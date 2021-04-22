@@ -1,0 +1,27 @@
+.main-screen {
+    p {
+        margin-bottom:15px;
+        font-size:16px;
+
+    }
+    .balance {
+        font-size:20px;
+        line-height:28px;
+    }
+    .nav-item  {
+        margin-right:15px;
+        a {
+            box-shadow:none!important;
+        }
+    }
+}
+.table th, .table td {
+    vertical-align: middle;
+}
+.user_avatar {
+    width: 64px;
+    height: 64px;
+    display: block;
+    background-size: cover;
+    border-radius: 100%;
+}

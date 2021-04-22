@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Helios';
+    src: local('Helios Extra Black'), local('Helios-Extra-Black'),
+        url('HeliosExtBlackC.woff2') format('woff2'),
+        url('HeliosExtBlackC.woff') format('woff'),
+        url('HeliosExtBlackC.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+  }

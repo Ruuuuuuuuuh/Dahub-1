@@ -1,0 +1,220 @@
+
+@media (min-width: 769px) {
+    .modal-dialog {
+        max-width: 622px;
+        margin: 1.75rem auto;
+    }
+    .icon-partners {
+        display:none;
+    }
+}
+@media (max-width: 1024px) {
+    .title {
+        font-size: 36px;
+    }
+    #deposit {
+        padding:20px
+    }
+    #main-content>.container-fluid {
+        padding: 40px 15px 15px 5px;
+    }
+}
+@media (max-width: 768px) {
+    .contact_notification p {
+        text-align:center
+    }
+    .contact_notification a {
+        text-align:center
+    }
+    .contact_notification_link {
+        float:none!important;
+        margin:0 auto 15px;
+    }
+    .title {
+        font-size: 32px;
+        line-height: 32px;
+        margin-bottom: 15px;
+    }
+
+    .table-wrapper {
+        overflow-x:scroll;
+    }
+    #deposit .btn {
+        font-size: 16px;
+        padding: 0 12px;
+    }
+    #deposit a.btn svg {
+        width:20px;
+        margin-right:0
+    }
+    #deposit a.btn span {
+        display:none;
+    }
+    .balance-block h2 {
+        display:none;
+    }
+    .deposit-buttons, .balance-block {
+        width:50%;
+        position:relative;
+    }
+    .deposit-buttons {
+        min-width:0;
+        padding-right:0;
+    }
+    .nav-sidebar {
+        width: calc(100vw - 60px);
+        background-image: linear-gradient(to bottom, #2e4d5d, #173849);
+        background-image: -webkit-linear-gradient(to bottom, #2e4d5d, #173849);
+        background-image: -moz-linear-gradient(to bottom, #2e4d5d, #173849);
+        }
+    #main-content {
+        transition: .2s ease-out all;
+        -webkit-transition: .2s ease-out all;
+        -moz-transition: .2s ease-out all;
+    }
+    #main-content.sidebar-open {
+        margin-left:100%;
+        opacity:0;
+    }
+    #main-content.sidebar-open #deposit {
+        width:calc(100% - 60px);
+        left:60px;
+        background:#0b243c
+    }
+    .top-menu-list  {
+        display:none;
+    }
+    .top-menu {
+        padding:0;
+    }
+    .top-menu-align {
+        -webkit-box-pack: center!important;
+        -ms-flex-pack: center!important;
+        justify-content: center!important;
+        width:100%;
+        margin:0;
+    }
+    .top-menu-icons {
+        -webkit-box-pack: space-evenly!important;
+        -ms-flex-pack: space-evenly!important;
+        justify-content: space-evenly!important;
+    }
+    #container {
+        position:absolute;
+    }
+    .tab-content {
+        padding:25px 15px 10px;
+    }
+    .currency-icon {
+        max-width:20px;
+        max-height:24px
+    }
+    #loginform {
+        padding: 20px 35px;
+    }
+    #loginform h2 {
+        font-size:16px
+    }
+    .login-fixed-content {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        padding: 35px 20px;
+    }
+    .logo-dark svg {
+        width:42px;
+    }
+    .logo-dark h1 {
+        font-size: 32px;
+        margin-left:10px
+    }
+    .logo-dark h2 {
+        font-size: 18px;
+        margin-left: 58px;
+        font-weight: 600;
+        margin-top: -7px;
+    }
+    .version-login {
+        top:5px;
+        font-size:11px;
+    }
+    .about-project {
+        font-size:12px;
+        width:100%;
+        text-align:center;
+    }
+    .about-project a {
+        margin-right:0
+    }
+    .about-project a:first-child {
+        margin-right:10px;
+    }
+    .nav-item.nav-link {
+        padding: 10px 0;
+        font-size: 12px;
+    }
+    .info-table tr td, .list-table tr td {
+        font-size:14px;
+        padding: 14px 10px;
+    }
+    .table {
+        margin-bottom:0;
+    }
+    .section-title p.description {
+        font-size: 16px;
+        margin: 0 0 25px;
+        line-height: 18px;
+    }
+    #nav-prices-content canvas {
+        max-height:200px!important;
+        height:200px!important;
+        min-height:200px!important;
+    }
+    .custom-select {
+        min-width:80px;
+    }
+    .custom-select, .form-control {
+        font-size:12px;
+        padding: 5px 15px;
+    }
+    .modal-content {
+        padding: 20px 15px;
+    }
+    .modal-header h5 {
+        font-size: 16px;
+        font-weight: bold;
+        color: #0b243c;
+        text-transform: uppercase;
+    }
+    .modal-header button span {
+        font-size:36px;
+    }
+    .separate {
+        line-height: 32px;
+        font-size: 24px;
+        text-align: left;
+        padding: 0 5px;
+    }
+    .currency-addon, .usd-change {
+        width:36px;
+    }
+    .currency-group {
+        margin-left:30px;
+    }
+    #sidebar {
+    }
+    .sidebar-open #sidebar {
+        left:0;
+    }
+    .sidebar-open #main-content {
+        transform:translateX(100vw);
+        -webkit-transform:translateX(100vw);
+    }
+    #v-pills-tabContent {
+        width: auto;
+        overflow: auto;
+    }
+    .profile-tabs .tab-content .tab-pane.active {
+        padding: 15px 25px
+    }
+}
