@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\System;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class WalletController extends Controller
 {
@@ -33,7 +34,7 @@ class WalletController extends Controller
 
     public function orders()
     {
-        $orders = Order::where('status', 'assignee')->orderBy('id', 'DESC')->get();
+        $orders = Order::where('status', 'assignee')->orWhere('status', 'created')->orderBy('id', 'DESC')->get();
         return view('wallet.pages.orders', compact('orders'));
     }
 
@@ -41,7 +42,6 @@ class WalletController extends Controller
     public function stages()
     {
         $system = System::findOrFail(1);
-        $system->getWallet('DHB')->refreshBalance();
         return view('wallet.pages.stages', compact('system'));
     }
 }

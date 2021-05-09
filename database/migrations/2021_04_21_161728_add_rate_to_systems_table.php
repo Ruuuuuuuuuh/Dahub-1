@@ -14,8 +14,8 @@ class AddRateToSystemsTable extends Migration
     public function up()
     {
         Schema::table('systems', function (Blueprint $table) {
-            $table->string('rate');
-            $table->integer('stage');
+            $table->string('rate')->nullable();
+            $table->integer('stage')->nullable();
         });
     }
 

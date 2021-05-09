@@ -16,7 +16,7 @@
                     </div>
                     <div class="card-body">
                         <p>Текущий баланс DHB</p>
-                        <h2>{{ $system->getWallet('DHB')->balance }} DHB</h2>
+                        <h2>{{ $system->getWallet('DHB')->balanceFloat }} DHB</h2>
                         <p>Замороженные токены (в заявках)</p>
                         <h2>{{$system->getFrozenTokens()}} DHB</h2>
                         @if ($system->stage != 1)

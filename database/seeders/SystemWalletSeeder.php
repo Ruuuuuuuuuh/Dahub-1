@@ -49,7 +49,7 @@ class SystemWalletSeeder extends Seeder
         ]);
 
         \DB::table('systems')->insert([
-            []
+            'id' => 1
         ]);
     }
 }

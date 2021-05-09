@@ -41,7 +41,7 @@
                                             <td>{{$user->uid}}</td>
                                             <td>{{$user->name}}</td>
                                             <td>{{$user->username}}</td>
-                                            <td class="user-balance">{{number_format($user->getWallet('DHB')->balance, 0, ',', ' ')}} </td>
+                                            <td class="user-balance">{{number_format($user->getWallet('DHB')->balanceFloat, 0, ',', ' ')}} </td>
                                             <td>
                                                 <a data-uid="{{$user->uid}}" class="btn btn-success user-deposit">+</a>
                                                 <a data-uid="{{$user->uid}}"  class="btn btn-danger user-withdraw">-</a>

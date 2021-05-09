@@ -2,7 +2,7 @@
 @extends('wallet.layouts.app')
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid admin-orders">
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card main-screen">
@@ -25,28 +25,30 @@
                                     @endphp
                                     <div class="order col-12 {{$order->status}}">
                                         <div class="row">
-                                            <div class="col-9 order-wrapper">
+                                            <div class="col-12 col-md-9 order-wrapper">
                                                 <div class="row">
-                                                    <div class="col-3">
+                                                    <div class="col-6 col-lg-3">
                                                         <p>@php echo '<a href="tg://resolve?domain=' . $order->user()->first()->username .'">@' . $order->user()->first()->username . '</a>'; @endphp</p>
                                                     </div>
 
-                                                    <div class="col-3">
+                                                    <div class="col-6 col-lg-3">
                                                         <p><strong>{{number_format($order->amount, 0, ',', ' ')}} DHB</strong></p>
                                                     </div>
 
-                                                    <div class="col-3">
+                                                    <div class="col-6 col-lg-3">
                                                         <p>за {{number_format($order->amount / $order->rate, $dec, ',', ' ') }} {{$order->currency}}</p>
                                                     </div>
 
-                                                    <div class="col-3">
+                                                    <div class="col-6 col-lg-3">
                                                         <p>{{ $order->created_at->format('d.m.Y H:i') }}</p>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-3">
-                                                <div class="orders-actions justify-content-end d-flex align-items-center h-100">
+                                            <div class="col-12 col-md-3">
+                                                <div class="orders-actions justify-content-md-end justify-content-around d-flex align-items-center h-100">
+                                                    @if ($order->status != 'created')
                                                     <a data-id="{{$order->id}}" class="btn btn-success order-confirm">Подтвердить</a>
+                                                    @endif
                                                     <a data-id="{{$order->id}}"  class="btn btn-danger order-decline">Отклонить</a>
                                                 </div>
                                             </div>

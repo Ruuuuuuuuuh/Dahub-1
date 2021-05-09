@@ -14,27 +14,20 @@ class Rate
 {
 
     /**
-     * @var float
-     * Курс DHB
-     */
-    public static $DHBRate = 0.05;
-
-
-    /**
      * @param string $currency
      * @return integer
      */
     public static function getRates(string $currency)
     {
+        $system = System::find(1);
         // Курс
         if ($currency == 'USDT') {
-            $system = System::find(1);
             return 1 / $system->rate;
         }
         else {
             if (!Cache::get($currency)) {
                 $response = Http::get('https://api.coinbase.com/v2/prices/'.$currency.'-USD/spot');
-                static::Cache($currency, $response->json()["data"]["amount"] * (1 / self::$DHBRate));
+                static::Cache($currency, $response->json()["data"]["amount"] * (1 / $system->rate));
                 return Cache::get($currency);
             }
             else return Cache::get($currency);

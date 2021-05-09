@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Rate;
 use App\Models\System;
+use App\Notifications\AdminNotifications;
+use App\Notifications\OrderAssignee;
+use App\Notifications\OrderCreate;
+use App\Notifications\OrderDecline;
+use App\Notifications\ReferralBonusPay;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
@@ -27,13 +32,14 @@ class ApiController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function deposit(Request $request)
+    public function depositFloat(Request $request)
     {
         $uid = $request->input('uid');
         $amount = $request->input('amount');
         $user = User::where('uid', $uid)->first();
-        $user->getWallet('DHB')->deposit($amount);
-        return $user->getWallet('DHB')->balance;
+        $user->getWallet('DHB')->depositFloat($amount);
+        $user->getWallet('DHB')->refreshBalance();
+        return $user->getWallet('DHB')->balanceFloat;
     }
 
     public function createOrder(Request $request)
@@ -46,7 +52,7 @@ class ApiController extends Controller
             'charset' => 'utf-8'
         );
 
-        if ($request->input('amount') <= $system->getFreeTokens() && $request->input('amount') < 333333)
+        if ($request->input('amount') <= $system->getFreeTokens() && $request->input('amount') <= 333333)
             if (!empty($user->orders()->notCompleted()->get())) {
                 $order = Order::create([
                     'user_uid'       => $request->input('user_uid'),
@@ -57,6 +63,12 @@ class ApiController extends Controller
                     'status'         => 'created',
                 ]);
                 $order->save();
+                $admins = User::where('roles', 'admin')->get();
+                foreach ($admins as $admin) {
+                    $message = 'Новая заявка ' . $order->id . ' на покупку ' . $order->amount . ' DHB. [Написать пользователю](tg://user?id='.$user->uid.')';
+                    $admin->notify(new AdminNotifications($message));
+                }
+                $user->notify(new OrderCreate($order));
                 return $order->id;
             }
             else {
@@ -72,6 +84,15 @@ class ApiController extends Controller
     {
         $order = Order::find($id);
         $order->status = 'assignee';
+        $user = User::where('uid', $order->user_uid)->first();
+
+        $admins = User::where('roles', 'admin')->get();
+        foreach ($admins as $admin) {
+            $message = 'Заявка ' . $order->id . ' на получение ' . $order->amount . ' DHB подтверждена пользователем. [Написать пользователю](tg://user?id='.$user->uid.')';
+            $admin->notify(new AdminNotifications($message));
+        }
+
+        $user->notify(new OrderAssignee($order));
         $order->save();
         return $order->id;
     }
@@ -84,17 +105,32 @@ class ApiController extends Controller
 
 
         $systemWallet = System::findOrFail(1);
-        if ($systemWallet->getWallet('DHB')->balance >= $order->amount) {
+        if ($systemWallet->getWallet('DHB')->balanceFloat >= $order->amount) {
 
             //deposit to user wallet
             $user = User::where('uid', $order->user_uid)->first();
-            $user->getWallet('DHB')->deposit($order->amount);
+            $user->getWallet('DHB')->depositFloat($order->amount);
+            $user->getWallet('DHB')->refreshBalance();
 
             //withdraw from system wallet
             $systemWallet->getWallet('DHB')->withdraw($order->amount);
+            $systemWallet->getWallet('DHB')->refreshBalance();
 
-            //deposit to system wallet
-            $systemWallet->getWallet($order->currency)->deposit($order->amount / $order->rate);
+            $currency = $order->currency;
+            $curAmount = $order->amount / $order->rate;
+
+
+
+            // Начисление рефок
+            $ref = User::where('uid', $order->user_uid)->first();
+
+            $curAmount = $this->payReferral($ref, $currency, $curAmount);
+
+            // deposit to system wallet
+            $systemWallet->getWallet($currency)->depositFloat($curAmount);
+            $systemWallet->getWallet($currency)->refreshBalance();
+
+            // сохраняем модель
             $order->save();
             return $order->id;
         }
@@ -113,15 +149,37 @@ class ApiController extends Controller
     public function declineOrder($id)
     {
         $order = Order::find($id);
+        $user = User::where('uid', $order->user_uid)->first();
+        $user->notify(new OrderDecline($order));
         $order->forceDelete();
         return $order->id;
+    }
+
+
+    public function payReferral(User $user, $currency, $amount) {
+        $curAmount = 0;
+
+        $tax = 9; // Процент на первом уровне
+        $refAmount = 0;
+        $curAmount = 0;
+        while ($user->referred_by && $tax > 0) {
+            $user = User::where('affiliate_id', $user->referred_by)->first();
+            $refAmount = ($amount * $tax ) / 100;
+            $user->getWallet($currency)->depositFloat($refAmount, array('destination' => 'referral'));
+            $user->getWallet($currency)->refreshBalance();
+            $user->notify(new ReferralBonusPay(array('amount' => $refAmount, 'currency' => $currency)));
+            $curAmount = $amount - $refAmount;
+            $tax = $tax - 3;
+        }
+        return $curAmount;
     }
 
 
     public function startTokenSale(Request $request)
     {
         $system = System::findOrFail(1);
-        $system->getWallet('DHB')->deposit('2000000');
+        $system->getWallet('DHB')->depositFloat('2000000');
+        $system->getWallet('DHB')->refreshBalance();
         $system->rate = 0.05;
         $system->stage = 1;
         $system->save();
@@ -139,7 +197,7 @@ class ApiController extends Controller
         $uid = $request->input('uid');
         $amount = $request->input('amount');
 
-        return $user->getWallet('DHB')->balance;
+        return $user->getWallet('DHB')->balanceFloat;
     }
 
     /**

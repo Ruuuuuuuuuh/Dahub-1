@@ -77,12 +77,14 @@ class AuthController extends Controller
             [
                 'name' => 'BTC',
                 'slug' => 'BTC',
+                'decimal_places' => '8'
             ]
         );
         $user->createWallet(
             [
                 'name' => 'ETH',
                 'slug' => 'ETH',
+                'decimal_places' => '6'
             ]
         );
 

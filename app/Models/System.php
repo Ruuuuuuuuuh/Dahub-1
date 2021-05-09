@@ -3,16 +3,17 @@
 namespace App\Models;
 
 use Bavix\Wallet\Interfaces\Wallet;
-use Bavix\Wallet\Traits\HasWallet;
+use Bavix\Wallet\Interfaces\WalletFloat;
+use Bavix\Wallet\Traits\HasWalletFloat;
 use Bavix\Wallet\Traits\HasWallets;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Questocat\Referral\Traits\UserReferral;
 
-class System extends Model implements Wallet
+class System extends Model implements Wallet, WalletFloat
 {
-    use HasFactory, Notifiable, HasWallet, HasWallets, UserReferral;
+    use HasFactory, Notifiable, HasWallets, UserReferral, HasWalletFloat;
 
     /**
      * @return int
@@ -37,17 +38,26 @@ class System extends Model implements Wallet
         $balance = 0;
         $users = User::all();
         foreach ($users as $user) {
-            $balance += $user->getWallet('DHB')->balance;
+            $balance += $user->getWallet('DHB')->balanceFloat;
         }
         return $balance;
     }
 
     /**
      * @return int
-     * Сумма доступных токенов для продажи
+     * Сумма доступных токенов
      */
     public function getFreeTokens()
     {
-        return $this->getWallet('DHB')->balance - $this->getSoldTokens() - $this->getFrozenTokens();
+        return $this->getWallet('DHB')->balanceFloat - $this->getSoldTokens() - $this->getFrozenTokens();
+    }
+
+    /**
+     * @return int
+     * Сумма доступных токенов для продажи
+     */
+    public function getAvailableTokens()
+    {
+        if ($this->getFreeTokens() >= 333333) return 333333; else return $this->getFreeTokens();
     }
 }

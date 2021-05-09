@@ -36,4 +36,8 @@ return [
         'redirect' => env('TELEGRAM_REDIRECT_URI', '/telegram/redirect'),
     ],
 
+    'telegram-bot-api' => [
+        'token' => env('TELEGRAM_BOT_TOKEN', '1150126504:AAGHppcIXIcZ0pBmhx1mFQfZRfbfb-DPWWQ')
+    ],
+
 ];

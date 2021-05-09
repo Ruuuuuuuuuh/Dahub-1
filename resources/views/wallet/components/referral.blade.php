@@ -4,7 +4,9 @@
 <p><strong>2-й уровень</strong> – 6 процентов вознаграждения</p>
 <p><strong>3-й уровень</strong> – 3 процента вознаграждения</p>
 <p style="margin-top:35px;">Ваш баланс</p>
-<p class="balance-amount">{{ number_format((Auth::User()->getWallet('USDT')->balance * Rate::$DHBRate), 2, ',' , ' ')}} USDT</p>
+@if (Auth::User()->getWallet('USDT')->balanceFloat > 0) <p class="balance-amount">{{ number_format((Auth::User()->getWallet('USDT')->balanceFloat), 2, ',' , ' ')}} USDT</p>@endif
+@if (Auth::User()->getWallet('BTC')->balanceFloat > 0) <p class="balance-amount">{{ number_format((Auth::User()->getWallet('BTC')->balanceFloat), 7, ',' , ' ')}} BTC</p>@endif
+@if (Auth::User()->getWallet('ETH')->balanceFloat > 0) <p class="balance-amount">{{ number_format((Auth::User()->getWallet('ETH')->balanceFloat), 5, ',' , ' ')}} ETH</p>@endif
 <hr />
 <h3>Реферальная ссылка</h3>
 <a class="ref-link copy-link" data-toggle="popover" data-placement="right" data-content="Ссылка скопирована в буфер обмена.">

@@ -2,20 +2,20 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Bavix\Wallet\Interfaces\WalletFloat;
+use Bavix\Wallet\Traits\HasWalletFloat;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Traits\HasWallets;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Traits\CanConfirm;
 use Questocat\Referral\Traits\UserReferral;
 
-class User extends Authenticatable implements Wallet, Confirmable
+class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
 {
-    use HasFactory, Notifiable, HasWallet, HasWallets, UserReferral, CanConfirm;
+    use HasFactory, Notifiable, HasWallets, UserReferral, CanConfirm, Notifiable, HasWalletFloat;
 
     /**
      * The attributes that are mass assignable.
@@ -69,4 +69,5 @@ class User extends Authenticatable implements Wallet, Confirmable
     {
         return $this->hasMany('App\Models\Order', 'user_uid', 'uid');
     }
+
 }

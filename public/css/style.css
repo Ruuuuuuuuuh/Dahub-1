@@ -160,7 +160,7 @@ main {
 p.balance-amount {
     font-weight: bold;
     font-size: 36px;
-    line-height: 20px;
+    line-height: 48px;
 }
 a.copy-link {
     font-size: 22px;
@@ -386,16 +386,24 @@ strong {
         content:none;
     }
     .card-header {
-        padding: 10px 30px 8px;
+        padding: 10px 20px 26px;
+    }
+    a.button {
+        margin-top: 40px;
+        font-size: 16px;
+        line-height: 28px;
+        padding: 10px 35px;
+        width: 100%;
+        text-align: center;
     }
     .card-body {
-        padding: 50px 30px 35px;
+        padding: 30px 20px 25px;
     }
     .progress {
         height:20px;
     }
     .main-screen p {
-        font-size:18px;
+        font-size:16px;
     }
     .progress + p {
         font-size: 10px!important;
@@ -412,16 +420,16 @@ strong {
         padding: 12px 0 14px;
     }
 
-    .main-screen .nav-item a svg {
+    #balance-tabs .nav-item a svg {
         height:16px;
         margin-right: 0px;
     }
-    .main-screen .nav-item a {
-        font-size: 14px;
+    #balance-tabs .nav-item a {
+        font-size: 12px;
         padding: 10px 0 5px;
         background:transparent!important;
     }
-    .main-screen .nav-item a  span {
+    #balance-tabs .nav-item a  span {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -432,10 +440,115 @@ strong {
         justify-content: space-around;
         width:100%;
     }
+    .orders-list {
+        margin-top:20px;
+    }
+    .orders-list p {
+        font-size:10px;
+    }
+    .order-wrapper .col-4 {
+        padding:0;
+        margin-bottom: 10px;
+    }
+    .order-wrapper {
+        padding: 25px 35px 15px;
+    }
+    .order-wrapper>.row {
+        justify-content: flex-end;
+    }
+    .order-status {
+        margin-top: -33px;
+        margin-left: -10px;
+    }
+    .order-status p {
+        font-size: 12px;
+    }
+    #orders-area h2 {
+        font-size: 18px;
+        text-align: center;
+    }
+    .card-body h2 {
+        font-size: 18px;
+    }
+    .deposit-block {
+        margin-top:30px;
+    }
+    .deposit-status {
+        font-size:14px;
+    }
+    .deposit-block input, .deposit-block select {
+        font-size:14px;
+    }
+    .deposit-recieve-group {
+        margin-left:0;
+    }
+    .subtotal {
+        margin-top:25px;
+    }
+    p.balance-amount {
+        line-height: 28px;
+    }
+    hr {
+        margin:25px 0;
+    }
+    h3 {
+        font-size: 18px;
+    }
+    a.copy-link {
+        width: 100%;
+        font-size: 14px;
+        padding: 0 15px;
+        border-radius: 15px;
+        line-height: 45px;
+    }
+    a.copy-link svg {
+        width:16px;
+    }
+    .deposit-section a.button {
+        margin-top:30px!important;
+    }
+    .deposit-section .nav-item {
+        margin-right:10px;
+    }
+    .deposit-section .nav-item a {
+        font-size: 12px;
+        padding: 7px 12px 8px;
+        border-radius: 15px;
+    }
+    .wallet-link-section .tab-content {
+        padding-top: 25px;
+    }
+    .qr-code {
+        margin-top: 30px;
+    }
+    .created-block {
+        margin-top:25px;
+    }
 }
 @media screen and (max-width:380px) {
     .users-button a {
         padding:0;
+    }
+    .card-header a.btn {
+        font-size:11px;
+    }
+    .admin-orders .card-header {
+        padding-bottom: 15px;
+        padding-top: 15px;
+    }
+    .admin-orders .card-body h2 {
+        text-align: center;
+        font-size:16px;
+    }
+    .admin-orders .orders-actions a {
+        margin-right: 15px;
+        font-size: 12px;
+        padding: 5px 15px 6px;
+        border-radius: 15px;
+        margin-top:-65px;
+    }
+    .admin-orders .order-wrapper {
+        padding-bottom:60px;
     }
     .users-button a svg {
         width:24px;
@@ -453,10 +566,25 @@ strong {
         height:26px!important;
         width: auto!important;
     }
-    .main-screen .nav-item a span {
+    #balance-tabs .nav-item a span {
         display:none;
     }
-    .main-screen .nav-item a.active span {
+    #balance-tabs .nav-item a.active span {
         display:inline-block;
+    }
+    .wallet-link {
+        max-width: 75vw;
+    }
+    .wallet-link span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 94%;
+        line-height: 14px;
+    }
+    .deposit-section .nav-item a {
+        font-size: 10px;
+        padding: 6px 12px 7px;
+        border-radius: 15px;
     }
 }
