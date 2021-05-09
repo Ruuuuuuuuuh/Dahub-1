@@ -15,7 +15,7 @@
     <meta name="msapplication-TileColor" content="#9f00a7">
     <meta name="theme-color" content="#ffffff">
     <title>Da·Hub – Децентрализованная P2P система</title>
-    <style>  
+    <style>
         .main-logo {
             margin-top:-40px;
             margin-bottom: 50px;
@@ -100,7 +100,7 @@
             </clipPath>
         </defs>
     </svg>
-    <script async src="https://telegram.org/js/telegram-widget.js?14" data-telegram-login="DropXBot" data-size="large" data-radius="30" data-userpic="false" data-auth-url="http://drop-x.ru/telegram/redirect" data-request-access="write"></script>
+    <script async src="https://telegram.org/js/telegram-widget.js?14" data-telegram-login="{{env('TELEGRAM_BOT_NAME')}}" data-size="large" data-radius="30" data-userpic="false" data-auth-url="{{env('TELEGRAM_REDIRECT_URI')}}" data-request-access="write"></script>
 
 </div>
 
