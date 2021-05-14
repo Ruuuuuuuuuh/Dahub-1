@@ -28,7 +28,600 @@
         src="https://code.jquery.com/jquery-3.5.1.min.js"
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
         crossorigin="anonymous"></script>
-    <link href="/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Gotham Pro";
+            background-color: #F6F8FA;
+        }
+        .app .navbar {
+            background: linear-gradient(100.13deg, #6CA8E0 -25.88%, #4D5B9D 53.71%);
+            padding: 24px 0 22px;
+        }
+        .navbar-light .navbar-brand {
+            padding: 0;
+            margin: 0;
+        }
+        .navbar-light .navbar-nav .nav-link {
+            font-size: 18px;
+            padding: 0 0.5rem;
+        }
+        .navbar-brand {
+            padding:0;
+        }
+        .navbar-nav .nav-item {
+            margin-left:60px;
+        }
+        .navbar-nav .nav-item svg {
+            margin-right:15px;
+        }
+        .navbar-dark .navbar-nav a.nav-link {
+            color:#fff;
+            font-weight: 500;
+        }
+        .container-fluid {
+            padding:0 70px;
+        }
+        main {
+            padding:53px 0;
+        }
+        .card {
+            background: linear-gradient(81.97deg, #85F362 -4.91%, #02AAFF 58.19%);
+            border-radius: 30px;
+            padding: 0;
+            outline: 0;
+            border: none;
+        }
+        .card-body {
+            background: #fff;
+            border-radius: 30px;
+            padding:75px 60px 60px;
+        }
+        .created .new-order, .assignee .new-order, .assignee-section {
+            display:none;
+        }
+        .assignee .assignee-section {
+            display:block;
+        }
+        .created-order {
+            display:none;
+        }
+        .created .created-order {
+            display:block;
+        }
+        .orders-list {
+            margin-top:50px;
+        }
+        .orders-list .order {
+            margin-bottom: 20px;
+        }
+        .order-wrapper {
+            border-radius: 30px;
+            background: #f5f8fa;
+            padding: 25px 40px;
+            font-size: 18px;
+        }
+        .order-status p {
+            padding-left:15px;
+            -webkit-background-clip: text!important;
+            -webkit-text-fill-color: transparent;
+            font-weight:bold;
+        }
+        .orders-actions a.order-confirm {
+            margin-right:15px;
+        }
+        .order-status p {
+            background: linear-gradient(105.97deg, #FF9134 28.87%, #E72269 74.74%);
+            background: -webkit-linear-gradient(105.97deg, #FF9134 28.87%, #E72269 74.74%);
+            background: -moz-linear-gradient(105.97deg, #FF9134 28.87%, #E72269 74.74%);
+        }
+        .completed .order-status p {
+            background: linear-gradient(112.27deg, #85F362 -27.42%, #02AAFF 90.87%);
+            background: -webkit-linear-gradient(112.27deg, #85F362 -27.42%, #02AAFF 90.87%);
+            background: -moz-linear-gradient(112.27deg, #85F362 -27.42%, #02AAFF 90.87%);
+
+        }
+        .card-header {
+            padding: 20px 60px;
+            border: none;
+            color: #fff;
+            background: transparent;
+        }
+        .main-screen p {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+        .main-screen .card-header p {
+            color:#fff;
+            font-weight: 500;
+        }
+        .bg-success {
+            background: linear-gradient(81.97deg, #85F362 -4.91%, #02AAFF 58.19%) !important;
+        }
+        .progress {
+            background: linear-gradient(100.13deg, #2691E2 -25.88%, #1A2453 53.71%);
+            border-radius: 20px;
+        }
+        .progress-bar {
+            border-radius: 20px;
+        }
+        .navbar-nav .dropdown-menu {
+            position: absolute;
+        }
+        .users-button svg {
+            width:30px;
+        }
+        .users-button svg path {
+            fill:#fff;
+        }
+        .users-button svg {
+            display:none;
+        }
+        .our_balance {
+            margin-top:50px;
+        }
+        .main-screen .nav-item a {
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 20px;
+            letter-spacing: 0.1em;
+            border: none!important;
+            border-radius: 20px 20px 0 0;
+            padding: 20px 30px 28px;
+        }
+        .main-screen .nav-item a svg {
+            margin-right:8px;
+            margin-top: -5px;
+        }
+        .main-screen .nav-item a.btn-outline-secondary:not(:disabled):not(.disabled).active {
+            background-color:rgba(255,255,255, 0.2);
+        }
+        .main-screen .nav-item a:hover {
+            background-color:rgba(255,255,255, 0.1);
+        }
+        .main-screen .nav-item a.btn-outline-secondary:not(:disabled):not(.disabled):active {
+            background-color:rgba(255,255,255, 0.2);
+        }
+        .button-orange {
+            background-image: url(/img/orange.svg);
+        }
+        .button-blue {
+            background-image: url(/img/blue.svg);
+        }
+        p.balance-amount {
+            font-weight: bold;
+            font-size: 36px;
+            line-height: 48px;
+        }
+        a.copy-link {
+            font-size: 22px;
+            line-height: 80px;
+            padding: 0 33px;
+            background-color: #F6F8FA;
+            border-radius: 30px;
+            color: #E72269;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 60%;
+            cursor:pointer;
+        }
+        .wallet-link-section .tab-content {
+            padding-top:35px;
+        }
+        .wallet-link-section .tab-content > .active {
+            display:flex;
+            align-items:center;
+        }
+
+        .wallet-link-section {display:none;}
+        .deposit-section.USDT .wallet-link-section.USDT {
+            display:block;
+        }
+        .deposit-section.ETH .wallet-link-section.ETH {
+            display:block;
+        }
+        .deposit-section.BTC .wallet-link-section.BTC {
+            display:block;
+        }
+        .qr-code canvas {
+            width:116px;
+        }
+        a.wallet-link {
+            width:100%;
+        }
+        .link-block {
+            display: none;
+        }
+        .deposit-section.USD .usd {
+            display:block;
+        }
+
+        .deposit-section.BTC .btc {
+            display:block;
+        }
+
+        .deposit-section.ETH .eth {
+            display:block;
+        }
+
+        .created-block {
+            margin-top:40px;
+        }
+        .created-block  .nav-item a {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 20px;
+            letter-spacing: 0.1em;
+            padding: 15px;
+
+            border-radius: 20px;
+            background: #f1f1f1;
+            color: #000;
+        }
+        .created-block .nav-item a.active {
+            background-image: url(/img/orange.svg);
+            background-size: cover;
+            background-position: center;
+            color: #fff;
+            border:none!important;
+        }
+        .created-block  .nav-item a:hover {
+            box-shadow: 0 0 15px rgba(0,0,0,.15)!important;
+        }
+        .created-block .nav-tabs {
+            border:none!important;
+            margin-top:15px;
+        }
+        hr {
+            display: block;
+            width: 100%;
+            margin: 45px 0 35px;
+        }
+        .popover {
+            max-width:100%;
+            border-radius: 15px;
+        }
+        .popover-body {
+            padding:.8rem;
+            color: #e7223d;
+            font-size:18px;
+        }
+        .deposit-block input, .deposit-block select {
+            background: #F6F8FA;
+            border: 1px solid #EFEFEF;
+            box-sizing: border-box;
+            border-radius: 15px;
+            padding: 10px 50px 10px 25px;
+            color:#333;
+            font-size: 18px;
+            line-height: 18px;
+        }
+        strong {
+            font-weight:500;
+        }
+        .deposit-recieve-group {
+            margin-left:30px;
+        }
+        .deposit-block select {
+            -webkit-appearance: none;
+            cursor:pointer;
+            margin-left:15px;
+        }
+        .deposit-block .input-group input {
+            border-radius: 15px!important;
+            width: 220px;
+            padding-right: 70px;
+        }
+        .deposit-block {
+            margin-top:60px;
+        }
+        .deposit-block .input-group-append {
+            position: absolute;
+            right: 0;
+            height: 100%;
+            border-radius: 0 15px 15px 0;
+            overflow: hidden;
+        }
+        .deposit-block .input-group-append .input-group-text {
+            background: linear-gradient(100.13deg, #6CA8E0 -25.88%, #4D5B9D 53.71%);
+            color:#fff;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            z-index: 11;
+        }
+        .deposit-block .currency-select {
+            position: relative;
+        }
+        .deposit-block .currency-select:before {
+            content: '';
+            width: 11px;
+            height: 7px;
+            position: absolute;
+            right: 15px;
+            top: calc(50% - 4px);
+            background: url(/img/angle-down.svg) no-repeat;
+            background-size: cover;
+
+        }
+
+        .subtotal {
+            margin-top:40px;
+        }
+
+        .deposit-separator {
+            width: 100%;
+            height: 2px;
+            background: #EFEFEF;
+            display: block;
+            margin-top: 60px;
+            margin-bottom: 40px;
+        }
+        .button {
+            font-size:22px;
+            font-weight:500;
+            color:#fff;
+            background-size:cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            line-height: 60px;
+            padding: 0 100px;
+            border-radius: 20px;
+            display: inline-block;
+            cursor:pointer;
+        }
+        .deposit-status {
+            font-size: 18px;
+            margin-left: 35px;
+        }
+        .button:hover {
+            text-decoration: none;
+            color:#fff;
+            box-shadow:0 0 15px rgba(0,0,0,.15);
+        }
+        .button:focus, .button:active {
+            box-shadow:0 0 15px rgba(0,0,0,.3);
+        }
+        @media screen and (max-width:767px) {
+            .navbar-dark .navbar-nav li a.nav-link svg {
+                height:18px!important;
+            }
+            .navbar-dark .navbar-nav li:last-child a.nav-link svg {
+                margin-right:0;
+            }
+            .our_balance {
+                margin-top:30px;
+            }
+            .main-screen p {
+                margin-bottom:0;
+            }
+            .users-button a {
+                background: none;
+                border: none!important;
+                box-shadow: none!important;
+            }
+            .users-button svg {
+                display:flex;
+            }
+            .users-button span {
+                display:none;
+            }
+            .container-fluid, .navbar-expand-md > .container-fluid {
+                padding: 0 47px;
+            }
+            .navbar-nav .nav-item {
+                margin-left:30px;
+            }
+            .navbar-nav .nav-item span {display:none;}
+            .navbar-nav .nav-item .dropdown-toggle::after {
+                content:none;
+            }
+            .card-header {
+                padding: 10px 20px 26px;
+            }
+            a.button {
+                margin-top: 40px;
+                font-size: 16px;
+                line-height: 28px;
+                padding: 10px 35px;
+                width: 100%;
+                text-align: center;
+            }
+            .card-body {
+                padding: 30px 20px 25px;
+            }
+            .progress {
+                height:20px;
+            }
+            .main-screen p {
+                font-size:16px;
+            }
+            .progress + p {
+                font-size: 10px!important;
+                text-align: center!important;
+                font-weight:bold!important;
+            }
+            .users-button a svg {
+                width:28px;
+            }
+            .app .navbar {
+                background: linear-gradient(
+                    100.13deg
+                    , #6CA8E0 -25.88%, #4D5B9D 53.71%);
+                padding: 12px 0 14px;
+            }
+
+            #balance-tabs .nav-item a svg {
+                height:16px;
+                margin-right: 0px;
+            }
+            #balance-tabs .nav-item a {
+                font-size: 12px;
+                padding: 10px 0 5px;
+                background:transparent!important;
+            }
+            #balance-tabs .nav-item a  span {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 105px;
+                line-height: 14px;
+            }
+            .card-header .nav {
+                justify-content: space-around;
+                width:100%;
+            }
+            .orders-list {
+                margin-top:20px;
+            }
+            .orders-list p {
+                font-size:10px;
+            }
+            .order-wrapper .col-4 {
+                padding:0;
+                margin-bottom: 10px;
+            }
+            .order-wrapper {
+                padding: 25px 35px 15px;
+            }
+            .order-wrapper>.row {
+                justify-content: flex-end;
+            }
+            .order-status {
+                margin-top: -33px;
+                margin-left: -10px;
+            }
+            .order-status p {
+                font-size: 12px;
+            }
+            #orders-area h2 {
+                font-size: 18px;
+                text-align: center;
+            }
+            .card-body h2 {
+                font-size: 18px;
+            }
+            .deposit-block {
+                margin-top:30px;
+            }
+            .deposit-status {
+                font-size:14px;
+            }
+            .deposit-block input, .deposit-block select {
+                font-size:14px;
+            }
+            .deposit-recieve-group {
+                margin-left:0;
+            }
+            .subtotal {
+                margin-top:25px;
+            }
+            p.balance-amount {
+                line-height: 28px;
+            }
+            hr {
+                margin:25px 0;
+            }
+            h3 {
+                font-size: 18px;
+            }
+            a.copy-link {
+                width: 100%;
+                font-size: 14px;
+                padding: 0 15px;
+                border-radius: 15px;
+                line-height: 45px;
+            }
+            a.copy-link svg {
+                width:16px;
+            }
+            .deposit-section a.button {
+                margin-top:30px!important;
+            }
+            .deposit-section .nav-item {
+                margin-right:10px;
+            }
+            .deposit-section .nav-item a {
+                font-size: 12px;
+                padding: 7px 12px 8px;
+                border-radius: 15px;
+            }
+            .wallet-link-section .tab-content {
+                padding-top: 25px;
+            }
+            .qr-code {
+                margin-top: 30px;
+            }
+            .created-block {
+                margin-top:25px;
+            }
+            .users-button a {
+                padding:0;
+            }
+            .card-header a.btn {
+                font-size:11px;
+            }
+            .admin-orders .card-header {
+                padding-bottom: 15px;
+                padding-top: 15px;
+            }
+            .admin-orders .card-body h2 {
+                text-align: center;
+                font-size:16px;
+            }
+            .admin-orders .orders-actions a {
+                margin-right: 15px;
+                font-size: 12px;
+                padding: 5px 15px 6px;
+                border-radius: 15px;
+                margin-top:-65px;
+            }
+            .admin-orders .order-wrapper {
+                padding-bottom:60px;
+            }
+            .users-button a svg {
+                width:24px;
+            }
+            .container-fluid, .navbar-expand-md > .container-fluid {
+                padding: 0 17px;
+            }
+            .navbar-dark .navbar-brand svg {
+                width:120px!important;
+            }
+            .navbar-nav .nav-item {
+                margin-left:0px;
+            }
+            .navbar-brand svg {
+                height:26px!important;
+                width: auto!important;
+            }
+            #balance-tabs .nav-item a span {
+                display:none;
+            }
+            #balance-tabs .nav-item a.active span {
+                display:inline-block;
+            }
+            .wallet-link {
+                max-width: 75vw;
+            }
+            .wallet-link span {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 94%;
+                line-height: 14px;
+            }
+            .deposit-section .nav-item a {
+                font-size: 10px;
+                padding: 6px 12px 7px;
+                border-radius: 15px;
+            }
+        }
+        @media screen and (max-width:380px) {
+
+        }
+
+    </style>
 </head>
 <body>
 <div class="app">
