@@ -177,6 +177,8 @@
                     , #6CA8E0 -25.88%, #4D5B9D 53.71%);
                 padding: 12px 0 14px;
             }
+        }
+        @media screen and (max-width:380px) {
             .users-button a {
                 padding:0;
             }
@@ -196,9 +198,6 @@
                 height:26px!important;
                 width: auto!important;
             }
-        }
-        @media screen and (max-width:380px) {
-
         }
     </style>
 </head>

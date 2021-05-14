@@ -524,8 +524,6 @@ strong {
     .created-block {
         margin-top:25px;
     }
-}
-@media screen and (max-width:380px) {
     .users-button a {
         padding:0;
     }
@@ -587,4 +585,7 @@ strong {
         padding: 6px 12px 7px;
         border-radius: 15px;
     }
+}
+@media screen and (max-width:380px) {
+
 }
