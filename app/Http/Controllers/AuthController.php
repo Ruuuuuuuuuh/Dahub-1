@@ -48,26 +48,23 @@ class AuthController extends Controller
      */
     private function findOrCreateUser($user)
     {
-
-        if (isset($user->nickname)) $username = $user->nickname;
-        else $username = '';
-
         if ($authUser = User::where('uid', $user->id)->first()) {
             $authUser->update([
                 'avatar'    => $user->avatar,
                 'name'      => $user->name,
-                'username'  => $username
+                'username'  => $user->nickname
             ]);
 
             return $authUser;
         }
 
 
+
         $user = User::create([
             'uid'       => $user->id,
             'avatar'    => $user->avatar,
             'name'      => $user->name,
-            'username'  => $username
+            'username'  => $user->nickname
         ]);
 
         $user->createWallet(
