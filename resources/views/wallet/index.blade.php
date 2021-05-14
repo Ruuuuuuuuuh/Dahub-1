@@ -106,14 +106,9 @@
 
         $('.deposit-block input, .deposit-block select').on('change keyup', function(){
             let max = parseInt($('.deposit-block input').attr('max'));
-            let min = parseInt($('.deposit-block input').attr('min'));
             if ($(this).val() > max)
             {
                 $(this).val(max);
-            }
-            else if ($(this).val() < min)
-            {
-                $(this).val(min);
             }
             let balance = {{ Auth::User()->getWallet('DHB')->balanceFloat }}
             let amount = $('input[name="deposit-amount"]')

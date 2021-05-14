@@ -3,7 +3,7 @@
         <h2>Получить DHB <span class="deposit-status">Шаг 1 из 3</span></h2>
         <div class="deposit-block form-inline">
             <div class="form-group input-group">
-                <input type="number" class="form-number form-control" name="deposit-amount" value="2000" min="2000" step="1000" max="{{$system->getAvailableTokens()}}"  />
+                <input type="number" class="form-number form-control" name="deposit-amount" value="2000" step="1000" max="{{$system->getAvailableTokens()}}"  />
                 <div class="input-group-append">
                     <div class="input-group-text">DHB</div>
                 </div>
