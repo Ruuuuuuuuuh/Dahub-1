@@ -26,8 +26,8 @@ class Rate
         }
         else {
             if (!Cache::get($currency)) {
-                $response = Http::get('https://api.coinbase.com/v2/prices/'.$currency.'-USD/spot');
-                static::Cache($currency, $response->json()["data"]["amount"] * (1 / $system->rate));
+                $response = Http::get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=' . $currency . '&convert=USD&CMC_PRO_API_KEY=96fc9b4e-ab30-4d60-b0fb-23c9da6456b6');
+                static::Cache($currency, $response->json()["data"][$currency]["quote"]["USD"]["price"] * (1 / $system->rate));
                 return Cache::get($currency);
             }
             else return Cache::get($currency);
