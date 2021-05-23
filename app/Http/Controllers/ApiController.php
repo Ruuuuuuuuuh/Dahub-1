@@ -12,6 +12,7 @@ use App\Notifications\ReferralBonusPay;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class ApiController extends Controller
 {
@@ -80,11 +81,10 @@ class ApiController extends Controller
 
     }
 
-    public function assigneeOrder($id)
+    public function assigneeOrderByUser()
     {
-        $order = Order::find($id);
-        $order->status = 'assignee';
-        $user = User::where('uid', $order->user_uid)->first();
+        $order = Order::where('status', 'created')->first();
+        $user = Auth::user();
 
         $admins = User::where('roles', 'admin')->get();
         foreach ($admins as $admin) {
@@ -150,6 +150,15 @@ class ApiController extends Controller
     {
         $order = Order::find($id);
         $user = User::where('uid', $order->user_uid)->first();
+        $user->notify(new OrderDecline($order));
+        $order->forceDelete();
+        return $order->id;
+    }
+
+    public function declineOrderByUser()
+    {
+        $order = Order::where('status', 'created')->first();
+        $user = Auth::user();
         $user->notify(new OrderDecline($order));
         $order->forceDelete();
         return $order->id;

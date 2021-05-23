@@ -41,9 +41,10 @@ Route::get('/wallet/users', [App\Http\Controllers\UsersController::class, 'index
 Route::post('/api/deposit', [App\Http\Controllers\ApiController::class, 'deposit']);
 Route::post('/api/withdraw', [App\Http\Controllers\ApiController::class, 'withdraw']);
 Route::post('/api/orders/create', [App\Http\Controllers\ApiController::class, 'createOrder']);
-Route::post('/api/orders/{id}/assignee', [App\Http\Controllers\ApiController::class, 'assigneeOrder']);
 Route::post('/api/orders/{id}/confirm', [App\Http\Controllers\ApiController::class, 'confirmOrder'])->middleware('admin');
 Route::post('/api/orders/{id}/decline', [App\Http\Controllers\ApiController::class, 'declineOrder'])->middleware('admin');
+Route::post('/api/orders/assigneeOrder', [App\Http\Controllers\ApiController::class, 'assigneeOrderByUser']);
+Route::post('/api/orders/declineOrder', [App\Http\Controllers\ApiController::class, 'declineOrderByUser']);
 Route::post('/api/start_token_sale/', [App\Http\Controllers\ApiController::class, 'startTokenSale'])->middleware('admin');
 
 Route::get('/wallet/orders/', [App\Http\Controllers\WalletController::class, 'orders'])->middleware('admin')->name('wallet.orders');

@@ -370,6 +370,12 @@
             display: inline-block;
             cursor:pointer;
         }
+        .button-danger {
+            background-image: linear-gradient(45deg, #ff6436, #d5006c);
+            background-image: -webkit-linear-gradient(45deg, #ff6436, #d5006c);
+            background-image: -moz-linear-gradient(45deg, #ff6436, #d5006c);
+            margin-left:25px;
+        }
         .deposit-status {
             font-size: 18px;
             margin-left: 35px;
@@ -383,6 +389,12 @@
             box-shadow:0 0 15px rgba(0,0,0,.3);
         }
         @media screen and (max-width:767px) {
+            .button {
+                margin-left:0;
+            }
+            .deposit-section a.button.button-danger {
+                margin-top:15px!important;
+            }
             .navbar-dark .navbar-nav li a.nav-link svg {
                 height:18px!important;
             }

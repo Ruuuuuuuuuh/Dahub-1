@@ -300,6 +300,7 @@
             </div>
 
             <a onclick="assignee();" style="margin-top:40px;" class="button button-blue">Переведено! Далее...</a>
+            <a onclick="decline();" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
         </div>
 
 

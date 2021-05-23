@@ -162,7 +162,7 @@
             let _token = $('meta[name="csrf-token"]').attr('content');
             let id = $('.deposit-section').data('id')
             $.ajax({
-                url: "/api/orders/" + id + "/assignee",
+                url: "/api/orders/assigneeOrder",
                 type:"POST",
                 data:{
                     _token: _token,
@@ -170,6 +170,21 @@
                 success:function(response){
                     $('.deposit-section').removeClass('created').addClass('assignee');
                     $('.assignee-section h2').text('Заявка #' + id)
+                },
+            });
+        }
+
+        function decline() {
+            let _token = $('meta[name="csrf-token"]').attr('content');
+            let id = $('.deposit-section').data('id')
+            $.ajax({
+                url: "/api/orders/declineOrder",
+                type:"POST",
+                data:{
+                    _token: _token,
+                },
+                success:function(response){
+                    $('.deposit-section').removeClass('created');
                 },
             });
         }
