@@ -93,6 +93,7 @@ class ApiController extends Controller
         }
 
         $user->notify(new OrderAssignee($order));
+        $order->status = 'assignee';
         $order->save();
         return $order->id;
     }

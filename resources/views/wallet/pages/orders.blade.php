@@ -28,7 +28,7 @@
                                             <div class="col-12 col-md-9 order-wrapper">
                                                 <div class="row">
                                                     <div class="col-6 col-lg-3">
-                                                        <p>@php echo '<a href="tg://resolve?domain=' . $order->user()->first()->username .'">@' . $order->user()->first()->username . '</a>'; @endphp</p>
+                                                        <p>@php echo '<a href="tg://user?id=' . $order->user()->first()->uid .'">' . $order->user()->first()->username . '</a>'; @endphp</p>
                                                     </div>
 
                                                     <div class="col-6 col-lg-3">
