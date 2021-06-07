@@ -34,7 +34,7 @@ class WalletController extends Controller
 
     public function orders()
     {
-        $orders = Order::where('status', 'assignee')->orWhere('status', 'created')->orderBy('id', 'DESC')->get();
+        $orders = Order::orderBy('id', 'DESC')->get();
         return view('wallet.pages.orders', compact('orders'));
     }
 

@@ -2,6 +2,18 @@
 @extends('wallet.layouts.app')
 
 @section('content')
+    <style>
+        .orders-list .completed {
+            background: #9dfc9b;
+            border-radius: 30px;
+        }
+        .orders-list .completed .order-wrapper {
+            background:transparent;
+        }
+        .orders-actions {
+            padding-right:25px;
+        }
+    </style>
     <div class="container-fluid admin-orders">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -16,7 +28,7 @@
                     </div>
                     <div class="card-body">
 
-                        <h2>Список подтвержденных заявок</h2>
+                        <h2>Список заявок</h2>
                         <div class="orders-list">
                             @if (count($orders) != 0)
                                 @foreach ($orders as $order)
@@ -26,7 +38,7 @@
                                     <div class="order col-12 {{$order->status}}">
                                         <div class="row">
                                             <div class="col-12 col-md-9 order-wrapper">
-                                                <div class="row">
+                                                <div class="row align-items-center">
                                                     <div class="col-6 col-lg-3">
                                                         <p>@php echo '<a href="tg://user?id=' . $order->user()->first()->uid .'">' . $order->user()->first()->username . '</a>'; @endphp</p>
                                                         <p>@php echo '<a href="tg://resolve?domain=' . $order->user()->first()->username .'">@' . $order->user()->first()->username . '</a>'; @endphp</p>
@@ -47,10 +59,14 @@
                                             </div>
                                             <div class="col-12 col-md-3">
                                                 <div class="orders-actions justify-content-md-end justify-content-around d-flex align-items-center h-100">
-                                                    @if ($order->status != 'created')
+                                                    @if ($order->status == 'assignee')
                                                     <a data-id="{{$order->id}}" class="btn btn-success order-confirm">Подтвердить</a>
                                                     @endif
+                                                    @if ($order->status != 'completed')
                                                     <a data-id="{{$order->id}}"  class="btn btn-danger order-decline">Отклонить</a>
+                                                    @else
+                                                    <p>Выполнена</p>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
