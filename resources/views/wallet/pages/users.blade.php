@@ -30,7 +30,7 @@
                                     <th scope="col">Имя</th>
                                     <th scope="col">TG @username</th>
                                     <th scope="col">Баланс DHB</th>
-                                    <th scope="col">Действия</th>
+                                    {{--<th scope="col">Действия</th>--}}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -42,10 +42,10 @@
                                             <td>{{$user->name}}</td>
                                             <td>{{$user->username}}</td>
                                             <td class="user-balance">{{number_format($user->getWallet('DHB')->balanceFloat, 0, ',', ' ')}} </td>
-                                            <td>
+                                            {{--<td>
                                                 <a data-uid="{{$user->uid}}" class="btn btn-success user-deposit">+</a>
                                                 <a data-uid="{{$user->uid}}"  class="btn btn-danger user-withdraw">-</a>
-                                            </td>
+                                            </td>--}}
                                         </tr>
                                  @endforeach
 
