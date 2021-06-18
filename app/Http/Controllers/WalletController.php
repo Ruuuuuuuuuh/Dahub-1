@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\System;
+use Bavix\Wallet\Models\Wallet;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +43,16 @@ class WalletController extends Controller
     public function stages()
     {
         $system = System::findOrFail(1);
+        $system->getWallet('DHB')->refreshBalance();
         return view('wallet.pages.stages', compact('system'));
+    }
+
+    // Этапы токен сейла
+    public function reports()
+    {
+        $system = System::findOrFail(1);
+        $orders = Order::orderBy('id', 'DESC')->get();
+        $wallet = new Wallet;
+        return view('wallet.pages.reports', compact('system', 'orders', 'wallet'));
     }
 }

@@ -60,4 +60,9 @@ class System extends Model implements Wallet, WalletFloat
     {
         if ($this->getFreeTokens() >= 333333) return 333333; else return $this->getFreeTokens();
     }
+
+    public function getTransactions($type)
+    {
+        return $this->transactions()->where('type', $type);
+    }
 }

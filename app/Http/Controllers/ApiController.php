@@ -110,11 +110,11 @@ class ApiController extends Controller
 
             //deposit to user wallet
             $user = User::where('uid', $order->user_uid)->first();
-            $user->getWallet('DHB')->depositFloat($order->amount);
-            $user->getWallet('DHB')->refreshBalance();
+
 
             //withdraw from system wallet
-            $systemWallet->getWallet('DHB')->withdraw($order->amount);
+            $systemWallet->getWallet('DHB')->transfer( $user->getWallet('DHB'), $order->amount * 100);
+            $user->getWallet('DHB')->refreshBalance();
             $systemWallet->getWallet('DHB')->refreshBalance();
 
             $currency = $order->currency;
@@ -128,7 +128,7 @@ class ApiController extends Controller
             $curAmount = $this->payReferral($ref, $currency, $curAmount);
 
             // deposit to system wallet
-            $systemWallet->getWallet($currency)->depositFloat($curAmount);
+            $systemWallet->getWallet($currency)->depositFloat($order->amount, array('destination' => 'tokenSale'));
             $systemWallet->getWallet($currency)->refreshBalance();
 
             // сохраняем модель
@@ -202,12 +202,16 @@ class ApiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function withdraw(Request $request)
+    public function withdrawPayment(Request $request)
     {
-        $uid = $request->input('uid');
-        $amount = $request->input('amount');
 
-        return $user->getWallet('DHB')->balanceFloat;
+        $amount = $request->input('amount');
+        $currency = $request->input('currency');
+        $destination = $request->input('destination');
+
+        $systemWallet = System::findOrFail(1);
+        $systemWallet->getWallet($currency)->withdrawFloat($amount, array('destination' => $destination));
+        return true;
     }
 
     /**

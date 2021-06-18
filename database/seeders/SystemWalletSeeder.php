@@ -36,7 +36,7 @@ class SystemWalletSeeder extends Seeder
                 'name' => 'BTC',
                 'slug' => 'BTC',
                 'balance' => '0',
-                'decimal_places' => '2'
+                'decimal_places' => '8'
             ],
             [
                 'holder_type' => 'App\Models\System',
@@ -44,7 +44,7 @@ class SystemWalletSeeder extends Seeder
                 'name' => 'ETH',
                 'slug' => 'ETH',
                 'balance' => '0',
-                'decimal_places' => '2'
+                'decimal_places' => '6'
             ]
         ]);
 

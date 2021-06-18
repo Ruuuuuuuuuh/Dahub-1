@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Bavix\Wallet\Models\Transaction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,6 +30,11 @@ class Order extends Model
     public function user()
     {
         return $this->belongsTo('App\Models\User', 'user_uid', 'uid');
+    }
+
+    public function transactions()
+    {
+        return $this->belongsToMany(Transaction::class, 'order_transaction', 'order_id', 'transaction_uuid');
     }
 
     public function scopeNotCompleted($query)
