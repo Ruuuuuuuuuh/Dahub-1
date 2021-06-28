@@ -64,7 +64,7 @@ class ApiController extends Controller
                 $admins = User::where('roles', 'admin')->get();
                 foreach ($admins as $admin) {
                     $message = 'Новая заявка ' . $order->id . ' на покупку ' . $order->amount . ' DHB. [Написать пользователю](tg://user?id='.$user->uid.')';
-                    $admin->notify(new AdminNotifications($message));
+                    if (config('notifications')) $admin->notify(new AdminNotifications($message));
                 }
                 if (config('notifications')) $user->notify(new OrderCreate($order));
                 return response($order->id, 200);
@@ -86,7 +86,7 @@ class ApiController extends Controller
         $admins = User::where('roles', 'admin')->get();
         foreach ($admins as $admin) {
             $message = 'Заявка ' . $order->id . ' на получение ' . $order->amount . ' DHB подтверждена пользователем. [Написать пользователю](tg://user?id='.$user->uid.')';
-            $admin->notify(new AdminNotifications($message));
+            if (config('notifications')) $admin->notify(new AdminNotifications($message));
         }
 
         if (config('notifications')) $user->notify(new OrderAssignee($order));
