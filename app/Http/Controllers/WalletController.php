@@ -29,6 +29,7 @@ class WalletController extends Controller
     public function index()
     {
         $system = System::find(1);
+        $system->getWallet('TokenSale')->refreshBalance();
         $balances = $system->getSoldTokens() + $system->getFrozenTokens();
         return view('wallet.index', compact('balances', 'system'));
     }
@@ -43,16 +44,22 @@ class WalletController extends Controller
     public function stages()
     {
         $system = System::findOrFail(1);
-        $system->getWallet('DHB')->refreshBalance();
+        $system->getWallet('DHBFundWallet')->refreshBalance();
         return view('wallet.pages.stages', compact('system'));
     }
 
-    // Этапы токен сейла
+    // Бухгалтерия
     public function reports()
     {
         $system = System::findOrFail(1);
+        $system->getWallet('DHBFundWallet')->refreshBalance();
+        $system->getWallet('TokenSale')->refreshBalance();
+        $system->getWallet('USDT')->refreshBalance();
+        $system->getWallet('BTC')->refreshBalance();
+        $system->getWallet('ETH')->refreshBalance();
         $orders = Order::orderBy('id', 'DESC')->get();
         $wallet = new Wallet;
-        return view('wallet.pages.reports', compact('system', 'orders', 'wallet'));
+        $users = User::all();
+        return view('wallet.pages.reports', compact('system', 'orders', 'wallet', 'users'));
     }
 }

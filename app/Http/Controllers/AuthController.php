@@ -58,8 +58,6 @@ class AuthController extends Controller
             return $authUser;
         }
 
-
-
         $user = User::create([
             'uid'       => $user->id,
             'avatar'    => $user->avatar,

@@ -40,15 +40,20 @@ class OrderDecline extends Notification
     {
         $url = url('/wallet/');
 
-        return TelegramMessage::create()
-            // Optional recipient user id.
-            ->to($notifiable->uid)
-            // Markdown supported.
-            ->content("Заявка №" . $this->order->id . " на получение " . $this->order->amount . " DHB отменена.")
 
-            // (Optional) Blade template for the content.
-            // ->view('notification', ['url' => $url])
+        try {
+            TelegramMessage::create()
+                // Optional recipient user id.
+                ->to($notifiable->uid)
+                // Markdown supported.
+                ->content("Заявка №" . $this->order->id . " на получение " . $this->order->amount . " DHB отменена.")
 
-             ->button('Перейти в кошелек', $url);
+                // (Optional) Blade template for the content.
+                // ->view('notification', ['url' => $url])
+
+                ->button('Перейти в кошелек', $url);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }

@@ -35,11 +35,7 @@ class System extends Model implements Wallet, WalletFloat
      */
     public function getSoldTokens()
     {
-        $balance = 0;
-        $users = User::all();
-        foreach ($users as $user) {
-            $balance += $user->getWallet('DHB')->balanceFloat;
-        }
+        $balance = 2000000 - $this->getWallet('TokenSale')->balanceFloat;
         return $balance;
     }
 
@@ -49,7 +45,7 @@ class System extends Model implements Wallet, WalletFloat
      */
     public function getFreeTokens()
     {
-        return $this->getWallet('DHB')->balanceFloat - $this->getSoldTokens() - $this->getFrozenTokens();
+        return $this->getWallet('TokenSale')->balanceFloat - $this->getSoldTokens() - $this->getFrozenTokens();
     }
 
     /**

@@ -10459,11 +10459,34 @@ strong {
 }
 
 .button-withdraw {
-  flex-grow: 1;
   text-align: right;
 }
 .button-withdraw a {
   display: inline;
+}
+
+.button-send {
+  flex-grow: 1;
+  text-align: right;
+  margin-right: 15px;
+}
+.button-send a {
+  display: inline;
+}
+
+#dashboard-tabs {
+  border: none;
+  margin-bottom: 30px;
+}
+#dashboard-tabs .nav-link {
+  padding: 15px 25px;
+  border-radius: 25px;
+  color: #333;
+  background: #eee;
+}
+#dashboard-tabs .nav-link.active {
+  background: var(--teal);
+  color: #fff;
 }
 
 @media screen and (max-width: 767px) {
@@ -10769,5 +10792,25 @@ strong {
     font-size: 10px;
     padding: 6px 12px 7px;
     border-radius: 15px;
+  }
+
+  #dashboard-tabs {
+    border: none;
+    margin-bottom: 30px;
+  }
+  #dashboard-tabs .nav-link {
+    font-size: 12px;
+    padding: 12px 20px;
+    border-radius: 25px;
+    color: #333;
+    background: #eee;
+  }
+  #dashboard-tabs .nav-link.active {
+    background: var(--teal);
+    color: #fff;
+  }
+
+  #wallet .wallet-number strong {
+    font-size: 12px;
   }
 }

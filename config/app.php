@@ -123,6 +123,15 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+
+    /*
+     * Disable Notifications
+     *
+     */
+    'notifications' => env('APP_NOTIFICATIONS', false),
+
+
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -133,7 +142,6 @@ return [
     | this array to grant expanded functionality to your applications.
     |
     */
-
     'providers' => [
 
         /*

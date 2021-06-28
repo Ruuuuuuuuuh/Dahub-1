@@ -386,9 +386,30 @@ strong {
     box-shadow:0 0 15px rgba(0,0,0,.3);
 }
 .button-withdraw {
-    flex-grow: 1;
     text-align: right;
     a {
         display:inline;
+    }
+}
+.button-send{
+    flex-grow: 1;
+    text-align: right;
+    margin-right: 15px;
+    a {
+        display:inline;
+    }
+}
+#dashboard-tabs {
+    border:none;
+    margin-bottom:30px;
+    .nav-link {
+        padding: 15px 25px;
+        border-radius: 25px;
+        color:#333;
+        background: #eee;
+        &.active {
+            background: var(--teal);
+            color:#fff;
+        }
     }
 }

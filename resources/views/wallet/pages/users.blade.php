@@ -30,7 +30,7 @@
                                     <th scope="col">Имя</th>
                                     <th scope="col">TG @username</th>
                                     <th scope="col">Баланс DHB</th>
-                                    {{--<th scope="col">Действия</th>--}}
+                                    <th scope="col">Действия</th
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -42,10 +42,10 @@
                                             <td>{{$user->name}}</td>
                                             <td>{{$user->username}}</td>
                                             <td class="user-balance">{{number_format($user->getWallet('DHB')->balanceFloat, 0, ',', ' ')}} </td>
-                                            {{--<td>
+                                            <td>
                                                 <a data-uid="{{$user->uid}}" class="btn btn-success user-deposit">+</a>
                                                 <a data-uid="{{$user->uid}}"  class="btn btn-danger user-withdraw">-</a>
-                                            </td>--}}
+                                            </td>
                                         </tr>
                                  @endforeach
 
@@ -64,12 +64,13 @@
             $('.user-deposit').bind('click', function(e) {
                 let uid = $(this).data('uid');
                 e.preventDefault();
-                let amount = prompt("Введите количество токенов", "");
+                let amount = prompt("Введите количество токенов DHB", "");
                 if (amount != null) {
-                    $.post( "/api/deposit", {
+                    $.post( "/api/orders/admin/create", {
                         "_token": "{{ csrf_token() }}",
-                        "uid": uid,
-                        "amount": amount
+                        "user_uid": uid,
+                        "amount": amount,
+                        "currency": 'USDT',
                     })
                     .done(function( data ) {
                         $('#' + uid + ' .user-balance').html(data);

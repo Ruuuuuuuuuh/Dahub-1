@@ -238,6 +238,26 @@
         padding: 6px 12px 7px;
         border-radius: 15px;
     }
+    #dashboard-tabs {
+        border:none;
+        margin-bottom:30px;
+        .nav-link {
+            font-size:12px;
+            padding: 12px 20px;
+            border-radius: 25px;
+            color:#333;
+            background: #eee;
+            &.active {
+                background: var(--teal);
+                color:#fff;
+            }
+        }
+    }
+    #wallet {
+        .wallet-number strong {
+            font-size:12px;
+        }
+    }
 }
 @media screen and (max-width:380px) {
 

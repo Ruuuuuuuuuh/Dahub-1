@@ -16,19 +16,9 @@ use Illuminate\Support\Facades\Auth;
 
 class ApiController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
 
     /**
-     * Store a newly created resource in storage.
+     * Deposit to users Wallet
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
@@ -43,9 +33,16 @@ class ApiController extends Controller
         return $user->getWallet('DHB')->balanceFloat;
     }
 
+
+    /**
+     * Create Order from users
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function createOrder(Request $request)
     {
-        $user = User::where('uid', $request->input('user_uid'))->first();
+        $user = Auth::user();
         $system = System::find(1);
 
         $headers = array (
@@ -69,8 +66,8 @@ class ApiController extends Controller
                     $message = 'Новая заявка ' . $order->id . ' на покупку ' . $order->amount . ' DHB. [Написать пользователю](tg://user?id='.$user->uid.')';
                     $admin->notify(new AdminNotifications($message));
                 }
-                $user->notify(new OrderCreate($order));
-                return $order->id;
+                if (config('notifications')) $user->notify(new OrderCreate($order));
+                return response($order->id, 200);
             }
             else {
                 return response(['error'=> true, 'error-msg' => 'У вас уже есть активная заявка'],404, $headers, JSON_UNESCAPED_UNICODE);
@@ -92,191 +89,31 @@ class ApiController extends Controller
             $admin->notify(new AdminNotifications($message));
         }
 
-        $user->notify(new OrderAssignee($order));
+        if (config('notifications')) $user->notify(new OrderAssignee($order));
         $order->status = 'assignee';
         $order->save();
         return $order->id;
     }
 
 
-    public function confirmOrder($id)
-    {
-        $order = Order::find($id);
-        $order->status = 'completed';
-
-
-        $systemWallet = System::findOrFail(1);
-        if ($systemWallet->getWallet('DHB')->balanceFloat >= $order->amount) {
-
-            //deposit to user wallet
-            $user = User::where('uid', $order->user_uid)->first();
-
-
-            //withdraw from system wallet
-            $systemWallet->getWallet('DHB')->transfer( $user->getWallet('DHB'), $order->amount * 100);
-            $user->getWallet('DHB')->refreshBalance();
-            $systemWallet->getWallet('DHB')->refreshBalance();
-
-            $currency = $order->currency;
-            $curAmount = $order->amount / $order->rate;
-
-
-
-            // Начисление рефок
-            $ref = User::where('uid', $order->user_uid)->first();
-
-            $curAmount = $this->payReferral($ref, $currency, $curAmount);
-
-            // deposit to system wallet
-            $systemWallet->getWallet($currency)->depositFloat($order->amount, array('destination' => 'tokenSale'));
-            $systemWallet->getWallet($currency)->refreshBalance();
-
-            // сохраняем модель
-            $order->save();
-            return $order->id;
-        }
-        else {
-
-            $headers = array (
-                'Content-Type' => 'application/json; charset=UTF-8',
-                'charset' => 'utf-8'
-            );
-
-            return response(['error'=>true, 'error-msg' => 'Баланс системы меньше запрашиваемой суммы'], 404, $headers, JSON_UNESCAPED_UNICODE);
-        }
-    }
-
-
-    public function declineOrder($id)
-    {
-        $order = Order::find($id);
-        $user = User::where('uid', $order->user_uid)->first();
-        $user->notify(new OrderDecline($order));
-        $order->forceDelete();
-        return $order->id;
-    }
-
+    /**
+     * Отмена заявки пользовтелем
+     *
+     * @return mixed
+     */
     public function declineOrderByUser()
     {
         $order = Order::where('status', 'created')->first();
         $user = Auth::user();
-        $user->notify(new OrderDecline($order));
+
+        // Send message via telegram
+        if (config('notifications')) $user->notify(new OrderDecline($order));
+
+
         $order->forceDelete();
         return $order->id;
     }
 
 
-    public function payReferral(User $user, $currency, $amount) {
-        $curAmount = 0;
 
-        $tax = 9; // Процент на первом уровне
-        $refAmount = 0;
-        $curAmount = 0;
-        while ($user->referred_by && $tax > 0) {
-            $user = User::where('affiliate_id', $user->referred_by)->first();
-            $refAmount = ($amount * $tax ) / 100;
-            $user->getWallet($currency)->depositFloat($refAmount, array('destination' => 'referral'));
-            $user->getWallet($currency)->refreshBalance();
-            $user->notify(new ReferralBonusPay(array('amount' => $refAmount, 'currency' => $currency)));
-            $curAmount = $amount - $refAmount;
-            $tax = $tax - 3;
-        }
-        return $curAmount;
-    }
-
-
-    public function startTokenSale(Request $request)
-    {
-        $system = System::findOrFail(1);
-        $system->getWallet('DHB')->depositFloat('2000000');
-        $system->getWallet('DHB')->refreshBalance();
-        $system->rate = 0.05;
-        $system->stage = 1;
-        $system->save();
-        return true;
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function withdrawPayment(Request $request)
-    {
-
-        $amount = $request->input('amount');
-        $currency = $request->input('currency');
-        $destination = $request->input('destination');
-
-        $systemWallet = System::findOrFail(1);
-        $systemWallet->getWallet($currency)->withdrawFloat($amount, array('destination' => $destination));
-        return true;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

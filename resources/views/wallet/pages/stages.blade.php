@@ -16,12 +16,10 @@
                     </div>
                     <div class="card-body">
                         <p>Текущий баланс DHB</p>
-                        <h2>{{ $system->getWallet('DHB')->balanceFloat }} DHB</h2>
+                        <h2>{{ $system->getWallet('DHBFundWallet')->balanceFloat }} DHB</h2>
                         <p>Замороженные токены (в заявках)</p>
-                        <h2>{{$system->getFrozenTokens()}} DHB</h2>
-                        @if ($system->stage != 1)
-                        <a class="button button-orange start-token-sale">Запустить токен сейл</a>
-                        @endif
+                        <a class="btn btn-success set-dhb-rate">Установить курс токенов</a>
+{{--                        <a class="start-token-sale">старт токен сейл</a>--}}
                     </div>
                 </div>
             </div>
@@ -32,7 +30,20 @@
 @section('script')
     <script>
         $(document).ready(function(){
-
+            $('.set-dhb-rate').bind('click', function(e) {
+                let dhbRate = '{{$system->rate}}'
+                e.preventDefault();
+                let amount = prompt("Введите курс DHB, текущий курс равен " + dhbRate, "");
+                if (amount != null) {
+                    $.post( "/api/set_dhb_rate", {
+                        "_token": "{{ csrf_token() }}",
+                        "rate": amount,
+                    })
+                    .done(function( data ) {
+                        alert('Курс DHB успешно установлен')
+                    });
+                }
+            })
             $('.start-token-sale').bind('click', function(e) {
                 e.preventDefault();
                 let _token = $('meta[name="csrf-token"]').attr('content');
@@ -44,6 +55,21 @@
                     },
                     success:function(response){
                         alert('Токен сейл успешно запущен по цене токена в 0.05$ На системный кошелек начислено 2 млн токенов DHB')
+                        window.location.href = '/wallet/stages/';
+                    },
+                });
+            })
+            $('.generate_user_wallets').bind('click', function(e) {
+                e.preventDefault();
+                let _token = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: "/api/generate_user_wallets",
+                    type:"POST",
+                    data:{
+                        _token: _token,
+                    },
+                    success:function(response){
+                        alert('Пользовательские кошельки сгенерированы автоматически')
                         window.location.href = '/wallet/stages/';
                     },
                 });
