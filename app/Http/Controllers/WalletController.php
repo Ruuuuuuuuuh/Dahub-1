@@ -34,6 +34,14 @@ class WalletController extends Controller
         return view('wallet.index', compact('balances', 'system'));
     }
 
+    public function profile()
+    {
+        $system = System::find(1);
+        $system->getWallet('TokenSale')->refreshBalance();
+        $balances = $system->getSoldTokens() + $system->getFrozenTokens();
+        return view('wallet.profile', compact('balances', 'system'));
+    }
+
     public function orders()
     {
         $orders = Order::orderBy('id', 'DESC')->get();

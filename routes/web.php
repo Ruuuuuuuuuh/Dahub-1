@@ -33,6 +33,7 @@ Route::group(['prefix' => 'dashboard'], function () {
 
 
 Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
+Route::get('/wallet/profile', [App\Http\Controllers\WalletController::class, 'profile'])->name('wallet.profile');
 
 // ADMIN PAGES
 Route::get('/wallet/orders/', [App\Http\Controllers\WalletController::class, 'orders'])->middleware('admin')->name('wallet.orders');
