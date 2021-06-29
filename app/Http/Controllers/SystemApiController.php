@@ -139,9 +139,14 @@ class SystemApiController extends Controller
                     $tag->save();
                 }
             }
-
             $systemWallet = System::findOrFail(1);
-            $systemWallet->getWallet($currency)->transferFloat($user->getWallet($currency), $amount, array('destination' => $destination));
+            if ($currency == 'DHBFundWallet') {
+                $systemWallet->getWallet($currency)->transferFloat($user->getWallet('DHB'), $amount, array('destination' => $destination));
+            }
+            else {
+                $systemWallet->getWallet($currency)->transferFloat($user->getWallet($currency), $amount, array('destination' => $destination));
+            }
+
             return 'Успешно переведено';
         }
         else {
