@@ -21,7 +21,7 @@ class AuthController extends Controller
      */
     public function login()
     {
-        return redirect('/wallet');
+        return redirect('/');
     }
 
     public function authUser($token) {

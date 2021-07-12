@@ -23,10 +23,6 @@ class WalletController extends Controller
     }
 
 
-    public function welcome() {
-        if (auth()->user()) return redirect(route('wallet')); else return view('welcome');
-    }
-
     /**
      * Show the application dashboard.
      *

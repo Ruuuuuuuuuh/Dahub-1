@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -14,7 +15,9 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 |
 */
 
-Route::get('/', [App\Http\Controllers\WalletController::class, 'welcome'])->middleware('referral');
+Route::get('/', function () {
+    if (Auth::check()) return redirect(route('wallet')); else return view('welcome');
+})->middleware('referral');
 
 Auth::routes();
 
