@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,14 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-})->middleware('referral');
+Route::get('/', [App\Http\Controllers\WalletController::class, 'welcome'])->middleware('referral');
 
 Auth::routes();
 
 Route::get('/telegram/redirect', [App\Http\Controllers\AuthController::class, 'getUser'])->name('getuser');
-Route::get('/telegram/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
+Route::get('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
+Route::get('/auth/{token}', [App\Http\Controllers\AuthController::class, 'authUser'])->name('auth');
 
 
 
@@ -58,3 +58,9 @@ Route::post('/api/orders/create', [App\Http\Controllers\ApiController::class, 'c
 Route::post('/api/orders/assigneeOrder', [App\Http\Controllers\ApiController::class, 'assigneeOrderByUser']);
 Route::post('/api/orders/declineOrder', [App\Http\Controllers\ApiController::class, 'declineOrderByUser']);
 
+
+// Telegram Web Api
+Route::post(\Telegram::getAccessToken().'/webhook', function () {
+    $update = Telegram::commandsHandler(true);
+    return 'ok';
+});

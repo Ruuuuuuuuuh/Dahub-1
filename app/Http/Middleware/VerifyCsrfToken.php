@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use Illuminate\Contracts\Encryption\Encrypter;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 
 class VerifyCsrfToken extends Middleware
@@ -12,6 +14,20 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        //
+        '/1150126504:AAGHppcIXIcZ0pBmhx1mFQfZRfbfb-DPWWQ/webhook',
     ];
+
+    /**
+     * Create a new middleware instance.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Contracts\Encryption\Encrypter  $encrypter
+     * @return void
+     */
+    public function __construct(Application $app, Encrypter $encrypter)
+    {
+        $this->app = $app;
+        $this->encrypter = $encrypter;
+        $this->except[] = \Telegram::getAccessToken().'/webhook';
+    }
 }

@@ -13,35 +13,39 @@
   *
   * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
   */
-
-
+ 
+ 
+ 
  /**
   * Next, we will create a fresh Vue application instance and attach it to
   * the page. Then, you may begin adding components to this application
   * or customize the JavaScript scaffolding to fit your unique needs.
   */
-
+ 
+ 
  import Vue from 'vue'
  import VueRouter from 'vue-router'
  import App from './components/App.vue'
-
+ 
  Vue.use(VueRouter)
-
+ 
  import Router from './routes';
-
+ 
  import Vuetify from 'vuetify'
-
+ 
  import 'vuetify/dist/vuetify.min.css'
+ 
  import Vuex from 'vuex';
-
-
+ 
+ 
  Vue.use(Vuetify)
-
+ 
  Vue.use(Vuex)
-
+ 
  new Vue({
      Router,
-     render: (h) => h(App),
- }).mount('#app');
-
-
+     render: (h) => h(App)
+ )}.$mount('#app');x 
+ 
+ 
+ 

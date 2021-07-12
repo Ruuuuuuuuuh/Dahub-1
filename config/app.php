@@ -184,6 +184,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        \Telegram\Bot\Laravel\TelegramServiceProvider::class
+
+
 
     ],
 
@@ -237,6 +240,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Rate' => App\Helpers\Rate::class,
+        'Telegram'  => \Telegram\Bot\Laravel\Facades\Telegram::class
 
     ],
 

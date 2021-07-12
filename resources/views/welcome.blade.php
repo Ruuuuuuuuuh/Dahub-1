@@ -15,6 +15,7 @@
     <meta name="msapplication-TileColor" content="#9f00a7">
     <meta name="theme-color" content="#ffffff">
     <title>Da·Hub – Децентрализованная P2P система</title>
+    <link href="/css/custom.css" rel="stylesheet" type="text/css">
     <style>
         .main-logo {
             margin-top:-40px;
@@ -22,11 +23,55 @@
             width: 450px;
             height: auto;
         }
+        .button-auth {
+            font-size: 18px;
+            line-height: 18px;
+            color: #fff;
+            padding: 20px 65px;
+            border-radius: 30px;
+            background: linear-gradient(
+                98.44deg
+                , #43BCEB 10.77%, #26A8DC 86.38%);
+            font-family: "Gotham Pro";
+            text-transform: initial;
+            text-decoration: none;
+            font-weight: 400;
+            display:flex;
+            align-items: center;
+            transition: .3s ease-in-out all;
+        }
+        .button-auth:hover {
+            box-shadow: 0 0 25px rgba(0, 0, 0, .15);
+        }
+        .button-auth svg {
+            margin-right:18px;
+            width: 34px;
+        }
         @media screen and (max-width:720px) {
             .main-logo {
                 margin-bottom: 60px;
                 width: 80vw;
                 height: auto;
+            }
+            .button-auth {
+                font-size: 16px;
+                line-height: 16px;
+                color: #fff;
+                width: calc(100vw - 80px);
+                justify-content: center;
+                padding: 15px 0px;
+                border-radius: 30px;
+                font-family: "Gotham Pro";
+                text-transform: initial;
+                text-decoration: none;
+                font-weight: 400;
+                display: flex;
+                align-items: center;
+                transition: .3s ease-in-out all;
+            }
+            .button-auth svg {
+                margin-right:18px;
+                width: 28px;
             }
         }
     </style>
@@ -100,8 +145,10 @@
             </clipPath>
         </defs>
     </svg>
-    <script async src="https://telegram.org/js/telegram-widget.js?14" data-telegram-login="{{env('TELEGRAM_BOT_NAME')}}" data-size="large" data-radius="30" data-userpic="false" data-auth-url="{{env('TELEGRAM_REDIRECT_URI')}}" data-request-access="write"></script>
-
+    <a class="button-auth" href="https://t.me/{{env('TELEGRAM_BOT_NAME')}}?start=login{{ app('request')->input('ref') }}"><svg width="38" height="33" viewBox="0 0 38 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M-8.01086e-05 1.17486C0.0591888 1.71427 0.237003 2.34973 0.370365 2.9852C1.30388 7.49998 2.2448 12.0148 3.18573 16.5295C4.2526 21.6724 5.32689 26.8153 6.40117 31.9507C6.61602 32.9926 7.431 33.2955 8.31265 32.6601C10.7502 30.8941 13.1877 29.1281 15.6252 27.3694C16.0253 27.0813 16.4253 26.7931 16.8254 26.5049C17.4552 26.0468 18.0849 26.0468 18.6999 26.5419C20.2187 27.7611 21.7227 28.9951 23.2341 30.229C23.523 30.4655 23.8194 30.7019 24.212 30.6872C24.701 30.6724 25.0715 30.3694 25.2419 29.8226C25.6642 28.5074 26.0643 27.1921 26.4792 25.8768C27.1385 23.7635 27.7979 21.6502 28.4499 19.5295C28.5388 19.234 28.6944 19.064 28.9982 18.9532C31.695 17.963 34.3844 16.9507 37.0812 15.9458C37.3257 15.8571 37.5702 15.7611 37.748 15.5616C38.2592 14.9778 38.0147 14.1354 37.2294 13.8251C36.081 13.367 34.9252 12.9384 33.7769 12.4951C29.2056 10.7364 24.6418 8.97042 20.0705 7.21919C16.0697 5.68225 12.0912 4.16008 8.1052 2.62313C6.0085 1.81771 3.9192 1.00491 1.8225 0.199487C1.6595 0.140373 1.49651 0.073871 1.33352 0.029536C0.637081 -0.140415 -8.01086e-05 0.354659 -8.01086e-05 1.17486ZM26.4643 18.9015C26.4569 18.9532 26.4569 19.101 26.4199 19.2414C25.8198 21.362 25.2196 23.4753 24.6121 25.596C24.5454 25.8251 24.4417 26.0098 24.1602 25.9951C23.8712 25.9803 23.812 25.7586 23.7749 25.5295C23.6638 24.7537 23.5304 23.9704 23.4638 23.1872C23.36 21.9458 23.0266 20.867 22.0413 19.9877C19.789 17.9778 17.5959 15.9015 15.3807 13.8473C13.3284 11.9483 11.2762 10.0492 9.22394 8.14284C8.9424 7.88422 8.66828 7.61821 8.39415 7.3522C8.28301 7.24136 8.20893 7.10835 8.31265 6.96057C8.43119 6.79062 8.57196 6.86451 8.70532 6.9384C8.77941 6.98274 8.8535 7.02707 8.92759 7.07141C10.1278 7.81032 11.3206 8.54185 12.5209 9.28077C16.8995 11.9704 21.2855 14.6601 25.6642 17.3497C26.1976 17.6896 26.4717 18.1773 26.4643 18.9015Z" fill="white"/>
+        </svg>
+        Войти через Telegram</a>
 </div>
 
 </body>

@@ -8,6 +8,7 @@ use Bavix\Wallet\Models\Wallet;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class WalletController extends Controller
 {
@@ -21,6 +22,11 @@ class WalletController extends Controller
         $this->middleware('auth');
     }
 
+
+    public function welcome() {
+        if (auth()->user()) return redirect(route('wallet')); else return view('welcome');
+    }
+
     /**
      * Show the application dashboard.
      *
@@ -28,6 +34,7 @@ class WalletController extends Controller
      */
     public function index()
     {
+
         $system = System::find(1);
         $system->getWallet('TokenSale')->refreshBalance();
         $balances = $system->getSoldTokens() + $system->getFrozenTokens();

@@ -31,6 +31,7 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         'uid',
         'affiliate_id',
         'referred_by',
+        'auth_token'
     ];
 
     /**
