@@ -10974,7 +10974,7 @@ strong {
   .explorer .order .order-wrapper .hash {
     width: 100%;
     font-size: 12px;
-    text-align: left;
+    text-align: center;
     line-height: 41px;
     border-radius: 20px;
     background-color: #F6F8FA;
@@ -11020,6 +11020,15 @@ strong {
   }
 }
 @media screen and (max-width: 360px) {
+  .explorer .hash {
+    font-size: 10px !important;
+  }
+  .explorer .amount {
+    font-size: 10px !important;
+  }
+  .explorer .amount-source {
+    font-size: 10px !important;
+  }
   .explorer .transactions.actions svg {
     display: none;
   }

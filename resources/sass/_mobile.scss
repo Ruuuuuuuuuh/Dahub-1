@@ -308,7 +308,7 @@
                 .hash {
                     width:100%;
                     font-size: 12px;
-                    text-align: left;
+                    text-align: center;
                     line-height: 41px;
                     border-radius: 20px;
                     background-color: #F6F8FA;
@@ -364,11 +364,14 @@
 }
 @media screen and (max-width:360px) {
     .explorer {
+        .hash {
+            font-size:10px!important;
+        }
         .amount {
-            font-size: 10px;
+            font-size:10px!important;
         }
         .amount-source {
-            font-size: 10px;
+            font-size:10px!important;
         }
         .transactions.actions svg {
             display:none;
