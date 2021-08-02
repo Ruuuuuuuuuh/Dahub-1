@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Telegram\Bot\Api;
 
 class SystemApiController extends Controller
 {
@@ -110,14 +111,19 @@ class SystemApiController extends Controller
         $amount = $request->input('amount');
         $currency = $request->input('currency');
         $destination = $request->input('destination');
-        if (!Tag::where('name', $destination)->exists()) {
-            $tag = new Tag;
-            $tag->name = $destination;
-            $tag->save();
+        $destinations = explode(',', $destination );
+        $message = '';
+        if ( $request->has('message')) $message = $request->input('message');
+        foreach ($destinations as $destination) {
+            if (!Tag::where('name', $destination)->exists()) {
+                $tag = new Tag;
+                $tag->name = $destination;
+                $tag->save();
+            }
         }
 
         $systemWallet = System::findOrFail(1);
-        $systemWallet->getWallet($currency)->withdrawFloat($amount, array('destination' => $destination));
+        $systemWallet->getWallet($currency)->withdrawFloat($amount, array('destination' => $destinations, 'comment' => $message));
         return true;
     }
 
@@ -126,25 +132,32 @@ class SystemApiController extends Controller
 
         $amount = $request->input('amount');
         $currency = $request->input('currency');
-        $destination = false;
-        if ($request->has('destination')) $destination = $request->input('destination');
+        $message = '';
+        if ( $request->has('message')) $message = $request->input('message');
+        $destinations = false;
+        if ($request->has('destination')) {
+            $destination = $request->input('destination');
+            $destinations = explode(',', $destination );
+        }
 
         $username = $request->input('username');
         $user = User::where('uid', $username)->first();
         if ($user) {
-            if ($destination) {
-                if (!Tag::where('name', $destination)->exists()) {
-                    $tag = new Tag;
-                    $tag->name = $destination;
-                    $tag->save();
+            if ($destinations) {
+                foreach ($destinations as $destination) {
+                    if (!Tag::where('name', $destination)->exists()) {
+                        $tag = new Tag;
+                        $tag->name = $destination;
+                        $tag->save();
+                    }
                 }
             }
             $systemWallet = System::findOrFail(1);
             if ($currency == 'DHBFundWallet') {
-                $systemWallet->getWallet($currency)->transferFloat($user->getWallet('DHB'), $amount, array('destination' => $destination));
+                $systemWallet->getWallet($currency)->transferFloat($user->getWallet('DHB'), $amount, array('destination' => $destinations, 'comment' => $message));
             }
             else {
-                $systemWallet->getWallet($currency)->transferFloat($user->getWallet($currency), $amount, array('destination' => $destination));
+                $systemWallet->getWallet($currency)->transferFloat($user->getWallet($currency), $amount, array('destination' => $destinations, 'comment' => $message));
             }
 
             return 'Успешно переведено';
@@ -232,6 +245,21 @@ class SystemApiController extends Controller
 
             // сохраняем модель
             $order->save();
+
+            $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
+            $transactions = $order->transactions();
+            foreach ($transactions as $transaction) {
+                if ($transaction->payable_type == 'App\Models\System') {
+                    $systemWallet->getWallet('TokenSale')->refreshBalance();
+                    $response = $telegram->sendMessage([
+                        'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
+                        'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>↗️ Sent: </b>' . $curAmount . ' ' . $currency .PHP_EOL.'<b>↙️ Recieved: </b>' . $order->amount . ' DHB' .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid. PHP_EOL.PHP_EOL.'<b>🔥 TokenSale: </b>'. number_format($systemWallet->getWallet('TokenSale')->balanceFloat, 0, '.', ' ') . ' DHB left until the end of stage 1',
+                        'parse_mode' => 'html'
+                    ]);
+                }
+            }
+
+
             return $order->id;
         }
         else {

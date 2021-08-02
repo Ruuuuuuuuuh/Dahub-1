@@ -90,7 +90,15 @@
                                                 {{ $wallet::where('id', $order->wallet_id)->first()->slug}}
                                             </td>
                                             <td>
-                                                {{ $order->meta['destination'] ?? '--' }}
+                                                @if (isset($order->meta['destination']))
+                                                    @if (is_array($order->meta['destination']))
+                                                        @foreach ($order->meta['destination'] as $destination)
+                                                            <span class="badge badge-success">{{$destination}}</span>
+                                                        @endforeach
+                                                    @else
+                                                        <span class="badge badge-success">{{$order->meta['destination']}}</span>
+                                                    @endif
+                                                @endif
                                             </td>
                                         </tr>
                                         @endif
@@ -109,6 +117,7 @@
                                         <td>Сумма</td>
                                         <td>Кошелек</td>
                                         <td>Назначение</td>
+                                        <td>Комментарий</td>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -132,7 +141,18 @@
                                                 {{ $wallet::where('id', $order->wallet_id)->first()->slug}}
                                             </td>
                                             <td>
-                                                {{ $order->meta['destination'] ?? '--' }}
+                                                @if (isset($order->meta['destination']))
+                                                    @if (is_array($order->meta['destination']))
+                                                        @foreach ($order->meta['destination'] as $destination)
+                                                            <span class="badge badge-success">{{$destination}}</span>
+                                                        @endforeach
+                                                    @else
+                                                        <span class="badge badge-success">{{$order->meta['destination']}}</span>
+                                                    @endif
+                                                @endif
+                                            </td>
+                                            <td>
+                                                {{ $order->meta['comment'] ?? '' }}
                                             </td>
                                         </tr>
                                         @endif
@@ -183,6 +203,10 @@
                             <label for="destination">Назначение</label>
                             <input type="text" class="form-control" name="destination" data-role="tagsinput" placeholder="Назначение платежа">
                         </div>
+                        <div class="form-group">
+                            <label for="message">Комментарий</label>
+                            <textarea class="form-control" name="message" placeholder="Комментарий к транзакции"></textarea>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -229,6 +253,10 @@
                             <label for="destination">Назначение</label>
                             <input type="text" class="form-control" name="destination" data-role="tagsinput" placeholder="Назначение платежа">
                         </div>
+                        <div class="form-group">
+                            <label for="message">Комментарий</label>
+                            <textarea class="form-control" name="message" placeholder="Комментарий к транзакции"></textarea>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -253,7 +281,6 @@
                     return $.post('/api/tags', { _token : $('meta[name="csrf-token"]').attr('content')});
                 }
             },
-            maxTags: 1
         });
     </script>
     <script>
@@ -261,6 +288,7 @@
             let currency = $('#withdraw-payment select[name="currency"]').val();
             let amount = $('#withdraw-payment input[name="amount"]').val();
             let destination = $('#withdraw-payment input[name="destination"]').val();
+            let message = $('#withdraw-payment textarea').val();
             let _token = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 url: "/api/withdraw-payment",
@@ -270,6 +298,7 @@
                     currency: currency,
                     amount: amount,
                     destination: destination,
+                    message: message
                 },
                 success:function(response){
                     alert('Вывод средств успешно совершен')
@@ -282,6 +311,7 @@
             let currency = $('#send-payment select[name="currency"]').val();
             let amount = $('#send-payment input[name="amount"]').val();
             let destination = $('#send-payment input[name="destination"]').val();
+            let message = $('#send-payment textarea').val();
             let username = $('#send-payment select[name="username"]').val();
             let _token = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
@@ -293,6 +323,7 @@
                     amount: amount,
                     destination: destination,
                     username: username,
+                    message: message,
                 },
                 success:function(response){
                     alert(response)

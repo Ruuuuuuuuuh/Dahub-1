@@ -37,6 +37,7 @@ Route::group(['prefix' => 'dashboard'], function () {
 
 Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
 Route::get('/wallet/profile', [App\Http\Controllers\WalletController::class, 'profile'])->name('wallet.profile');
+Route::get('/wallet/explorer', [App\Http\Controllers\WalletController::class, 'explorer'])->name('wallet.explorer');
 
 // ADMIN PAGES
 Route::get('/wallet/orders/', [App\Http\Controllers\WalletController::class, 'orders'])->middleware('admin')->name('wallet.orders');
@@ -53,13 +54,14 @@ Route::post('/api/orders/{id}/decline', [App\Http\Controllers\SystemApiControlle
 Route::post('/api/withdraw-payment', [App\Http\Controllers\SystemApiController::class, 'withdrawPayment'])->middleware('admin');
 Route::post('/api/send', [App\Http\Controllers\SystemApiController::class, 'sendTokens'])->middleware('admin');
 Route::post('/api/set_dhb_rate', [App\Http\Controllers\SystemApiController::class, 'setDHBRate'])->middleware('admin');
-Route::post('/api/orders/admin/create', [App\Http\Controllers\SystemApiController::class, 'createOrder']);
+Route::post('/api/orders/admin/create', [App\Http\Controllers\SystemApiController::class, 'createOrder'])->middleware('admin');
 
 // API ROUTES
 Route::post('/api/deposit', [App\Http\Controllers\ApiController::class, 'deposit']);
 Route::post('/api/orders/create', [App\Http\Controllers\ApiController::class, 'createOrder']);
 Route::post('/api/orders/assigneeOrder', [App\Http\Controllers\ApiController::class, 'assigneeOrderByUser']);
 Route::post('/api/orders/declineOrder', [App\Http\Controllers\ApiController::class, 'declineOrderByUser']);
+Route::post('/api/getTransactions', [App\Http\Controllers\ApiController::class, 'getTransactions']);
 
 
 // Telegram Web Api

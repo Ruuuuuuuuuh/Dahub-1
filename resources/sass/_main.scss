@@ -85,13 +85,26 @@ main {
 .created .created-order {
     display:block;
 }
+.order-list-header {
+    margin-top:65px;
+    padding:0 30px;
+}
 .orders-list {
-    margin-top:50px;
+    margin-top:20px;
+}
+.explorer .order {
+    margin-bottom: 20px;
 }
 .orders-list .order {
     margin-bottom: 20px;
 }
 .order-wrapper {
+    a {
+        color:#03ABFF!important;
+    }
+    p {
+        font-size:18px;
+    }
     border-radius: 30px;
     background: #f5f8fa;
     padding: 25px 40px;
@@ -124,10 +137,14 @@ main {
     background: transparent;
 }
 .main-screen p {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+.card-header p {
     font-size: 22px;
     margin-bottom: 5px;
 }
-.main-screen .card-header p {
+.card-header p {
     color:#fff;
     font-weight: 500;
 }
@@ -149,6 +166,14 @@ main {
 }
 .users-button svg path {
     fill:#fff;
+}
+.alert {
+    font-size: 18px;
+    padding: 25px;
+    border-radius: 25px;
+    background: #f5f8fa;
+    text-align: center;
+    display:none;
 }
 .users-button svg {
     display:none;
@@ -410,6 +435,89 @@ strong {
         &.active {
             background: var(--teal);
             color:#fff;
+        }
+    }
+}
+.explorer .order, .order-list-header .order {
+    text-align: center;
+}
+.order-wrapper .hash {
+    font-size:15px;
+}
+.transactions.actions {
+    text-align: center;
+    position: relative;
+    width:100%;
+    max-width:450px;
+    margin: 0 auto;
+    input {
+        width:100%;
+        border-radius: 30px;
+        background-color: #F6F8FA;
+        border:1px solid #EFEFEF;
+        height:50px;
+        line-height: 50px;
+        padding-left:30px;
+        &:active, &:focus {
+            border:1px solid #ccc;
+            outline:0;
+        }
+
+    }
+    svg {
+        position: absolute;
+        right:30px;
+        top:15px;
+    }
+}
+.explorer .card-header p {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    svg {
+        margin-right:8px;
+        margin-top: -2px;
+    }
+}
+.badge {
+    font-size:14px;
+}
+.search-items {
+    display:none;
+    p {
+        margin-top:30px;
+    }
+}
+.searching {
+    text-align: center;
+    .orders-list {
+        display:none;
+    }
+    .search-items {
+        display:block;
+    }
+}
+.explorer .error {
+    text-align: center;
+    .order-list-header {
+        display:none;
+    }
+}
+.explorer {
+    .order {
+        .order-wrapper {
+            .hash {
+                width:33.3333%;
+            }
+            .date {
+                width:25%;
+            }
+            .amount {
+                width:16.6666%;
+            }
+            .amount-source {
+                width:25%;
+            }
         }
     }
 }

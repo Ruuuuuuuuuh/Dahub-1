@@ -9,6 +9,7 @@ use App\Notifications\OrderAssignee;
 use App\Notifications\OrderCreate;
 use App\Notifications\OrderDecline;
 use App\Notifications\ReferralBonusPay;
+use Bavix\Wallet\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
@@ -114,6 +115,44 @@ class ApiController extends Controller
         return $order->id;
     }
 
-
-
+    public function getTransactions(Request $request) {
+        $value = $request->input('value');
+        $user = User::where('uid', $value)->first();
+        if ($user) {
+            $ordersList = array();
+            $i = 0;
+            foreach ($user->orders()->get() as $order) {
+                $ordersList[$i]['currency'] = $order->currency;
+                $ordersList[$i]['amount'] = $order->amount;
+                $transactions = $order->transactions();
+                foreach ($transactions as $transaction) {
+                    if ($transaction->payable_type == 'App\Models\System') {
+                        $ordersList[$i]['amountSource'] = $transaction->amount / 10 ** $transaction->wallet->decimal_places;
+                        $ordersList[$i]['date'] = $transaction->created_at->diffForHumans() . ', ' . $transaction->created_at->Format('H:s');
+                    } else {
+                        $ordersList[$i]['uuid'] = $transaction->uuid;
+                    }
+                }
+                $i++;
+            }
+            return json_encode($ordersList, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
+        }
+        else {
+            $transaction = Transaction::where('uuid', $value)->firstOrFail();
+            $order = Order::where('id', $transaction->meta['order_id'])->firstOrFail();
+            $orderList = array();
+            $orderList[0]['currency'] = $order->currency;
+            $orderList[0]['amount'] = $order->amount;
+            $transactions = $order->transactions();
+            foreach ($transactions as $transaction) {
+                if ($transaction->payable_type == 'App\Models\System') {
+                    $orderList[0]['amountSource'] = $transaction->amount / 10 ** $transaction->wallet->decimal_places;
+                    $orderList[0]['date'] = $transaction->created_at->diffForHumans() . ', ' . $transaction->created_at->Format('H:s');
+                } else {
+                    $orderList[0]['uuid'] = $transaction->uuid;
+                }
+            }
+            return json_encode($orderList, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
+        }
+    }
 }

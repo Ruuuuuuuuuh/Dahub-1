@@ -59,6 +59,6 @@ class System extends Model implements Wallet, WalletFloat
 
     public function getTransactions($type)
     {
-        return $this->transactions()->where('type', $type);
+        return $this->transactions()->where('type', $type)->orderBy('id', 'DESC');
     }
 }

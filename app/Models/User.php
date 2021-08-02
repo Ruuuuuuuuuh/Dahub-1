@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Bavix\Wallet\Interfaces\WalletFloat;
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Traits\HasWalletFloat;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -70,5 +71,6 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
     {
         return $this->hasMany('App\Models\Order', 'user_uid', 'uid');
     }
+
 
 }

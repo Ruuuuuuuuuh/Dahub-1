@@ -34,7 +34,7 @@ class Order extends Model
 
     public function transactions()
     {
-        return $this->belongsToMany(Transaction::class, 'order_transaction', 'order_id', 'transaction_uuid');
+        return Transaction::where('type', 'deposit')->where('meta', 'like', '%"order_id": ' . $this->getKey() . '%')->get();
     }
 
     public function scopeNotCompleted($query)
