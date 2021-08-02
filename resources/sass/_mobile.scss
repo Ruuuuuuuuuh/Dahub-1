@@ -364,7 +364,12 @@
 }
 @media screen and (max-width:360px) {
     .explorer {
-
+        .amount {
+            font-size: 10px;
+        }
+        .amount-source {
+            font-size: 10px;
+        }
         .transactions.actions svg {
             display:none;
         }
