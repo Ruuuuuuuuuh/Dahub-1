@@ -10970,6 +10970,9 @@ strong {
   }
   .explorer .order .order-wrapper > .row {
     justify-content: center !important;
+    align-items: center !important;
+    -webkit-box-align: center !important;
+    -webkit-box-pack: center !important;
   }
   .explorer .order .order-wrapper .hash {
     width: 100%;

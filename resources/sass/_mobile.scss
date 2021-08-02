@@ -304,6 +304,10 @@
                 padding-top:32px;
                 &>.row {
                     justify-content: center!important;
+                    align-items: center!important;
+                    -webkit-box-align: center!important;
+                    -webkit-box-pack: center!important;
+
                 }
                 .hash {
                     width:100%;

@@ -181,7 +181,7 @@
 <script src="/js/qrcode.js"></script>
 <script>
     window.onload = function() {
-        if (screen.width < 420) {
+        if (screen.width < 380) {
             var mvp = document.getElementById('vp');
             mvp.setAttribute('content','user-scalable=no,width=450');
         }
