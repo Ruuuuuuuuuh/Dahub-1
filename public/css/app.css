@@ -10998,7 +10998,7 @@ strong {
     top: -4px;
   }
   .explorer .order .order-wrapper .amount {
-    width: auto;
+    width: auto !important;
     font-size: 12px;
     font-weight: 700;
     padding: 0px 0px 0px 8px;
@@ -11008,7 +11008,7 @@ strong {
     content: "Recieved: ";
   }
   .explorer .order .order-wrapper .amount-source {
-    width: auto;
+    width: auto !important;
     font-size: 12px;
     font-weight: 700;
     padding: 0;

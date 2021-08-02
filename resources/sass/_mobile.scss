@@ -335,7 +335,7 @@
                     &:before {
                         content:'Recieved: ';
                     }
-                    width:auto;
+                    width: auto!important;
                     font-size: 12px;
                     font-weight: 700;
                     padding: 0px 0px 0px 8px;
@@ -346,7 +346,7 @@
                     &:before {
                         content:'Sent: ';
                     }
-                    width: auto;
+                    width: auto!important;
                     font-size: 12px;
                     font-weight: 700;
                     padding: 0;
