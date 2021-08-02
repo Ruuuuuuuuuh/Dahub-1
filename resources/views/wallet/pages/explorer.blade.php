@@ -101,7 +101,7 @@
                                                     {{ $transaction['date'] }}
                                                 </div>
                                                 <div class="amount-source">
-                                                    <strong>{{ $transaction['amountSource'] . '&nbsp;' . $transaction['currency'] }}</strong>
+                                                    <strong>{!! $transaction['amountSource'] . '&nbsp;' . $transaction['currency'] !!}</strong>
                                                 </div>
                                                 <div class="amount">
                                                     <strong>{{ $transaction['amount'] }}&nbsp;DHB</strong>
