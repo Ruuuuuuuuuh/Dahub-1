@@ -280,7 +280,7 @@
         .transactions.actions {
             svg {
                 position: absolute;
-                right: 16px;
+                right: 15px;
                 top: 9px;
                 width: 18px;
             }
@@ -301,14 +301,15 @@
                 border-radius: 20px;
                 background-color: #ECF3F5;
                 position: relative;
+                padding-top:32px;
                 &>.row {
-                    justify-content: flex-start!important;
+                    justify-content: center!important;
                 }
                 .hash {
                     width:100%;
                     font-size: 12px;
                     text-align: left;
-                    line-height: 50px;
+                    line-height: 41px;
                     border-radius: 20px;
                     background-color: #F6F8FA;
                     width: 100%;
@@ -323,35 +324,33 @@
                     width: 100%;
                     text-align: right;
                     position: absolute;
-                    font-size: 14px;
-                    font-weight: 700;
+                    font-size: 10px;
+                    font-weight: 400;
                     padding: 0 15px;
                     line-height: 42px;
                     right: 0;
-                    bottom: 0;
-                    font-size: 8px;
-                    font-weight: 400;
+                    top: -4px;
                 }
                 .amount {
+                    &:before {
+                        content:'Recieved: ';
+                    }
                     width:auto;
                     font-size: 12px;
                     font-weight: 700;
-                    padding: 0px 0px 0px 15px;
+                    padding: 0px 0px 0px 8px;
                     line-height: 42px;
-                    padding-left:20px;
-                    &:after {
-                        content:'≈';
-                        padding-left:3px;
-                    }
 
                 }
                 .amount-source {
+                    &:before {
+                        content:'Sent: ';
+                    }
                     width: auto;
                     font-size: 12px;
                     font-weight: 700;
-                    padding: 0 0px 0 8px;
+                    padding: 0;
                     line-height: 14px;
-                    max-width: 160px;
                     text-align: left;
                 }
             }

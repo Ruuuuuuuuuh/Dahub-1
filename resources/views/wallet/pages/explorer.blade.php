@@ -80,8 +80,8 @@
                                     <div class="row">
                                         <div class="col-lg-4">Хеш</div>
                                         <div class="col-lg-3">Время</div>
-                                        <div class="col-lg-2">Получено</div>
                                         <div class="col-lg-3">Отправлено</div>
+                                        <div class="col-lg-2">Получено</div>
                                     </div>
                                 </div>
                             </div>
@@ -100,11 +100,11 @@
                                                 <div class="date">
                                                     {{ $transaction['date'] }}
                                                 </div>
-                                                <div class="amount">
-                                                    <strong>{{ $transaction['amount'] }} DHB</strong>
-                                                </div>
                                                 <div class="amount-source">
                                                     <strong>{{ $transaction['amountSource'] . ' ' . $transaction['currency'] }}</strong>
+                                                </div>
+                                                <div class="amount">
+                                                    <strong>{{ $transaction['amount'] }} DHB</strong>
                                                 </div>
                                             </div>
                                         </div>
@@ -166,11 +166,11 @@
 '                                        <div class="date">\n' +
 '                                            ' + value.date + '\n' +
 '                                        </div>\n' +
-'                                        <div class="amount">\n' +
-'                                            <strong>' + value.amount + ' DHB</strong>\n' +
-'                                        </div>\n' +
 '                                        <div class="amount-source">\n' +
 '                                            <strong>' + value.amountSource + ' ' + value.currency + '</strong>\n' +
+'                                        </div>\n' +
+'                                        <div class="amount">\n' +
+'                                            <strong>' + value.amount + ' DHB</strong>\n' +
 '                                        </div>\n' +
 '                                    </div>\n' +
 '                                </div>\n' +
@@ -208,23 +208,23 @@
                     $.each(JSON.parse(response), function(index, value) {
                         $('.search-items').append(
                             ' <div class="order">\n' +
-                            '                                <div class="col-12 order-wrapper">\n' +
-                            '                                    <div class="row">\n' +
-                            '                                        <div class="col-lg-4 hash">\n' +
-                            '                                            <a>' + value.uuid + '</a>\n' +
-                            '                                        </div>\n' +
-                            '                                        <div class="date">\n' +
-                            '                                            ' + value.date + '\n' +
-                            '                                        </div>\n' +
-                            '                                        <div class="amount">\n' +
-                            '                                            <strong>' + value.amount + ' DHB</strong>\n' +
-                            '                                        </div>\n' +
-                            '                                        <div class="amount-source">\n' +
-                            '                                            <strong>' + value.amountSource + ' ' + value.currency + '</strong>\n' +
-                            '                                        </div>\n' +
-                            '                                    </div>\n' +
-                            '                                </div>\n' +
-                            '                            </div>'
+'                                <div class="col-12 order-wrapper">\n' +
+'                                    <div class="row">\n' +
+'                                        <div class="col-lg-4 hash">\n' +
+'                                            <a>' + value.uuid + '</a>\n' +
+'                                        </div>\n' +
+'                                        <div class="date">\n' +
+'                                            ' + value.date + '\n' +
+'                                        </div>\n' +
+'                                        <div class="amount-source">\n' +
+'                                            <strong>' + value.amountSource + ' ' + value.currency + '</strong>\n' +
+'                                        </div>\n' +
+'                                        <div class="amount">\n' +
+'                                            <strong>' + value.amount + ' DHB</strong>\n' +
+'                                        </div>\n' +
+'                                    </div>\n' +
+'                                </div>\n' +
+'                            </div>'
                         )
                     });
                 })

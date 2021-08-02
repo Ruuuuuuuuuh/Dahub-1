@@ -10548,7 +10548,7 @@ strong {
 }
 .transactions.actions svg {
   position: absolute;
-  right: 30px;
+  right: 20px;
   top: 15px;
 }
 
@@ -10947,7 +10947,7 @@ strong {
   }
   .explorer .transactions.actions svg {
     position: absolute;
-    right: 16px;
+    right: 15px;
     top: 9px;
     width: 18px;
   }
@@ -10966,15 +10966,16 @@ strong {
     border-radius: 20px;
     background-color: #ECF3F5;
     position: relative;
+    padding-top: 32px;
   }
   .explorer .order .order-wrapper > .row {
-    justify-content: flex-start !important;
+    justify-content: center !important;
   }
   .explorer .order .order-wrapper .hash {
     width: 100%;
     font-size: 12px;
     text-align: left;
-    line-height: 50px;
+    line-height: 41px;
     border-radius: 20px;
     background-color: #F6F8FA;
     width: 100%;
@@ -10989,35 +10990,33 @@ strong {
     width: 100%;
     text-align: right;
     position: absolute;
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 10px;
+    font-weight: 400;
     padding: 0 15px;
     line-height: 42px;
     right: 0;
-    bottom: 0;
-    font-size: 8px;
-    font-weight: 400;
+    top: -4px;
   }
   .explorer .order .order-wrapper .amount {
     width: auto;
     font-size: 12px;
     font-weight: 700;
-    padding: 0px 0px 0px 15px;
+    padding: 0px 0px 0px 8px;
     line-height: 42px;
-    padding-left: 20px;
   }
-  .explorer .order .order-wrapper .amount:after {
-    content: "\2248";
-    padding-left: 3px;
+  .explorer .order .order-wrapper .amount:before {
+    content: "Recieved: ";
   }
   .explorer .order .order-wrapper .amount-source {
     width: auto;
     font-size: 12px;
     font-weight: 700;
-    padding: 0 0px 0 8px;
+    padding: 0;
     line-height: 14px;
-    max-width: 160px;
     text-align: left;
+  }
+  .explorer .order .order-wrapper .amount-source:before {
+    content: "Sent: ";
   }
 }
 @media screen and (max-width: 360px) {
