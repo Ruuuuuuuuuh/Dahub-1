@@ -10104,8 +10104,17 @@ main {
   display: block;
 }
 
+.order-list-header {
+  margin-top: 65px;
+  padding: 0 30px;
+}
+
 .orders-list {
-  margin-top: 50px;
+  margin-top: 20px;
+}
+
+.explorer .order {
+  margin-bottom: 20px;
 }
 
 .orders-list .order {
@@ -10116,6 +10125,12 @@ main {
   border-radius: 30px;
   background: #f5f8fa;
   padding: 25px 40px;
+  font-size: 18px;
+}
+.order-wrapper a {
+  color: #03ABFF !important;
+}
+.order-wrapper p {
   font-size: 18px;
 }
 
@@ -10148,11 +10163,16 @@ main {
 }
 
 .main-screen p {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.card-header p {
   font-size: 22px;
   margin-bottom: 5px;
 }
 
-.main-screen .card-header p {
+.card-header p {
   color: #fff;
   font-weight: 500;
 }
@@ -10180,6 +10200,15 @@ main {
 
 .users-button svg path {
   fill: #fff;
+}
+
+.alert {
+  font-size: 18px;
+  padding: 25px;
+  border-radius: 25px;
+  background: #f5f8fa;
+  text-align: center;
+  display: none;
 }
 
 .users-button svg {
@@ -10487,6 +10516,91 @@ strong {
 #dashboard-tabs .nav-link.active {
   background: var(--teal);
   color: #fff;
+}
+
+.explorer .order, .order-list-header .order {
+  text-align: center;
+}
+
+.order-wrapper .hash {
+  font-size: 15px;
+}
+
+.transactions.actions {
+  text-align: center;
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+.transactions.actions input {
+  width: 100%;
+  border-radius: 30px;
+  background-color: #F6F8FA;
+  border: 1px solid #EFEFEF;
+  height: 50px;
+  line-height: 50px;
+  padding-left: 30px;
+}
+.transactions.actions input:active, .transactions.actions input:focus {
+  border: 1px solid #ccc;
+  outline: 0;
+}
+.transactions.actions svg {
+  position: absolute;
+  right: 30px;
+  top: 15px;
+}
+
+.explorer .card-header p {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+.explorer .card-header p svg {
+  margin-right: 8px;
+  margin-top: -2px;
+}
+
+.badge {
+  font-size: 14px;
+}
+
+.search-items {
+  display: none;
+}
+.search-items p {
+  margin-top: 30px;
+}
+
+.searching {
+  text-align: center;
+}
+.searching .orders-list {
+  display: none;
+}
+.searching .search-items {
+  display: block;
+}
+
+.explorer .error {
+  text-align: center;
+}
+.explorer .error .order-list-header {
+  display: none;
+}
+
+.explorer .order .order-wrapper .hash {
+  width: 33.3333%;
+}
+.explorer .order .order-wrapper .date {
+  width: 25%;
+}
+.explorer .order .order-wrapper .amount {
+  width: 16.6666%;
+}
+.explorer .order .order-wrapper .amount-source {
+  width: 25%;
 }
 
 @media screen and (max-width: 767px) {
@@ -10813,4 +10927,107 @@ strong {
   #wallet .wallet-number strong {
     font-size: 12px;
   }
+
+  .explorer .order-list-header {
+    display: none;
+  }
+  .explorer .card-header {
+    padding: 10px 20px;
+  }
+  .explorer .card-header p {
+    font-size: 15px;
+  }
+  .explorer .card-header p svg {
+    margin-right: 5px;
+    margin-top: -2px;
+    width: 16px;
+  }
+  .explorer .card-header .d-flex {
+    justify-content: center !important;
+  }
+  .explorer .transactions.actions svg {
+    position: absolute;
+    right: 16px;
+    top: 9px;
+    width: 18px;
+  }
+  .explorer .transactions.actions input {
+    width: 100%;
+    border-radius: 20px;
+    background-color: #F6F8FA;
+    border: 1px solid #EFEFEF;
+    height: 40px;
+    line-height: 50px;
+    padding-left: 15px;
+    font-size: 10px;
+  }
+  .explorer .order .order-wrapper {
+    padding: 0 15px;
+    border-radius: 20px;
+    background-color: #ECF3F5;
+    position: relative;
+  }
+  .explorer .order .order-wrapper > .row {
+    justify-content: flex-start !important;
+  }
+  .explorer .order .order-wrapper .hash {
+    width: 100%;
+    font-size: 12px;
+    text-align: left;
+    line-height: 50px;
+    border-radius: 20px;
+    background-color: #F6F8FA;
+    width: 100%;
+    padding-left: 20px;
+  }
+  .explorer .order .order-wrapper .hash .row {
+    padding-left: 15px;
+    width: 100%;
+    display: block;
+  }
+  .explorer .order .order-wrapper .date {
+    width: 100%;
+    text-align: right;
+    position: absolute;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 0 15px;
+    line-height: 42px;
+    right: 0;
+    bottom: 0;
+    font-size: 8px;
+    font-weight: 400;
+  }
+  .explorer .order .order-wrapper .amount {
+    width: auto;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 0px 0px 0px 15px;
+    line-height: 42px;
+    padding-left: 20px;
+  }
+  .explorer .order .order-wrapper .amount:after {
+    content: "\2248";
+    padding-left: 3px;
+  }
+  .explorer .order .order-wrapper .amount-source {
+    width: auto;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 0 0px 0 8px;
+    line-height: 14px;
+    max-width: 160px;
+    text-align: left;
+  }
+}
+@media screen and (max-width: 360px) {
+  .explorer .transactions.actions svg {
+    display: none;
+  }
+}
+input[type=text] {
+  /* Remove First */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
