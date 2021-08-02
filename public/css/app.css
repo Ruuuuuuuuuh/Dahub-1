@@ -10590,6 +10590,9 @@ strong {
   display: none;
 }
 
+.explorer .search-items {
+  padding-top: 20px;
+}
 .explorer .order .order-wrapper .hash {
   width: 33.3333%;
 }
@@ -10928,6 +10931,9 @@ strong {
     font-size: 12px;
   }
 
+  .explorer .search-items {
+    padding-top: 20px;
+  }
   .explorer .order-list-header {
     display: none;
   }
