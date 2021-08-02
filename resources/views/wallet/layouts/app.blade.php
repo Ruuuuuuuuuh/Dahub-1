@@ -183,7 +183,7 @@
     window.onload = function() {
         if (screen.width < 380) {
             var mvp = document.getElementById('vp');
-            mvp.setAttribute('content','user-scalable=no,width=450');
+            mvp.setAttribute('content','user-scalable=no,width=380');
         }
     }
 </script>
