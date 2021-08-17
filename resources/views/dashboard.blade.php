@@ -94,6 +94,14 @@
     </noscript>
     <div id="app"></div>
     <script src="{{ mix('js/app.js') }}"></script>
+    <script>
+        window.onload = function() {
+            if (screen.width < 375) {
+                let mvp = document.getElementById('vp');
+                mvp.setAttribute('content','user-scalable=no,width=375');
+            }
+        }
+    </script>
 </body>
 
 </html>

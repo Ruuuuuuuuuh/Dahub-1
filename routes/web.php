@@ -30,7 +30,7 @@ Route::get('/auth/{token}', [App\Http\Controllers\AuthController::class, 'authUs
 // DASHBOARD ROUTES
 Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/{vue_capture?}', function () {
-        return view('home');
+        return view('dashboard');
     })->where('vue_capture', '[\/\w\.-]*')->middleware('auth');
 });
 
