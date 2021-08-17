@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="viewport" id="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="favicon.ico">
     <title></title>
     <link rel="stylesheet" href="/css/dashboard.css">
@@ -97,7 +97,7 @@
     <script>
         window.onload = function() {
             if (screen.width < 375) {
-                let mvp = document.getElementById('vp');
+                let mvp = document.getElementById('viewport');
                 mvp.setAttribute('content','user-scalable=no,width=375');
             }
         }
