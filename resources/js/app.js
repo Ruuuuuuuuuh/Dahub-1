@@ -25,7 +25,7 @@
  import VueRouter from 'vue-router'
  import App from './components/App.vue'
 
- Vue.use(VueRouter)
+/* Vue.use(VueRouter)
 
  import Router from './routes';
 
@@ -42,6 +42,6 @@
  new Vue({
      Router,
      render: (h) => h(App),
- }).mount('#app');
+ }).mount('#app');*/
 
 

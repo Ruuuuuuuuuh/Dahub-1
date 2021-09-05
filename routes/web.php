@@ -28,12 +28,14 @@ Route::get('/auth/{token}', [App\Http\Controllers\AuthController::class, 'authUs
 
 
 // DASHBOARD ROUTES
-Route::group(['prefix' => 'dashboard'], function () {
+/*Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/{vue_capture?}', function () {
         return view('dashboard');
     })->where('vue_capture', '[\/\w\.-]*')->middleware('auth');
+});*/
+Route::group(['prefix' => 'dashboard'], function () {
+    Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('main');
 });
-
 
 Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
 Route::get('/wallet/profile', [App\Http\Controllers\WalletController::class, 'profile'])->name('wallet.profile');
@@ -43,10 +45,11 @@ Route::get('/wallet/explorer', [App\Http\Controllers\WalletController::class, 'e
 Route::get('/wallet/orders/', [App\Http\Controllers\WalletController::class, 'orders'])->middleware('admin')->name('wallet.orders');
 Route::get('/wallet/stages/', [App\Http\Controllers\WalletController::class, 'stages'])->middleware('admin')->name('wallet.stages');
 Route::get('/wallet/reports/', [App\Http\Controllers\WalletController::class, 'reports'])->middleware('admin')->name('wallet.reports');
-Route::post('/api/tags/', [App\Http\Controllers\SystemApiController::class, 'getTags'])->middleware('admin')->name('api.tags');
+Route::get('/wallet/hft/', [App\Http\Controllers\WalletController::class, 'hft'])->middleware('admin')->name('wallet.hft');
+Route::get('/wallet/users', [App\Http\Controllers\UsersController::class, 'index'])->name('wallet.users')->middleware('admin');
 
 // ADMIN ROUTES
-Route::get('/wallet/users', [App\Http\Controllers\UsersController::class, 'index'])->name('wallet.users')->middleware('admin');
+Route::post('/api/tags/', [App\Http\Controllers\SystemApiController::class, 'getTags'])->middleware('admin')->name('api.tags');
 Route::post('/api/start_token_sale/', [App\Http\Controllers\SystemApiController::class, 'startTokenSale'])->middleware('admin');
 Route::post('/api/generate_user_wallets/', [App\Http\Controllers\SystemApiController::class, 'generateUserWallets'])->middleware('admin');
 Route::post('/api/orders/{id}/confirm', [App\Http\Controllers\SystemApiController::class, 'confirmOrder'])->middleware('admin');
@@ -54,6 +57,7 @@ Route::post('/api/orders/{id}/decline', [App\Http\Controllers\SystemApiControlle
 Route::post('/api/withdraw-payment', [App\Http\Controllers\SystemApiController::class, 'withdrawPayment'])->middleware('admin');
 Route::post('/api/send', [App\Http\Controllers\SystemApiController::class, 'sendTokens'])->middleware('admin');
 Route::post('/api/set_dhb_rate', [App\Http\Controllers\SystemApiController::class, 'setDHBRate'])->middleware('admin');
+Route::post('/api/set_hft', [App\Http\Controllers\SystemApiController::class, 'setHFT'])->middleware('admin');
 Route::post('/api/orders/admin/create', [App\Http\Controllers\SystemApiController::class, 'createOrder'])->middleware('admin');
 
 // API ROUTES

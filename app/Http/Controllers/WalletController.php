@@ -61,6 +61,22 @@ class WalletController extends Controller
         return view('wallet.pages.stages', compact('system'));
     }
 
+    // Пополнить HFT
+    public function hft()
+    {
+        $system = System::findOrFail(1);
+        if (!$system->getWallet('HFT')) {
+            $system->createWallet(
+                [
+                    'name' => 'HFT',
+                    'slug' => 'HFT',
+                ]
+            );
+        }
+        $system->getWallet('HFT')->refreshBalance();
+        return view('wallet.pages.hft', compact('system'));
+    }
+
     // Бухгалтерия
     public function reports()
     {
@@ -70,6 +86,15 @@ class WalletController extends Controller
         $system->getWallet('USDT')->refreshBalance();
         $system->getWallet('BTC')->refreshBalance();
         $system->getWallet('ETH')->refreshBalance();
+        if (!$system->getWallet('HFT')) {
+            $system->createWallet(
+                [
+                    'name' => 'HFT',
+                    'slug' => 'HFT',
+                ]
+            );
+        }
+        $system->getWallet('HFT')->refreshBalance();
         $orders = Order::orderBy('id', 'DESC')->get();
         $wallet = new Wallet;
         $users = User::all();

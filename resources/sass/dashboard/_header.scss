@@ -1,6 +1,17 @@
 header.header {
     color:#fff;
-
+    padding:35px 25px 50px;
+    height:100vh;
+    .icon-watch {
+        span {
+            font-weight: normal;
+            font-size: 12px;
+            line-height: 24px;
+            text-align: right;
+            margin-right:8px;
+            color:#78839C
+        }
+    }
     .balance {
         .total-amount {
             h1 {
@@ -27,6 +38,11 @@ header.header {
             margin-top: 30px;
             .balance-item {
                 margin: 15px 0;
+                .balance-item-currency-icon {
+                    display:flex;
+                    align-items: center;
+                    justify-content: center;
+                }
                 .balance-item-currency-text {
                     margin-left:15px;
                     .balance-item-currency-title {
@@ -47,7 +63,7 @@ header.header {
                     font-style: normal;
                     font-weight: 600;
                     font-size: 18px;
-                    line-height: 18px;
+                    line-height: 24px;
                     color: #F3F3F3;
                     text-align: right;
                 }

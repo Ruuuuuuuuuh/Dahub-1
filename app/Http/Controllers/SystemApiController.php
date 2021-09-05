@@ -152,6 +152,14 @@ class SystemApiController extends Controller
                     }
                 }
             }
+            if (!$user->getWallet($currency)) {
+                $user->createWallet(
+                    [
+                        'name' => $currency,
+                        'slug' => $currency,
+                    ]
+                );
+            }
             $systemWallet = System::findOrFail(1);
             if ($currency == 'DHBFundWallet') {
                 $systemWallet->getWallet($currency)->transferFloat($user->getWallet('DHB'), $amount, array('destination' => $destinations, 'comment' => $message));
@@ -288,6 +296,15 @@ class SystemApiController extends Controller
 
         $order->forceDelete();
         return $order->id;
+    }
+
+    public function setHFT(Request $request)
+    {
+        $amount = $request->input('amount');
+        $system = $system = System::findOrFail(1);
+        $system->getWallet('HFT')->refreshBalance();
+        $system->getWallet('HFT')->depositFloat($amount);
+        return 'success';
     }
 
     public function payReferral(User $user, $currency, $amount) {

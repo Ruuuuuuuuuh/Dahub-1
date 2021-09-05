@@ -10007,13 +10007,16 @@ body {
   justify-content: center;
   font-family: "Titillium Web", sans-serif;
   font-size: 14px;
+  position: relative;
 }
 
 .app {
   max-width: 480px;
   width: 100%;
-  padding: 50px 25px;
   background: rgba(13, 31, 60, 0.9);
+  height: 100vh;
+  overflow-y: hidden;
+  position: relative;
 }
 
 h1, h2 {
@@ -10024,8 +10027,133 @@ h3, h4, h5, h6 {
   font-weight: 600;
 }
 
+a {
+  cursor: pointer !important;
+}
+
+main#main-screen {
+  width: 100%;
+  background-color: #fff;
+  padding: 30px 25px;
+  border-radius: 20px 20px 0 0;
+  position: absolute;
+  bottom: 0;
+  height: 50vh;
+}
+main#main-screen .screen-rollover {
+  position: absolute;
+  top: -21px;
+  border-radius: 100%;
+  border: 4px solid #fff;
+  left: calc(50% - 22px);
+}
+main#main-screen .filter {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+}
+main#main-screen .filter a.filter-item {
+  margin-right: 0.5em;
+  cursor: pointer;
+  color: #78839C;
+}
+main#main-screen .filter a.filter-item.active {
+  color: #347AF0;
+}
+main#main-screen .orders .order-item {
+  background: #EDF1F9;
+  box-shadow: 0px 2px 3px rgba(20, 70, 150, 0.15);
+  border-radius: 15px;
+  padding: 14px 18px;
+  margin-top: 15px;
+}
+main#main-screen .orders .order-item .amount {
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  color: #347AF0;
+  margin-bottom: 4px;
+}
+main#main-screen .orders .order-item .currency {
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  color: #112340;
+  margin-bottom: 4px;
+}
+main#main-screen .orders .order-item .destination {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent;
+}
+main#main-screen .orders .order-item .destination.deposit {
+  background: linear-gradient(112.27deg, #85F362 -27.42%, #02AAFF 90.87%);
+  background: -moz-linear-gradient(112.27deg, #85F362 -27.42%, #02AAFF 90.87%);
+}
+main#main-screen .orders .order-item .datetime {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 24px;
+  color: #78839C;
+}
+
+footer {
+  padding: 10px 50px 10px;
+  background: #EDF1F9;
+  box-shadow: 0px -1px 7px rgba(255, 255, 255, 0.6);
+  border-radius: 20px 20px 1px 1px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  max-width: 480px;
+}
+footer .footer-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+footer .footer-nav a svg {
+  margin-bottom: 2px;
+}
+footer .footer-nav a span {
+  font-size: 12px;
+  line-height: 24px;
+  text-align: center;
+  color: #78839C;
+}
+footer .create-order {
+  position: absolute;
+  top: -29px;
+}
+footer .create-order span {
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 12px;
+  text-align: center;
+  color: #78839C;
+}
+
 header.header {
   color: #fff;
+  padding: 35px 25px 50px;
+  height: 100vh;
+}
+header.header .icon-watch span {
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 24px;
+  text-align: right;
+  margin-right: 8px;
+  color: #78839C;
 }
 header.header .balance .total-amount h1 {
   font-weight: bold;
@@ -10052,6 +10180,11 @@ header.header .balance .balance-items {
 header.header .balance .balance-items .balance-item {
   margin: 15px 0;
 }
+header.header .balance .balance-items .balance-item .balance-item-currency-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 header.header .balance .balance-items .balance-item .balance-item-currency-text {
   margin-left: 15px;
 }
@@ -10072,7 +10205,7 @@ header.header .balance .balance-items .balance-item .balance-item-amount-title {
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
-  line-height: 18px;
+  line-height: 24px;
   color: #F3F3F3;
   text-align: right;
 }
@@ -10082,4 +10215,64 @@ header.header .balance .balance-items .balance-item .balance-item-amount-descrip
   color: #929792;
   margin-top: 2px;
   text-align: right;
+}
+
+section.screen {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  background-color: #fff;
+}
+section.screen .section-header {
+  padding: 60px 25px 80px;
+  background-color: #EDF1F9;
+}
+section.screen .section-header .top-nav {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  justify-content: center;
+}
+section.screen .section-header .top-nav .back-link {
+  left: 0;
+  position: absolute;
+}
+section.screen .section-header .top-nav h2 {
+  font-weight: 600;
+  font-size: 26px;
+  line-height: 32px;
+  text-align: center;
+  color: #0D1F3C;
+  margin-bottom: 5px;
+}
+section.screen .section-main {
+  border-radius: 20px;
+  padding: 30px 25px;
+  margin-top: -20px;
+  background: #fff;
+}
+section.screen .section-main #create-order-tab .nav-item .nav-link {
+  opacity: 0.4;
+  mix-blend-mode: normal;
+  background: #EDF1F9;
+  border-radius: 30px;
+  padding: 12px 22px 13px;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 16px;
+  text-align: center;
+  color: #21314C;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s ease-in-out all;
+}
+section.screen .section-main #create-order-tab .nav-item .nav-link:hover {
+  opacity: 1;
+}
+section.screen .section-main #create-order-tab .nav-item .nav-link.active {
+  opacity: 1;
+  color: #347AF0;
 }

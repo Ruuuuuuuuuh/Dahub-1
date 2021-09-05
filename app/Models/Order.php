@@ -42,4 +42,9 @@ class Order extends Model
         return $query->where('status', '!=', 'completed');
     }
 
+    public function scopeUserOrders($query)
+    {
+        return $query->where('destination', '=', 'deposit')->orWhere('destination', '=', 'withdraw');
+    }
+
 }
