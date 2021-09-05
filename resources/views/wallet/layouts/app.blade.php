@@ -154,6 +154,9 @@
                                     <a class="dropdown-item" href="{{Route('wallet.stages')}}" >
                                         Токенсейл
                                     </a>
+                                    <a class="dropdown-item" href="{{Route('wallet.hft')}}" >
+                                        HFT
+                                    </a>
                                 @endif
                                     <hr class="dropdown-divider">
                                 <a class="dropdown-item" href="{{ route('logout') }}"

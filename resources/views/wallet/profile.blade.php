@@ -26,6 +26,11 @@
                         <hr />
                         <p class="wallet-number">Номер кошелька: <strong>0x{{ md5(Auth::User()->getWallet('USDT')->id) }}</strong></p>
                         <p>Баланс: <strong>{{Auth::User()->getWallet('USDT')->balanceFloat}} USDT</strong></p>
+                        @if (Auth::User()->getWallet('HFT'))
+                            <hr />
+                            <p class="wallet-number">Номер кошелька: <strong>0x{{ md5(Auth::User()->getWallet('HFT')->id) }}</strong></p>
+                            <p>Баланс: <strong>{{Auth::User()->getWallet('HFT')->balanceFloat}} HFT</strong></p>
+                        @endif
                     </div>
                 </div>
             </div>

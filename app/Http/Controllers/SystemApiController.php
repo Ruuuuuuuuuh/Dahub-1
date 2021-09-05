@@ -303,7 +303,7 @@ class SystemApiController extends Controller
         $amount = $request->input('amount');
         $system = $system = System::findOrFail(1);
         $system->getWallet('HFT')->refreshBalance();
-        $system->getWallet('HFT')->depositFloat($amount);
+        $system->getWallet('HFT')->depositFloat($amount, array('destination' => 'Начисление HFT'));
         return 'success';
     }
 
