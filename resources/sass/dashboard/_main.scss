@@ -1,17 +1,22 @@
 body {
     display:flex;
     justify-content: center;
-    font-family: 'Titillium Web', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     font-size:14px;
     position: relative;
+}
+body,
+html {
+    position: fixed;
+    width:100%;
 }
 .app {
     max-width:480px;
     width:100%;
     background: rgba(13, 31, 60, 0.9);
     height:100vh;
-    overflow-y:hidden;
     position:relative;
+    overflow: hidden;
 }
 h1, h2 {
     font-weight:700;
@@ -22,20 +27,204 @@ h3, h4,h5, h6 {
 a {
     cursor:pointer!important;
 }
+
+* {
+    box-sizing: border-box;
+    outline: 0;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+p {
+    margin:0;
+    padding: 0;
+}
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+    cursor:pointer;
+}
+select option {
+    cursor: pointer!important;
+}
+label {
+    display: block;
+    width: 100%;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    color: #485068;
+    margin-bottom: 15px;
+}
+
+input[type="number"], input[type="text"], input[type="tel"] {
+    background: #EDF1F9;
+    box-shadow: 0px 1px 1px rgba(207, 210, 216, 0.5);
+    border-radius: 30px;
+    height: 46px;
+    width: 100%;
+    line-height: 46px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    color: #0D1F3C;
+    padding-left: 25px;
+    padding-right: 25px;
+}
+input[type="number"]::placeholder, input[type="tel"]::placeholder {
+    color: #B5BDCC;
+}
+section.screen {
+    position: absolute;
+    width: 100%;
+    height:100%;
+    left: 0;
+    background-color: #fff;
+    padding-bottom: 80px;
+    bottom: -200vh;
+    transition: .2s ease-in-out all;
+    overflow: scroll;
+    &.opened {
+        bottom: 0;
+        z-index: 10;
+    }
+}
+.amount-wrapper input[type="number"], .amount-wrapper input[type="tel"] {
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 56px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #347AF0;
+    width: 100%;
+    background:transparent;
+    padding: 0;
+    box-shadow: none;
+}
+input[type='number']::-webkit-inner-spin-button {
+    display: none;
+}
+.text-center {
+    text-align: center;
+}
+#app {
+    width:375px;
+    margin:25px auto;
+    border:3px solid #777;
+    border-radius: 20px 20px 0px 0px;
+    padding-bottom: 30px;
+    box-sizing: content-box;
+}
+
+.form-control {
+    display:table;
+    margin-bottom: 20px;
+    border: none;
+    padding: 0;
+}
+
+.amount-wrapper {
+    padding-top:20px;
+}
+.amount-wrapper label {
+    margin-bottom: 0;
+}
+.textnote {
+    text-align: center;
+    color: #485068;
+    font-size: 12px;
+    line-height: 24px;
+}
+a.button {
+    background: #EDF1F9;
+    border-radius: 23px;
+    width: 100%;
+    display: block;
+    text-align: center;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 46px;
+    color: #FFFFFF;
+    margin-top: 20px;
+}
+a.button-blue {
+    background: #347AF0;
+    color: #FFFFFF!important;
+}
+a.button-red {
+    background: #DF5060;
+    color: #FFFFFF!important;
+}
+
+form {
+    padding: 25px 25px 0px;
+    display: table;
+}
+.draggable {
+    touch-action: none
+}
+.form-exchange .select-currency {
+    width: 100%;
+    height: 46px;
+    background: #EDF1F9;
+    box-shadow: 0px 1px 1px rgba(207, 210, 216, 0.5);
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    color: #0D1F3C;
+    padding: 0 25px;
+}
+.select-wrapper {
+    position: relative;
+
+}
+.select-angle {
+    position: absolute;
+    right: 17px;
+    top: 13px;
+}
+.text-block {
+    padding: 25px 30px 0px;
+}
+.text-block p {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 24px;
+    color: #0D1F3C;
+}
+.text-block p small {
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 24px;
+    color: #485068;
+}
+.text-blue p {
+    color: #347AF0
+}
 main#main-screen {
     width: 100%;
     background-color: #fff;
-    padding: 30px 25px;
     border-radius: 20px 20px 0 0;
     position: absolute;
-    bottom: 0;
+    top: 50vh;
     height:50vh;
+    box-sizing: content-box;
+    .main-screen-wrapper {
+        padding: 30px 25px;
+    }
     .screen-rollover {
         position: absolute;
         top: -21px;
         border-radius: 100%;
         border: 4px solid #fff;
         left: calc(50% - 22px);
+        cursor:pointer;
     }
     .filter {
         font-weight: 500;
@@ -95,6 +284,7 @@ main#main-screen {
         }
     }
 }
+
 footer {
     padding:10px 50px 10px;
     background: #EDF1F9;
