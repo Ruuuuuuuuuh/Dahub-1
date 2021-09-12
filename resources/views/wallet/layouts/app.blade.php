@@ -157,6 +157,12 @@
                                     <a class="dropdown-item" href="{{Route('wallet.hft')}}" >
                                         HFT
                                     </a>
+                                    <a class="dropdown-item" href="{{Route('wallet.currencies')}}" >
+                                        Валюты
+                                    </a>
+                                    <a class="dropdown-item" href="{{Route('wallet.payments')}}" >
+                                        Платежные системы / сети
+                                    </a>
                                 @endif
                                     <hr class="dropdown-divider">
                                 <a class="dropdown-item" href="{{ route('logout') }}"

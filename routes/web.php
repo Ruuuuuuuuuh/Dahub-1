@@ -46,6 +46,9 @@ Route::get('/wallet/orders/', [App\Http\Controllers\WalletController::class, 'or
 Route::get('/wallet/stages/', [App\Http\Controllers\WalletController::class, 'stages'])->middleware('admin')->name('wallet.stages');
 Route::get('/wallet/reports/', [App\Http\Controllers\WalletController::class, 'reports'])->middleware('admin')->name('wallet.reports');
 Route::get('/wallet/hft/', [App\Http\Controllers\WalletController::class, 'hft'])->middleware('admin')->name('wallet.hft');
+Route::get('/wallet/currencies/', [App\Http\Controllers\WalletController::class, 'currencies'])->middleware('admin')->name('wallet.currencies');
+Route::get('/wallet/currencies/{slug}', [App\Http\Controllers\WalletController::class, 'currency'])->middleware('admin')->name('wallet.currency');
+Route::get('/wallet/payments/', [App\Http\Controllers\WalletController::class, 'payments'])->middleware('admin')->name('wallet.payments');
 Route::get('/wallet/users', [App\Http\Controllers\UsersController::class, 'index'])->name('wallet.users')->middleware('admin');
 
 // ADMIN ROUTES
@@ -58,6 +61,9 @@ Route::post('/api/withdraw-payment', [App\Http\Controllers\SystemApiController::
 Route::post('/api/send', [App\Http\Controllers\SystemApiController::class, 'sendTokens'])->middleware('admin');
 Route::post('/api/set_dhb_rate', [App\Http\Controllers\SystemApiController::class, 'setDHBRate'])->middleware('admin');
 Route::post('/api/set_hft', [App\Http\Controllers\SystemApiController::class, 'setHFT'])->middleware('admin');
+Route::post('/api/add_currency', [App\Http\Controllers\SystemApiController::class, 'addCurrency'])->middleware('admin');
+Route::post('/api/add_payment', [App\Http\Controllers\SystemApiController::class, 'addPayment'])->middleware('admin');
+Route::post('/api/attach_payment_to_currency', [App\Http\Controllers\SystemApiController::class, 'attachPaymentToCurrency'])->middleware('admin');
 Route::post('/api/orders/admin/create', [App\Http\Controllers\SystemApiController::class, 'createOrder'])->middleware('admin');
 
 // API ROUTES

@@ -11,6 +11,7 @@ class Payment extends Model
 
     protected $fillable = [
         'title',
+        'crypto',
     ];
 
     public function currencies()

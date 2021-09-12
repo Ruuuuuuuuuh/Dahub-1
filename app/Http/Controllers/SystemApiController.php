@@ -4,6 +4,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Rate;
+use App\Models\Currency;
+use App\Models\Payment;
 use App\Models\System;
 use App\Models\Tag;
 use App\Models\Wallet;
@@ -304,6 +306,55 @@ class SystemApiController extends Controller
         $system = $system = System::findOrFail(1);
         $system->getWallet('HFT')->refreshBalance();
         $system->getWallet('HFT')->depositFloat($amount, array('destination' => 'Начисление HFT'));
+        return 'success';
+    }
+
+    public function addCurrency(Request $request)
+    {
+        $title = $request->input('title');
+        if ($request->has('crypto')) {
+            $crypto = $request->input('crypto');
+        }
+        else $crypto = false;
+        Currency::firstOrCreate([
+            'title' => $title,
+            'crypto' => $crypto
+        ]);
+        $system = System::findOrFail(1);
+        if (!$system->getWallet($title)) {
+            $system->createWallet(
+                [
+                    'name' => $title,
+                    'slug' => $title,
+                ]
+            );
+        }
+        $system->getWallet($title)->refreshBalance();
+        return 'success';
+    }
+
+    public function addPayment(Request $request)
+    {
+        $title = $request->input('title');
+        if ($request->has('crypto')) {
+            $crypto = $request->input('crypto');
+        }
+        else $crypto = false;
+        Payment::firstOrCreate([
+            'title' => $title,
+            'crypto' => $crypto
+        ]);
+
+        return 'success';
+    }
+
+    public function attachPaymentToCurrency(Request $request)
+    {
+        $currency = $request->input('currency');
+        $payment = $request->input('payment');
+        $currency = Currency::where('title', $currency)->first();
+        $currency->payments()->attach(Payment::where('title', $payment)->first()->id);
+
         return 'success';
     }
 

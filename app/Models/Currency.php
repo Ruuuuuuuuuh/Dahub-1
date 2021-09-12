@@ -9,10 +9,7 @@ class Currency extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'crypto',
-    ];
+    protected $guarded = [];
 
     public function payments()
     {

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Rate;
+use App\Models\Currency;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\System;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\WalletService;
@@ -126,5 +128,20 @@ class WalletController extends Controller
             return json_encode($ordersList, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
         }
         return view('wallet.pages.explorer')->with('transactions', $ordersList);
+    }
+
+    public function currencies() {
+        $currencies = Currency::all();
+        return view('wallet.pages.currencies')->with('currencies', $currencies);
+    }
+
+    public function currency($slug) {
+        $currency = Currency::where('title', $slug)->first();
+        return view('wallet.pages.currency')->with('currency', $currency);
+    }
+
+    public function payments() {
+        $payments = Payment::all();
+        return view('wallet.pages.payments')->with('payments', $payments);
     }
 }
