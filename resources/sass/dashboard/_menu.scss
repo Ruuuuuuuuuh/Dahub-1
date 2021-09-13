@@ -1,0 +1,89 @@
+#menu-swipe {
+    position: absolute;
+    width:100%;
+    height: 100%;
+    background-color: #fff;
+    z-index:999;
+    top:0;
+    left:-200vw;
+    transition: .3s ease-in-out all;
+    &.opened {
+        transform:translateX(200vw);
+    }
+    .user-info {
+        padding: 30px 35px 25px;
+        h2 {
+            font-weight: 600;
+            font-size: 19px;
+            line-height: 24px;
+            color: #0D1F3C;
+        }
+        p.user-id {
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 24px;
+            color: #347AF0;
+        }
+    }
+
+    .verification-info {
+        p {
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 24px;
+            opacity: 0.9;
+            background: -webkit-linear-gradient(#85F362, #02AAFF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            svg {
+                margin-right: 10px;
+            }
+        }
+    }
+    ul.nav {
+        padding:30px 35px;
+        li {
+            margin-bottom:25px;
+            a {
+                font-weight: normal;
+                font-size: 16px;
+                line-height: 24px;
+                color: #0D1F3C;
+                display: flex;
+                align-items: center;
+                padding:0;
+                .svg-wrapper {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    text-align: center;
+                    width:28px;
+                    margin-right: 13px;
+                }
+            }
+        }
+    }
+    .version-pro {
+        height: 50px;
+        background: #F4F4F4;
+        display: flex;
+        padding:0 35px;
+        h2 {
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 24px;
+            opacity: 0.9;
+            color: #0D1F3C;
+            display: flex;
+            align-items: center;
+            margin-bottom: 0;
+            svg {
+                margin-left: 172px;
+            }
+        }
+    }
+}
+

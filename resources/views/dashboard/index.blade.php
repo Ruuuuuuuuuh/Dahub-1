@@ -21,119 +21,9 @@
 
 <body>
 <div class="app">
-    <header class="header">
-        <div class="header-top-icons d-flex justify-content-between">
-            <a href="#" class="navbar-open">
-                <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2 7H20C20.6 7 21 6.6 21 6C21 5.4 20.6 5 20 5H2C1.4 5 1 5.4 1 6C1 6.6 1.4 7 2 7ZM21 12C21 12.6 20.6 13 20 13H2C1.4 13 1 12.6 1 12C1 11.4 1.4 11 2 11H20C20.6 11 21 11.4 21 12ZM2 17H20C20.6 17 21 17.4 21 18C21 18.6 20.6 19 20 19H2C1.4 19 1 18.6 1 18C1 17.4 1.4 17 2 17Z" fill="black"/>
-                    <mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="1" y="5" width="20" height="14">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M2 7H20C20.6 7 21 6.6 21 6C21 5.4 20.6 5 20 5H2C1.4 5 1 5.4 1 6C1 6.6 1.4 7 2 7ZM21 12C21 12.6 20.6 13 20 13H2C1.4 13 1 12.6 1 12C1 11.4 1.4 11 2 11H20C20.6 11 21 11.4 21 12ZM2 17H20C20.6 17 21 17.4 21 18C21 18.6 20.6 19 20 19H2C1.4 19 1 18.6 1 18C1 17.4 1.4 17 2 17Z" fill="white"/>
-                    </mask>
-                    <g mask="url(#mask0)">
-                        <rect x="-1" width="24" height="24" fill="#B5BBC9"/>
-                    </g>
-                </svg>
-            </a>
-            <a href="#" class="icon-watch">
-                <span>PRO</span>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M8 4H16C20.4 4 24 7.6 24 12C24 16.4 20.4 20 16 20H8C3.6 20 0 16.4 0 12C0 7.6 3.6 4 8 4ZM16 18C19.3 18 22 15.3 22 12C22 8.7 19.3 6 16 6H8C4.7 6 2 8.7 2 12C2 15.3 4.7 18 8 18H16ZM8 8C5.8 8 4 9.8 4 12C4 14.2 5.8 16 8 16C10.2 16 12 14.2 12 12C12 9.8 10.2 8 8 8ZM6 12C6 13.1 6.9 14 8 14C9.1 14 10 13.1 10 12C10 10.9 9.1 10 8 10C6.9 10 6 10.9 6 12Z" fill="black"/>
-                    <mask id="switcher" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="4" width="24" height="16">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8 4H16C20.4 4 24 7.6 24 12C24 16.4 20.4 20 16 20H8C3.6 20 0 16.4 0 12C0 7.6 3.6 4 8 4ZM16 18C19.3 18 22 15.3 22 12C22 8.7 19.3 6 16 6H8C4.7 6 2 8.7 2 12C2 15.3 4.7 18 8 18H16ZM8 8C5.8 8 4 9.8 4 12C4 14.2 5.8 16 8 16C10.2 16 12 14.2 12 12C12 9.8 10.2 8 8 8ZM6 12C6 13.1 6.9 14 8 14C9.1 14 10 13.1 10 12C10 10.9 9.1 10 8 10C6.9 10 6 10.9 6 12Z" fill="white"/>
-                    </mask>
-                    <g mask="url(#switcher)">
-                        <rect width="24" height="24" fill="#B5BBC9"/>
-                    </g>
-                </svg>
 
-            </a>
-        </div>
-        <section class="balance">
-            <div class="total-amount">
-                <h1>0.00000 <span>BTC</span></h1>
-                <p class="total-currency">≈ $0.00</p>
-            </div>
-            <div class="balance-items">
-                <div class="balance-item d-flex justify-content-between w-100">
-                    <div class="balance-item-currency d-flex align-items-center">
-                        <div class="balance-item-currency-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g opacity="0.9">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M5 12.2199L12.3646 16.5731L12.3647 16.5732L12.3647 16.5732H12.3647L19.7294 12.2199L12.3647 8.54488e-05V0L12.3647 4.27244e-05L12.3647 0L12.3646 0.000166947L5 12.2199ZM12.3647 23.9946L12.3646 23.9944L5 13.6165L12.3647 17.9675L19.7338 13.6166L12.3647 23.9946L12.3647 23.9946Z" fill="white"/>
-                                </g>
-                            </svg>
-                        </div>
-                        <div class="balance-item-currency-text">
-                            <div class="balance-item-currency-title">BTC</div>
-                            <div class="balance-item-currency-description">Bitcoin</div>
-                        </div>
-                    </div>
-                    <div class="balance-item-amount">
-                        <div class="balance-item-amount-title">{{number_format(Auth::User()->getWallet('BTC')->balanceFloat, 5, '.', ' ')}}</div>
-                        <div class="balance-item-amount-description">${{number_format(Auth::User()->getWallet('BTC')->balanceFloat / Rate::getRates('BTC'), 2, '.', ' ')}}</div>
-                    </div>
-                </div>
-                <div class="balance-item d-flex justify-content-between w-100">
-                    <div class="balance-item-currency d-flex align-items-center">
-                        <div class="balance-item-currency-icon">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <g opacity="0.9">
-                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M5 12.2199L12.3646 16.5731L12.3647 16.5732L12.3647 16.5732H12.3647L19.7294 12.2199L12.3647 8.54488e-05V0L12.3647 4.27244e-05L12.3647 0L12.3646 0.000166947L5 12.2199ZM12.3647 23.9946L12.3646 23.9944L5 13.6165L12.3647 17.9675L19.7338 13.6166L12.3647 23.9946L12.3647 23.9946Z" fill="white"/>
-                                </g>
-                            </svg>
-                        </div>
-                        <div class="balance-item-currency-text">
-                            <div class="balance-item-currency-title">ETH</div>
-                            <div class="balance-item-currency-description">Ethereum</div>
-                        </div>
-                    </div>
-                    <div class="balance-item-amount">
-                        <div class="balance-item-amount-title">{{number_format(Auth::User()->getWallet('ETH')->balanceFloat, 5, '.', ' ')}}</div>
-                        <div class="balance-item-amount-description">${{number_format(Auth::User()->getWallet('ETH')->balanceFloat / Rate::getRates('ETH'), 2, '.', ' ')}}</div>
-                    </div>
-                </div>
-                <div class="balance-item d-flex justify-content-between w-100">
-                    <div class="balance-item-currency d-flex">
-                        <div class="balance-item-currency-icon">
-                            <svg width="24" height="19" viewBox="0 0 24 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path opacity="0.9" d="M7.96344 8.19798C-3.97489 7.0748 0.215383 2.71116 3.32515 1.6138C15.8301 -2.77565 28.5063 2.05275 22.4318 12.8973C21.9179 13.8139 21.1404 13.3749 20.4157 12.6778C18.4128 10.7671 14.7628 8.84349 7.96344 8.19798Z" fill="white"/>
-                                <path opacity="0.9" d="M17.8326 9.38414C17.9248 9.42287 18.0302 9.4616 18.1225 9.50033C19.2162 9.9651 19.9014 10.7397 20.2308 11.7467C20.5207 12.6375 19.9409 14.432 18.755 15.3874C17.5032 16.4073 15.8956 17.156 14.8282 17.5304C11.3363 18.744 8.00257 18.318 7.33054 15.8909C6.52675 12.999 13.1548 8.29969 17.2528 9.2034C17.4504 9.25504 17.6481 9.31959 17.8326 9.38414Z" fill="white"/>
-                                <path opacity="0.9" d="M7.80542 6.37925C10.4803 6.96021 7.80542 12.3954 5.76299 11.8273C2.70593 10.9624 4.86695 5.73375 7.80542 6.37925Z" fill="white"/>
-                            </svg>
-                        </div>
-                        <div class="balance-item-currency-text">
-                            <div class="balance-item-currency-title">DHB</div>
-                            <div class="balance-item-currency-description">Da·Hub</div>
-                        </div>
-                    </div>
-                    <div class="balance-item-amount">
-                        <div class="balance-item-amount-title">{{number_format(Auth::User()->getWallet('DHB')->balanceFloat, 2, '.', ' ')}}</div>
-                        <div class="balance-item-amount-description">${{number_format(Auth::User()->getWallet('DHB')->balanceFloat / Rate::getRates('USDT'), 2, '.', ' ') }}</div>
-                    </div>
-                </div>
-                <div class="balance-item d-flex justify-content-between w-100">
-                    <div class="balance-item-currency d-flex">
-                        <div class="balance-item-currency-icon">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M11.14 6.99402H9.44604V9.71402H11.14C11.89 9.71402 12.5 9.10402 12.5 8.35402C12.5 7.60402 11.89 6.99402 11.14 6.99402Z" fill="white" fill-opacity="0.9"/>
-                                <path d="M10 0C4.478 0 0 4.478 0 10C0 15.522 4.478 20 10 20C15.522 20 20 15.522 20 10C20 4.478 15.522 0 10 0ZM11.14 11.676H9.446V12.39H11.476C11.648 12.39 11.788 12.53 11.788 12.702V14.04C11.788 14.212 11.648 14.352 11.476 14.352H9.444V15.378C9.444 15.55 9.304 15.69 9.132 15.69H7.794C7.622 15.69 7.482 15.55 7.482 15.378V14.352H6.79C6.618 14.352 6.478 14.212 6.478 14.04V12.702C6.478 12.53 6.618 12.39 6.79 12.39H7.482V11.676H6.79C6.618 11.676 6.478 11.536 6.478 11.364V10.026C6.478 9.854 6.618 9.714 6.79 9.714H7.482V5.344C7.482 5.172 7.622 5.032 7.794 5.032H11.14C12.972 5.032 14.462 6.522 14.462 8.354C14.462 10.188 12.978 11.676 11.14 11.676Z" fill="white" fill-opacity="0.9"/>
-                            </svg>
-
-
-                        </div>
-                        <div class="balance-item-currency-text">
-                            <div class="balance-item-currency-title">RUB</div>
-                            <div class="balance-item-currency-description">Рубли</div>
-                        </div>
-                    </div>
-                    <div class="balance-item-amount">
-                        <div class="balance-item-amount-title">0.00</div>
-                        <div class="balance-item-amount-description">$0.00</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </header>
+    @include('dashboard.components.header')
+    @include('dashboard.components.menu')
     <main id="main-screen" class="resizable">
         <div class="screen-rollover ui-resizable-handle ui-resizable-n">
             <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -242,6 +132,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js" type="text/javascript"></script>
+
 
 <script>
     window.onload = function() {
@@ -262,6 +154,33 @@
                 'n': '.screen-rollover'
             }
         });
+        $('.navbar-open').click(function(){
+            $('#menu-swipe').addClass('opened');
+        })
+        $('body').swipe( {
+            swipeStatus:function(event, phase, direction, distance, duration, fingerCount, fingerData, currentDirection) {
+                if (phase == "start") {
+                    // сработает в начале swipe
+                }
+                if (phase == "end") {
+                        //сработает через 20 пикселей то число которое выбрали в threshold
+                        if (direction == 'left') {
+                            jQuery('#menu-swipe').removeClass('opened');
+                        }
+                        if (direction == 'right') {
+                            jQuery('#menu-swipe').addClass('opened');
+                        }
+                        if (direction == 'up') {
+                            //сработает при движении вверх
+                        }
+                        if (direction == 'down') {
+                            //сработает при движении вниз
+                        }
+                    }
+                },
+                triggerOnTouchEnd:true,
+                    threshold:30 // сработает через 20 пикселей
+            });
 
     });
 </script>
