@@ -1,7 +1,7 @@
 <h2>Мои заявки</h2>
     <div class="orders-list">
     @if (count(Auth::user()->orders()->get()) != 0)
-        @foreach (Auth::user()->orders()->orderBy('id', 'DESC')->get() as $order)
+        @foreach (Auth::user()->orders()->where('destination', 'TokenSale')->orderBy('id', 'DESC')->get() as $order)
         <div class="order col-12 {{$order->status}}">
             @php
             if ($order->currency == 'USDT') $dec = 0; else $dec = 5;

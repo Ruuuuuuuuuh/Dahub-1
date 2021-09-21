@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Rate;
+use App\Models\Currency;
 use App\Models\System;
 use App\Notifications\AdminNotifications;
 use App\Notifications\OrderAssignee;
@@ -77,6 +78,28 @@ class ApiController extends Controller
             return response(['error'=> true, 'error-msg' => 'Не достаточно токенов для получения'],404, $headers, JSON_UNESCAPED_UNICODE);
         }
 
+    }
+
+    public function createOrderByUser(Request $request) {
+        $user = Auth::user();
+        $headers = array (
+            'Content-Type' => 'application/json; charset=UTF-8',
+            'charset' => 'utf-8'
+        );
+        if ($request->has('amount') && $request->input('amount')!= null) {
+            $order = Order::create([
+                'user_uid'       => $user->uid,
+                'destination'    => $request->input('destination'),
+                'payment'        => $request->input('payment'),
+                'currency'       => $request->input('currency'),
+                'amount'         => $request->input('amount'),
+                'status'         => 'created',
+                'rate'           => 0
+            ]);
+            $order->save();
+            return response($order->id, 200, $headers);
+        }
+        else return response(['error'=> true, 'error-msg' => 'Вы не ввели сумму'],404, $headers, JSON_UNESCAPED_UNICODE);
     }
 
     public function assigneeOrderByUser()
@@ -154,5 +177,10 @@ class ApiController extends Controller
             }
             return json_encode($orderList, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
         }
+    }
+
+    public function getPayments(Request $request) {
+        $currency = $request->input('currency');
+        return Currency::where('title', $currency)->first()->payments()->get();
     }
 }

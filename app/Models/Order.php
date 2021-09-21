@@ -39,7 +39,7 @@ class Order extends Model
 
     public function scopeNotCompleted($query)
     {
-        return $query->where('status', '!=', 'completed');
+        return $query->where('status', '!=', 'completed')->where('destination', '=', 'TokenSale');
     }
 
     public function scopeUserOrders($query)

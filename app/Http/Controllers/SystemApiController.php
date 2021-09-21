@@ -168,6 +168,16 @@ class SystemApiController extends Controller
             }
             else {
                 $systemWallet->getWallet($currency)->transferFloat($user->getWallet($currency), $amount, array('destination' => $destinations, 'comment' => $message));
+                $systemWallet->getWallet($currency)->refreshBalance();
+                if ($currency == 'HFT') {
+                    $telegram = new Api(env('TELEGRAM_BOT_HARVEST_TOKEN'));
+                    $transaction = $user->getWallet('HFT')->transactions()->orderBy('id', 'desc')->first();
+                    $response = $telegram->sendMessage([
+                        'chat_id' => env('TELEGRAM_HARVEST_CHAT_ID'),
+                        'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' HFT '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL.PHP_EOL.'There is still ' .$systemWallet->getWallet('HFT')->balanceFloat. ' HFT in the main wallet.',
+                        'parse_mode' => 'html'
+                    ]);
+                }
             }
 
             return 'Успешно переведено';
@@ -306,6 +316,13 @@ class SystemApiController extends Controller
         $system = $system = System::findOrFail(1);
         $system->getWallet('HFT')->refreshBalance();
         $system->getWallet('HFT')->depositFloat($amount, array('destination' => 'Начисление HFT'));
+        $telegram = new Api(env('TELEGRAM_BOT_HARVEST_TOKEN'));
+        $transaction = $system->getWallet('HFT')->transactions()->orderBy('id', 'desc')->first();
+        $response = $telegram->sendMessage([
+            'chat_id' => env('TELEGRAM_HARVEST_CHAT_ID'),
+            'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>⬇️ Created: </b>' . $amount . ' HFT '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid,
+            'parse_mode' => 'html'
+        ]);
         return 'success';
     }
 
@@ -340,6 +357,7 @@ class SystemApiController extends Controller
             $crypto = $request->input('crypto');
         }
         else $crypto = false;
+
         Payment::firstOrCreate([
             'title' => $title,
             'crypto' => $crypto

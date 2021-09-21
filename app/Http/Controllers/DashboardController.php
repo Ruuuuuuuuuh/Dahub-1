@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Rate;
+use App\Models\Currency;
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\System;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\WalletService;
@@ -30,8 +32,31 @@ class DashboardController extends Controller {
      */
     public function index()
     {
-        $orders = Order::where('user_uid', Auth::user()->uid)->userOrders()->get();
+        $user = Auth::user();
+        if (!$user->getWallet('RUB')) {
+            $user->createWallet(
+                [
+                    'name' => 'RUB',
+                    'slug' => 'RUB',
+                ]
+            );
+        }
+        if (!$user->getWallet('USD')) {
+            $user->createWallet(
+                [
+                    'name' => 'USD',
+                    'slug' => 'USD',
+                ]
+            );
+        }
+        $orders = Order::where('user_uid', Auth::user()->uid)->userOrders()->orderBy('id', 'DESC')->take(5)->get();
         $rates = new Rate();
-        return view('dashboard.index', compact('orders', 'rates'));
+        $currency = new Currency();
+        return view('dashboard.index', compact('orders', 'rates', 'currency'));
+    }
+
+    public function getOrder($id) {
+        $order = Order::findOrFail($id);
+        return view('dashboard.order', compact('order'));
     }
 }

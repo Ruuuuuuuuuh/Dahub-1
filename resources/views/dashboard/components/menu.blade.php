@@ -5,10 +5,12 @@
     </div>
     <div class="version-pro w-100 d-flex align-items-center justify-content-between">
         <h2>Da·Hub Pro</h2>
-        <svg width="44" height="24" viewBox="0 0 44 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="44" height="24" rx="12" fill="#75BF72"/>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M32.5 21.5C37.7467 21.5 42 17.2467 42 12C42 6.75329 37.7467 2.5 32.5 2.5C27.2533 2.5 23 6.75329 23 12C23 17.2467 27.2533 21.5 32.5 21.5Z" fill="white"/>
-        </svg>
+        <a class="switch-pro">
+            <svg width="44" height="24" viewBox="0 0 44 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="44" height="24" rx="12" fill="#75BF72"/>
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M32.5 21.5C37.7467 21.5 42 17.2467 42 12C42 6.75329 37.7467 2.5 32.5 2.5C27.2533 2.5 23 6.75329 23 12C23 17.2467 27.2533 21.5 32.5 21.5Z" fill="white"/>
+            </svg>
+        </a>
     </div>
     <ul class="nav flex-column">
         <li class="nav-item">
@@ -94,3 +96,9 @@
         </li>
     </ul>
 </div>
+
+<script>
+    $('.switch-pro').click(function(){
+        $(this).toggleClass('active')
+    })
+</script>

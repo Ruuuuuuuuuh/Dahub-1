@@ -168,7 +168,7 @@ form {
 .draggable {
     touch-action: none
 }
-.form-exchange .select-currency {
+.form-create-order .form-select  {
     width: 100%;
     height: 46px;
     background: #EDF1F9;
@@ -246,6 +246,10 @@ main#main-screen {
             border-radius: 15px;
             padding:14px 18px;
             margin-top:15px;
+            text-decoration: none;
+            * {
+                text-decoration: none;
+            }
             .amount {
                 font-weight: bold;
                 font-size: 20px;
@@ -313,7 +317,7 @@ footer {
             }
         }
     }
-    .create-order {
+    .create-order-open {
         position: absolute;
         top:-29px;
         span {

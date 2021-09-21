@@ -35,6 +35,7 @@ Route::get('/auth/{token}', [App\Http\Controllers\AuthController::class, 'authUs
 });*/
 Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('main');
+    Route::get('/orders/{id}', [App\Http\Controllers\DashboardController::class, 'getOrder'])->name('getOrder');
 });
 
 Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
@@ -72,6 +73,8 @@ Route::post('/api/orders/create', [App\Http\Controllers\ApiController::class, 'c
 Route::post('/api/orders/assigneeOrder', [App\Http\Controllers\ApiController::class, 'assigneeOrderByUser']);
 Route::post('/api/orders/declineOrder', [App\Http\Controllers\ApiController::class, 'declineOrderByUser']);
 Route::post('/api/getTransactions', [App\Http\Controllers\ApiController::class, 'getTransactions']);
+Route::post('/api/getPayments', [App\Http\Controllers\ApiController::class, 'getPayments']);
+Route::post('/api/createOrderByUser', [App\Http\Controllers\ApiController::class, 'createOrderByUser']);
 
 
 // Telegram Web Api

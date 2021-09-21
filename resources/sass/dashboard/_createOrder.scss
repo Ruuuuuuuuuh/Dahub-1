@@ -1,7 +1,11 @@
-section#create-order {
+section.screen {
     .section-header {
         padding:30px 25px 50px;
         background-color: #EDF1F9;
+        svg.status {
+            position: absolute;
+            bottom: -65px;
+        }
         .top-nav {
             display: flex;
             align-items: center;

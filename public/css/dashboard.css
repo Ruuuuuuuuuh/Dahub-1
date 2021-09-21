@@ -10202,7 +10202,7 @@ form {
   touch-action: none;
 }
 
-.form-exchange .select-currency {
+.form-create-order .form-select {
   width: 100%;
   height: 46px;
   background: #EDF1F9;
@@ -10286,6 +10286,10 @@ main#main-screen .orders .order-item {
   border-radius: 15px;
   padding: 14px 18px;
   margin-top: 15px;
+  text-decoration: none;
+}
+main#main-screen .orders .order-item * {
+  text-decoration: none;
 }
 main#main-screen .orders .order-item .amount {
   font-weight: bold;
@@ -10350,11 +10354,11 @@ footer .footer-nav a span {
   text-align: center;
   color: #78839C;
 }
-footer .create-order {
+footer .create-order-open {
   position: absolute;
   top: -29px;
 }
-footer .create-order span {
+footer .create-order-open span {
   font-weight: 500;
   font-size: 12px;
   line-height: 12px;
@@ -10400,7 +10404,14 @@ header.header .balance .balance-items {
 header.header .balance .balance-items .balance-item {
   margin: 15px 0;
 }
-header.header .balance .balance-items .balance-item .balance-item-currency-icon {
+header.header .balance .balance-items .balance-item .icon-wrapper {
+  width: 24px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+header.header .balance .balance-items .balance-item .icon-wrapper .balance-item-currency-icon {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10412,14 +10423,13 @@ header.header .balance .balance-items .balance-item .balance-item-currency-text 
   font-style: normal;
   font-weight: 600;
   font-size: 18px;
-  line-height: 18px;
+  line-height: 24px;
   color: #F3F3F3;
 }
 header.header .balance .balance-items .balance-item .balance-item-currency-text .balance-item-currency-description {
   font-size: 12px;
-  line-height: 12px;
+  line-height: 16px;
   color: #929792;
-  margin-top: 2px;
 }
 header.header .balance .balance-items .balance-item .balance-item-amount-title {
   font-style: normal;
@@ -10437,22 +10447,26 @@ header.header .balance .balance-items .balance-item .balance-item-amount-descrip
   text-align: right;
 }
 
-section#create-order .section-header {
+section.screen .section-header {
   padding: 30px 25px 50px;
   background-color: #EDF1F9;
 }
-section#create-order .section-header .top-nav {
+section.screen .section-header svg.status {
+  position: absolute;
+  bottom: -65px;
+}
+section.screen .section-header .top-nav {
   display: flex;
   align-items: center;
   position: relative;
   width: 100%;
   justify-content: center;
 }
-section#create-order .section-header .top-nav .back-link {
+section.screen .section-header .top-nav .back-link {
   left: 0;
   position: absolute;
 }
-section#create-order .section-header .top-nav h2 {
+section.screen .section-header .top-nav h2 {
   font-weight: 600;
   font-size: 26px;
   line-height: 32px;
@@ -10460,13 +10474,13 @@ section#create-order .section-header .top-nav h2 {
   color: #0D1F3C;
   margin-bottom: 5px;
 }
-section#create-order .section-main {
+section.screen .section-main {
   border-radius: 20px;
   padding: 30px 25px;
   margin-top: -20px;
   background: #fff;
 }
-section#create-order .section-main #create-order-tab .nav-item .nav-link {
+section.screen .section-main #create-order-tab .nav-item .nav-link {
   opacity: 0.4;
   mix-blend-mode: normal;
   background: #EDF1F9;
@@ -10481,10 +10495,10 @@ section#create-order .section-main #create-order-tab .nav-item .nav-link {
   cursor: pointer;
   transition: 0.3s ease-in-out all;
 }
-section#create-order .section-main #create-order-tab .nav-item .nav-link:hover {
+section.screen .section-main #create-order-tab .nav-item .nav-link:hover {
   opacity: 1;
 }
-section#create-order .section-main #create-order-tab .nav-item .nav-link.active {
+section.screen .section-main #create-order-tab .nav-item .nav-link.active {
   opacity: 1;
   color: #347AF0;
 }
@@ -10571,6 +10585,20 @@ section#create-order .section-main #create-order-tab .nav-item .nav-link.active 
   align-items: center;
   margin-bottom: 0;
 }
-#menu-swipe .version-pro h2 svg {
-  margin-left: 172px;
+#menu-swipe .version-pro .switch-pro svg {
+  transition: 0.2s ease-in-out all;
+}
+#menu-swipe .version-pro .switch-pro svg path {
+  transform: translateX(-20px);
+  transition: 0.2s ease-in-out all;
+}
+#menu-swipe .version-pro .switch-pro svg rect {
+  fill: #999;
+  transition: 0.2s ease-in-out all;
+}
+#menu-swipe .version-pro .switch-pro.active svg path {
+  transform: translateX(0px);
+}
+#menu-swipe .version-pro .switch-pro.active svg rect {
+  fill: #75bf72;
 }

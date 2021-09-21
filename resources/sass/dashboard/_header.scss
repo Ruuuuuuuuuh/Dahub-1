@@ -38,25 +38,32 @@ header.header {
             margin-top: 30px;
             .balance-item {
                 margin: 15px 0;
-                .balance-item-currency-icon {
-                    display:flex;
+                .icon-wrapper {
+                    width:24px;
+                    height:100%;
+                    display: flex;
                     align-items: center;
                     justify-content: center;
+                    .balance-item-currency-icon {
+                        display:flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
                 }
+
                 .balance-item-currency-text {
                     margin-left:15px;
                     .balance-item-currency-title {
                         font-style: normal;
                         font-weight: 600;
                         font-size: 18px;
-                        line-height: 18px;
+                        line-height: 24px;
                         color: #F3F3F3;
                     }
                     .balance-item-currency-description {
                         font-size: 12px;
-                        line-height: 12px;
+                        line-height: 16px;
                         color: #929792;
-                        margin-top: 2px;
                     }
                 }
                 .balance-item-amount-title {
