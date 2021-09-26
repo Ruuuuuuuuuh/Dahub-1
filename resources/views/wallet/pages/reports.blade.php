@@ -239,8 +239,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="address">Пользователь</label>
-                            <select class="form-control" name="username" placeholder="Пользователь">
+                            <label for="username">Пользователь</label>
+                            <select class="form-control selectable" name="username" placeholder="Пользователь">
                                 @foreach ($users as $user)
                                     <option value="{{$user->uid}}">{{$user->uid}} {{$user->username}}</option>
                                 @endforeach
@@ -332,5 +332,23 @@
                 },
             });
         }
+    </script>
+    <script src="/js/typehead.js"></script>
+    <script src="/js/sifter.js"></script>
+    <script src="/js/microplugin.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="/css/selectize.css" >
+    <script src="/js/selectize.js"></script>
+    <script>
+        $(function(){
+            $(".selectable").selectize({
+                create: true,
+                sortField: "text",
+                render: {
+                    option_create: function(data, escape) {
+                        return '<div class="create">Добавить <strong>' + escape(data.input) + '</strong>&hellip;</div>';
+                    }
+                },
+            });
+        })
     </script>
 @endsection
