@@ -51,7 +51,7 @@ class WalletController extends Controller
 
     public function orders()
     {
-        $orders = Order::orderBy('id', 'DESC')->get();
+        $orders = Order::where('destination','TokenSale')->orderBy('id', 'DESC')->get();
         return view('wallet.pages.orders', compact('orders'));
     }
 
