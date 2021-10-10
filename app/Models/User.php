@@ -14,6 +14,10 @@ use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Traits\CanConfirm;
 use Questocat\Referral\Traits\UserReferral;
 
+/**
+ * @property mixed $roles
+ */
+
 class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
 {
     use HasFactory, Notifiable, HasWallets, UserReferral, CanConfirm, Notifiable, HasWalletFloat;
@@ -32,7 +36,8 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         'uid',
         'affiliate_id',
         'referred_by',
-        'auth_token'
+        'auth_token',
+        'roles'
     ];
 
     /**
@@ -55,10 +60,25 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
     ];
 
 
-
-    public function isAdmin()
+    /**
+     * @return bool
+     * Check administrator permissions
+     */
+    public function isAdmin(): bool
     {
-        if (\Auth::user()->roles == 'admin') {
+        if ($this->roles == 'admin') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return bool
+     * Check gateway permissions
+     */
+    public function isGate(): bool
+    {
+        if ($this->roles == 'admin' || $this->roles == 'gate') {
             return true;
         }
         return false;
@@ -67,7 +87,7 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
     /**
      * Получить заявки.
      */
-    public function orders()
+    public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany('App\Models\Order', 'user_uid', 'uid');
     }
