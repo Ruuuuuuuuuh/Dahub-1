@@ -93,4 +93,13 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
     }
 
 
+    /**
+     * Получить настройки.
+     */
+    public function config(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany('App\Models\UserConfig', 'user_uid', 'uid');
+    }
+
+
 }

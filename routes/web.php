@@ -75,6 +75,7 @@ Route::post('/api/orders/declineOrder', [App\Http\Controllers\ApiController::cla
 Route::post('/api/getTransactions', [App\Http\Controllers\ApiController::class, 'getTransactions']);
 Route::post('/api/getPayments', [App\Http\Controllers\ApiController::class, 'getPayments']);
 Route::post('/api/createOrderByUser', [App\Http\Controllers\ApiController::class, 'createOrderByUser']);
+Route::post('/api/saveUserConfig', [App\Http\Controllers\ApiController::class, 'saveUserConfig']);
 
 
 // Telegram Web Api

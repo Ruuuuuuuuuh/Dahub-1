@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Rate;
 use App\Models\Currency;
 use App\Models\System;
+use App\Models\UserConfig;
 use App\Notifications\AdminNotifications;
 use App\Notifications\OrderAssignee;
 use App\Notifications\OrderCreate;
@@ -182,5 +183,21 @@ class ApiController extends Controller
     public function getPayments(Request $request) {
         $currency = $request->input('currency');
         return Currency::where('title', $currency)->first()->payments()->get();
+    }
+
+    /**
+     * Сохранение юзер конфига
+     * @param Request $request
+     * @return bool
+     */
+    public function saveUserConfig(Request $request): bool
+    {
+        $meta  = $request->input('meta');
+        $value = $request->input('value');
+        UserConfig::updateOrCreate(
+            ['user_uid' => Auth::user()->uid, 'meta' => $meta],
+            ['value' => $value]
+        );
+        return true;
     }
 }
