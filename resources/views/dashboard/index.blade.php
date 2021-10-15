@@ -1,29 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" id="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="favicon.ico">
-    <title></title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ mix('css/dashboard.css') }}">
-
-    <script>
-        window.user = {!! Auth::User()->toJson(JSON_PRETTY_PRINT) !!}
-    </script>
-    <script
-        src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
-        crossorigin="anonymous"></script>
-</head>
-
-<body>
-<div class="app">
-
-    @include('dashboard.components.header')
-    @include('dashboard.components.menu')
+@extends('dashboard.layouts.app')
+@section('content')
     <main id="main-screen" class="resizable">
         <div class="screen-rollover ui-resizable-handle ui-resizable-n">
             <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -39,130 +15,128 @@
     </main>
     @include('dashboard.components.footer')
     @include('dashboard.components.createorder')
-</div>
+@endsection
+@section('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js" type="text/javascript"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js" type="text/javascript"></script>
 
-
-<script>
-    window.onload = function() {
-        if (screen.width < 375) {
-            let mvp = document.getElementById('viewport');
-            mvp.setAttribute('content','user-scalable=no,width=375,  height=device-height');
+    <script>
+        window.onload = function() {
+            if (screen.width < 375) {
+                let mvp = document.getElementById('viewport');
+                mvp.setAttribute('content','user-scalable=no,width=375,  height=device-height');
+            }
         }
-    }
-    function createOrderScreenOpen() {
-        $('#create-order').toggleClass('opened');
-    }
-    $('.back-link').click(function(){
-        $('.screen').removeClass('opened');
-    })
-    $(function() {
-        $('.resizable').resizable({
-            handles: {
-                'n': '.screen-rollover'
-            }
-        });
-        $('.navbar-open').click(function(){
-            $('#menu-swipe').addClass('opened');
+        function createOrderScreenOpen() {
+            $('#create-order').toggleClass('opened');
+        }
+        $('.back-link').click(function(){
+            $('.screen').removeClass('opened');
         })
-        $('body').swipe( {
-            swipeStatus:function(event, phase, direction, distance, duration, fingerCount, fingerData, currentDirection) {
-                if (phase == "start") {
-                    // сработает в начале swipe
+        $(function() {
+            $('.resizable').resizable({
+                handles: {
+                    'n': '.screen-rollover'
                 }
-                if (phase == "end") {
-                    //сработает через 20 пикселей то число которое выбрали в threshold
-                    if (direction == 'left') {
-                        jQuery('#menu-swipe').removeClass('opened');
-                    }
-                    if (direction == 'right') {
-                        jQuery('#menu-swipe').addClass('opened');
-                    }
-                    if (direction == 'up') {
-                        //сработает при движении вверх
-                    }
-                    if (direction == 'down') {
-                        //сработает при движении вниз
-                    }
-                }
-            },
-            triggerOnTouchEnd:true,
-            threshold:30 // сработает через 20 пикселей
-        });
-
-        $('.select-currency').on('change', function(e) {
-            let currency = $(this).val()
-            let form = $(this).closest('form')
-            getPayments(currency).then(function(data) {
-                // Run this when your request was successful
-                let payments = '';
-                $.each(data, function(key, item) {
-                    payments += "<option value='" + item.title + "'>" + item.title + "</option>";
-                   // $(this).closest('form').find('.select-payment').html(payments)
-                })
-                console.log(form.find('select-payments'))
-                form.find('select[name="payment-network"]').html(payments)
-            }).catch(function(err) {
-                // Run this when promise was rejected via reject()
-                console.log(err)
+            });
+            $('.navbar-open').click(function(){
+                $('#menu-swipe').addClass('opened');
             })
-        })
-        $('.section-main .create-order').click(function(){
-            let form = $(this).parent().find('form')
-            let currency = form.find('select[name="currency"]').val()
-            let amount = form.find('input[name="amount"]').val()
-            let payment = form.find('select[name="payment-network"]').val()
-            let destination = form.find('input[name="destination"]').val()
-            let data = {
-                "_token": "{{ csrf_token() }}",
-                "currency": currency,
-                "amount": amount,
-                "payment": payment,
-                "destination": destination
-            }
-            createOrder(data)
-        })
-    });
-    function getPayments(currency) {
-        return new Promise(function (resolve, reject) {
-            $.ajax({
-                url: "/api/getPayments",
-                type: "POST",
-                data: {
+            $('body').swipe( {
+                swipeStatus:function(event, phase, direction, distance, duration, fingerCount, fingerData, currentDirection) {
+                    if (phase == "start") {
+                        // сработает в начале swipe
+                    }
+                    if (phase == "end") {
+                        //сработает через 20 пикселей то число которое выбрали в threshold
+                        if (direction == 'left') {
+                            jQuery('#menu-swipe').removeClass('opened');
+                        }
+                        if (direction == 'right') {
+                            jQuery('#menu-swipe').addClass('opened');
+                        }
+                        if (direction == 'up') {
+                            //сработает при движении вверх
+                        }
+                        if (direction == 'down') {
+                            //сработает при движении вниз
+                        }
+                    }
+                },
+                triggerOnTouchEnd:true,
+                threshold:30 // сработает через 20 пикселей
+            });
+
+            $('.select-currency').on('change', function(e) {
+                let currency = $(this).val()
+                let form = $(this).closest('form')
+                getPayments(currency).then(function(data) {
+                    // Run this when your request was successful
+                    let payments = '';
+                    $.each(data, function(key, item) {
+                        payments += "<option value='" + item.title + "'>" + item.title + "</option>";
+                        // $(this).closest('form').find('.select-payment').html(payments)
+                    })
+                    console.log(form.find('select-payments'))
+                    form.find('select[name="payment-network"]').html(payments)
+                }).catch(function(err) {
+                    // Run this when promise was rejected via reject()
+                    console.log(err)
+                })
+            })
+            $('.section-main .create-order').click(function(){
+                let form = $(this).parent().find('form')
+                let currency = form.find('select[name="currency"]').val()
+                let amount = form.find('input[name="amount"]').val()
+                let payment = form.find('select[name="payment-network"]').val()
+                let destination = form.find('input[name="destination"]').val()
+                let data = {
                     "_token": "{{ csrf_token() }}",
                     "currency": currency,
-                },
-                success: function (data) {
-                    resolve(data) // Resolve promise and go to then()
-                },
-                error: function (err) {
-                    reject(err) // Reject the promise and go to catch()
+                    "amount": amount,
+                    "payment": payment,
+                    "destination": destination
                 }
+                createOrder(data)
             })
-        })
-    }
-    function createOrder(data) {
-        return new Promise(function (resolve, reject) {
-            $.ajax({
-                url: "/api/createOrderByUser",
-                type: "POST",
-                data: data,
-                success: function (data) {
-                    resolve(data) // Resolve promise and go to then()
-                    window.location.href = '{{Request::url()}}/orders/' + data;
-                },
-                error: function (err) {
-                    reject(err) // Reject the promise and go to catch()
-                }
+        });
+        function getPayments(currency) {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: "/api/getPayments",
+                    type: "POST",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "currency": currency,
+                    },
+                    success: function (data) {
+                        resolve(data) // Resolve promise and go to then()
+                    },
+                    error: function (err) {
+                        reject(err) // Reject the promise and go to catch()
+                    }
+                })
             })
-        })
-    }
-</script>
-</body>
-
-</html>
+        }
+        function createOrder(data) {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: "/api/createOrderByUser",
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        resolve(data) // Resolve promise and go to then()
+                        window.location.href = '{{Request::url()}}/orders/' + data;
+                    },
+                    error: function (err) {
+                        reject(err) // Reject the promise and go to catch()
+                    }
+                })
+            })
+        }
+    </script>
+@endsection

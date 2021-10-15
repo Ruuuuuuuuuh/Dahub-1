@@ -81,6 +81,11 @@ class ApiController extends Controller
 
     }
 
+    /**
+     * Create self order by user
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function createOrderByUser(Request $request) {
         $user = Auth::user();
         $headers = array (
@@ -103,6 +108,10 @@ class ApiController extends Controller
         else return response(['error'=> true, 'error-msg' => 'Вы не ввели сумму'],404, $headers, JSON_UNESCAPED_UNICODE);
     }
 
+    /**
+     * Assignee self order by User
+     * @return mixed
+     */
     public function assigneeOrderByUser()
     {
         $order = Order::where('status', 'created')->first();

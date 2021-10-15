@@ -97,8 +97,3 @@
     </ul>
 </div>
 
-<script>
-    $('.switch-pro').click(function(){
-        $(this).toggleClass('active')
-    })
-</script>

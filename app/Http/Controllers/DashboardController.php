@@ -7,6 +7,7 @@ use App\Models\Currency;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\System;
+use App\Models\UserConfig;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\WalletService;
 use Illuminate\Http\Request;
@@ -49,10 +50,15 @@ class DashboardController extends Controller {
                 ]
             );
         }
+        $mode = UserConfig::firstOrCreate(
+            ['user_uid' => $user->uid, 'meta' => 'mode'],
+            ['value' => 'lite']
+        )->value;
         $orders = Order::where('user_uid', Auth::user()->uid)->userOrders()->orderBy('id', 'DESC')->take(5)->get();
         $rates = new Rate();
         $currency = new Currency();
-        return view('dashboard.index', compact('orders', 'rates', 'currency'));
+
+        return view('dashboard.index', compact('orders', 'rates', 'currency', 'mode'));
     }
 
     public function getOrder($id) {
