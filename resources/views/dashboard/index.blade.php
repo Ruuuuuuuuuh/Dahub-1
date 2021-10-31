@@ -9,28 +9,24 @@
             </svg>
         </div>
         <div class="main-screen-wrapper">
-            @include('dashboard.components.filter')
-            @include('dashboard.components.orders')
+            @if ($mode == 'lite')
+                @include('dashboard.components.filter')
+                @include('dashboard.components.orders')
+            @else
+                @include('dashboard.components.gate.filter')
+                @include('dashboard.components.gate.orders')
+            @endif
         </div>
     </main>
     @include('dashboard.components.footer')
     @include('dashboard.components.createorder')
+    @if ($mode == 'pro')
+        @include('dashboard.components.gate.accept_order')
+    @endif
 @endsection
 @section('scripts')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js" type="text/javascript"></script>
-
 
     <script>
-        window.onload = function() {
-            if (screen.width < 375) {
-                let mvp = document.getElementById('viewport');
-                mvp.setAttribute('content','user-scalable=no,width=375,  height=device-height');
-            }
-        }
         function createOrderScreenOpen() {
             $('#create-order').toggleClass('opened');
         }
@@ -38,38 +34,6 @@
             $('.screen').removeClass('opened');
         })
         $(function() {
-            $('.resizable').resizable({
-                handles: {
-                    'n': '.screen-rollover'
-                }
-            });
-            $('.navbar-open').click(function(){
-                $('#menu-swipe').addClass('opened');
-            })
-            $('body').swipe( {
-                swipeStatus:function(event, phase, direction, distance, duration, fingerCount, fingerData, currentDirection) {
-                    if (phase == "start") {
-                        // сработает в начале swipe
-                    }
-                    if (phase == "end") {
-                        //сработает через 20 пикселей то число которое выбрали в threshold
-                        if (direction == 'left') {
-                            jQuery('#menu-swipe').removeClass('opened');
-                        }
-                        if (direction == 'right') {
-                            jQuery('#menu-swipe').addClass('opened');
-                        }
-                        if (direction == 'up') {
-                            //сработает при движении вверх
-                        }
-                        if (direction == 'down') {
-                            //сработает при движении вниз
-                        }
-                    }
-                },
-                triggerOnTouchEnd:true,
-                threshold:30 // сработает через 20 пикселей
-            });
 
             $('.select-currency').on('change', function(e) {
                 let currency = $(this).val()
@@ -114,10 +78,10 @@
                         "currency": currency,
                     },
                     success: function (data) {
-                        resolve(data) // Resolve promise and go to then()
+                        resolve(data)
                     },
                     error: function (err) {
-                        reject(err) // Reject the promise and go to catch()
+                        reject(err)
                     }
                 })
             })
@@ -129,14 +93,113 @@
                     type: "POST",
                     data: data,
                     success: function (data) {
-                        resolve(data) // Resolve promise and go to then()
+                        resolve(data)
                         window.location.href = '{{Request::url()}}/orders/' + data;
                     },
                     error: function (err) {
-                        reject(err) // Reject the promise and go to catch()
+                        reject(err)
                     }
                 })
             })
         }
+        $('.gate-controls .gate-action').click(function(e){
+            $('.gate-controls .gate-action').removeClass('active')
+            $(this).addClass('active')
+        })
+
+        @if ($mode == 'pro')
+        $('.gate-order.order-created').click(function(e){
+            if ($(this).hasClass('order-deposit')) {
+                e.preventDefault();
+                let amount = $(this).find('.amount').html();
+                let payment = $(this).find('.payment_details span').html();
+                let orderID = $(this).data('id');
+                $('#accept-order .top-nav h2').text('Принять ' + amount)
+                $('.payment-details-form input[name="payment"]').val(payment);
+                $('#accept-order a.order-accept').attr('data-id', orderID);
+                $('#accept-order').addClass('opened');
+                $('.payment-items .payment-item').removeClass('d-flex').addClass('d-none')
+                $('.payment-item[data-payment="' + payment + '"]').removeClass('d-none').addClass('d-flex')
+            }
+        })
+        $('.add-payment_item').click(function(){
+            $('#add-payment-details').modal()
+        })
+        @endif
+        $('.payment-details-form input').on('change keyup', function(){
+            let filledtextboxes = 1;
+            $('.payment-details-form input:text').each(function(i) {
+                if ($(this).val().length == 0) {
+                    filledtextboxes = 0
+                }
+            });
+            if (filledtextboxes != 0) $('.payment-details-form .confirm-modal').removeClass('disabled')
+            else $('.payment-details-form .confirm-modal').addClass('disabled')
+        })
+        $('.payment-details-form .confirm-modal').click(function(e){
+            e.preventDefault()
+            if (!$(this).hasClass('disabled')) {
+                return new Promise(function (resolve, reject) {
+                    let form = $('.payment-details-form');
+                    let data = {
+                        "_token": "{{ csrf_token() }}",
+                        "address": form.find('input[name="address"]').val(),
+                        "payment": form.find('input[name="payment"]').val(),
+                        "holder_name": form.find('input[name="holder_name"]').val(),
+                    }
+                    $.ajax({
+                        url: "/api/payment_details/add",
+                        type: "POST",
+                        data: data,
+                        success: function (data) {
+                            resolve(data)
+                            console.log(data)
+                            $('.payment-items').append('<a class="payment-item d-flex align-items-center justify-content-start" data-id="' + data[0].id + '" data-payment="' + data[0].payment + '">' +
+                                '<svg class="payment-details-icon" width="55" height="36" viewBox="0 0 56 36" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                                '<rect x="1" width="55" height="36" rx="5" fill="#EFF2F9"></rect>' +
+                                '<rect y="23" width="56" height="6" fill="white"></rect>' +
+                            '</svg>' +
+                            '<div class="payment-details">' +
+                                '<span class="payment-system">' + data[0].payment + '</span>' +
+                                '<span class="address">' + data[0].address + '</span>' +
+                                '<span class="holder-name">' + data[0].holder + '</span>' +
+                            '</div></a>');
+                            $('#add-payment-details').modal('hide')
+                        },
+                        error: function (err) {
+                            reject(err)
+                        }
+                    })
+                })
+            }
+        })
+        $('.payment-items').on('click', '.payment-item', function() {
+            $('.payment-item').removeClass('active')
+            $(this).addClass('active')
+            $('.order-accept').removeClass('disabled').attr('data-address', $(this).data('id'))
+        })
+        $('.order-accept').click(function() {
+            if (!$(this).hasClass('disabled')) {
+                let data = {
+                    "_token": "{{ csrf_token() }}",
+                    "id": $(this).data('id'),
+                    "payment_details": $(this).data('address'),
+                }
+                return new Promise(function (resolve, reject) {
+                    $.ajax({
+                        url: "/api/orders/acceptOrderByGate",
+                        type: "POST",
+                        data: data,
+                        success: function (data) {
+                            resolve(data)
+                            window.location.href = '{{Request::url()}}/orders/' + data;
+                        },
+                        error: function (err) {
+                            reject(err)
+                        }
+                    })
+                })
+            }
+        })
     </script>
 @endsection

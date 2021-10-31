@@ -101,5 +101,54 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         return $this->hasMany('App\Models\UserConfig', 'user_uid', 'uid');
     }
 
+    public function paymentDetails(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany('App\Models\PaymentDetail', 'user_uid', 'uid');
+    }
+
+    public function getBalance($currency, $decimal = 2): float
+    {
+        if (!$this->hasWallet($currency)) {
+            $this->createWallet(
+                [
+                    'name' => $currency,
+                    'slug' => $currency,
+                    'decimal_places' => System::findOrFail(1)->getWallet($currency)->decimal_places
+                ]
+            );
+        }
+        return $this->getWallet($currency)->balanceFloat;
+    }
+
+    public function getBalanceFrozen($currency, $decimal = 2): float
+    {
+        if (!$this->hasWallet($currency.'_frozen')) {
+            $this->createWallet(
+                [
+                    'name' => $currency.'_frozen',
+                    'slug' => $currency.'_frozen',
+                    'decimal_places' => $this->getWallet($currency)->decimal_places
+                ]
+            );
+        }
+        return $this->getWallet($currency.'_frozen')->balanceFloat;
+    }
+
+    public function getBalanceFree($currency): float
+    {
+        return $this->getBalance($currency) - $this->getBalanceFrozen($currency);
+    }
+
+    public function freezeTokens($currency, $amount)
+    {
+        $this->getWallet($currency.'_frozen')->depositFloat($amount, array('destination' => 'Заморозка токенов'));
+        $this->getWallet($currency.'_frozen')->refreshBalance();
+    }
+
+    public function unfreezeTokens($currency, $amount)
+    {
+        $this->getWallet($currency.'_frozen')->withdrawFloat($amount, array('destination' => 'Разморозка токенов'));
+        $this->getWallet($currency.'_frozen')->refreshBalance();
+    }
 
 }

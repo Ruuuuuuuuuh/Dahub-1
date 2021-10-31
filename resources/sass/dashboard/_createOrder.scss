@@ -1,59 +1,26 @@
-section.screen {
-    .section-header {
-        padding:30px 25px 50px;
-        background-color: #EDF1F9;
-        svg.status {
-            position: absolute;
-            bottom: -65px;
-        }
-        .top-nav {
-            display: flex;
-            align-items: center;
-            position: relative;
-            width: 100%;
-            justify-content: center;
-            .back-link {
-                left: 0;
-                position: absolute;
-            }
-            h2 {
+.section-main {
+    #create-order-tab {
+        .nav-item {
+            .nav-link {
+                opacity: 0.4;
+                mix-blend-mode: normal;
+                background: #EDF1F9;
+                border-radius: 30px;
+                padding: 0 22px;
                 font-weight: 600;
-                font-size: 26px;
-                line-height: 32px;
+                font-size: 13px;
+                line-height: 46px;
                 text-align: center;
-                color: #0D1F3C;
-                margin-bottom: 5px;
-            }
-        }
-    }
-    .section-main {
-        border-radius: 20px;
-        padding: 30px 25px;
-        margin-top: -20px;
-        background: #fff;
-        #create-order-tab {
-            .nav-item {
-                .nav-link {
-                    opacity: 0.4;
-                    mix-blend-mode: normal;
-                    background: #EDF1F9;
-                    border-radius: 30px;
-                    padding: 0 22px;
-                    font-weight: 600;
-                    font-size: 13px;
-                    line-height: 46px;
-                    text-align: center;
-                    color: #21314C;
-                    border: none;
-                    cursor: pointer;
-                    transition: 0.3s ease-in-out all;
-                    &:hover {
-                        opacity: 1;
-                    }
-                    &.active {
-                        opacity:1;
-                        color:#347AF0;
-                    }
+                color: #21314C;
+                border: none;
+                cursor: pointer;
+                transition: 0.3s ease-in-out all;
+                &:hover {
+                    opacity: 1;
+                }
+                &.active {
+                    opacity:1;
+                    color:#347AF0;
                 }
             }
         }

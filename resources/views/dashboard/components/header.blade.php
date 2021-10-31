@@ -25,7 +25,7 @@
         @if ($mode == 'lite')
             @include('dashboard.components.balance_items')
         @else
-            @include('dashboard.components.gate_balances')
+            @include('dashboard.components.gate.gate_balances')
         @endif
     </section>
 </header>

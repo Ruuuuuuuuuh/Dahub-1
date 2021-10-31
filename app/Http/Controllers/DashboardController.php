@@ -51,17 +51,33 @@ class DashboardController extends Controller {
             );
         }
 
-        $orders = Order::where('user_uid', Auth::user()->uid)->userOrders()->orderBy('id', 'DESC')->take(5)->get();
         $rates = new Rate();
         $currency = new Currency();
         $mode = $this->getMode();
-        return view('dashboard.index', compact('orders', 'rates', 'currency', 'mode'));
+        $myOrders = '';
+        if ($mode == 'lite') $orders = Order::where('user_uid', Auth::user()->uid)->userOrders()->orderBy('id', 'DESC')->take(5)->get();
+        else {
+            $orders = Order::where('status', 'created')->orderBy('id', 'DESC')->take(5)->get();
+            $myOrders = Order::where('status', 'accepted')->where('gate', $user->uid)->orderBy('id', 'DESC')->take(5)->get();
+        }
+        return view('dashboard.index', compact('orders', 'rates', 'currency', 'mode', 'myOrders'));
     }
 
     public function getOrder($id) {
+        $user = Auth::user();
         $order = Order::findOrFail($id);
-        $mode = $this->getMode();
-        return view('dashboard.order', compact('order', 'mode'));
+        if ($order->user_uid == $user->uid || $order->gate == $user->uid) {
+            $mode = $this->getMode();
+            if ($mode == 'lite') {
+                return view('dashboard.pages.order', compact('order', 'mode'));
+            }
+            else {
+                return view('dashboard.pages.gate.order', compact('order', 'mode'));
+            }
+        }
+        else {
+            return redirect('dashboard');
+        }
     }
 
     public function getMode() {

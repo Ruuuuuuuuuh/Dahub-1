@@ -29,30 +29,31 @@
         </a>
     </div>
     <a class="create-order-open d-flex justify-content-center align-items-center flex-column" onclick="createOrderScreenOpen();">
-        <svg width="72" height="72" viewBox="0 0 72 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g filter="url(#filterCreateIcon)">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M36 63C53.6731 63 68 48.6731 68 31C68 13.3269 53.6731 -1 36 -1C18.3269 -1 4 13.3269 4 31C4 48.6731 18.3269 63 36 63Z" fill="#EDF1F9"/>
+        <svg width="72" height="69" viewBox="0 0 72 69" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g filter="url(#filter0_d_629:268)">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M36 66C53.6731 66 68 51.6731 68 34C68 16.3269 53.6731 2 36 2C18.3269 2 4 16.3269 4 34C4 51.6731 18.3269 66 36 66Z" fill="#EDF1F9"/>
             </g>
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M36 60C52.0163 60 65 47.0163 65 31C65 14.9837 52.0163 2 36 2C19.9837 2 7 14.9837 7 31C7 47.0163 19.9837 60 36 60Z" fill="#3783F5"/>
-            <path d="M46 31C46 31.75 45.5 32.25 44.75 32.25H37.25V39.75C37.25 40.5 36.75 41 36 41C35.25 41 34.75 40.5 34.75 39.75V32.25H27.25C26.5 32.25 26 31.75 26 31C26 30.25 26.5 29.75 27.25 29.75H34.75V22.25C34.75 21.5 35.25 21 36 21C36.75 21 37.25 21.5 37.25 22.25V29.75H44.75C45.5 29.75 46 30.25 46 31Z" fill="black"/>
-            <mask id="create-order-icon" mask-type="alpha" maskUnits="userSpaceOnUse" x="26" y="21" width="20" height="20">
-                <path d="M46 31C46 31.75 45.5 32.25 44.75 32.25H37.25V39.75C37.25 40.5 36.75 41 36 41C35.25 41 34.75 40.5 34.75 39.75V32.25H27.25C26.5 32.25 26 31.75 26 31C26 30.25 26.5 29.75 27.25 29.75H34.75V22.25C34.75 21.5 35.25 21 36 21C36.75 21 37.25 21.5 37.25 22.25V29.75H44.75C45.5 29.75 46 30.25 46 31Z" fill="white"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M36 63C52.0163 63 65 50.0163 65 34C65 17.9837 52.0163 5 36 5C19.9837 5 7 17.9837 7 34C7 50.0163 19.9837 63 36 63Z" fill="#3783F5"/>
+            <path d="M46 34C46 34.75 45.5 35.25 44.75 35.25H37.25V42.75C37.25 43.5 36.75 44 36 44C35.25 44 34.75 43.5 34.75 42.75V35.25H27.25C26.5 35.25 26 34.75 26 34C26 33.25 26.5 32.75 27.25 32.75H34.75V25.25C34.75 24.5 35.25 24 36 24C36.75 24 37.25 24.5 37.25 25.25V32.75H44.75C45.5 32.75 46 33.25 46 34Z" fill="black"/>
+            <mask id="mask0_629:268" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="26" y="24" width="20" height="20">
+                <path d="M46 34C46 34.75 45.5 35.25 44.75 35.25H37.25V42.75C37.25 43.5 36.75 44 36 44C35.25 44 34.75 43.5 34.75 42.75V35.25H27.25C26.5 35.25 26 34.75 26 34C26 33.25 26.5 32.75 27.25 32.75H34.75V25.25C34.75 24.5 35.25 24 36 24C36.75 24 37.25 24.5 37.25 25.25V32.75H44.75C45.5 32.75 46 33.25 46 34Z" fill="white"/>
             </mask>
-            <g mask="url(#create-order-icon)">
-                <rect x="21" y="16" width="30" height="30" fill="white"/>
+            <g mask="url(#mask0_629:268)">
+                <rect x="21" y="19" width="30" height="30" fill="white"/>
             </g>
             <defs>
-                <filter id="filterCreateIcon" x="0" y="-6" width="72" height="72" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <filter id="filter0_d_629:268" x="0" y="-3" width="72" height="72" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
                     <feFlood flood-opacity="0" result="BackgroundImageFix"/>
                     <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
                     <feOffset dy="-1"/>
                     <feGaussianBlur stdDeviation="2"/>
                     <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.502704 0"/>
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_629:268"/>
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_629:268" result="shape"/>
                 </filter>
             </defs>
         </svg>
+
 
         <span>Создать заявку</span>
     </a>

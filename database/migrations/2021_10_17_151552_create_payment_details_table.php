@@ -20,7 +20,8 @@ class CreatePaymentDetailsTable extends Migration
             $table->index('user_uid');
             $table->foreign('user_uid')->references('uid')->on('users')->onDelete('cascade');
             $table->integer('payment_id');
-            $table->string('value');
+            $table->string('address');
+            $table->string('holder')->nullable();
         });
     }
 

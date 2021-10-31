@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Str;
@@ -24,11 +25,12 @@ class AuthController extends Controller
         return redirect('/');
     }
 
-    public function authUser($token) {
+    public function authUser($token, Request $request) {
+        $url = $request->has('url') ? $request->input('url') : 'wallet';
         $user = User::where('auth_token', $token)->firstOrFail();
         Auth::login($user, true);
 
-        return redirect('wallet');
+        return redirect($url);
     }
 
 

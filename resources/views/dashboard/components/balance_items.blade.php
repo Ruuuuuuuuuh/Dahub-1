@@ -17,8 +17,8 @@
             </div>
         </div>
         <div class="balance-item-amount">
-            <div class="balance-item-amount-title">{{number_format(Auth::User()->getWallet('ETH')->balanceFloat, 5, '.', ' ')}}</div>
-            <div class="balance-item-amount-description">${{number_format(Auth::User()->getWallet('ETH')->balanceFloat / Rate::getRates('ETH'), 2, '.', ' ')}}</div>
+            <div class="balance-item-amount-title">{{number_format(Auth::User()->getBalance('ETH'), 5, '.', ' ')}}</div>
+            <div class="balance-item-amount-description">${{number_format(Auth::User()->getBalance('ETH') / Rate::getRates('ETH'), 2, '.', ' ')}}</div>
         </div>
     </div>
     <div class="balance-item d-flex justify-content-between w-100">
@@ -38,8 +38,8 @@
             </div>
         </div>
         <div class="balance-item-amount">
-            <div class="balance-item-amount-title">{{number_format(Auth::User()->getWallet('DHB')->balanceFloat, 2, '.', ' ')}}</div>
-            <div class="balance-item-amount-description">${{number_format(Auth::User()->getWallet('DHB')->balanceFloat / Rate::getRates('USDT'), 2, '.', ' ') }}</div>
+            <div class="balance-item-amount-title">{{number_format(Auth::User()->getBalance('DHB'), 2, '.', ' ')}}</div>
+            <div class="balance-item-amount-description">${{number_format(Auth::User()->getBalance('DHB') / Rate::getRates('USDT'), 2, '.', ' ') }}</div>
         </div>
     </div>
     <div class="balance-item d-flex justify-content-between w-100">
@@ -58,8 +58,8 @@
             </div>
         </div>
         <div class="balance-item-amount">
-            <div class="balance-item-amount-title">{{number_format(Auth::User()->getWallet('RUB')->balanceFloat, 2, '.', ' ')}}</div>
-            <div class="balance-item-amount-description">${{number_format(Auth::User()->getWallet('ETH')->balanceFloat * 72.73, 2, '.', ' ')}}</div>
+            <div class="balance-item-amount-title">{{number_format(Auth::User()->getBalance('RUB'), 2, '.', ' ')}}</div>
+            <div class="balance-item-amount-description">${{number_format(Auth::User()->getBalance('RUB') / 72.73, 2, '.', ' ')}}</div>
         </div>
     </div>
     <div class="balance-item d-flex justify-content-between w-100">

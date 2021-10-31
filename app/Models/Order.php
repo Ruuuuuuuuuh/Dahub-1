@@ -22,19 +22,37 @@ class Order extends Model
         'amount',
         'status',
         'rate',
+        'payment',
+        'payment_details',
+        'tax'
     ];
 
     /**
      * Получить пользователей заявки.
      */
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo('App\Models\User', 'user_uid', 'uid');
+    }
+
+    public function payment(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo('App\Models\Payment', 'title', 'title');
+    }
+
+    public function paymentDetails(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo('App\Models\PaymentDetail', 'payment_details', 'id');
     }
 
     public function transactions()
     {
         return Transaction::where('type', 'deposit')->where('meta', 'like', '%"order_id": ' . $this->getKey() . '%')->get();
+    }
+
+    public function transaction(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(\App\Models\Transaction::class, 'order_transaction', 'order_id', 'transaction_id');
     }
 
     public function scopeNotCompleted($query)

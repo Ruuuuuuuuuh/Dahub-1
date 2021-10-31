@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Rate;
 use App\Models\Currency;
+use App\Models\Payment;
+use App\Models\PaymentDetail;
 use App\Models\System;
 use App\Models\UserConfig;
+use App\Notifications\AcceptDepositOrder;
 use App\Notifications\AdminNotifications;
 use App\Notifications\OrderAssignee;
 use App\Notifications\OrderCreate;
@@ -112,10 +115,11 @@ class ApiController extends Controller
      * Assignee self order by User
      * @return mixed
      */
-    public function assigneeOrderByUser()
+    public function assigneeOrderByUser(Request $request)
     {
-        $order = Order::where('status', 'created')->first();
+        $id = $request->input('id');
         $user = Auth::user();
+        $order = Order::where('id', $id)->where('user_uid', $user->uid)->first();
 
         $admins = User::where('roles', 'admin')->get();
         foreach ($admins as $admin) {
@@ -135,10 +139,11 @@ class ApiController extends Controller
      *
      * @return mixed
      */
-    public function declineOrderByUser()
+    public function declineOrderByUser(Request $request)
     {
-        $order = Order::where('status', 'created')->first();
+        $id = $request->input('id');
         $user = Auth::user();
+        $order = Order::where('id', $id)->where('user_uid', $user->uid)->first();
 
         // Send message via telegram
         if (config('notifications')) $user->notify(new OrderDecline($order));
@@ -208,5 +213,76 @@ class ApiController extends Controller
             ['value' => $value]
         );
         return true;
+    }
+
+    public function addPaymentDetails(Request $request) {
+        $user = Auth::user();
+        $payment = $request->input('payment');
+        $address = $request->input('address');
+        $holder = $request->input('holder_name');
+        $payment_details = PaymentDetail::create(
+            [
+                'user_uid' => $user->uid,
+                'payment_id' => Payment::where('title', $payment)->firstOrFail()->id,
+                'address' => $address,
+                'holder' => $holder,
+            ],
+        );
+        $data[]       = [
+            'user_uid' => $user->uid,
+            'payment' => $payment,
+            'address' => $address,
+            'holder' => $holder,
+            'id'    => $payment_details->id
+        ];
+        return response()->json($data);
+    }
+
+    public function getPaymentDetails() {
+        $user = Auth::user();
+        return $user->paymentDetails()->with('payment');
+    }
+
+    public function acceptOrderByGate(Request $request) {
+        $user = Auth::user();
+        $mode = UserConfig::where('user_uid', $user->uid)->firstOrFail()->value;
+        if ($user->isGate()) {
+            $order = Order::where('id', $request->input('id'))->firstOrFail();
+            if ($order->status == 'created') {
+                $order->gate = $user->uid;
+                $order->payment_details = $request->input('payment_details');
+                $order->status = 'accepted';
+                $order->save();
+                $owner = User::where('uid', $order->user_uid)->first();
+                $owner->notify(new AcceptDepositOrder($order));
+                return $order->id;
+            }
+        }
+    }
+
+    public function confirmOrderByGate(Request $request) {
+        $user = Auth::user();
+        $order = Order::where('id', $request->input('id'))->firstOrFail();
+        $owner = $order->user()->first();
+        $headers = array (
+            'Content-Type' => 'application/json; charset=UTF-8',
+            'charset' => 'utf-8'
+        );
+        if ($order->gate == $user->uid) {
+            if (($user->getBalanceFree($order->currency) > $order->amount) || $user->isAdmin()) {
+                $transaction = $owner->getWallet($order->currency)->depositFloat($order->amount, array('destination' => 'deposit to wallet'));
+                $owner->getWallet($order->currency)->refreshBalance();
+                $user->freezeTokens($order->currency, $order->amount);
+                $order->status = 'completed';
+                $order->transaction()->attach($transaction->id);
+                $order->save();
+                return $order->id;
+            }
+            else response(['error'=>true, 'error-msg' => 'Недостаточно баланса'], 404, $headers, JSON_UNESCAPED_UNICODE);
+        }
+        else {
+
+            return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $headers, JSON_UNESCAPED_UNICODE);
+        }
     }
 }

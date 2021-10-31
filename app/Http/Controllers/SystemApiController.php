@@ -313,7 +313,7 @@ class SystemApiController extends Controller
     public function setHFT(Request $request)
     {
         $amount = $request->input('amount');
-        $system = $system = System::findOrFail(1);
+        $system = System::findOrFail(1);
         $system->getWallet('HFT')->refreshBalance();
         $system->getWallet('HFT')->depositFloat($amount, array('destination' => 'Начисление HFT'));
         $telegram = new Api(env('TELEGRAM_BOT_HARVEST_TOKEN'));
