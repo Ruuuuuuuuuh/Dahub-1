@@ -1,4 +1,5 @@
-<form class="form-exchange form-create-order" action="index.html" method="post">
+<form class="form-withdraw form-create-order" action="index.html" method="post">
+    <input type="hidden" name="destination" value="withdraw"/>
     <div class="form-control">
         <label for="currency">Валюта</label>
         <div class="select-wrapper">
@@ -47,8 +48,8 @@
     <div class="form-control address">
         <label for="address">Адрес</label>
         <div class="select-wrapper">
-            <input type="text" name="address" class="input-address"/>
+            <input type="button" name="address" class="input-address"/>
         </div>
     </div>
 </form>
-<a class="button button-blue">Далее</a>
+<a class="button button-blue create-order">Далее</a>

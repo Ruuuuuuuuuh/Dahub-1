@@ -48,9 +48,24 @@
 
 <script>
     $(function() {
+        let screenHeight = window.innerHeight
         $('.resizable').resizable({
             handles: {
                 'n': '.screen-rollover'
+            },
+            stop: function(e, ui) {
+                if (ui.element.height() > window.innerHeight / 1.5) {
+                    ui.element.height(window.innerHeight - 75)
+                    ui.element.css('top', 75)
+                }
+                if (ui.element.height() < window.innerHeight / 1.5 && ui.element.height() > window.innerHeight / 3) {
+                    ui.element.height(window.innerHeight / 2)
+                    ui.element.css('top', window.innerHeight / 2)
+                }
+                if (ui.element.height() < window.innerHeight / 3) {
+                    ui.element.height(145)
+                    ui.element.css('top', window.innerHeight - 145)
+                }
             }
         });
         $('.navbar-open').click(function () {

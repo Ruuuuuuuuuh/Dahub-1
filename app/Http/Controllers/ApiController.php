@@ -9,6 +9,8 @@ use App\Models\PaymentDetail;
 use App\Models\System;
 use App\Models\UserConfig;
 use App\Notifications\AcceptDepositOrder;
+use App\Notifications\AcceptSendingByGate;
+use App\Notifications\AcceptWithdrawOrder;
 use App\Notifications\AdminNotifications;
 use App\Notifications\OrderAssignee;
 use App\Notifications\OrderCreate;
@@ -96,14 +98,16 @@ class ApiController extends Controller
             'charset' => 'utf-8'
         );
         if ($request->has('amount') && $request->input('amount')!= null) {
+            $address = $request->input('destination') == 'deposit' ? null : $request->input('address');
             $order = Order::create([
-                'user_uid'       => $user->uid,
-                'destination'    => $request->input('destination'),
-                'payment'        => $request->input('payment'),
-                'currency'       => $request->input('currency'),
-                'amount'         => $request->input('amount'),
-                'status'         => 'created',
-                'rate'           => 0
+                'user_uid'        => $user->uid,
+                'destination'     => $request->input('destination'),
+                'payment'         => $request->input('payment'),
+                'currency'        => $request->input('currency'),
+                'amount'          => $request->input('amount'),
+                'status'          => 'created',
+                'rate'            => 0,
+                'payment_details' => $address
             ]);
             $order->save();
             return response($order->id, 200, $headers);
@@ -245,17 +249,40 @@ class ApiController extends Controller
 
     public function acceptOrderByGate(Request $request) {
         $user = Auth::user();
-        $mode = UserConfig::where('user_uid', $user->uid)->firstOrFail()->value;
         if ($user->isGate()) {
             $order = Order::where('id', $request->input('id'))->firstOrFail();
             if ($order->status == 'created') {
                 $order->gate = $user->uid;
-                $order->payment_details = $request->input('payment_details');
-                $order->status = 'accepted';
-                $order->save();
                 $owner = User::where('uid', $order->user_uid)->first();
-                $owner->notify(new AcceptDepositOrder($order));
-                return $order->id;
+                if ($order->destination == 'deposit') {
+                    $order->payment_details = $request->input('payment_details');
+                    $order->status = 'accepted';
+                    $order->save();
+                    $owner->notify(new AcceptDepositOrder($order));
+                    return $order->id;
+                }
+                else {
+                    $order->status = 'accepted';
+                    $order->save();
+                    $owner->notify(new AcceptWithdrawOrder($order));
+                    return $order->id;
+                }
+            }
+        }
+    }
+
+    public function acceptSendingByGate(Request $request) {
+        $user = Auth::user();
+        if ($user->isGate()) {
+            $order = Order::where('id', $request->input('id'))->firstOrFail();
+            if ($order->status == 'accepted' && $order->gate == $user->uid) {
+                $owner = User::where('uid', $order->user_uid)->first();
+                if ($order->destination == 'withdraw') {
+                    $order->status = 'pending';
+                    $order->save();
+                    $owner->notify(new AcceptSendingByGate($order));
+                    return $order->id;
+                }
             }
         }
     }
@@ -284,5 +311,52 @@ class ApiController extends Controller
 
             return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $headers, JSON_UNESCAPED_UNICODE);
         }
+    }
+
+    public function confirmOrderByUser(Request $request) {
+        $user = Auth::user();
+        $order = Order::where('id', $request->input('id'))->firstOrFail();
+        $gate = User::where('uid', $order->gate)->first();
+        $headers = array (
+            'Content-Type' => 'application/json; charset=UTF-8',
+            'charset' => 'utf-8'
+        );
+        if ($order->user_uid == $user->uid) {
+            if (($gate->getBalanceFree($order->currency) > $order->amount) || $gate->isAdmin()) {
+                $transaction = $user->getWallet($order->currency)->withdrawFloat($order->amount, array('destination' => 'withdraw from wallet'));
+                $user->getWallet($order->currency)->refreshBalance();
+                $gate->unfreezeTokens($order->currency, $order->amount);
+                $order->status = 'completed';
+                $order->transaction()->attach($transaction->id);
+                $order->save();
+                return $order->id;
+            }
+            else response(['error'=>true, 'error-msg' => 'Недостаточно баланса'], 404, $headers, JSON_UNESCAPED_UNICODE);
+        }
+        else {
+
+            return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $headers, JSON_UNESCAPED_UNICODE);
+        }
+    }
+
+    public function declineOrderByGate(Request $request)
+    {
+        $headers = array (
+            'Content-Type' => 'application/json; charset=UTF-8',
+            'charset' => 'utf-8'
+        );
+        $id = $request->input('id');
+        $user = Auth::user();
+        if ($user->isGate()) {
+            $order = Order::where('id', $id)->where('gate', $user->uid)->first();
+            $owner = User::where('uid', $order->user_uid)->first();
+
+            // Send message via telegram
+            if (config('notifications')) $owner->notify(new OrderDecline($order));
+            $order->forceDelete();
+            return true;
+        }
+        else return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $headers, JSON_UNESCAPED_UNICODE);
+
     }
 }

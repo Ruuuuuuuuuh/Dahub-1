@@ -22,6 +22,8 @@
     @include('dashboard.components.createorder')
     @if ($mode == 'pro')
         @include('dashboard.components.gate.accept_order')
+    @else
+        @include('dashboard.components.payment-details-list')
     @endif
 @endsection
 @section('scripts')
@@ -31,7 +33,7 @@
             $('#create-order').toggleClass('opened');
         }
         $('.back-link').click(function(){
-            $('.screen').removeClass('opened');
+            $(this).closest('.screen').removeClass('opened');
         })
         $(function() {
 
@@ -52,17 +54,20 @@
                     console.log(err)
                 })
             })
-            $('.section-main .create-order').click(function(){
-                let form = $(this).parent().find('form')
+
+            $('.create-order').click(function() {
+                let form = $('#create-order .tab-pane.active form')
                 let currency = form.find('select[name="currency"]').val()
                 let amount = form.find('input[name="amount"]').val()
                 let payment = form.find('select[name="payment-network"]').val()
+                let address = form.find('input[name="address"]').val()
                 let destination = form.find('input[name="destination"]').val()
                 let data = {
                     "_token": "{{ csrf_token() }}",
                     "currency": currency,
                     "amount": amount,
                     "payment": payment,
+                    "address": address,
                     "destination": destination
                 }
                 createOrder(data)
@@ -103,10 +108,22 @@
             })
         }
         $('.gate-controls .gate-action').click(function(e){
+            let action = $(this).data('action')
+            $('.orders .orders-deposit, .orders .orders-withdraw').hide()
+            $('.orders-' + action).show()
             $('.gate-controls .gate-action').removeClass('active')
             $(this).addClass('active')
         })
-
+        $('.form-withdraw .input-address').click(function(e){
+            e.preventDefault();
+            let payment = $('.form-withdraw .select-payment').val();
+            $('#payment-details-list').addClass('opened')
+            $('#payment-details-list .payment-items .payment-item').removeClass('d-flex').addClass('d-none')
+            $('#payment-details-list .payment-item[data-payment="' + payment + '"]').removeClass('d-none').addClass('d-flex')
+        })
+        $('.add-payment_item').click(function(){
+            $('#add-payment-details').modal()
+        })
         @if ($mode == 'pro')
         $('.gate-order.order-created').click(function(e){
             if ($(this).hasClass('order-deposit')) {
@@ -122,9 +139,7 @@
                 $('.payment-item[data-payment="' + payment + '"]').removeClass('d-none').addClass('d-flex')
             }
         })
-        $('.add-payment_item').click(function(){
-            $('#add-payment-details').modal()
-        })
+
         @endif
         $('.payment-details-form input').on('change keyup', function(){
             let filledtextboxes = 1;
@@ -154,7 +169,7 @@
                         success: function (data) {
                             resolve(data)
                             console.log(data)
-                            $('.payment-items').append('<a class="payment-item d-flex align-items-center justify-content-start" data-id="' + data[0].id + '" data-payment="' + data[0].payment + '">' +
+                            $('.payment-items').append('<a class="payment-item d-flex align-items-center justify-content-start" data-address="' + data[0].address + '" data-payment="' + data[0].payment + '">' +
                                 '<svg class="payment-details-icon" width="55" height="36" viewBox="0 0 56 36" fill="none" xmlns="http://www.w3.org/2000/svg">' +
                                 '<rect x="1" width="55" height="36" rx="5" fill="#EFF2F9"></rect>' +
                                 '<rect y="23" width="56" height="6" fill="white"></rect>' +
@@ -173,10 +188,17 @@
                 })
             }
         })
-        $('.payment-items').on('click', '.payment-item', function() {
+        $('#accept-order .payment-items').on('click', '.payment-item', function() {
             $('.payment-item').removeClass('active')
             $(this).addClass('active')
-            $('.order-accept').removeClass('disabled').attr('data-address', $(this).data('id'))
+            $('.order-accept').removeClass('disabled').attr('data-address', $(this).data('address'))
+        })
+        $('#payment-details-list .payment-items').on('click', '.payment-item', function() {
+            $('.payment-item').removeClass('active')
+            $(this).addClass('active')
+            let address = $(this).find('.address').text();
+            $('#payment-details-list').removeClass('opened')
+            $('.input-address').val(address)
         })
         $('.order-accept').click(function() {
             if (!$(this).hasClass('disabled')) {

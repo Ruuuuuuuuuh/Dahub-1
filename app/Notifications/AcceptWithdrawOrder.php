@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notification;
 use NotificationChannels\Telegram\TelegramChannel;
 use NotificationChannels\Telegram\TelegramMessage;
 
-class AcceptDepositOrder extends Notification
+class AcceptWithdrawOrder extends Notification
 {
     use Queueable;
 
@@ -44,7 +44,7 @@ class AcceptDepositOrder extends Notification
             // Optional recipient user id.
             ->to($notifiable->uid)
             // Markdown supported.
-            ->content("Заявка №" . $this->order->id . " на пополнение " . $this->order->amount . " " . $this->order->currency. " принята шлюзом. Номер карты для пополнения " . $this->order->payment_details)
+            ->content("Заявка №" . $this->order->id . " на отправление " . $this->order->amount . " " . $this->order->currency. " принята шлюзом.")
 
             // (Optional) Blade template for the content.
             // ->view('notification', ['url' => $url])

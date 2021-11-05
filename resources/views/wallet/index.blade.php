@@ -145,7 +145,7 @@
                 data:{
                     _token: _token,
                     user_uid:       window.user.uid,
-                    destination:    'deposit',
+                    destination:    'TokenSale',
                     currency:       currency,
                     amount:         amount,
                 },
@@ -166,6 +166,7 @@
                 type:"POST",
                 data:{
                     _token: _token,
+                    id: id
                 },
                 success:function(response){
                     $('.deposit-section').removeClass('created').addClass('assignee');

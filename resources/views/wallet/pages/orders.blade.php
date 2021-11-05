@@ -60,6 +60,9 @@
                                             <div class="col-12 col-md-3">
                                                 <div class="orders-actions justify-content-md-around justify-content-around d-flex align-items-center h-100">
                                                     <p class="mr-4">#{{$order->id}}</p>
+                                                    @if ($order->status == 'created')
+                                                        <a data-id="{{$order->id}}" class="btn btn-warning order-confirm">Подтвердить</a>
+                                                    @endif
                                                     @if ($order->status == 'assignee')
                                                     <a data-id="{{$order->id}}" class="btn btn-success order-confirm">Подтвердить</a>
                                                     @endif

@@ -80,6 +80,9 @@ Route::post('/api/payment_details/add', [App\Http\Controllers\ApiController::cla
 Route::post('/api/payment_details/get', [App\Http\Controllers\ApiController::class, 'getPaymentDetails']);
 Route::post('/api/orders/acceptOrderByGate', [App\Http\Controllers\ApiController::class, 'acceptOrderByGate']);
 Route::post('/api/orders/confirmOrderByGate', [App\Http\Controllers\ApiController::class, 'confirmOrderByGate']);
+Route::post('/api/orders/confirmOrderByUser', [App\Http\Controllers\ApiController::class, 'confirmOrderByUser']);
+Route::post('/api/orders/declineOrderByGate', [App\Http\Controllers\ApiController::class, 'declineOrderByGate']);
+Route::post('/api/orders/acceptSendingByGate', [App\Http\Controllers\ApiController::class, 'acceptSendingByGate']);
 
 
 // Telegram Web Api

@@ -54,13 +54,16 @@ class DashboardController extends Controller {
         $rates = new Rate();
         $currency = new Currency();
         $mode = $this->getMode();
-        $myOrders = '';
-        if ($mode == 'lite') $orders = Order::where('user_uid', Auth::user()->uid)->userOrders()->orderBy('id', 'DESC')->take(5)->get();
-        else {
-            $orders = Order::where('status', 'created')->orderBy('id', 'DESC')->take(5)->get();
-            $myOrders = Order::where('status', 'accepted')->where('gate', $user->uid)->orderBy('id', 'DESC')->take(5)->get();
+        if ($mode == 'lite') {
+            $orders = Order::where('user_uid', Auth::user()->uid)->userOrders()->orderBy('id', 'DESC')->take(4)->get();
         }
-        return view('dashboard.index', compact('orders', 'rates', 'currency', 'mode', 'myOrders'));
+        else {
+            $orders['deposit'] = Order::where('status', 'created')->where('destination', 'deposit')->orderBy('id', 'DESC')->take(5)->get();
+            $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->take(5)->get();
+            $orders['owned'] = Order::where('status', 'accepted')->where('gate', $user->uid)->orderBy('id', 'DESC')->take(5)->get();
+        }
+        return view('dashboard.index', compact('orders', 'rates', 'currency', 'mode'));
+
     }
 
     public function getOrder($id) {

@@ -1,4 +1,4 @@
-<section id="accept-order" class="screen">
+<section id="payment-details-list" class="screen">
     <div class="section-header">
         <div class="top-nav">
             <a href="#" class="back-link">
@@ -12,24 +12,24 @@
                     </g>
                 </svg>
             </a>
-            <h2>Принять заявку</h2>
+            <h2>Список реквизитов</h2>
         </div>
     </div>
     <div class="section-main">
         <h4>Выберите подходящую карту</h4>
         <div class="payment-items">
             @foreach (Auth::user()->paymentDetails()->get() as $payment)
-            <a class="payment-item d-flex align-items-center justify-content-start" data-address="{{$payment->address}}" data-payment="{{$payment->payment()->first()->title}}">
-                <svg class="payment-details-icon" width="55" height="36" viewBox="0 0 56 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="1" width="55" height="36" rx="5" fill="#EFF2F9"/>
-                    <rect y="23" width="56" height="6" fill="white"/>
-                </svg>
-                <div class="payment-details">
-                    <span class="payment-system">{{$payment->payment()->first()->title}}</span>
-                    <span class="address">{{$payment->address}}</span>
-                    <span class="holder-name">{{$payment->holder}}</span>
-                </div>
-            </a>
+                <a class="payment-item d-flex align-items-center justify-content-start" data-address="{{$payment->address}}" data-payment="{{$payment->payment()->first()->title}}">
+                    <svg class="payment-details-icon" width="55" height="36" viewBox="0 0 56 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="1" width="55" height="36" rx="5" fill="#EFF2F9"/>
+                        <rect y="23" width="56" height="6" fill="white"/>
+                    </svg>
+                    <div class="payment-details">
+                        <span class="payment-system">{{$payment->payment()->first()->title}}</span>
+                        <span class="address">{{$payment->address}}</span>
+                        <span class="holder-name">{{$payment->holder}}</span>
+                    </div>
+                </a>
             @endforeach
         </div>
         <a class="add-payment_item d-flex align-items-center justify-content-start">
@@ -40,7 +40,6 @@
             <span>Добавить новую карту</span>
         </a>
 
-        <a href="#" class="btn btn-primary order-accept disabled">Принять заявку</a>
     </div>
 </section>
 <div class="modal fade" id="add-payment-details" tabindex="-1" role="dialog" aria-labelledby="add-payment-details" aria-hidden="true">
