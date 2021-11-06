@@ -97,22 +97,34 @@ class ApiController extends Controller
             'Content-Type' => 'application/json; charset=UTF-8',
             'charset' => 'utf-8'
         );
-        if ($request->has('amount') && $request->input('amount')!= null) {
-            $address = $request->input('destination') == 'deposit' ? null : $request->input('address');
+        $destination = $request->input('destination');
+        $amount = $request->input('amount');
+        $currency = $request->input('currency');
+        $payment = $request->input('payment');
+        $error = false;
+        if ($destination == 'withdraw') {
+            if ($user->getBalanceFree($currency) < $amount) $error = 'Недостаточно средств для создания заявки';
+        }
+        if (!($request->has('amount') && $request->input('amount')!= null)) {
+            $error = 'Вы не ввели сумму';
+        }
+        if (!$error) {
+            $address = $destination == 'deposit' ? null : $request->input('address');
+
             $order = Order::create([
                 'user_uid'        => $user->uid,
-                'destination'     => $request->input('destination'),
-                'payment'         => $request->input('payment'),
-                'currency'        => $request->input('currency'),
-                'amount'          => $request->input('amount'),
+                'destination'     => $destination,
+                'payment'         => $payment,
+                'currency'        => $currency,
+                'amount'          => $amount,
                 'status'          => 'created',
-                'rate'            => 0,
+                'rate'            => $error,
                 'payment_details' => $address
             ]);
             $order->save();
             return response($order->id, 200, $headers);
         }
-        else return response(['error'=> true, 'error-msg' => 'Вы не ввели сумму'],404, $headers, JSON_UNESCAPED_UNICODE);
+        else return response(['error'=> true, 'error-msg' => $error],404, $headers, JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -222,8 +234,8 @@ class ApiController extends Controller
     public function addPaymentDetails(Request $request) {
         $user = Auth::user();
         $payment = $request->input('payment');
+        $holder = Payment::where('title', $payment)->firstOrFail()->currencies()->firstOrFail()->crypto ? $request->input('holder_name') : null;
         $address = $request->input('address');
-        $holder = $request->input('holder_name');
         $payment_details = PaymentDetail::create(
             [
                 'user_uid' => $user->uid,

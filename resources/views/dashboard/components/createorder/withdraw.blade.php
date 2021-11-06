@@ -6,7 +6,7 @@
             <select name="currency" class="form-select select-currency">
                 @foreach ($currency::all() as $currency)
                     @if ($currency->title != 'HFT')
-                        <option value="{{$currency->title}}">{{$currency->title}}</option>
+                        <option data-crypto="{{$currency->crypto}}" value="{{$currency->title}}">{{$currency->title}}</option>
                     @endif
                 @endforeach
             </select>
@@ -48,7 +48,7 @@
     <div class="form-control address">
         <label for="address">Адрес</label>
         <div class="select-wrapper">
-            <input type="button" name="address" class="input-address"/>
+            <input type="button" name="address" class="input-address crypto"/>
         </div>
     </div>
 </form>

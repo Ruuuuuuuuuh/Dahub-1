@@ -1,4 +1,4 @@
-<section id="payment-details-list" class="screen">
+<section id="payment-details-list" class="screen crypto">
     <div class="section-header">
         <div class="top-nav">
             <a href="#" class="back-link">
@@ -12,11 +12,11 @@
                     </g>
                 </svg>
             </a>
-            <h2>Список реквизитов</h2>
+            <h2>Список <span class="banking-title">карт</span><span class="crypto-title">кошельков</span></h2>
         </div>
     </div>
     <div class="section-main">
-        <h4>Выберите подходящую карту</h4>
+        <h4>Выберите <span class="banking-title">подходящую карту</span><span class="crypto-title">кошелек</span></h4>
         <div class="payment-items">
             @foreach (Auth::user()->paymentDetails()->get() as $payment)
                 <a class="payment-item d-flex align-items-center justify-content-start" data-address="{{$payment->address}}" data-payment="{{$payment->payment()->first()->title}}">
@@ -32,17 +32,17 @@
                 </a>
             @endforeach
         </div>
-        <a class="add-payment_item d-flex align-items-center justify-content-start">
+        <a class="add-payment_item d-flex align-items-center justify-content-start crypto">
             <svg width="55" height="36" viewBox="0 0 55 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="55" height="36" rx="5" fill="#EFF2F9"/>
                 <path d="M38.144 20.8H30.356V28.5H25.648V20.8H17.86V16.4H25.648V8.7H30.356V16.4H38.144V20.8Z" fill="white"/>
             </svg>
-            <span>Добавить новую карту</span>
+            <span>Добавить <span class="banking-title">новую карту</span><span class="crypto-title">кошелек</span></span>
         </a>
 
     </div>
 </section>
-<div class="modal fade" id="add-payment-details" tabindex="-1" role="dialog" aria-labelledby="add-payment-details" aria-hidden="true">
+<div class="modal fade crypto" id="add-payment-details" tabindex="-1" role="dialog" aria-labelledby="add-payment-details" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-body">
@@ -52,14 +52,14 @@
                         <rect width="40" height="4" rx="2" transform="matrix(-0.707107 0.707107 0.707107 0.707107 28.2842 0)" fill="white"/>
                     </svg>
                 </button>
-                <h4>Добавить новую карту</h4>
+                <h4>Добавить <span class="banking-title">новую карту</span><span class="crypto-title">кошелек</span></h4>
                 <form class="payment-details-form">
                     @csrf
-                    <input type="hidden" name="payment">
+                    <input type="hidden" name="payment" value="USDT">
                     <div class="form-group">
                         <input type="text" class="form-control" name="address" placeholder="Номер карты">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group holder-name">
                         <input type="text" class="form-control" name="holder_name" placeholder="Имя держателя">
                     </div>
                     <a href="#" class="btn btn-primary confirm-modal disabled">Добавить</a>

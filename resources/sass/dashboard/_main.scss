@@ -560,6 +560,16 @@ section.screen {
             font-size: 14px;
             line-height: 24px;
             color: #0D1F3C;
+            span {
+                margin-left:0;
+            }
+        }
+    }
+}
+#add-payment-details {
+    &.crypto {
+        .holder-name {
+            display:none;
         }
     }
 }
@@ -690,4 +700,22 @@ input[type="button"] {
     .copy-link {
         margin:10px -15px;
     }
+}
+#payment-details-list, #add-payment-details {
+
+    .crypto-title {
+        display:none;
+    }
+    &.crypto {
+        .holder-name {
+            display:none;
+        }
+        .banking-title {
+            display:none;
+        }
+        .crypto-title {
+            display:inline-block
+        }
+    }
+
 }

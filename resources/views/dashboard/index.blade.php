@@ -29,6 +29,7 @@
 @section('scripts')
 
     <script>
+
         function createOrderScreenOpen() {
             $('#create-order').toggleClass('opened');
         }
@@ -38,6 +39,7 @@
         $(function() {
 
             $('.select-currency').on('change', function(e) {
+                let crypto = $(this).children('option:selected').data('crypto') == 1
                 let currency = $(this).val()
                 let form = $(this).closest('form')
                 getPayments(currency).then(function(data) {
@@ -47,12 +49,13 @@
                         payments += "<option value='" + item.title + "'>" + item.title + "</option>";
                         // $(this).closest('form').find('.select-payment').html(payments)
                     })
-                    console.log(form.find('select-payments'))
                     form.find('select[name="payment-network"]').html(payments)
                 }).catch(function(err) {
                     // Run this when promise was rejected via reject()
                     console.log(err)
                 })
+                $('.form-withdraw .input-address').val('')
+                if (crypto) $('.form-withdraw .input-address').addClass('crypto')
             })
 
             $('.create-order').click(function() {
@@ -116,12 +119,26 @@
         })
         $('.form-withdraw .input-address').click(function(e){
             e.preventDefault();
-            let payment = $('.form-withdraw .select-payment').val();
+            let payment =  $('.form-withdraw .select-payment').val();
+            if ($(this).hasClass('crypto'))
+            {
+                $('#payment-details-list').addClass('crypto')
+                $('#add-payment-details').addClass('crypto')
+                $('#add-payment-details input[name="address"]').attr('placeholder', 'Номер кошелька')
+            }
+            else {
+                $('#payment-details-list').removeClass('crypto')
+                $('#add-payment-details').removeClass('crypto')
+                $('#add-payment-details input[name="address"]').attr('placeholder', 'Номер карты')
+            }
             $('#payment-details-list').addClass('opened')
             $('#payment-details-list .payment-items .payment-item').removeClass('d-flex').addClass('d-none')
             $('#payment-details-list .payment-item[data-payment="' + payment + '"]').removeClass('d-none').addClass('d-flex')
+            $('#payment-details-list .add-payment_item').attr('data-payment', payment)
         })
-        $('.add-payment_item').click(function(){
+        $('.add-payment_item').click(function() {
+            let payment = $(this).data('payment')
+            $('.payment-details-form input[name="payment"]').val(payment);
             $('#add-payment-details').modal()
         })
         @if ($mode == 'pro')
@@ -141,13 +158,14 @@
         })
 
         @endif
-        $('.payment-details-form input').on('change keyup', function(){
+        $('.payment-details-form input').on('change keyup', function() {
             let filledtextboxes = 1;
             $('.payment-details-form input:text').each(function(i) {
                 if ($(this).val().length == 0) {
                     filledtextboxes = 0
                 }
             });
+            if ($('.payment-details-form').closest('#add-payment-details').hasClass('crypto') && $('.payment-details-form input[name="address"]').val().length != 0) filledtextboxes = 1
             if (filledtextboxes != 0) $('.payment-details-form .confirm-modal').removeClass('disabled')
             else $('.payment-details-form .confirm-modal').addClass('disabled')
         })

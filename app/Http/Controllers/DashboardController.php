@@ -55,12 +55,12 @@ class DashboardController extends Controller {
         $currency = new Currency();
         $mode = $this->getMode();
         if ($mode == 'lite') {
-            $orders = Order::where('user_uid', Auth::user()->uid)->userOrders()->orderBy('id', 'DESC')->take(4)->get();
+            $orders = Order::where('user_uid', Auth::user()->uid)->userOrders()->orderBy('id', 'DESC')->take(10)->get();
         }
         else {
-            $orders['deposit'] = Order::where('status', 'created')->where('destination', 'deposit')->orderBy('id', 'DESC')->take(5)->get();
-            $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->take(5)->get();
-            $orders['owned'] = Order::where('status', 'accepted')->where('gate', $user->uid)->orderBy('id', 'DESC')->take(5)->get();
+            $orders['deposit'] = Order::where('status', 'created')->where('destination', 'deposit')->orderBy('id', 'DESC')->take(10)->get();
+            $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->take(10)->get();
+            $orders['owned'] = Order::where('status', 'accepted')->where('gate', $user->uid)->orderBy('id', 'DESC')->take(10)->get();
         }
         return view('dashboard.index', compact('orders', 'rates', 'currency', 'mode'));
 
