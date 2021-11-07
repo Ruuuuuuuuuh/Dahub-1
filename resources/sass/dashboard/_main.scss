@@ -313,6 +313,7 @@ main#main-screen {
     top: 50vh;
     height:50vh;
     box-sizing: content-box;
+    z-index:1;
     .main-screen-wrapper {
         padding: 30px 25px;
         height:100%;
@@ -417,6 +418,7 @@ footer {
     display: flex;
     justify-content: center;
     max-width: 480px;
+    z-index:2;
     .footer-nav {
         a {
             display: flex;
@@ -718,4 +720,8 @@ input[type="button"] {
         }
     }
 
+}
+
+.swiper {
+    width: 100%;
 }

@@ -49,7 +49,7 @@
                                                     </div>
 
                                                     <div class="col-6 col-lg-3">
-                                                        <p>за {{number_format($order->amount / $order->rate, $dec, ',', ' ') }} {{$order->currency}}</p>
+                                                        <p>за {{number_format(App\Models\System::findOrFail(1)->rate * $order->amount / $order->rate, $dec, ',', ' ') }} {{$order->currency}}</p>
                                                     </div>
 
                                                     <div class="col-6 col-lg-3">
