@@ -250,7 +250,7 @@ class SystemApiController extends Controller
             $systemWallet->getWallet('TokenSale')->refreshBalance();
 
             $currency = $order->currency;
-            $curAmount = $order->amount / $order->rate;
+            $curAmount = $systemWallet->rate * $order->amount / $order->rate;
 
 
 

@@ -17,15 +17,5 @@
             </svg>
         </a>
     </div>
-    <section class="balance">
-        <div class="total-amount">
-            <h1>0.00000 <span>BTC</span></h1>
-            <p class="total-currency">≈ $0.00</p>
-        </div>
-        @if ($mode == 'lite')
-            @include('dashboard.components.balance_items')
-        @else
-            @include('dashboard.components.gate.gate_balances')
-        @endif
-    </section>
+    @yield('balances')
 </header>

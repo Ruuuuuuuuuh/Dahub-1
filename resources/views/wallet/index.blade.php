@@ -125,11 +125,12 @@
             let total = $('.deposit-recieve')
             let subtotal = $('.subtotal-amount span').html() + 0
             let rate = {
+                DHB : '{!! Rate::getRates('DHB') !!}',
                 USDT : '{!! Rate::getRates('USDT') !!}',
                 BTC : '{!! Rate::getRates('BTC') !!}',
                 ETH : '{!! Rate::getRates('ETH') !!}',
             }
-            let amountTotal = amount.val() / rate[currency.val()]
+            let amountTotal = rate['DHB'] * amount.val() / rate[currency.val()]
             total.html( + amountTotal.toFixed(5))
             subtotal = parseFloat(balance) + parseFloat(amount.val())
             $('.subtotal-amount span').html( new Intl.NumberFormat('ru-RU').format(subtotal) + ',00' )

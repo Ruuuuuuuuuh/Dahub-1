@@ -1,4 +1,30 @@
 @extends('dashboard.layouts.app')
+@section('css')
+    <link rel="stylesheet" href="/css/swiper-bundle.min.css" >
+@endsection
+@section('balances')
+    <section class="balance">
+        <div class="swiper">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
+                @foreach ($visibleWallets as $visibleWallet)
+                    <div class="swiper-slide">
+                        <div class="total-amount">
+                            <p class="total-amount-title">{{$user->getBalance($visibleWallet)}} <span>{{$visibleWallet}}</span></p>
+                            <p class="total-currency">≈ $ {{ number_format($user->getBalance($visibleWallet) * $rates::getRates($visibleWallet), 2, ',', ' ') }}</p>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+
+        @if ($mode == 'lite')
+            @include('dashboard.components.balance_items')
+        @else
+            @include('dashboard.components.gate.gate_balances')
+        @endif
+    </section>
+@endsection
 @section('content')
     <main id="main-screen" class="resizable">
         <div class="screen-rollover ui-resizable-handle ui-resizable-n">
@@ -27,7 +53,7 @@
     @endif
 @endsection
 @section('scripts')
-
+    <script src="/js/swiper-bundle.min.js"></script>
     <script>
 
         function createOrderScreenOpen() {
@@ -75,6 +101,26 @@
                 }
                 createOrder(data)
             })
+            const swiper = new Swiper('.swiper', {
+                // Optional parameters
+                direction: 'horizontal',
+
+                // If we need pagination
+                pagination: {
+                    el: '.swiper-pagination',
+                },
+
+                // Navigation arrows
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+
+                // And if we need scrollbar
+                scrollbar: {
+                    el: '.swiper-scrollbar',
+                },
+            });
         });
         function getPayments(currency) {
             return new Promise(function (resolve, reject) {
@@ -241,5 +287,7 @@
                 })
             }
         })
+
     </script>
+
 @endsection

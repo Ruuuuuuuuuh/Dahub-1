@@ -26,7 +26,7 @@
 
         <div class="subtotal">
             <p><strong>Ваш баланс после покупки:</strong></p>
-            <p class="subtotal-amount"><span>{{ number_format(Auth::User()->getWallet('DHB')->balanceFloat + 2000, 2, ',',' ')  }}</span> DHB</p>
+            <p class="subtotal-amount"><span>{{ number_format(Auth::User()->getBalance('DHB') + 2000, 2, ',',' ')  }}</span> DHB</p>
         </div>
 
         <a onclick="deposit();" style="margin-top:40px;" class="button button-orange">Получить DHB</a>
@@ -36,7 +36,7 @@
         <h2>Получить DHB <span class="deposit-status">Шаг 2 из 3</span></h2>
 
         <div class="created-block form-inline">
-            <p>Отправьте <strong><span class="step2-amount">@if (count(Auth::user()->orders()->notCompleted()->get()) != 0){{number_format(Auth::user()->orders()->notCompleted()->first()->amount / Auth::user()->orders()->notCompleted()->first()->rate, 5, ',', ' ') }} @endif </span> <span class="step2-currency">@if (count(Auth::user()->orders()->notCompleted()->get()) != 0) {{Auth::user()->orders()->notCompleted()->first()->currency}}@endif</span> </strong> на один из этих адресов:</p>
+            <p>Отправьте <strong><span class="step2-amount">@if (count(Auth::user()->orders()->notCompleted()->get()) != 0){{number_format($system->rate * Auth::user()->orders()->notCompleted()->first()->amount / Auth::user()->orders()->notCompleted()->first()->rate, 5, ',', ' ') }} @endif </span> <span class="step2-currency">@if (count(Auth::user()->orders()->notCompleted()->get()) != 0) {{Auth::user()->orders()->notCompleted()->first()->currency}}@endif</span> </strong> на один из этих адресов:</p>
             <div class="wallet-link-section USDT w-100">
                 <div class="col-12">
                     <div class="row flex-wrap flex-column">
@@ -300,7 +300,7 @@
             </div>
 
             <a onclick="assignee();" style="margin-top:40px;" class="button button-blue">Переведено! Далее...</a>
-            <a onclick="decline();" style="margin-top:40px;" class="button button-danger">Отменить заявку</a> 
+            <a onclick="decline();" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
         </div>
 
 

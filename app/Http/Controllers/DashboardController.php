@@ -34,26 +34,10 @@ class DashboardController extends Controller {
     public function index()
     {
         $user = Auth::user();
-        if (!$user->getWallet('RUB')) {
-            $user->createWallet(
-                [
-                    'name' => 'RUB',
-                    'slug' => 'RUB',
-                ]
-            );
-        }
-        if (!$user->getWallet('USD')) {
-            $user->createWallet(
-                [
-                    'name' => 'USD',
-                    'slug' => 'USD',
-                ]
-            );
-        }
-
         $rates = new Rate();
         $currency = new Currency();
         $mode = $this->getMode();
+        $visibleWallets = $this->getVisibleWallets();
         if ($mode == 'lite') {
             $orders = Order::where('user_uid', Auth::user()->uid)->userOrders()->orderBy('id', 'DESC')->take(10)->get();
         }
@@ -62,7 +46,7 @@ class DashboardController extends Controller {
             $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->take(10)->get();
             $orders['owned'] = Order::where('status', 'accepted')->where('gate', $user->uid)->orderBy('id', 'DESC')->take(10)->get();
         }
-        return view('dashboard.index', compact('orders', 'rates', 'currency', 'mode'));
+        return view('dashboard.index', compact('orders', 'user', 'rates', 'currency', 'mode', 'visibleWallets'));
 
     }
 
@@ -88,5 +72,12 @@ class DashboardController extends Controller {
             ['user_uid' => Auth::user()->uid, 'meta' => 'mode'],
             ['value' => 'lite']
         )->value;
+    }
+
+    public function getVisibleWallets() {
+        return json_decode(UserConfig::firstOrCreate(
+            ['user_uid' => Auth::user()->uid, 'meta' => 'visible_wallets'],
+            ['value' => json_encode(['DHB', 'BTC', 'ETH'])]
+        )->value, true);
     }
 }

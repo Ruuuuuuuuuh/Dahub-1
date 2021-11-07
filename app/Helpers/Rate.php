@@ -21,13 +21,19 @@ class Rate
     {
         $system = System::find(1);
         // Курс
-        if ($currency == 'USDT') {
-            return 1 / $system->rate;
+        if ($currency == 'USDT' || $currency == 'USD') {
+            return 1;
+        }
+        elseif ($currency == 'DHB') {
+            return $system->rate;
+        }
+        elseif ($currency == 'RUB') {
+            return 73;
         }
         else {
             if (!Cache::get($currency)) {
                 $response = Http::get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=' . $currency . '&convert=USD&CMC_PRO_API_KEY=96fc9b4e-ab30-4d60-b0fb-23c9da6456b6');
-                static::Cache($currency, $response->json()["data"][$currency]["quote"]["USD"]["price"] * (1 / $system->rate));
+                static::Cache($currency, $response->json()["data"][$currency]["quote"]["USD"]["price"]);
                 return Cache::get($currency);
             }
             else return Cache::get($currency);
