@@ -94,8 +94,10 @@
                 }
             },
             triggerOnTouchEnd: true,
-            threshold: 30 // сработает через 20 пикселей
+            threshold: 30,
+            excludedElements: '.balance',
         });
+
         window.mode = $('.app').data('mode')
         if (window.mode == 'pro') $('.switch-pro').addClass('active')
 

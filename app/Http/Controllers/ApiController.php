@@ -102,7 +102,7 @@ class ApiController extends Controller
         $currency = $request->input('currency');
         $payment = $request->input('payment');
         $error = false;
-        if ($destination == 'withdraw') {
+        if ($destination == 'withdraw' && !$user->isAdmin()) {
             if ($user->getBalanceFree($currency) < $amount) $error = 'Недостаточно средств для создания заявки';
         }
         if (!($request->has('amount') && $request->input('amount')!= null)) {
@@ -370,5 +370,21 @@ class ApiController extends Controller
         }
         else return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $headers, JSON_UNESCAPED_UNICODE);
 
+    }
+
+    public function getOrdersByFilter(Request $request) {
+        $filter = $request->input('filter');
+        $user = Auth::user();
+        switch ($filter) {
+            case'deposit':
+                return $user->orders()->OrdersDeposit()->limit(10)->get();
+                break;
+            case'withdraw':
+                return $user->orders()->OrdersWithdraw()->limit(10)->get();
+                break;
+            case'all':
+                return $user->orders()->UserOrders()->limit(10)->get();
+                break;
+        }
     }
 }

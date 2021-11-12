@@ -50,6 +50,17 @@ class DashboardController extends Controller {
 
     }
 
+    public function settings()
+    {
+        $user = Auth::user();
+        $currency = new Currency();
+        $mode = $this->getMode();
+        $visibleWallets = $this->getVisibleWallets();
+
+        return view('dashboard.pages.settings', compact('user', 'currency', 'mode', 'visibleWallets'));
+
+    }
+
     public function getOrder($id) {
         $user = Auth::user();
         $order = Order::findOrFail($id);

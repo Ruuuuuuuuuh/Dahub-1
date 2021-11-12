@@ -30,7 +30,8 @@ class StartCommand extends Command
         $update = Telegram::getWebhookUpdates();
         $text = $update->getMessage()->getText();
         $telegram_user = Telegram::getWebhookUpdates()['message'];
-        $referral = strpos('/start login', $text) === false ? '' : str_replace('/start login', '', $text);
+        $referral = stripos('/start login', $text) === false ? str_replace('/start login', '', $text) : '';
+        //str_replace('/start login', '', $text)
         $username = isset($telegram_user['from']['username']) ? $telegram_user['from']['username'] : $telegram_user['from']['first_name'];
         $first_name = isset($telegram_user['from']['first_name']) ? $telegram_user['from']['first_name'] : '';
         $first_name .= isset($telegram_user['from']['last_name']) ? ' '.$telegram_user['from']['last_name'] : '';

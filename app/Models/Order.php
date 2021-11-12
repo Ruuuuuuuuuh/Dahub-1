@@ -47,7 +47,7 @@ class Order extends Model
 
     public function transactions()
     {
-        return Transaction::where('type', 'deposit')->where('meta', 'like', '%"order_id": ' . $this->getKey() . '%')->get();
+        return \Bavix\Wallet\Models\Transaction::where('type', 'deposit')->where('meta', 'like', '%"order_id"%')->get();
     }
 
     public function transaction(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -62,7 +62,17 @@ class Order extends Model
 
     public function scopeUserOrders($query)
     {
-        return $query->where('destination', '=', 'deposit')->orWhere('destination', '=', 'withdraw');
+        return $query->where('destination', '=', 'deposit')->orWhere('destination', '=', 'withdraw')->orderBy('id', 'DESC');
+    }
+
+    public function scopeOrdersDeposit($query)
+    {
+        return $query->where('destination', '=', 'deposit')->orderBy('id', 'DESC');
+    }
+
+    public function scopeOrdersWithdraw($query)
+    {
+        return $query->where('destination', '=', 'withdraw')->orderBy('id', 'DESC');
     }
 
 }

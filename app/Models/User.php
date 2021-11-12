@@ -120,7 +120,7 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         return $this->getWallet($currency)->balanceFloat;
     }
 
-    public function getBalanceFrozen($currency, $decimal = 2): float
+    public function getBalanceFrozen($currency): float
     {
         if (!$this->hasWallet($currency.'_frozen')) {
             $this->createWallet(
@@ -150,5 +150,7 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         $this->getWallet($currency.'_frozen')->withdrawFloat($amount, array('destination' => 'Разморозка токенов'));
         $this->getWallet($currency.'_frozen')->refreshBalance();
     }
+
+
 
 }

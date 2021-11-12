@@ -28,7 +28,7 @@ class Rate
             return $system->rate;
         }
         elseif ($currency == 'RUB') {
-            return 73;
+            return 0.014;
         }
         else {
             if (!Cache::get($currency)) {

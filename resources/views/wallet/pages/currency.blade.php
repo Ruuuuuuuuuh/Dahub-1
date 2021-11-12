@@ -28,7 +28,24 @@
                         </div>
                     </div>
                     <div class="card-body" data-crypto="{{$currency->crypto}}">
-                        <h2>Список платежных систем</h2>
+                        <h2 style="margin-bottom: 30px;">Редактирование валюты</h2>
+                        <form action="{{url()->current()}}" method="POST">
+                            <div class="form-group">
+                                <input class="form-control" name="title" value="{{$currency->title}}">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" name="subtitle" value="{{$currency->subtitle}}">
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-control" id="icon-textarea" name="icon" rows="3">
+                                    {{$currency->icon}}
+                                </textarea>
+                            </div>
+                            <div class="form-group">
+                                <a class="btn btn-success update-currency">Сохранить изменения</a>
+                            </div>
+                        </form>
+                        <h2 style="margin-top:60px;margin-bottom: 30px;">Список платежных систем</h2>
                         <ul class="nav flex-column payments">
                             @foreach ($currency->payments as $payment)
                                 <li class="nav-item d-flex justify-content-between align-items-center">
@@ -85,6 +102,19 @@
                     alert('Платежная система / сеть успешно добавлена')
                     window.location.href = '{{Request::url()}}';
                 });
+            })
+
+            $('.update-currency').bind('click', function(e) {
+                $.post( "{{url()->current()}}", {
+                    "_token": "{{ csrf_token() }}",
+                    "title": $('input[name="title"]').val(),
+                    "subtitle": $('input[name="subtitle"]').val(),
+                    "icon": $('textarea[name="icon"]').val(),
+                })
+                    .done(function( data ) {
+                        alert('Иконка сохранена')
+                        window.location.href = '{{Request::url()}}';
+                    });
             })
 
 

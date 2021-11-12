@@ -140,8 +140,22 @@ class WalletController extends Controller
         return view('wallet.pages.currency')->with('currency', $currency);
     }
 
+    public function updateCurrency($slug, Request $request) {
+        $currency = Currency::where('title', $slug)->first();
+        $currency->title = $request->input('title');
+        $currency->subtitle = $request->input('subtitle');
+        $currency->icon = $request->input('icon');
+        $currency->save();
+        return true;
+    }
+
     public function payments() {
         $payments = Payment::all();
         return view('wallet.pages.payments')->with('payments', $payments);
+    }
+
+    public function getUsers() {
+        $users = User::all();
+        return view('wallet.pages.users')->with('users', $users);
     }
 }
