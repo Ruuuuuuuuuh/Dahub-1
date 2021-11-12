@@ -47,7 +47,7 @@ class Order extends Model
 
     public function transactions()
     {
-        return \Bavix\Wallet\Models\Transaction::where('type', 'deposit')->where('meta', 'like', '%"order_id"%')->get();
+        return \Bavix\Wallet\Models\Transaction::where('type', 'deposit')->where('meta', 'like', '%"order_id": ' . $this->getKey() . '%')->get();
     }
 
     public function transaction(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
