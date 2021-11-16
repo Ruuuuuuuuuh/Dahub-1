@@ -58,7 +58,7 @@ class ApiController extends Controller
             'charset' => 'utf-8'
         );
 
-        if ($request->input('amount') <= $system->getFreeTokens() && $request->input('amount') <= 333333)
+        if ($request->input('amount') >=2000 && $request->input('amount') <= 333333)
             if (!empty($user->orders()->notCompleted()->get())) {
                 $order = Order::create([
                     'user_uid'       => $request->input('user_uid'),
