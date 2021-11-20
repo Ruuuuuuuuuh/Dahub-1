@@ -234,63 +234,66 @@ class SystemApiController extends Controller
     public function confirmOrder($id)
     {
         $order = Order::find($id);
-        $order->status = 'completed';
 
+        $headers = array (
+            'Content-Type' => 'application/json; charset=UTF-8',
+            'charset' => 'utf-8'
+        );
 
-        $systemWallet = System::findOrFail(1);
-        if ($systemWallet->getWallet('TokenSale')->balanceFloat >= $order->amount) {
-
-            //deposit to user wallet
-            $user = User::where('uid', $order->user_uid)->first();
-
-
-            //withdraw from system wallet
-            $systemWallet->getWallet('TokenSale')->transferFloat( $user->getWallet('DHB'), $order->amount, array('destination' => 'TokenSale', 'order_id' => $order->id));
-            $user->getWallet('DHB')->refreshBalance();
-            $systemWallet->getWallet('TokenSale')->refreshBalance();
-
-            $currency = $order->currency;
-            $curAmount = $systemWallet->rate * $order->amount / $order->rate;
-
-
-
-            // Начисление рефок
-            $ref = User::where('uid', $order->user_uid)->first();
-
-            $this->payReferral($ref, $currency, $curAmount);
-
-            // deposit to system wallet
-            $systemWallet->getWallet($currency)->depositFloat($curAmount,  array('destination' => 'TokenSale', 'order_id' => $order->id));
-            $systemWallet->getWallet($currency)->refreshBalance();
-
-            // сохраняем модель
+        if ($order->status != 'completed' && $order->gate ==  null)
+        {
+            $systemWallet = System::findOrFail(1);
+            $order->gate = Auth::user()->uid;
             $order->save();
+            if ($systemWallet->getWallet('TokenSale')->balanceFloat >= $order->amount) {
 
-            $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
-            $transactions = $order->transactions();
-            foreach ($transactions as $transaction) {
-                if ($transaction->payable_type == 'App\Models\System') {
-                    $systemWallet->getWallet('TokenSale')->refreshBalance();
-                    $response = $telegram->sendMessage([
-                        'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
-                        'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>↗️ Sent: </b>' . $curAmount . ' ' . $currency .PHP_EOL.'<b>↙️ Recieved: </b>' . $order->amount . ' DHB' .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid. PHP_EOL.PHP_EOL.'<b>🔥 TokenSale: </b>'. number_format($systemWallet->getWallet('TokenSale')->balanceFloat, 0, '.', ' ') . ' DHB left until the end of stage 1',
-                        'parse_mode' => 'html'
-                    ]);
+                //deposit to user wallet
+                $user = User::where('uid', $order->user_uid)->first();
+
+
+                //withdraw from system wallet
+                $systemWallet->getWallet('TokenSale')->transferFloat( $user->getWallet('DHB'), $order->amount, array('destination' => 'TokenSale', 'order_id' => $order->id));
+                $user->getWallet('DHB')->refreshBalance();
+                $systemWallet->getWallet('TokenSale')->refreshBalance();
+
+                $currency = $order->currency;
+                $curAmount = $systemWallet->rate * $order->amount / $order->rate;
+
+
+
+                // Начисление рефок
+                $ref = User::where('uid', $order->user_uid)->first();
+
+                $this->payReferral($ref, $currency, $curAmount);
+
+                // deposit to system wallet
+                $systemWallet->getWallet($currency)->depositFloat($curAmount,  array('destination' => 'TokenSale', 'order_id' => $order->id));
+                $systemWallet->getWallet($currency)->refreshBalance();
+
+                $order->status = 'completed';
+                // сохраняем модель
+                $order->save();
+
+                $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
+                $transactions = $order->transactions();
+                foreach ($transactions as $transaction) {
+                    if ($transaction->payable_type == 'App\Models\System') {
+                        $systemWallet->getWallet('TokenSale')->refreshBalance();
+                        $response = $telegram->sendMessage([
+                            'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
+                            'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>↗️ Sent: </b>' . $curAmount . ' ' . $currency .PHP_EOL.'<b>↙️ Recieved: </b>' . $order->amount . ' DHB' .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid. PHP_EOL.PHP_EOL.'<b>🔥 TokenSale: </b>'. number_format($systemWallet->getWallet('TokenSale')->balanceFloat, 0, '.', ' ') . ' DHB left until the end of stage 1',
+                            'parse_mode' => 'html'
+                        ]);
+                    }
                 }
+                return $order->id;
             }
-
-
-            return $order->id;
+            else {
+                return response(['error'=>true, 'error-msg' => 'Баланс системы меньше запрашиваемой суммы'], 404, $headers, JSON_UNESCAPED_UNICODE);
+            }
         }
-        else {
+        else return response(['error'=>true, 'error-msg' => 'Заявка выполнена'], 404, $headers, JSON_UNESCAPED_UNICODE);
 
-            $headers = array (
-                'Content-Type' => 'application/json; charset=UTF-8',
-                'charset' => 'utf-8'
-            );
-
-            return response(['error'=>true, 'error-msg' => 'Баланс системы меньше запрашиваемой суммы'], 404, $headers, JSON_UNESCAPED_UNICODE);
-        }
     }
 
     /**
