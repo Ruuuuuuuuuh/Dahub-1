@@ -16,7 +16,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 */
 
 Route::get('/', function () {
-    if (Auth::check()) return redirect(route('dashboard')); else return view('welcome');
+    if (Auth::check()) return redirect(route('wallet')); else return view('welcome');
 })->middleware('referral');
 
 Auth::routes();
@@ -28,11 +28,6 @@ Route::get('/auth/{token}', [App\Http\Controllers\AuthController::class, 'authUs
 
 
 // DASHBOARD ROUTES
-/*Route::group(['prefix' => 'dashboard'], function () {
-    Route::get('/{vue_capture?}', function () {
-        return view('dashboard');
-    })->where('vue_capture', '[\/\w\.-]*')->middleware('auth');
-});*/
 Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('main');
     Route::get('/orders/{id}', [App\Http\Controllers\DashboardController::class, 'getOrder'])->name('getOrder');
