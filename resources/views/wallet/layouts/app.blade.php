@@ -163,6 +163,9 @@
                                     <a class="dropdown-item" href="{{Route('wallet.payments')}}" >
                                         Платежные системы / сети
                                     </a>
+                                    <a class="dropdown-item" href="{{Route('wallet.transfer')}}" >
+                                        Перевод средств
+                                    </a>
                                 @endif
                                     <hr class="dropdown-divider">
                                 <a class="dropdown-item" href="{{ route('logout') }}"

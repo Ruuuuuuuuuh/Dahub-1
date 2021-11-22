@@ -16,7 +16,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 */
 
 Route::get('/', function () {
-    if (Auth::check()) return redirect(route('wallet')); else return view('welcome');
+    if (Auth::check()) return redirect(route('dashboard')); else return view('welcome');
 })->middleware('referral');
 
 Auth::routes();
@@ -42,6 +42,7 @@ Route::group(['prefix' => 'dashboard'], function () {
 Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
 Route::get('/wallet/profile', [App\Http\Controllers\WalletController::class, 'profile'])->name('wallet.profile');
 Route::get('/wallet/explorer', [App\Http\Controllers\WalletController::class, 'explorer'])->name('wallet.explorer');
+Route::get('/wallet/transfer', [App\Http\Controllers\WalletController::class, 'transfer'])->name('wallet.transfer');
 
 // ADMIN PAGES
 Route::get('/wallet/orders/', [App\Http\Controllers\WalletController::class, 'orders'])->middleware('admin')->name('wallet.orders');
@@ -86,6 +87,7 @@ Route::post('/api/orders/confirmOrderByUser', [App\Http\Controllers\ApiControlle
 Route::post('/api/orders/declineOrderByGate', [App\Http\Controllers\ApiController::class, 'declineOrderByGate']);
 Route::post('/api/orders/acceptSendingByGate', [App\Http\Controllers\ApiController::class, 'acceptSendingByGate']);
 Route::post('/api/getOrdersByFilter', [App\Http\Controllers\ApiController::class, 'getOrdersByFilter']);
+Route::post('/api/transfer', [App\Http\Controllers\ApiController::class, 'transfer']);
 
 
 // Telegram Web Api

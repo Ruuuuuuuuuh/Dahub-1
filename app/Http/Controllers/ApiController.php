@@ -387,4 +387,31 @@ class ApiController extends Controller
                 break;
         }
     }
+
+    public function transfer(Request $request) {
+        $headers = array (
+            'Content-Type' => 'application/json; charset=UTF-8',
+            'charset' => 'utf-8'
+        );
+
+        $amount = $request->input('amount');
+        $currency = $request->input('currency');
+        $username = $request->input('username');
+
+        $user = Auth::user();
+        if ($user->getBalanceFree($currency) >= $amount) {
+            if ($username != 'DHBFundWallet') {
+                $receiver = User::where('uid', $username)->firstOrFail();
+                $user->getWallet($currency)->transferFloat($receiver->getWallet($currency), $amount, array('destination' => 'Transfer from user'));
+                $user->getWallet($currency)->refreshBalance();
+                $receiver->getWallet($currency)->refreshBalance();
+                return true;
+            }
+            else {
+                $user->getWallet($currency)->transferFloat(System::findOrFail(1)->getWallet('DHBFundWallet'), $amount, array('destination' => 'Transfer from user'));
+                return true;
+            }
+        }
+        else return response(['error' => true, 'error-msg' => 'Не достаточно баланса'], 404, $headers, JSON_UNESCAPED_UNICODE);
+    }
 }

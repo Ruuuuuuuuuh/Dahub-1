@@ -158,4 +158,8 @@ class WalletController extends Controller
         $users = User::all();
         return view('wallet.pages.users')->with('users', $users);
     }
+
+    public function transfer() {
+        return view('wallet.pages.transfer');
+    }
 }

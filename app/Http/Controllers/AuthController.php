@@ -26,7 +26,7 @@ class AuthController extends Controller
     }
 
     public function authUser($token, Request $request) {
-        $url = $request->has('url') ? $request->input('url') : 'wallet';
+        $url = $request->has('url') ? $request->input('url') : 'dashboard';
         $user = User::where('auth_token', $token)->firstOrFail();
         Auth::login($user, true);
 
@@ -48,7 +48,7 @@ class AuthController extends Controller
 
 
 
-        return redirect('wallet');
+        return redirect('dashboard');
     }
 
 
