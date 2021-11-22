@@ -26,7 +26,7 @@ class AuthController extends Controller
     }
 
     public function authUser($token, Request $request) {
-        $url = $request->has('url') ? $request->input('url') : 'dashboard';
+        $url = $request->has('url') ? $request->input('url') : 'wallet';
         $user = User::where('auth_token', $token)->firstOrFail();
         Auth::login($user, true);
 
