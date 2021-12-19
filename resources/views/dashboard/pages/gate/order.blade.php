@@ -64,19 +64,21 @@
         }
 
         function declineOrder() {
-            let _token = "{{ csrf_token() }}";
-            let id = {{$order->id}}
-            $.ajax({
-                url: "/api/orders/declineOrderByGate",
-                type:"POST",
-                data:{
-                    _token: _token,
-                    id: id,
-                },
-                success:function(response){
-                    window.location.href = "{{Route('main')}}"
-                },
-            });
+            if (confirm('Вы собираетесь отменить заявку, вы уверены?')) {
+                let _token = "{{ csrf_token() }}";
+                let id = {{$order->id}}
+                $.ajax({
+                    url: "/api/orders/declineOrderByGate",
+                    type:"POST",
+                    data:{
+                        _token: _token,
+                        id: id,
+                    },
+                    success:function(response){
+                        window.location.href = "{{Route('dashboard')}}"
+                    },
+                });
+            }
         }
 
     </script>

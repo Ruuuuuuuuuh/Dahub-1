@@ -399,6 +399,9 @@ main#main-screen {
                 line-height: 24px;
                 color: #78839C;
             }
+            .order-id {
+                margin-left:15px;
+            }
             .order-status {
                 margin-top: -5px;
                 margin-left:10px;
@@ -406,6 +409,7 @@ main#main-screen {
         }
     }
 }
+
 
 footer {
     padding:10px 50px 10px;
@@ -439,6 +443,13 @@ footer {
     .create-order-open {
         position: absolute;
         top:-26px;
+        border:none!important;
+        outline:none!important;
+        text-decoration: none!important;
+        * {
+            border:none!important;
+            outline:none!important;
+        }
         span {
             font-weight: 500;
             font-size: 12px;
@@ -449,6 +460,8 @@ footer {
     }
 }
 .balance-items {
+    max-height: calc(100vh - 400px);
+    overflow: auto;
     .balance-item {
         font-weight: 600;
         font-size: 16px;
@@ -510,10 +523,7 @@ section.screen {
         }
     }
     .footer {
-        position: absolute;
-        left: 24px;
-        right: 24px;
-        bottom: 30px;
+        margin-top:50px;
         background: #fff;
     }
     .footer-relative {

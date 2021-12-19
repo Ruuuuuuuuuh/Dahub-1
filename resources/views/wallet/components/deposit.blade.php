@@ -11,7 +11,7 @@
             <div class="form-group deposit-recieve-group">
                 <p>
                     <span style="margin-right:20px;">=</span>
-                    <span class="deposit-recieve">{!! 2000 * $system->rate !!}</span>
+                    <input class="deposit-receive" name="deposit-receive" value="{!! 2000 * $system->rate !!}"/>
                 </p>
             </div>
 

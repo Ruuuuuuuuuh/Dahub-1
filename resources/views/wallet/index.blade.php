@@ -116,13 +116,11 @@
             }
             $('.deposit-block input, .deposit-block select').change()
         })
-        $('.deposit-block input, .deposit-block select').on('change keyup', function(){
-
-
-            let balance = {{ Auth::User()->getWallet('DHB')->balanceFloat }}
+        $('.deposit-block input, .deposit-block select').on('change keyup', function(e){
+            let balance = {{ Auth::User()->getBalance('DHB') }}
             let amount = $('input[name="deposit-amount"]')
             let currency = $('select[name="deposit-currency"]')
-            let total = $('.deposit-recieve')
+            let total = $('.deposit-receive')
             let subtotal = $('.subtotal-amount span').html() + 0
             let rate = {
                 DHB : '{!! Rate::getRates('DHB') !!}',
@@ -130,11 +128,20 @@
                 BTC : '{!! Rate::getRates('BTC') !!}',
                 ETH : '{!! Rate::getRates('ETH') !!}',
             }
-            let amountTotal = rate['DHB'] * amount.val() / rate[currency.val()]
-            total.html( + amountTotal.toFixed(5))
+
+            if ($(e.target).is(total)) {
+                let amountTotal = rate[currency.val()] * total.val() / rate['DHB']
+                amount.val( + amountTotal.toFixed(5))
+            }
+            else {
+                let amountTotal = rate['DHB'] * amount.val() / rate[currency.val()]
+                total.val( + amountTotal.toFixed(5))
+            }
+
             subtotal = parseFloat(balance) + parseFloat(amount.val())
             $('.subtotal-amount span').html( new Intl.NumberFormat('ru-RU').format(subtotal) + ',00' )
         })
+
 
         function deposit() {
             let _token = $('meta[name="csrf-token"]').attr('content');
@@ -184,6 +191,7 @@
                 type:"POST",
                 data:{
                     _token: _token,
+                    id: id
                 },
                 success:function(response){
                     $('.deposit-section').removeClass('created');

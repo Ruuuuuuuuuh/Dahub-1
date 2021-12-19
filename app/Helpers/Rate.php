@@ -24,12 +24,25 @@ class Rate
         if ($currency == 'USDT' || $currency == 'USD') {
             return 1;
         }
+
         elseif ($currency == 'DHB') {
             return $system->rate;
         }
+
         elseif ($currency == 'RUB') {
-            return 0.014;
+            if (!Cache::get($currency)) {
+                $response = Http::get('https://www.cbr.ru/scripts/XML_daily.asp');
+                $json = json_decode(json_encode(simplexml_load_string($response->body())));
+                foreach ($json->Valute as $index => $value) {
+                    if ($value->CharCode == 'USD') {
+                        static::Cache($currency, 1 / intval($value->Value));
+                        return Cache::get($currency);
+                    }
+                }
+            }
+            else return Cache::get($currency);
         }
+
         else {
             if (!Cache::get($currency)) {
                 $response = Http::get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=' . $currency . '&convert=USD&CMC_PRO_API_KEY=96fc9b4e-ab30-4d60-b0fb-23c9da6456b6');

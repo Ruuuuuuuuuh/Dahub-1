@@ -18,10 +18,11 @@
             </div>
         </div>
 
-        @if ($mode == 'lite')
-            @include('dashboard.components.balance_items')
-        @else
+
+        @if ($mode=='pro' && $user->isGate())
             @include('dashboard.components.gate.gate_balances')
+        @else
+            @include('dashboard.components.balance_items')
         @endif
     </section>
 @endsection
@@ -220,8 +221,6 @@
             $('#payment-details-list .add-payment_item').attr('data-payment', payment)
         })
         $('.add-payment_item').click(function() {
-            let payment = $(this).data('payment')
-            $('.payment-details-form input[name="payment"]').val(payment);
             $('#add-payment-details').modal()
         })
         @if ($mode == 'pro')
@@ -233,6 +232,7 @@
                 let orderID = $(this).data('id');
                 $('#accept-order .top-nav h2').text('Принять ' + amount)
                 $('.payment-details-form input[name="payment"]').val(payment);
+                $('#accept-order').attr('data-payment', payment);
                 $('#accept-order a.order-accept').attr('data-id', orderID);
                 $('#accept-order').addClass('opened');
                 $('.payment-items .payment-item').removeClass('d-flex').addClass('d-none')
@@ -344,7 +344,7 @@
                 if (currency == 'ETH') decimal = 6
                 let amount = parseFloat(order.amount)
 
-                a += '<a href="https://drop-x.ru/dashboard/orders/' + order.id + '" class="order-item d-flex justify-content-between align-items-center">' +
+                a += '<a href="/dashboard/orders/' + order.id + '" class="order-item d-flex justify-content-between align-items-center">' +
                     '<div class="d-flex align-items-start flex-column justify-content-center">' +
                         '<div class="destination ' + order.destination + '">'
                 if (order.destination == 'deposit') a += 'Ввод'

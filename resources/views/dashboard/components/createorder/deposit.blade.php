@@ -5,7 +5,7 @@
         <div class="select-wrapper">
             <select name="currency" class="form-select select-currency">
                 @foreach ($currency::all() as $currency)
-                    @if ($currency->title != 'HFT')
+                    @if ($currency->visible)
                         <option value="{{$currency->title}}">{{$currency->title}}</option>
                     @endif
                 @endforeach

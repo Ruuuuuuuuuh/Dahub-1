@@ -26,7 +26,7 @@ class AuthController extends Controller
     }
 
     public function authUser($token, Request $request) {
-        $url = $request->has('url') ? $request->input('url') : 'wallet';
+        $url = $request->has('url') ? $request->input('url') : env('AUTH_REDIRECT') ;
         $user = User::where('auth_token', $token)->firstOrFail();
         Auth::login($user, true);
 
@@ -44,9 +44,6 @@ class AuthController extends Controller
         $user = Socialite::driver('telegram')->user();
 
         $authUser = $this->findOrCreateUser($user);
-
-
-
 
         return redirect('dashboard');
     }

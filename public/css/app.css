@@ -10375,13 +10375,19 @@ hr {
 
 .deposit-block input, .deposit-block select {
   background: #F6F8FA;
-  border: 1px solid #EFEFEF;
+  border: 1px solid #EFEFEF !important;
+  box-shadow: none !important;
   box-sizing: border-box;
   border-radius: 15px;
   padding: 10px 50px 10px 25px;
   color: #333;
   font-size: 18px;
   line-height: 18px;
+  outline: none;
+}
+
+.deposit-block input:active, .deposit-block input:focus {
+  border: 1px solid #ccc !important;
 }
 
 strong {
@@ -10604,6 +10610,19 @@ strong {
 }
 .explorer .order .order-wrapper .amount-source {
   width: 25%;
+}
+
+.currency-select select, .currency-select select:active, .currency-select select:focus {
+  margin-left: -120px;
+  margin-top: -6px;
+  border: 1px solid #eee !important;
+  background: linear-gradient(100.13deg, #6CA8E0 -25.88%, #4D5B9D 53.71%) !important;
+  color: #fff;
+  box-shadow: none !important;
+}
+
+.currency-select select option {
+  background: #4D5B9D;
 }
 
 @media screen and (max-width: 767px) {

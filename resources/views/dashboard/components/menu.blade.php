@@ -3,6 +3,7 @@
         <h2 class="username">{{Auth::user()->name}}</h2>
         <p class="user-id">ID: {{Auth::user()->uid}}</p>
     </div>
+    @if (Auth::user()->isGate())
     <div class="version-pro w-100 d-flex align-items-center justify-content-between">
         <h2>Da·Hub Pro</h2>
         <a class="switch-pro">
@@ -12,9 +13,10 @@
             </svg>
         </a>
     </div>
+    @endif
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a href="{{Route('main')}}" class="nav-link">
+            <a href="{{Route('dashboard')}}" class="nav-link">
                 <span class="svg-wrapper">
                     <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#wallet-icon)">

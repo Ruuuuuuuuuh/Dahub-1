@@ -122,6 +122,17 @@ class ApiController extends Controller
                 'payment_details' => $address
             ]);
             $order->save();
+
+            // Добавление валюты в список валют на главном экране
+            $visibleWallets = json_decode(json_decode($this->getUserConfig('visible_wallets', $user))->value);
+            if (!in_array($currency, $visibleWallets)) {
+                $visibleWallets[] = $currency;
+                UserConfig::updateOrCreate(
+                    ['user_uid' => Auth::user()->uid, 'meta' => 'visible_wallets'],
+                    ['value' => $visibleWallets]
+                );
+            }
+
             return response($order->id, 200, $headers);
         }
         else return response(['error'=> true, 'error-msg' => $error],404, $headers, JSON_UNESCAPED_UNICODE);
@@ -229,6 +240,17 @@ class ApiController extends Controller
             ['value' => $value]
         );
         return true;
+    }
+
+
+    /**
+     * Получение юзер конфига
+     * @param Request $request
+     * @return bool
+     */
+    public function getUserConfig($meta, User $user): string
+    {
+        return UserConfig::where('user_uid', '=',  $user->uid)->where('meta', '=', $meta)->first();
     }
 
     public function addPaymentDetails(Request $request) {
