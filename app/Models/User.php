@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helpers\Rate;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Traits\HasWalletFloat;
@@ -16,6 +17,7 @@ use Questocat\Referral\Traits\UserReferral;
 
 /**
  * @property mixed $roles
+ * @method static findOrFail($id)
  */
 
 class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
@@ -101,10 +103,12 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         return $this->hasMany('App\Models\UserConfig', 'user_uid', 'uid');
     }
 
+
     public function paymentDetails(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany('App\Models\PaymentDetail', 'user_uid', 'uid');
     }
+
 
     public function getBalance($currency, $decimal = 2): float
     {
@@ -120,37 +124,67 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         return $this->getWallet($currency)->balanceFloat;
     }
 
-    public function getBalanceFrozen($currency): float
+    /**
+     * Получить баланс внутреннего токена
+     * @return float
+     */
+    public function getBalanceInner(): float
     {
-        if (!$this->hasWallet($currency.'_frozen')) {
+        if (!$this->hasWallet('iUSDT')) {
             $this->createWallet(
                 [
-                    'name' => $currency.'_frozen',
-                    'slug' => $currency.'_frozen',
-                    'decimal_places' => $this->getWallet($currency)->decimal_places
+                    'name' => 'Inner USD Token',
+                    'slug' => 'iUSDT',
+                    'decimal_places' => 2
                 ]
             );
         }
-        return $this->getWallet($currency.'_frozen')->balanceFloat;
+        return $this->getWallet('iUSDT')->balanceFloat;
+    }
+
+    public function getBalanceFrozen(): float
+    {
+        if (!$this->hasWallet('iUSDT_frozen')) {
+            $this->createWallet(
+                [
+                    'name' => 'iUSDT frozen',
+                    'slug' => 'iUSDT_frozen',
+                    'decimal_places' => 2
+                ]
+            );
+        }
+        return $this->getWallet('iUSDT_frozen')->balanceFloat;
     }
 
     public function getBalanceFree($currency): float
     {
-        return $this->getBalance($currency) - $this->getBalanceFrozen($currency);
+        return ($this->getBalanceInner() - $this->getBalanceFrozen()) / Rate::getRates($currency);
     }
 
     public function freezeTokens($currency, $amount)
     {
-        $this->getWallet($currency.'_frozen')->depositFloat($amount, array('destination' => 'Заморозка токенов'));
-        $this->getWallet($currency.'_frozen')->refreshBalance();
+        $amount = Rate::getRates($currency) * $amount;
+        $this->getWallet('iUSDT_frozen')->depositFloat($amount, array('destination' => 'Заморозка токенов'));
+        $this->getWallet('iUSDT_frozen')->refreshBalance();
     }
 
     public function unfreezeTokens($currency, $amount)
     {
-        $this->getWallet($currency.'_frozen')->withdrawFloat($amount, array('destination' => 'Разморозка токенов'));
-        $this->getWallet($currency.'_frozen')->refreshBalance();
+        $amount = Rate::getRates($currency) * $amount;
+        $this->getWallet('iUSDT_frozen')->withdrawFloat($amount, array('destination' => 'Разморозка токенов'));
+        $this->getWallet('iUSDT_frozen')->refreshBalance();
     }
 
+    public function depositInner($currency, $amount) {
+        $amount = Rate::getRates($currency) * $amount;
+        $this->getWallet('iUSDT')->depositFloat($amount, array('destination' => 'Пополнение внутренних токенов'));
+        $this->getWallet('iUSDT')->refreshBalance();
+    }
 
-
+    public function withdrawInner($currency, $amount)
+    {
+        $amount = Rate::getRates($currency) * $amount;
+        $this->getWallet('iUSDT')->withdrawFloat($amount, array('destination' => 'Сжигание внутренних токенов'));
+        $this->getWallet('iUSDT')->refreshBalance();
+    }
 }

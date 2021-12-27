@@ -67,7 +67,7 @@ class Order extends Model
 
     public function scopeOrdersDeposit($query)
     {
-        return $query->where('destination', '=', 'deposit')->orderBy('id', 'DESC');
+        return $query->where('destination', '=', 'deposit')->orWhere('destination', '=', 'TokenSale')->orderBy('id', 'DESC');
     }
 
     public function scopeOrdersWithdraw($query)

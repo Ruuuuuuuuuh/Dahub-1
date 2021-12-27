@@ -44,7 +44,7 @@ class AcceptDepositOrder extends Notification
             // Optional recipient user id.
             ->to($notifiable->uid)
             // Markdown supported.
-            ->content("Заявка №" . $this->order->id . " на пополнение " . $this->order->amount . " " . $this->order->currency. " принята шлюзом. Номер карты для пополнения " . $this->order->payment_details)
+            ->content("Заявка №" . $this->order->id . " на " . $this->order->amount . " " . $this->order->currency. " принята шлюзом. Реквизиты: " . $this->order->payment_details)
 
             // (Optional) Blade template for the content.
             // ->view('notification', ['url' => $url])

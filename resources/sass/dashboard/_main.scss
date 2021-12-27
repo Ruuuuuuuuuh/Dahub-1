@@ -535,11 +535,15 @@ section.screen {
             height:84px;
             border-bottom: 2px solid #EDF1F9;
             padding:24px 0 28px;
+            .payment-details-icon {
+                min-width:55px;
+            }
             .payment-details {
                 margin-left:22px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+                word-break: break-all;
                 .address {
                     font-weight: 600;
                     font-size: 16px;

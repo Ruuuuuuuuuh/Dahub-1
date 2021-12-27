@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Rate;
 use App\Models\Currency;
+use App\Models\Gate;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\System;
@@ -34,21 +35,23 @@ class DashboardController extends Controller {
      */
     public function index()
     {
-        $user = Auth::user();
+        $user = User::findOrFail(Auth::user()->id);
+        dd($user->getBalanceFree('DHB'));
         $rates = new Rate();
         $currency = new Currency();
         $mode = $this->getMode();
         $visibleWallets = $this->getVisibleWallets();
-        foreach ($currency::all() as $item) {
-            $user->getBalance($item->title);
-        }
         if ($mode == 'pro' && $user->isGate()) {
-            $orders['deposit'] = Order::where('status', 'created')->where('destination', 'deposit')->orderBy('id', 'DESC')->take(30)->get();
+            $user = Gate::findOrFail($user->id);
+            $orders['deposit'] = Order::where('status', 'created')->whereIn('destination', ['TokenSale', 'deposit'])->orderBy('id', 'DESC')->take(30)->get();
             $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->take(30)->get();
             $orders['owned'] = Order::where('status', 'accepted')->where('gate', $user->uid)->orderBy('id', 'DESC')->take(30)->get();
         }
         else {
             $orders = Order::where('user_uid', Auth::user()->uid)->userOrders()->orderBy('id', 'DESC')->take(10)->get();
+        }
+        foreach ($currency::all() as $item) {
+            $user->getBalance($item->title);
         }
         return view('dashboard.index', compact('orders', 'user', 'rates', 'currency', 'mode', 'visibleWallets'));
 
