@@ -36,7 +36,6 @@ class DashboardController extends Controller {
     public function index()
     {
         $user = User::findOrFail(Auth::user()->id);
-        dd($user->getBalanceFree('DHB'));
         $rates = new Rate();
         $currency = new Currency();
         $mode = $this->getMode();

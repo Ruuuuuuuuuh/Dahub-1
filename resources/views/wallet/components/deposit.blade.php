@@ -11,7 +11,7 @@
             <div class="form-group deposit-recieve-group">
                 <p>
                     <span style="margin-right:20px;">=</span>
-                    <input class="deposit-receive" name="deposit-receive" value="{!! 2000 * $system->rate !!}"/>
+                    <input class="deposit-receive" name="deposit-receive" value="{!! 2000 * Rate::getRates('DHB') !!}"/>
                 </p>
             </div>
 
@@ -36,7 +36,7 @@
         <h2>Получить DHB <span class="deposit-status">Шаг 2 из 3</span></h2>
 
         <div class="created-block form-inline">
-            <p>Отправьте <strong><span class="step2-amount">@if (count(Auth::user()->orders()->notCompleted()->get()) != 0){{number_format($system->rate * Auth::user()->orders()->notCompleted()->first()->amount / Auth::user()->orders()->notCompleted()->first()->rate, 5, ',', ' ') }} @endif </span> <span class="step2-currency">@if (count(Auth::user()->orders()->notCompleted()->get()) != 0) {{Auth::user()->orders()->notCompleted()->first()->currency}}@endif</span> </strong> на один из этих адресов:</p>
+            <p>Отправьте <strong><span class="step2-amount">@if (count(Auth::user()->orders()->notCompleted()->get()) != 0){{number_format(Rate::getRates('DHB') * Auth::user()->orders()->notCompleted()->first()->amount / Auth::user()->orders()->notCompleted()->first()->rate, 5, ',', ' ') }} @endif </span> <span class="step2-currency">@if (count(Auth::user()->orders()->notCompleted()->get()) != 0) {{Auth::user()->orders()->notCompleted()->first()->currency}}@endif</span> </strong> на один из этих адресов:</p>
             <div class="wallet-link-section USDT w-100">
                 <div class="col-12">
                     <div class="row flex-wrap flex-column">

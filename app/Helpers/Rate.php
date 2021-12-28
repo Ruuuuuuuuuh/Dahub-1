@@ -26,7 +26,7 @@ class Rate
         }
 
         elseif ($currency == 'DHB') {
-            return $system->rate;
+            return \App\Models\Rate::where('title', 'DHB')->orderBy('created_at', 'desc')->first()->value;
         }
 
         elseif ($currency == 'RUB') {

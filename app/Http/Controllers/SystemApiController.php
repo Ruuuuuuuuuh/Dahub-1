@@ -93,11 +93,12 @@ class SystemApiController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return boolean
      */
-    public function setDHBRate(Request $request)
+    public function setDHBRate(Request $request): bool
     {
-        $system = System::findOrFail(1);
-        $system->rate = $request->input('rate');
-        $system->save();
+        $rate = new \App\Models\Rate();
+        $rate->title = 'DHB';
+        $rate->value = $request->input('rate');
+        $rate->save();
         return true;
     }
 

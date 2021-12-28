@@ -18,7 +18,7 @@
                         </div>
 
                         <div class="col-4 col-lg-3">
-                            <p>за {{number_format($system->rate * $order->amount / $order->rate, $dec, ',', ' ') }} {{$order->currency}}</p>
+                            <p>за {{number_format(Rate::getRates('DHB') * $order->amount / $order->rate, $dec, ',', ' ') }} {{$order->currency}}</p>
                         </div>
 
                         <div class="col-4 col-lg-3">

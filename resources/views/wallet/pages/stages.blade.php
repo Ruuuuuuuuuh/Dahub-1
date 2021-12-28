@@ -31,7 +31,7 @@
     <script>
         $(document).ready(function(){
             $('.set-dhb-rate').bind('click', function(e) {
-                let dhbRate = '{{$system->rate}}'
+                let dhbRate = '{{Rate::getRates('DHB')}}'
                 e.preventDefault();
                 let amount = prompt("Введите курс DHB, текущий курс равен " + dhbRate, "");
                 if (amount != null) {
