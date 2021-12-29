@@ -38,7 +38,7 @@ class OrderCreate extends Notification
 
     public function toTelegram($notifiable)
     {
-        $url = url('/wallet/');
+        $url = url('/wallet/orders/'.$this->order->id);
 
         return TelegramMessage::create()
             // Optional recipient user id.
@@ -49,6 +49,6 @@ class OrderCreate extends Notification
             // (Optional) Blade template for the content.
             // ->view('notification', ['url' => $url])
 
-            ->button('Перейти в кошелек', $url);
+            ->button('Перейти в заявку', $url);
     }
 }

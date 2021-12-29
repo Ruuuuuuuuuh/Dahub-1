@@ -177,7 +177,7 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
 
     public function depositInner($currency, $amount) {
         $amount = Rate::getRates($currency) * $amount;
-        $this->getWallet('iUSDT')->depositFloat($amount, array('destination' => 'Пополнение внутренних токенов'));
+        $this->getWallet('iUSDT')->depositFloat($amount, array('destination' => 'deposit to Inner Wallet'));
         $this->getWallet('iUSDT')->refreshBalance();
     }
 

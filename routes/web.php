@@ -40,6 +40,7 @@ Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->
 Route::get('/wallet/profile', [App\Http\Controllers\WalletController::class, 'profile'])->name('wallet.profile');
 Route::get('/wallet/explorer', [App\Http\Controllers\WalletController::class, 'explorer'])->name('wallet.explorer');
 Route::get('/wallet/transfer', [App\Http\Controllers\WalletController::class, 'transfer'])->name('wallet.transfer');
+Route::get('/wallet/orders/{id}', [App\Http\Controllers\WalletController::class, 'order'])->name('wallet.pages.order');
 
 // ADMIN PAGES
 Route::get('/wallet/orders/', [App\Http\Controllers\WalletController::class, 'orders'])->middleware('admin')->name('wallet.orders');

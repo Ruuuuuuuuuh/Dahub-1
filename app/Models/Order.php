@@ -24,7 +24,9 @@ class Order extends Model
         'rate',
         'payment',
         'payment_details',
-        'tax'
+        'tax',
+        'dhb_rate',
+        'dhb_amount'
     ];
 
     /**

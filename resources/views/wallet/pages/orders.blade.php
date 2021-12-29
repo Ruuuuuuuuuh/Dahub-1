@@ -45,11 +45,11 @@
                                                     </div>
 
                                                     <div class="col-6 col-lg-3">
-                                                        <p><strong>{{number_format($order->amount, 0, ',', ' ')}} DHB</strong></p>
+                                                        <p><strong>{{number_format($order->dhb_amount, 0, ',', ' ')}} DHB</strong></p>
                                                     </div>
 
                                                     <div class="col-6 col-lg-3">
-                                                        <p>за {{number_format(App\Models\System::findOrFail(1)->rate * $order->amount / $order->rate, $dec, ',', ' ') }} {{$order->currency}}</p>
+                                                        <p>за {{number_format($order->amount, $dec, ',', ' ') }} {{$order->currency}}</p>
                                                     </div>
 
                                                     <div class="col-6 col-lg-3">

@@ -1,7 +1,9 @@
-<div class="deposit-section @if (count(Auth::user()->orders()->notCompleted()->get()) != 0) {{Auth::user()->orders()->notCompleted()->first()->status}} {{Auth::user()->orders()->notCompleted()->first()->currency}} @endif" @if (count(Auth::user()->orders()->notCompleted()->get()) != 0) data-id="{{Auth::user()->orders()->notCompleted()->first()->id}}" @endif>
+<div class="deposit-section">
     <div class="new-order">
         <h2>Получить DHB <span class="deposit-status">Шаг 1 из 3</span></h2>
         <div class="deposit-block form-inline">
+
+            <p class="w-100">Введите количество токенов DHB</p>
             <div class="form-group input-group">
                 <input type="number" class="form-number form-control" name="deposit-amount" value="2000" step="1000"  min="2000"  />
                 <div class="input-group-append">
@@ -22,6 +24,16 @@
                     <option value="ETH">ETH</option>
                 </select>
             </div>
+
+            <p class="w-100 mt-5">Выберите платежную систему</p>
+            <div class="form-group payment-select">
+                <select class="form-control ml-0" name="deposit-payment">
+                    @foreach (\App\Models\Currency::where('title', 'USDT')->first()->payments()->get() as $payment)
+                        <option value="{{$payment->title}}">{{$payment->title}}</option>
+                    @endforeach
+                </select>
+            </div>
+
         </div>
 
         <div class="subtotal">

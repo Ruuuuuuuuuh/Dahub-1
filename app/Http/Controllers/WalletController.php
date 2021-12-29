@@ -162,4 +162,10 @@ class WalletController extends Controller
     public function transfer() {
         return view('wallet.pages.transfer');
     }
+
+    public function order($id) {
+        $order = Order::where('id', $id)->firstOrFail();
+        if (Auth::user()->uid == $order->user_uid) return view('wallet.pages.order')->with('order', $order);
+        else abort(404);
+    }
 }

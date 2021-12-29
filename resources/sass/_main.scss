@@ -321,6 +321,9 @@ hr {
     line-height: 18px;
     outline:none;
 }
+input[name="deposit-amount"], input[name="deposit-receive"], select[name="deposit-payment"] {
+    min-width:300px;
+}
 .deposit-block input:active, .deposit-block input:focus {
     border:1px solid #ccc!important;
 }
@@ -337,7 +340,6 @@ strong {
 }
 .deposit-block .input-group input {
     border-radius: 15px!important;
-    width: 220px;
     padding-right: 70px;
 }
 .deposit-block {
@@ -401,7 +403,6 @@ strong {
     background-image: linear-gradient(45deg, #ff6436, #d5006c);
     background-image: -webkit-linear-gradient(45deg, #ff6436, #d5006c);
     background-image: -moz-linear-gradient(45deg, #ff6436, #d5006c);
-    margin-left:25px;
 }
 .deposit-status {
     font-size: 18px;

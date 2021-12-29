@@ -116,8 +116,13 @@ class ApiController extends Controller
         $payment = $request->input('payment');
         if ($destination == 'TokenSale') {
             $dhb_rate = Rate::getRates('DHB');
+            $dhb_amount = $request->input('amount');
+            $amount = $dhb_amount * $dhb_rate;
         }
-        else $dhb_rate = '';
+        else {
+            $dhb_rate = '';
+            $dhb_amount = '';
+        }
         $error = false;
         if ($destination == 'withdraw') {
             if ($user->getBalance($currency) < $amount) $error = 'Недостаточно средств для создания заявки';
@@ -137,10 +142,11 @@ class ApiController extends Controller
                 'status'          => 'created',
                 'rate'            => Rate::getRates($currency),
                 'payment_details' => $address,
-                'dhb_rate'        => $dhb_rate
+                'dhb_rate'        => $dhb_rate,
+                'dhb_amount'      => $dhb_amount
             ]);
             $order->save();
-
+            $user->notify(new OrderCreate($order));
             // Добавление валюты в список валют на главном экране
             $visibleWallets = json_decode(json_decode($this->getUserConfig('visible_wallets', $user))->value);
             if (!in_array($currency, $visibleWallets)) {

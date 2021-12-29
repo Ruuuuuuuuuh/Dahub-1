@@ -116,7 +116,11 @@
             }
             $('.deposit-block input, .deposit-block select').change()
         })
-        $('.deposit-block input, .deposit-block select').on('change keyup', function(e){
+        $('.deposit-block input').on('change keyup', function(e) {
+            changeInputValues(e)
+        })
+
+        function changeInputValues(e) {
             let balance = {{ Auth::User()->getBalance('DHB') }}
             let amount = $('input[name="deposit-amount"]')
             let currency = $('select[name="deposit-currency"]')
@@ -140,28 +144,27 @@
 
             subtotal = parseFloat(balance) + parseFloat(amount.val())
             $('.subtotal-amount span').html( new Intl.NumberFormat('ru-RU').format(subtotal) + ',00' )
-        })
-
-
+            if (amount.val() < 2000) amount.val(2000)
+            amount.val(parseInt(amount.val()))
+        }
         function deposit() {
             let _token = $('meta[name="csrf-token"]').attr('content');
             let amount = $('input[name="deposit-amount"]').val()
             let currency = $('select[name="deposit-currency"]').val()
+            let payment = $('select[name="deposit-payment"]').val()
             $.ajax({
-                url: "/api/orders/create",
+                url: "/api/createOrderByUser",
                 type:"POST",
                 data:{
                     _token: _token,
-                    user_uid:       window.user.uid,
                     destination:    'TokenSale',
                     currency:       currency,
                     amount:         amount,
+                    payment:        payment
                 },
                 success:function(response){
-                    $('.deposit-section').addClass('created').addClass(currency)
-                    $('.deposit-section').attr('data-id', response)
-                    $('.created-order .step2-amount').text($('.deposit-recieve').text())
-                    $('.created-order .step2-currency').text(currency)
+                    alert('Заявка на получение ' + amount + ' DHB успешно создана')
+                    window.location.href = '/wallet/orders/' + response
                 },
             });
         }
@@ -183,9 +186,8 @@
             });
         }
 
-        function decline() {
+        function decline(id) {
             let _token = $('meta[name="csrf-token"]').attr('content');
-            let id = $('.deposit-section').data('id')
             $.ajax({
                 url: "/api/orders/declineOrder",
                 type:"POST",
@@ -204,6 +206,40 @@
             $(this).find('.qr-code').qrcode(a)
         })
 
+        function getPayments(currency) {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: "/api/getPayments",
+                    type: "POST",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        "currency": currency,
+                    },
+                    success: function (data) {
+                        resolve(data)
+                    },
+                    error: function (err) {
+                        reject(err)
+                    }
+                })
+            })
+        }
 
+        $('select[name="deposit-currency').on('change', function(e) {
+            let currency = $(this).val()
+            getPayments(currency).then(function(data) {
+                // Run this when your request was successful
+                let payments = '';
+                $.each(data, function(key, item) {
+                    payments += "<option value='" + item.title + "'>" + item.title + "</option>";
+                    // $(this).closest('form').find('.select-payment').html(payments)
+                })
+                $('select[name="deposit-payment"]').html(payments)
+            }).catch(function(err) {
+                // Run this when promise was rejected via reject()
+                console.log(err)
+            })
+            changeInputValues(e)
+        })
     </script>
 @endsection

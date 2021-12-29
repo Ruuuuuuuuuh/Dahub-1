@@ -6,7 +6,12 @@
         <div class="row">
             <div class="col-lg-6 col-md-12">
                 <div class="row">
-                    <div class="col-md-12 col-lg-3">
+                    <div class="col-md-12 col-lg-1">
+                        <div class="row">
+                            #{{$order->id}}
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-2">
                         <div class="row">
                             Получение
                         </div>
@@ -14,13 +19,13 @@
 
                     <div class="col-md-12 col-lg-3">
                         <div class="row">
-                            {{$order->amount}} DHB
+                            {{$order->dhb_amount}} DHB
                         </div>
                     </div>
 
                     <div class="col-md-12 col-lg-3">
                         <div class="row">
-                            за {{$order->amount / $order->rate}} {{$order->currency}}
+                            за {{$order->amount}} {{$order->currency}}
                         </div>
                     </div>
 
