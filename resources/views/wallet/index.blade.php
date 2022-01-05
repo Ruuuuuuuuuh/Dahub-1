@@ -103,21 +103,30 @@
                 $('[data-toggle="popover"]').popover('hide');
             }
         });
-        $('.deposit-block input, .deposit-block select').on('focusout', function(){
-            let max = parseInt($('.deposit-block input').attr('max'));
-            let min = parseInt($('.deposit-block input').attr('min'));
-            if ($(this).val() > max)
+        $('.deposit-block input, .deposit-block select').on('change keyup', function(e){
+            let min = parseInt($('.deposit-block input[name="deposit-amount"]').attr('min'));
+            if ($('.deposit-block input[name="deposit-amount"]').val() < min)
             {
-                $(this).val(max);
+                $('.deposit-block input[name="deposit-amount"]').val(min);
             }
-            else if ($(this).val() < min)
-            {
-                $(this).val(min);
-            }
-            $('.deposit-block input, .deposit-block select').change()
-        })
-        $('.deposit-block input').on('change keyup', function(e) {
             changeInputValues(e)
+        })
+
+
+        $('select[name="deposit-currency').on('change', function(e) {
+            let currency = $(this).val()
+            getPayments(currency).then(function(data) {
+                // Run this when your request was successful
+                let payments = '';
+                $.each(data, function(key, item) {
+                    payments += "<option value='" + item.title + "'>" + item.title + "</option>";
+                    // $(this).closest('form').find('.select-payment').html(payments)
+                })
+                $('select[name="deposit-payment"]').html(payments)
+            }).catch(function(err) {
+                // Run this when promise was rejected via reject()
+                console.log(err)
+            })
         })
 
         function changeInputValues(e) {
@@ -132,7 +141,6 @@
                 BTC : '{!! Rate::getRates('BTC') !!}',
                 ETH : '{!! Rate::getRates('ETH') !!}',
             }
-
             if ($(e.target).is(total)) {
                 let amountTotal = rate[currency.val()] * total.val() / rate['DHB']
                 amount.val( + amountTotal.toFixed(5))
@@ -141,17 +149,20 @@
                 let amountTotal = rate['DHB'] * amount.val() / rate[currency.val()]
                 total.val( + amountTotal.toFixed(5))
             }
-
             subtotal = parseFloat(balance) + parseFloat(amount.val())
             $('.subtotal-amount span').html( new Intl.NumberFormat('ru-RU').format(subtotal) + ',00' )
             if (amount.val() < 2000) amount.val(2000)
             amount.val(parseInt(amount.val()))
+
+
+
         }
         function deposit() {
             let _token = $('meta[name="csrf-token"]').attr('content');
-            let amount = $('input[name="deposit-amount"]').val()
+            let amount = $('input[name="deposit-receive"]').val()
             let currency = $('select[name="deposit-currency"]').val()
             let payment = $('select[name="deposit-payment"]').val()
+            let dhb_amount = $('input[name="deposit-amount"]').val()
             $.ajax({
                 url: "/api/createOrderByUser",
                 type:"POST",
@@ -160,10 +171,11 @@
                     destination:    'TokenSale',
                     currency:       currency,
                     amount:         amount,
-                    payment:        payment
+                    payment:        payment,
+                    dhb_amount:     dhb_amount
                 },
                 success:function(response){
-                    alert('Заявка на получение ' + amount + ' DHB успешно создана')
+                    alert('Заявка на получение ' + dhb_amount + ' DHB успешно создана')
                     window.location.href = '/wallet/orders/' + response
                 },
             });
@@ -186,25 +198,6 @@
             });
         }
 
-        function decline(id) {
-            let _token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: "/api/orders/declineOrder",
-                type:"POST",
-                data:{
-                    _token: _token,
-                    id: id
-                },
-                success:function(response){
-                    $('.deposit-section').removeClass('created');
-                },
-            });
-        }
-
-        $('.wallet-link-section .tab-content .tab-pane').each(function(i, e){
-            let a = $(this).find('.copy-link span').text()
-            $(this).find('.qr-code').qrcode(a)
-        })
 
         function getPayments(currency) {
             return new Promise(function (resolve, reject) {
@@ -225,21 +218,6 @@
             })
         }
 
-        $('select[name="deposit-currency').on('change', function(e) {
-            let currency = $(this).val()
-            getPayments(currency).then(function(data) {
-                // Run this when your request was successful
-                let payments = '';
-                $.each(data, function(key, item) {
-                    payments += "<option value='" + item.title + "'>" + item.title + "</option>";
-                    // $(this).closest('form').find('.select-payment').html(payments)
-                })
-                $('select[name="deposit-payment"]').html(payments)
-            }).catch(function(err) {
-                // Run this when promise was rejected via reject()
-                console.log(err)
-            })
-            changeInputValues(e)
-        })
+
     </script>
 @endsection

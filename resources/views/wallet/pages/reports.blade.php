@@ -49,6 +49,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-withdraw-tab" data-toggle="pill" href="#pills-withdraw" role="tab" aria-controls="pills-withdraw" aria-selected="false">Отправка</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-gates-tab" data-toggle="pill" href="#pills-gates" role="tab" aria-controls="pills-gates" aria-selected="false">Балансы шлюзов</a>
+                            </li>
                             <li class="nav-item button-send" data-toggle="modal" data-target="#modal-send">
                                 <a class="nav-link btn btn-success">Перевести</a>
                             </li>
@@ -160,7 +163,41 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="tab-pane fade" id="pills-gates" role="tabpanel" aria-labelledby="pills-gates-tab">
+
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <td>Telegram ID</td>
+                                        <td>Username</td>
+                                        <td>Имя</td>
+                                        @foreach (\App\Models\Currency::payableCurrencies()->get() as $currency)
+                                        <td>{{$currency->title}}</td>
+                                        @endforeach
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach (\App\Models\User::getGates()->get() as $gate)
+                                        <tr>
+                                            <td>{{$gate->uid}}</td>
+                                            <td>{{$gate->username}}</td>
+                                            <td>{{$gate->name}}</td>
+                                            @foreach (\App\Models\Currency::payableCurrencies()->get() as $currency)
+                                                <td>
+                                                    @if ($gate->hasWallet($currency->title.'_gate'))
+                                                    {{$gate->getWallet($currency->title.'_gate')->balanceFloat}}
+                                                    @else
+                                                        0
+                                                    @endif
+                                                </td>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
+
 <hr />
                         <h2 class="mb-3">Балансы системного кошелька</h2>
                         <h4>{{$system->getWallet('TokenSale')->balanceFloat}} DHB (Токен Сейл)</h4>

@@ -20,4 +20,10 @@ class Currency extends Model
             'currency_id',
             'payment_id');
     }
+
+
+    public function scopePayableCurrencies($query)
+    {
+        return $query->where('title', '!=', 'HFT')->where('title', '!=', 'DHB');
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\System;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -36,12 +37,16 @@ class DepositIusdtAndAddRatesToRatesTable extends Migration
                 'decimal_places' => 2
             ]
         );
-        $orders = DB::table('orders')->where('destination', 'TokenSale')->get()->toArray();
-        foreach ($orders as $order) {
-            $user = App\Models\User::where('uid', $order->user_uid)->first();
+        foreach (User::all() as $user) {
+            $dhb = 0;
+            foreach ($user->orders()->where('status', 'completed')->get() as $order) {
+                $dhb += $order->dhb_amount;
+                $user->getBalance('iUSDT');
+                $user->getWallet('iUSDT')->depositFloat($order->dhb_amount * $order->dhb_rate , array('destination' => 'deposit to Inner Wallet', 'order_id' => $order->id));
+                $user->getWallet('iUSDT')->refreshBalance();
+            }
             $user->getBalance('iUSDT');
-            $user->getWallet('iUSDT')->depositFloat($order->dhb_amount * $order->dhb_rate , array('destination' => 'deposit to Inner Wallet', 'order_id' => $order->id));
-            $user->getWallet('iUSDT')->refreshBalance();
+            if ($user->getWallet('DHB')->balanceFloat > $dhb) $user->getWallet('iUSDT')->depositFloat(($user->getWallet('DHB')->balanceFloat - $dhb)  * 0.05, array('destination' => 'deposit to Inner Wallet'));
         }
     }
 

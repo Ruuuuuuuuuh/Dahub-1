@@ -1,12 +1,9 @@
 @if (gmdate("i", $seconds_left) < 15)
 <span class="minutes">{{14 - gmdate("i", $seconds_left)}}</span>:<span class="seconds">{{60 - gmdate("s", $seconds_left)}}</span>
-@else
-Время вышло
-@endif
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // конечная дата, например 1 июля 2021
-        const deadline = new Date('{{$order->created_at->addMinutes(15)}}');
+        const deadline = new Date('{{$order->updated_at->addMinutes(15)}}');
         // id таймера
         let timerId = null;
         // вычисляем разницу дат и устанавливаем оставшееся времени в качестве содержимого элементов
@@ -28,3 +25,7 @@
         timerId = setInterval(countdownTimer, 1000);
     });
 </script>
+
+@else
+Время вышло
+@endif

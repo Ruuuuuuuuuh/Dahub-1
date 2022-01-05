@@ -13,6 +13,7 @@ use App\Notifications\AcceptDepositOrder;
 use App\Notifications\AcceptSendingByGate;
 use App\Notifications\AcceptWithdrawOrder;
 use App\Notifications\AdminNotifications;
+use App\Notifications\ConfirmOrder;
 use App\Notifications\OrderAssignee;
 use App\Notifications\OrderCreate;
 use App\Notifications\OrderDecline;
@@ -22,6 +23,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Telegram\Bot\Api;
 
 class ApiController extends Controller
 {
@@ -51,7 +53,7 @@ class ApiController extends Controller
      */
     public function createOrder(Request $request)
     {
-        $user = User::findOrFail(Auth::user()->id);
+        $user = $user = Auth::user();;
         $system = System::find(1);
 
         $headers = array (
@@ -105,7 +107,7 @@ class ApiController extends Controller
             ]
         );
 
-        $user = User::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         $headers = array (
             'Content-Type' => 'application/json; charset=UTF-8',
             'charset' => 'utf-8'
@@ -116,8 +118,8 @@ class ApiController extends Controller
         $payment = $request->input('payment');
         if ($destination == 'TokenSale') {
             $dhb_rate = Rate::getRates('DHB');
-            $dhb_amount = $request->input('amount');
-            $amount = $dhb_amount * $dhb_rate;
+            $dhb_amount = $request->input('dhb_amount');
+            $amount = $request->input('amount');
         }
         else {
             $dhb_rate = '';
@@ -169,7 +171,7 @@ class ApiController extends Controller
     public function assigneeOrderByUser(Request $request)
     {
         $id = $request->input('id');
-        $user = User::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         $order = Order::where('id', $id)->where('user_uid', $user->uid)->first();
         $headers = array (
             'Content-Type' => 'application/json; charset=UTF-8',
@@ -203,18 +205,22 @@ class ApiController extends Controller
     public function declineOrderByUser(Request $request)
     {
         $id = $request->input('id');
-        $user = User::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         $order = Order::where('id', $id)->where('user_uid', $user->uid)->first();
-        if ($order->status != 'created') {
-            $gate = Gate::where('uid', $order->gate)->first();
-            $gate->unfreezeTokens($order->currency, $order->amount);
+        if ($order->status != 'completed') {
+            if ($order->status != 'created') {
+                $gate = User::where('uid', $order->gate)->first();
+                $gate->unfreezeTokens($order->currency, $order->amount);
+            }
+            // Send message via telegram
+            if (config('notifications')) $user->notify(new OrderDecline($order));
+
+
+            $order->forceDelete();
+            return $order->id;
         }
-        // Send message via telegram
-        if (config('notifications')) $user->notify(new OrderDecline($order));
+        else abort(404);
 
-
-        $order->forceDelete();
-        return $order->id;
     }
 
     public function getTransactions(Request $request) {
@@ -226,15 +232,10 @@ class ApiController extends Controller
             foreach ($user->orders()->get() as $order) {
                 $ordersList[$i]['currency'] = $order->currency;
                 $ordersList[$i]['amount'] = $order->amount;
-                $transactions = $order->transactions();
-                foreach ($transactions as $transaction) {
-                    if ($transaction->payable_type == 'App\Models\System') {
-                        $ordersList[$i]['amountSource'] = $transaction->amount / 10 ** $transaction->wallet->decimal_places;
-                        $ordersList[$i]['date'] = $transaction->created_at->diffForHumans() . ', ' . $transaction->created_at->Format('H:s');
-                    } else {
-                        $ordersList[$i]['uuid'] = $transaction->uuid;
-                    }
-                }
+                $ordersList[$i]['dhb_amount'] = $order->dhb_amount;
+                $transaction = $order->orderSystemTransaction();
+                $ordersList[$i]['date'] = $transaction->created_at->diffForHumans() . ', ' . $transaction->created_at->Format('H:s');
+                $ordersList[$i]['uuid'] = $transaction->uuid;
                 $i++;
             }
             return json_encode($ordersList, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
@@ -245,15 +246,10 @@ class ApiController extends Controller
             $orderList = array();
             $orderList[0]['currency'] = $order->currency;
             $orderList[0]['amount'] = $order->amount;
-            $transactions = $order->transactions();
-            foreach ($transactions as $transaction) {
-                if ($transaction->payable_type == 'App\Models\System') {
-                    $orderList[0]['amountSource'] = $transaction->amount / 10 ** $transaction->wallet->decimal_places;
-                    $orderList[0]['date'] = $transaction->created_at->diffForHumans() . ', ' . $transaction->created_at->Format('H:s');
-                } else {
-                    $orderList[0]['uuid'] = $transaction->uuid;
-                }
-            }
+            $orderList[0]['dhb_amount'] = $order->dhb_amount;
+            $transaction = $order->orderSystemTransaction();
+            $orderList[0]['date'] = $transaction->created_at->diffForHumans() . ', ' . $transaction->created_at->Format('H:s');
+            $orderList[0]['uuid'] = $value;
             return json_encode($orderList, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
         }
     }
@@ -272,7 +268,7 @@ class ApiController extends Controller
     {
         $meta  = $request->input('meta');
         $value = $request->input('value');
-        $user = User::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         UserConfig::updateOrCreate(
             ['user_uid' => $user->uid, 'meta' => $meta],
             ['value' => $value]
@@ -292,7 +288,7 @@ class ApiController extends Controller
     }
 
     public function addPaymentDetails(Request $request) {
-        $user = User::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         $payment = $request->input('payment');
         $holder = Payment::where('title', $payment)->firstOrFail()->currencies()->firstOrFail()->crypto ? $request->input('holder_name') : null;
         $address = $request->input('address');
@@ -315,12 +311,12 @@ class ApiController extends Controller
     }
 
     public function getPaymentDetails() {
-        $user = User::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         return $user->paymentDetails()->with('payment');
     }
 
     public function acceptOrderByGate(Request $request) {
-        $user = Gate::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         if ($user->isGate()) {
             $order = Order::where('id', $request->input('id'))->firstOrFail();
             if ($order->status == 'created') {
@@ -342,7 +338,7 @@ class ApiController extends Controller
     }
 
     public function acceptSendingByGate(Request $request) {
-        $user = Gate::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         if ($user->isGate()) {
             $order = Order::where('id', $request->input('id'))->firstOrFail();
             if ($order->status == 'accepted' && $order->gate == $user->uid) {
@@ -357,8 +353,11 @@ class ApiController extends Controller
         }
     }
 
+    /**
+     * @throws \Telegram\Bot\Exceptions\TelegramSDKException
+     */
     public function confirmOrderByGate(Request $request) {
-        $user = Gate::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         $order = Order::where('id', $request->input('id'))->firstOrFail();
         $owner = $order->user()->first();
         $headers = array (
@@ -377,16 +376,35 @@ class ApiController extends Controller
                     $systemWallet = System::findOrFail(1);
                     $transaction = $systemWallet->getWallet('TokenSale')->transferFloat( $owner->getWallet('DHB'), $order->dhb_amount, array('destination' => 'TokenSale', 'order_id' => $order->id));
                     $owner->getWallet('DHB')->refreshBalance();
+
+                    // deposit to system wallet
+                    $systemWallet->getWallet($order->currency)->depositFloat($order->amount,  array('destination' => 'TokenSale', 'order_id' => $order->id));
+                    $systemWallet->getWallet($order->currency)->refreshBalance();
+
                     $order->status = 'completed';
                     $order->transaction()->attach($transaction->id);
                     $owner->depositInner($order->currency, $order->amount);
+                    $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
+                    $transactions = $order->transactions();
+                    foreach ($transactions as $transaction) {
+                        if ($transaction->payable_type == 'App\Models\System') {
+                            $systemWallet->getWallet('TokenSale')->refreshBalance();
+                            $telegram->sendMessage([
+                                'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
+                                'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>↗️ Sent: </b>' . $order->amount . ' ' . $order->currency .PHP_EOL.'<b>↙️ Recieved: </b>' . $order->dhb_amount . ' DHB' .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid. PHP_EOL.PHP_EOL.'<b>🔥 TokenSale: </b>'. number_format($systemWallet->getWallet('TokenSale')->balanceFloat, 0, '.', ' ') . ' DHB left until the end of stage 1',
+                                'parse_mode' => 'html'
+                            ]);
+                        }
+                    }
                 }
+                $owner->getBalance($order->currency.'_gate');
                 $owner->getWallet($order->currency.'_gate')->depositFloat($order->amount, array('destination' => 'deposit to wallet'));
                 $owner->getWallet($order->currency.'_gate')->refreshBalance();
                 $order->save();
+                $owner->notify(new ConfirmOrder($order));
                 return $order->id;
             }
-            else response(['error'=>true, 'error-msg' => 'Недостаточно баланса'], 404, $headers, JSON_UNESCAPED_UNICODE);
+            else return response(['error' => true, 'error-msg' => 'Недостаточно баланса'], 404, $headers, JSON_UNESCAPED_UNICODE);
         }
         else {
             return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $headers, JSON_UNESCAPED_UNICODE);
@@ -394,7 +412,7 @@ class ApiController extends Controller
     }
 
     public function confirmOrderByUser(Request $request) {
-        $user = User::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         $order = Order::where('id', $request->input('id'))->firstOrFail();
         $gate = User::where('uid', $order->gate)->first();
         $headers = array (
@@ -426,7 +444,7 @@ class ApiController extends Controller
             'charset' => 'utf-8'
         );
         $id = $request->input('id');
-        $user = User::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         if ($user->isGate()) {
             $order = Order::where('id', $id)->where('gate', $user->uid)->first();
             $owner = User::where('uid', $order->user_uid)->first();
@@ -442,7 +460,7 @@ class ApiController extends Controller
 
     public function getOrdersByFilter(Request $request) {
         $filter = $request->input('filter');
-        $user = User::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         switch ($filter) {
             case'deposit':
                 return $user->orders()->OrdersDeposit()->limit(10)->get();
@@ -466,7 +484,7 @@ class ApiController extends Controller
         $currency = $request->input('currency');
         $username = $request->input('username');
 
-        $user = User::findOrFail(Auth::user()->id);
+        $user = Auth::user();
         if ($user->getBalanceFree($currency) >= $amount) {
             if ($username != 'DHBFundWallet') {
                 $receiver = User::where('uid', $username)->firstOrFail();

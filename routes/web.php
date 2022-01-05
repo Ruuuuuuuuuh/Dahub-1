@@ -39,10 +39,10 @@ Route::group(['prefix' => 'dashboard'], function () {
 Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
 Route::get('/wallet/profile', [App\Http\Controllers\WalletController::class, 'profile'])->name('wallet.profile');
 Route::get('/wallet/explorer', [App\Http\Controllers\WalletController::class, 'explorer'])->name('wallet.explorer');
-Route::get('/wallet/transfer', [App\Http\Controllers\WalletController::class, 'transfer'])->name('wallet.transfer');
 Route::get('/wallet/orders/{id}', [App\Http\Controllers\WalletController::class, 'order'])->name('wallet.pages.order');
 
 // ADMIN PAGES
+Route::get('/wallet/transfer', [App\Http\Controllers\WalletController::class, 'transfer'])->middleware('admin')->name('wallet.transfer');
 Route::get('/wallet/orders/', [App\Http\Controllers\WalletController::class, 'orders'])->middleware('admin')->name('wallet.orders');
 Route::get('/wallet/stages/', [App\Http\Controllers\WalletController::class, 'stages'])->middleware('admin')->name('wallet.stages');
 Route::get('/wallet/reports/', [App\Http\Controllers\WalletController::class, 'reports'])->middleware('admin')->name('wallet.reports');
@@ -67,6 +67,7 @@ Route::post('/api/add_currency', [App\Http\Controllers\SystemApiController::clas
 Route::post('/api/add_payment', [App\Http\Controllers\SystemApiController::class, 'addPayment'])->middleware('admin');
 Route::post('/api/attach_payment_to_currency', [App\Http\Controllers\SystemApiController::class, 'attachPaymentToCurrency'])->middleware('admin');
 Route::post('/api/orders/admin/create', [App\Http\Controllers\SystemApiController::class, 'createOrder'])->middleware('admin');
+Route::post('/api/transfer', [App\Http\Controllers\ApiController::class, 'transfer'])->middleware('admin');
 
 // API ROUTES
 Route::post('/api/deposit', [App\Http\Controllers\ApiController::class, 'deposit']);
@@ -85,7 +86,6 @@ Route::post('/api/orders/confirmOrderByUser', [App\Http\Controllers\ApiControlle
 Route::post('/api/orders/declineOrderByGate', [App\Http\Controllers\ApiController::class, 'declineOrderByGate']);
 Route::post('/api/orders/acceptSendingByGate', [App\Http\Controllers\ApiController::class, 'acceptSendingByGate']);
 Route::post('/api/getOrdersByFilter', [App\Http\Controllers\ApiController::class, 'getOrdersByFilter']);
-Route::post('/api/transfer', [App\Http\Controllers\ApiController::class, 'transfer']);
 
 
 // Telegram Web Api

@@ -52,6 +52,11 @@ class Order extends Model
         return \Bavix\Wallet\Models\Transaction::where('type', 'deposit')->where('meta', 'like', '%"order_id": ' . $this->getKey() . '%')->get();
     }
 
+    public function orderSystemTransaction()
+    {
+        return \Bavix\Wallet\Models\Transaction::where('type', 'withdraw')->where('meta', 'like', '%"order_id": ' . $this->getKey() . '%')->where('payable_type', 'App\Models\System')->first();
+    }
+
     public function transaction(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(\App\Models\Transaction::class, 'order_transaction', 'order_id', 'transaction_id');
@@ -78,3 +83,4 @@ class Order extends Model
     }
 
 }
+

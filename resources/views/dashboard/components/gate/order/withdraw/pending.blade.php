@@ -26,7 +26,7 @@
 
     <div class="text-block">
         <p><small>Оставшееся время:</small></p>
-        <p>4:59 минут</p>
+        <p class="timeleft">@include('dashboard.components.order.timeleft')</p>
     </div>
 
     <div class="text-block">

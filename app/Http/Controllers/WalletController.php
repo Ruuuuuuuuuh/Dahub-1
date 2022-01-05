@@ -105,23 +105,16 @@ class WalletController extends Controller
 
     public function explorer(Request $request)
     {
-        $orders = Order::where('status', 'completed')->orderBy('id', 'DESC')->paginate(4);
+        $orders = Order::where('status', 'completed')->where('destination', 'TokenSale')->orderBy('id', 'DESC')->paginate(4);
         $ordersList = array();
         $i = 0;
         foreach ($orders as $order) {
             $ordersList[$i]['currency'] = $order->currency;
             $ordersList[$i]['amount'] = $order->amount;
-            $ordersList[$i]['amount'] = $order->amount;
-            $transactions = $order->transactions();
-            foreach ($transactions as $transaction) {
-                if ($transaction->payable_type == 'App\Models\System') {
-                    $ordersList[$i]['amountSource'] = $transaction->amount / 10 ** $transaction->wallet->decimal_places;
-                    $ordersList[$i]['date'] = $transaction->created_at->diffForHumans() . ', ' . $transaction->created_at->Format('H:s');
-                }
-                else {
-                    $ordersList[$i]['uuid'] = $transaction->uuid;
-                }
-            }
+            $ordersList[$i]['amount_dhb'] = $order->dhb_amount;
+            $transaction = $order->orderSystemTransaction();
+            $ordersList[$i]['date'] = $transaction->created_at->diffForHumans() . ', ' . $transaction->created_at->Format('H:s');
+            $ordersList[$i]['uuid'] = $transaction->uuid;
             $i++;
         }
         if ($request->ajax()) {

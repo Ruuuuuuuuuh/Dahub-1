@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\Rate;
+use App\Models\System as System;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Traits\HasWalletFloat;
@@ -117,7 +118,7 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
                 [
                     'name' => $currency,
                     'slug' => $currency,
-                    'decimal_places' => System::findOrFail(1)->getWallet($currency)->decimal_places
+                    'decimal_places' => System::findOrFail(1)->getWallet(str_replace('_gate', '', $currency))->decimal_places
                 ]
             );
         }
@@ -164,6 +165,7 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
     public function freezeTokens($currency, $amount)
     {
         $amount = Rate::getRates($currency) * $amount;
+        $this->getBalanceFrozen();
         $this->getWallet('iUSDT_frozen')->depositFloat($amount, array('destination' => 'Заморозка токенов'));
         $this->getWallet('iUSDT_frozen')->refreshBalance();
     }
@@ -171,6 +173,7 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
     public function unfreezeTokens($currency, $amount)
     {
         $amount = Rate::getRates($currency) * $amount;
+        $this->getBalanceFrozen();
         $this->getWallet('iUSDT_frozen')->withdrawFloat($amount, array('destination' => 'Разморозка токенов'));
         $this->getWallet('iUSDT_frozen')->refreshBalance();
     }
@@ -187,4 +190,15 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         $this->getWallet('iUSDT')->withdrawFloat($amount, array('destination' => 'Сжигание внутренних токенов'));
         $this->getWallet('iUSDT')->refreshBalance();
     }
+
+    /**
+     * Получение списка шлюзов
+     * @param $query
+     * @return mixed
+     */
+    public function scopeGetGates($query)
+    {
+        return $query->where('roles', '=', 'admin')->orWhere('roles', '=', 'gate');
+    }
+
 }

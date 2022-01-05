@@ -32,7 +32,7 @@
     <div class="text-block">
         <p><small>Статус:</small></p>
 
-        <p style="color:#347AF0">Заявка выполнена,<br /> Отправлено {{number_format($order->amount, 2, '.', ' ').' '.$order->currency}} на карту {{$order->payment}}</p>
+        <p style="color:#347AF0">Заявка выполнена.</p>
     </div>
     <div class="text-block">
         <p>Хеш транзакции:</p>

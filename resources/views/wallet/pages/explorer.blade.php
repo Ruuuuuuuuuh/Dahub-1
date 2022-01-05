@@ -101,10 +101,10 @@
                                                     {{ $transaction['date'] }}
                                                 </div>
                                                 <div class="amount-source">
-                                                    <strong>{!! $transaction['amountSource'] . '&nbsp;' . $transaction['currency'] !!}</strong>
+                                                    <strong>{!! $transaction['amount'] . '&nbsp;' . $transaction['currency'] !!}</strong>
                                                 </div>
                                                 <div class="amount">
-                                                    <strong>{{ $transaction['amount'] }}&nbsp;DHB</strong>
+                                                    <strong>{{ $transaction['amount_dhb'] }}&nbsp;DHB</strong>
                                                 </div>
                                             </div>
                                         </div>
@@ -167,10 +167,10 @@
 '                                            ' + value.date + '\n' +
 '                                        </div>\n' +
 '                                        <div class="amount-source">\n' +
-'                                            <strong>' + value.amountSource + '&nbsp;' + value.currency + '</strong>\n' +
+'                                            <strong>' + value.amount + '&nbsp;' + value.currency + '</strong>\n' +
 '                                        </div>\n' +
 '                                        <div class="amount">\n' +
-'                                            <strong>' + value.amount + '&nbsp;DHB</strong>\n' +
+'                                            <strong>' + value.dhb_amount + '&nbsp;DHB</strong>\n' +
 '                                        </div>\n' +
 '                                    </div>\n' +
 '                                </div>\n' +
@@ -217,10 +217,10 @@
 '                                            ' + value.date + '\n' +
 '                                        </div>\n' +
 '                                        <div class="amount-source">\n' +
-'                                            <strong>' + value.amountSource + '&nbsp;' + value.currency + '</strong>\n' +
+'                                            <strong>' + value.amount + '&nbsp;' + value.currency + '</strong>\n' +
 '                                        </div>\n' +
 '                                        <div class="amount">\n' +
-'                                            <strong>' + value.amount + '&nbsp;DHB</strong>\n' +
+'                                            <strong>' + value.dhb_amount + '&nbsp;DHB</strong>\n' +
 '                                        </div>\n' +
 '                                    </div>\n' +
 '                                </div>\n' +

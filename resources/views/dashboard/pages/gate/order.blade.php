@@ -1,7 +1,12 @@
 @extends('dashboard.layouts.app')
 @section('content')
     <section class="screen opened order-page" data-status="{{$order->status}}">
-        @include('dashboard.components.gate.order.'.$order->destination.'.'.$order->status)
+        @if ($order->destination == 'TokenSale')
+            @include('dashboard.components.gate.order.deposit.'.$order->status)
+        @else
+            @include('dashboard.components.gate.order.'.$order->destination.'.'.$order->status)
+        @endif
+
     </section>
 @endsection
 

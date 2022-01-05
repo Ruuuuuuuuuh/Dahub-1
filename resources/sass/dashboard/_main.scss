@@ -328,9 +328,10 @@ main#main-screen {
     .screen-rollover {
         position: absolute;
         top: -21px;
-        left: calc(50% - 22px);
+        left: 0;
         cursor:pointer;
         width:100%;
+        text-align: center;
         svg {
             border-radius: 100%;
             border: 4px solid #fff;
