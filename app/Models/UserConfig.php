@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static updateOrCreate(array $array, array $array1)
+ * @method static where(string $string, string $string1, $uid)
  */
 class UserConfig extends Model
 {

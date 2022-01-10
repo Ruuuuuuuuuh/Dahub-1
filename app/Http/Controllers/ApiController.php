@@ -19,6 +19,7 @@ use App\Notifications\OrderCreate;
 use App\Notifications\OrderDecline;
 use App\Notifications\ReferralBonusPay;
 use Bavix\Wallet\Models\Transaction;
+use http\Client\Response;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
@@ -40,8 +41,11 @@ class ApiController extends Controller
      */
     protected $headers;
 
+
+    /**
+     * Конструктор, присваиваем приватные свойства
+     */
     public function __construct() {
-        $this->user = Auth::user();
 
         $this->middleware(function ($request, $next) {
 
@@ -110,10 +114,13 @@ class ApiController extends Controller
             ]
         );
 
+        $error = false;
+
         $destination = $request->input('destination');
         $amount = $request->input('amount');
         $currency = $request->input('currency');
         $payment = $request->input('payment');
+
         if ($destination == 'TokenSale') {
             $dhb_rate = Rate::getRates('DHB');
             $dhb_amount = $request->input('dhb_amount');
@@ -123,13 +130,15 @@ class ApiController extends Controller
             $dhb_rate = '';
             $dhb_amount = '';
         }
-        $error = false;
+
         if ($destination == 'withdraw') {
             if ($this->user->getBalance($currency) < $amount) $error = 'Недостаточно средств для создания заявки';
         }
+
         if (!($request->has('amount') && $request->input('amount') != null)) {
             $error = 'Вы не ввели сумму';
         }
+
         if (!$error) {
             $address = $destination == 'deposit' ? null : $request->input('address');
 
@@ -146,9 +155,11 @@ class ApiController extends Controller
                 'dhb_amount'      => $dhb_amount
             ]);
             $order->save();
+
             $this->user->notify(new OrderCreate($order));
+
             // Добавление валюты в список валют на главном экране
-            $visibleWallets = json_decode(json_decode($this->getUserConfig('visible_wallets', $this->user))->value);
+            $visibleWallets = json_decode(json_decode($this->getUserConfig('visible_wallets'))->value);
             if (!in_array($currency, $visibleWallets)) {
                 $visibleWallets[] = $currency;
                 UserConfig::updateOrCreate(
@@ -162,6 +173,7 @@ class ApiController extends Controller
         else return response(['error'=> true, 'error-msg' => $error],404, $this->headers, JSON_UNESCAPED_UNICODE);
     }
 
+
     /**
      * Assignee self order by User
      * @return mixed
@@ -169,7 +181,6 @@ class ApiController extends Controller
     public function assigneeOrderByUser(Request $request)
     {
         $id = $request->input('id');
-        $this->user = Auth::user();
         $order = Order::where('id', $id)->where('user_uid', $this->user->uid)->first();
 
         if ($order->status != 'completed') {
@@ -200,7 +211,6 @@ class ApiController extends Controller
     public function declineOrderByUser(Request $request)
     {
         $id = $request->input('id');
-        $this->user = Auth::user();
         $order = Order::where('id', $id)->where('user_uid', $this->user->uid)->first();
         if ($order->status != 'completed') {
             if ($order->status != 'created') {
@@ -217,6 +227,11 @@ class ApiController extends Controller
 
     }
 
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return false|string
+     */
     public function getTransactions(Request $request) {
         $value = $request->input('value');
         $user = User::where('uid', $value)->first();
@@ -235,7 +250,7 @@ class ApiController extends Controller
             return json_encode($ordersList, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
         }
         else {
-            $transaction = Transaction::where('uuid', $value)->firstOrFail();
+            $transaction = \App\Models\Transaction::where('uuid', $value)->firstOrFail();
             $order = Order::where('id', $transaction->meta['order_id'])->firstOrFail();
             $orderList = array();
             $orderList[0]['currency'] = $order->currency;
@@ -248,6 +263,12 @@ class ApiController extends Controller
         }
     }
 
+
+    /**
+     * Получить платежные сети привязанные к валюте
+     * @param \Illuminate\Http\Request $request
+     * @return mixed
+     */
     public function getPayments(Request $request) {
         $currency = $request->input('currency');
         return Currency::where('title', $currency)->first()->payments()->get();
@@ -280,6 +301,7 @@ class ApiController extends Controller
         return UserConfig::where('user_uid', '=',  $this->user->uid)->where('meta', '=', $meta)->first();
     }
 
+
     /**
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -307,16 +329,24 @@ class ApiController extends Controller
         return response()->json($data);
     }
 
+
     /**
      * Возвращаем реквизиты
-     * @return mixed
+     * @return PaymentDetail
      */
-    public function getPaymentDetails()
+    public function getPaymentDetails(): PaymentDetail
     {
         return $this->user->paymentDetails()->with('payment');
     }
 
-    public function acceptOrderByGate(Request $request) {
+
+    /**
+     * Подтверждение заявки шлюзом
+     * @param Request $request
+     * @return void | integer $order->id
+     */
+    public function acceptOrderByGate(Request $request)
+    {
         if ($this->user->isGate()) {
             $order = Order::where('id', $request->input('id'))->firstOrFail();
             if ($order->status == 'created') {
@@ -335,9 +365,17 @@ class ApiController extends Controller
                 return $order->id;
             }
         }
+        else abort(404);
     }
 
-    public function acceptSendingByGate(Request $request) {
+
+    /**
+     * Подтверждение отправки шлюзом
+     * @param Request $request
+     * @return void | integer $order->id
+     */
+    public function acceptSendingByGate(Request $request)
+    {
         if ($this->user->isGate()) {
             $order = Order::where('id', $request->input('id'))->firstOrFail();
             if ($order->status == 'accepted' && $order->gate == $this->user->uid) {
@@ -350,12 +388,18 @@ class ApiController extends Controller
                 }
             }
         }
+        else abort(404);
     }
 
+
     /**
+     * Подтверждение поступления средств шлюзом
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      * @throws \Telegram\Bot\Exceptions\TelegramSDKException
      */
-    public function confirmOrderByGate(Request $request) {
+    public function confirmOrderByGate(Request $request)
+    {
         $order = Order::where('id', $request->input('id'))->firstOrFail();
         $owner = $order->user()->first();
 
@@ -406,7 +450,14 @@ class ApiController extends Controller
         }
     }
 
-    public function confirmOrderByUser(Request $request) {
+
+    /**
+     * Подтверждение заявки пользователем
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|void
+     */
+    public function confirmOrderByUser(Request $request)
+    {
         $order = Order::where('id', $request->input('id'))->firstOrFail();
         $gate = User::where('uid', $order->gate)->first();
 
@@ -423,14 +474,18 @@ class ApiController extends Controller
             else response(['error'=>true, 'error-msg' => 'Недостаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
         else {
-
             return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
     }
 
+
+    /**
+     * Метод отмены заявки шлюзом, пока не используется
+     * @param \Illuminate\Http\Request $request
+     * @return bool|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function declineOrderByGate(Request $request)
     {
-
         $id = $request->input('id');
         if ($this->user->isGate()) {
             $order = Order::where('id', $id)->where('gate', $this->user->uid)->first();
@@ -445,7 +500,14 @@ class ApiController extends Controller
 
     }
 
-    public function getOrdersByFilter(Request $request) {
+
+    /**
+     * Фильтрация пользовательских заявок
+     * @param \Illuminate\Http\Request $request
+     * @return mixed \App\Models\Order
+     */
+    public function getOrdersByFilter(Request $request)
+    {
         $filter = $request->input('filter');
         switch ($filter) {
             case'deposit':
@@ -460,6 +522,12 @@ class ApiController extends Controller
         }
     }
 
+
+    /**
+     * Перевод средств между пользователями
+     * @param \Illuminate\Http\Request $request
+     * @return bool|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     */
     public function transfer(Request $request) {
 
         $amount = $request->input('amount');
@@ -472,12 +540,11 @@ class ApiController extends Controller
                 $this->user->getWallet($currency)->transferFloat($receiver->getWallet($currency), $amount, array('destination' => 'Transfer from user'));
                 $this->user->getWallet($currency)->refreshBalance();
                 $receiver->getWallet($currency)->refreshBalance();
-                return true;
             }
             else {
                 $this->user->getWallet($currency)->transferFloat(System::findOrFail(1)->getWallet('DHBFundWallet'), $amount, array('destination' => 'Transfer from user'));
-                return true;
             }
+            return true;
         }
         else return response(['error' => true, 'error-msg' => 'Не достаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
     }

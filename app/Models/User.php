@@ -16,9 +16,12 @@ use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Traits\CanConfirm;
 use Questocat\Referral\Traits\UserReferral;
 
+
+
 /**
  * @property mixed $roles
  * @method static findOrFail($id)
+ * @method static where(string $string, string $string1)
  */
 
 class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
