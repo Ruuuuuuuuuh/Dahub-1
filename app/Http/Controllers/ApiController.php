@@ -28,15 +28,30 @@ use Telegram\Bot\Api;
 class ApiController extends Controller
 {
     /**
-     * @var
+     *
+     * Экземпляр класса авторизованного пользователь
+     * @var Auth::user()
      */
     protected $user;
+
+    /**
+     * Заголовки запроса
+     * @var array
+     */
+    protected $headers;
 
     public function __construct() {
         $this->user = Auth::user();
 
         $this->middleware(function ($request, $next) {
+
             $this->user = Auth::user();
+
+            $this->headers = array (
+                'Content-Type' => 'application/json; charset=UTF-8',
+                'charset' => 'utf-8'
+            );
+
             return $next($request);
         });
     }
@@ -49,12 +64,6 @@ class ApiController extends Controller
      */
     public function createOrder(Request $request)
     {
-
-        $headers = array (
-            'Content-Type' => 'application/json; charset=UTF-8',
-            'charset' => 'utf-8'
-        );
-
         if ($request->input('amount') >= 2000 && $request->input('amount') <= 333333)
             if (!empty($this->user->orders()->notCompleted()->get())) {
                 $order = Order::create([
@@ -75,10 +84,10 @@ class ApiController extends Controller
                 return response($order->id, 200);
             }
             else {
-                return response(['error'=> true, 'error-msg' => 'У вас уже есть активная заявка'],404, $headers, JSON_UNESCAPED_UNICODE);
+                return response(['error'=> true, 'error-msg' => 'У вас уже есть активная заявка'],404, $this->headers, JSON_UNESCAPED_UNICODE);
             }
         else {
-            return response(['error'=> true, 'error-msg' => 'Не достаточно токенов для получения'],404, $headers, JSON_UNESCAPED_UNICODE);
+            return response(['error'=> true, 'error-msg' => 'Не достаточно токенов для получения'],404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
 
     }
@@ -100,10 +109,7 @@ class ApiController extends Controller
                 'amount.numeric' => 'Введите корректную сумму',
             ]
         );
-        $headers = array (
-            'Content-Type' => 'application/json; charset=UTF-8',
-            'charset' => 'utf-8'
-        );
+
         $destination = $request->input('destination');
         $amount = $request->input('amount');
         $currency = $request->input('currency');
@@ -151,9 +157,9 @@ class ApiController extends Controller
                 );
             }
 
-            return response($order->id, 200, $headers);
+            return response($order->id, 200, $this->headers);
         }
-        else return response(['error'=> true, 'error-msg' => $error],404, $headers, JSON_UNESCAPED_UNICODE);
+        else return response(['error'=> true, 'error-msg' => $error],404, $this->headers, JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -165,10 +171,7 @@ class ApiController extends Controller
         $id = $request->input('id');
         $this->user = Auth::user();
         $order = Order::where('id', $id)->where('user_uid', $this->user->uid)->first();
-        $headers = array (
-            'Content-Type' => 'application/json; charset=UTF-8',
-            'charset' => 'utf-8'
-        );
+
         if ($order->status != 'completed') {
             if (config('notifications')) $this->user->notify(new OrderAssignee($order));
             $order->status = 'assignee';
@@ -182,7 +185,7 @@ class ApiController extends Controller
                     'error-msg' => 'Вы пытаетесь подтвердить завершенную заявку'
                 ],
                 404,
-                $headers,
+                $this->headers,
                 JSON_UNESCAPED_UNICODE
             );
         }
@@ -206,7 +209,6 @@ class ApiController extends Controller
             }
             // Send message via telegram
             if (config('notifications')) $this->user->notify(new OrderDecline($order));
-
 
             $order->forceDelete();
             return $order->id;
@@ -356,10 +358,7 @@ class ApiController extends Controller
     public function confirmOrderByGate(Request $request) {
         $order = Order::where('id', $request->input('id'))->firstOrFail();
         $owner = $order->user()->first();
-        $headers = array (
-            'Content-Type' => 'application/json; charset=UTF-8',
-            'charset' => 'utf-8'
-        );
+
         if ($order->gate == $this->user->uid) {
             if (($this->user->getBalanceFree($order->currency) > $order->amount)) {
                 if ($order->destination == 'deposit') {
@@ -400,20 +399,17 @@ class ApiController extends Controller
                 $owner->notify(new ConfirmOrder($order));
                 return $order->id;
             }
-            else return response(['error' => true, 'error-msg' => 'Недостаточно баланса'], 404, $headers, JSON_UNESCAPED_UNICODE);
+            else return response(['error' => true, 'error-msg' => 'Недостаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
         else {
-            return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $headers, JSON_UNESCAPED_UNICODE);
+            return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
     }
 
     public function confirmOrderByUser(Request $request) {
         $order = Order::where('id', $request->input('id'))->firstOrFail();
         $gate = User::where('uid', $order->gate)->first();
-        $headers = array (
-            'Content-Type' => 'application/json; charset=UTF-8',
-            'charset' => 'utf-8'
-        );
+
         if ($order->user_uid == $this->user->uid) {
             if (($gate->getBalanceFree($order->currency) > $order->amount) || $gate->isAdmin()) {
                 $transaction = $this->user->getWallet($order->currency)->withdrawFloat($order->amount, array('destination' => 'withdraw from wallet'));
@@ -424,20 +420,17 @@ class ApiController extends Controller
                 $order->save();
                 return $order->id;
             }
-            else response(['error'=>true, 'error-msg' => 'Недостаточно баланса'], 404, $headers, JSON_UNESCAPED_UNICODE);
+            else response(['error'=>true, 'error-msg' => 'Недостаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
         else {
 
-            return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $headers, JSON_UNESCAPED_UNICODE);
+            return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
     }
 
     public function declineOrderByGate(Request $request)
     {
-        $headers = array (
-            'Content-Type' => 'application/json; charset=UTF-8',
-            'charset' => 'utf-8'
-        );
+
         $id = $request->input('id');
         if ($this->user->isGate()) {
             $order = Order::where('id', $id)->where('gate', $this->user->uid)->first();
@@ -448,7 +441,7 @@ class ApiController extends Controller
             $order->forceDelete();
             return true;
         }
-        else return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $headers, JSON_UNESCAPED_UNICODE);
+        else return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
 
     }
 
@@ -468,10 +461,6 @@ class ApiController extends Controller
     }
 
     public function transfer(Request $request) {
-        $headers = array (
-            'Content-Type' => 'application/json; charset=UTF-8',
-            'charset' => 'utf-8'
-        );
 
         $amount = $request->input('amount');
         $currency = $request->input('currency');
@@ -490,6 +479,6 @@ class ApiController extends Controller
                 return true;
             }
         }
-        else return response(['error' => true, 'error-msg' => 'Не достаточно баланса'], 404, $headers, JSON_UNESCAPED_UNICODE);
+        else return response(['error' => true, 'error-msg' => 'Не достаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
     }
 }
