@@ -27,23 +27,19 @@ use Telegram\Bot\Api;
 
 class ApiController extends Controller
 {
-
     /**
-     * Deposit to users Wallet
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @var
      */
-    public function depositFloat(Request $request)
-    {
-        $uid = $request->input('uid');
-        $amount = $request->input('amount');
-        $user = User::where('uid', $uid)->first();
-        $user->getWallet('DHB')->depositFloat($amount);
-        $user->getWallet('DHB')->refreshBalance();
-        return $user->getWallet('DHB')->balanceFloat;
-    }
+    protected $user;
 
+    public function __construct() {
+        $this->user = Auth::user();
+
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::user();
+            return $next($request);
+        });
+    }
 
     /**
      * Create Order from users
@@ -53,8 +49,6 @@ class ApiController extends Controller
      */
     public function createOrder(Request $request)
     {
-        $user = $user = Auth::user();;
-        $system = System::find(1);
 
         $headers = array (
             'Content-Type' => 'application/json; charset=UTF-8',
@@ -62,7 +56,7 @@ class ApiController extends Controller
         );
 
         if ($request->input('amount') >= 2000 && $request->input('amount') <= 333333)
-            if (!empty($user->orders()->notCompleted()->get())) {
+            if (!empty($this->user->orders()->notCompleted()->get())) {
                 $order = Order::create([
                     'user_uid'       => $request->input('user_uid'),
                     'destination'    => $request->input('destination'),
@@ -74,10 +68,10 @@ class ApiController extends Controller
                 $order->save();
                 $admins = User::where('roles', 'admin')->get();
                 foreach ($admins as $admin) {
-                    $message = 'Новая заявка ' . $order->id . ' на покупку ' . $order->amount . ' DHB. [Написать пользователю](tg://user?id='.$user->uid.')';
+                    $message = 'Новая заявка ' . $order->id . ' на покупку ' . $order->amount . ' DHB. [Написать пользователю](tg://user?id='.$this->user->uid.')';
                     if (config('notifications')) $admin->notify(new AdminNotifications($message));
                 }
-                if (config('notifications')) $user->notify(new OrderCreate($order));
+                if (config('notifications')) $this->user->notify(new OrderCreate($order));
                 return response($order->id, 200);
             }
             else {
@@ -106,8 +100,6 @@ class ApiController extends Controller
                 'amount.numeric' => 'Введите корректную сумму',
             ]
         );
-
-        $user = Auth::user();
         $headers = array (
             'Content-Type' => 'application/json; charset=UTF-8',
             'charset' => 'utf-8'
@@ -127,7 +119,7 @@ class ApiController extends Controller
         }
         $error = false;
         if ($destination == 'withdraw') {
-            if ($user->getBalance($currency) < $amount) $error = 'Недостаточно средств для создания заявки';
+            if ($this->user->getBalance($currency) < $amount) $error = 'Недостаточно средств для создания заявки';
         }
         if (!($request->has('amount') && $request->input('amount') != null)) {
             $error = 'Вы не ввели сумму';
@@ -136,7 +128,7 @@ class ApiController extends Controller
             $address = $destination == 'deposit' ? null : $request->input('address');
 
             $order = Order::create([
-                'user_uid'        => $user->uid,
+                'user_uid'        => $this->user->uid,
                 'destination'     => $destination,
                 'payment'         => $payment,
                 'currency'        => $currency,
@@ -148,13 +140,13 @@ class ApiController extends Controller
                 'dhb_amount'      => $dhb_amount
             ]);
             $order->save();
-            $user->notify(new OrderCreate($order));
+            $this->user->notify(new OrderCreate($order));
             // Добавление валюты в список валют на главном экране
-            $visibleWallets = json_decode(json_decode($this->getUserConfig('visible_wallets', $user))->value);
+            $visibleWallets = json_decode(json_decode($this->getUserConfig('visible_wallets', $this->user))->value);
             if (!in_array($currency, $visibleWallets)) {
                 $visibleWallets[] = $currency;
                 UserConfig::updateOrCreate(
-                    ['user_uid' => $user->uid, 'meta' => 'visible_wallets'],
+                    ['user_uid' => $this->user->uid, 'meta' => 'visible_wallets'],
                     ['value' => $visibleWallets]
                 );
             }
@@ -171,14 +163,14 @@ class ApiController extends Controller
     public function assigneeOrderByUser(Request $request)
     {
         $id = $request->input('id');
-        $user = Auth::user();
-        $order = Order::where('id', $id)->where('user_uid', $user->uid)->first();
+        $this->user = Auth::user();
+        $order = Order::where('id', $id)->where('user_uid', $this->user->uid)->first();
         $headers = array (
             'Content-Type' => 'application/json; charset=UTF-8',
             'charset' => 'utf-8'
         );
         if ($order->status != 'completed') {
-            if (config('notifications')) $user->notify(new OrderAssignee($order));
+            if (config('notifications')) $this->user->notify(new OrderAssignee($order));
             $order->status = 'assignee';
             $order->save();
             return $order->id;
@@ -205,15 +197,15 @@ class ApiController extends Controller
     public function declineOrderByUser(Request $request)
     {
         $id = $request->input('id');
-        $user = Auth::user();
-        $order = Order::where('id', $id)->where('user_uid', $user->uid)->first();
+        $this->user = Auth::user();
+        $order = Order::where('id', $id)->where('user_uid', $this->user->uid)->first();
         if ($order->status != 'completed') {
             if ($order->status != 'created') {
                 $gate = User::where('uid', $order->gate)->first();
                 $gate->unfreezeTokens($order->currency, $order->amount);
             }
             // Send message via telegram
-            if (config('notifications')) $user->notify(new OrderDecline($order));
+            if (config('notifications')) $this->user->notify(new OrderDecline($order));
 
 
             $order->forceDelete();
@@ -268,9 +260,8 @@ class ApiController extends Controller
     {
         $meta  = $request->input('meta');
         $value = $request->input('value');
-        $user = Auth::user();
         UserConfig::updateOrCreate(
-            ['user_uid' => $user->uid, 'meta' => $meta],
+            ['user_uid' => $this->user->uid, 'meta' => $meta],
             ['value' => $value]
         );
         return true;
@@ -279,29 +270,33 @@ class ApiController extends Controller
 
     /**
      * Получение юзер конфига
-     * @param Request $request
-     * @return bool
+     * @param $meta
+     * @return string
      */
-    public function getUserConfig($meta, User $user): string
+    public function getUserConfig($meta): string
     {
-        return UserConfig::where('user_uid', '=',  $user->uid)->where('meta', '=', $meta)->first();
+        return UserConfig::where('user_uid', '=',  $this->user->uid)->where('meta', '=', $meta)->first();
     }
 
-    public function addPaymentDetails(Request $request) {
-        $user = Auth::user();
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addPaymentDetails(Request $request): \Illuminate\Http\JsonResponse
+    {
         $payment = $request->input('payment');
         $holder = Payment::where('title', $payment)->firstOrFail()->currencies()->firstOrFail()->crypto ? $request->input('holder_name') : null;
         $address = $request->input('address');
         $payment_details = PaymentDetail::create(
             [
-                'user_uid' => $user->uid,
+                'user_uid' => $this->user->uid,
                 'payment_id' => Payment::where('title', $payment)->firstOrFail()->id,
                 'address' => $address,
                 'holder' => $holder,
             ],
         );
         $data[]       = [
-            'user_uid' => $user->uid,
+            'user_uid' => $this->user->uid,
             'payment' => $payment,
             'address' => $address,
             'holder' => $holder,
@@ -310,20 +305,23 @@ class ApiController extends Controller
         return response()->json($data);
     }
 
-    public function getPaymentDetails() {
-        $user = Auth::user();
-        return $user->paymentDetails()->with('payment');
+    /**
+     * Возвращаем реквизиты
+     * @return mixed
+     */
+    public function getPaymentDetails()
+    {
+        return $this->user->paymentDetails()->with('payment');
     }
 
     public function acceptOrderByGate(Request $request) {
-        $user = Auth::user();
-        if ($user->isGate()) {
+        if ($this->user->isGate()) {
             $order = Order::where('id', $request->input('id'))->firstOrFail();
             if ($order->status == 'created') {
-                $order->gate = $user->uid;
+                $order->gate = $this->user->uid;
                 $owner = User::where('uid', $order->user_uid)->first();
                 if ($order->destination == 'deposit' || $order->destination == 'TokenSale') {
-                    $user->freezeTokens($order->currency, $order->amount);
+                    $this->user->freezeTokens($order->currency, $order->amount);
                     $order->payment_details = $request->input('payment_details');
                     $owner->notify(new AcceptDepositOrder($order));
                 }
@@ -338,10 +336,9 @@ class ApiController extends Controller
     }
 
     public function acceptSendingByGate(Request $request) {
-        $user = Auth::user();
-        if ($user->isGate()) {
+        if ($this->user->isGate()) {
             $order = Order::where('id', $request->input('id'))->firstOrFail();
-            if ($order->status == 'accepted' && $order->gate == $user->uid) {
+            if ($order->status == 'accepted' && $order->gate == $this->user->uid) {
                 $owner = User::where('uid', $order->user_uid)->first();
                 if ($order->destination == 'withdraw') {
                     $order->status = 'pending';
@@ -357,15 +354,14 @@ class ApiController extends Controller
      * @throws \Telegram\Bot\Exceptions\TelegramSDKException
      */
     public function confirmOrderByGate(Request $request) {
-        $user = Auth::user();
         $order = Order::where('id', $request->input('id'))->firstOrFail();
         $owner = $order->user()->first();
         $headers = array (
             'Content-Type' => 'application/json; charset=UTF-8',
             'charset' => 'utf-8'
         );
-        if ($order->gate == $user->uid) {
-            if (($user->getBalanceFree($order->currency) > $order->amount)) {
+        if ($order->gate == $this->user->uid) {
+            if (($this->user->getBalanceFree($order->currency) > $order->amount)) {
                 if ($order->destination == 'deposit') {
                     $transaction = $owner->getWallet($order->currency)->depositFloat($order->amount, array('destination' => 'deposit to wallet'));
                     $owner->getWallet($order->currency)->refreshBalance();
@@ -412,17 +408,16 @@ class ApiController extends Controller
     }
 
     public function confirmOrderByUser(Request $request) {
-        $user = Auth::user();
         $order = Order::where('id', $request->input('id'))->firstOrFail();
         $gate = User::where('uid', $order->gate)->first();
         $headers = array (
             'Content-Type' => 'application/json; charset=UTF-8',
             'charset' => 'utf-8'
         );
-        if ($order->user_uid == $user->uid) {
+        if ($order->user_uid == $this->user->uid) {
             if (($gate->getBalanceFree($order->currency) > $order->amount) || $gate->isAdmin()) {
-                $transaction = $user->getWallet($order->currency)->withdrawFloat($order->amount, array('destination' => 'withdraw from wallet'));
-                $user->getWallet($order->currency)->refreshBalance();
+                $transaction = $this->user->getWallet($order->currency)->withdrawFloat($order->amount, array('destination' => 'withdraw from wallet'));
+                $this->user->getWallet($order->currency)->refreshBalance();
                 $gate->unfreezeTokens($order->currency, $order->amount);
                 $order->status = 'completed';
                 $order->transaction()->attach($transaction->id);
@@ -444,9 +439,8 @@ class ApiController extends Controller
             'charset' => 'utf-8'
         );
         $id = $request->input('id');
-        $user = Auth::user();
-        if ($user->isGate()) {
-            $order = Order::where('id', $id)->where('gate', $user->uid)->first();
+        if ($this->user->isGate()) {
+            $order = Order::where('id', $id)->where('gate', $this->user->uid)->first();
             $owner = User::where('uid', $order->user_uid)->first();
 
             // Send message via telegram
@@ -460,16 +454,15 @@ class ApiController extends Controller
 
     public function getOrdersByFilter(Request $request) {
         $filter = $request->input('filter');
-        $user = Auth::user();
         switch ($filter) {
             case'deposit':
-                return $user->orders()->OrdersDeposit()->limit(10)->get();
+                return $this->user->orders()->OrdersDeposit()->limit(10)->get();
                 break;
             case'withdraw':
-                return $user->orders()->OrdersWithdraw()->limit(10)->get();
+                return $this->user->orders()->OrdersWithdraw()->limit(10)->get();
                 break;
             case'all':
-                return $user->orders()->UserOrders()->limit(10)->get();
+                return $this->user->orders()->UserOrders()->limit(10)->get();
                 break;
         }
     }
@@ -484,17 +477,16 @@ class ApiController extends Controller
         $currency = $request->input('currency');
         $username = $request->input('username');
 
-        $user = Auth::user();
-        if ($user->getBalanceFree($currency) >= $amount) {
+        if ($this->user->getBalanceFree($currency) >= $amount) {
             if ($username != 'DHBFundWallet') {
                 $receiver = User::where('uid', $username)->firstOrFail();
-                $user->getWallet($currency)->transferFloat($receiver->getWallet($currency), $amount, array('destination' => 'Transfer from user'));
-                $user->getWallet($currency)->refreshBalance();
+                $this->user->getWallet($currency)->transferFloat($receiver->getWallet($currency), $amount, array('destination' => 'Transfer from user'));
+                $this->user->getWallet($currency)->refreshBalance();
                 $receiver->getWallet($currency)->refreshBalance();
                 return true;
             }
             else {
-                $user->getWallet($currency)->transferFloat(System::findOrFail(1)->getWallet('DHBFundWallet'), $amount, array('destination' => 'Transfer from user'));
+                $this->user->getWallet($currency)->transferFloat(System::findOrFail(1)->getWallet('DHBFundWallet'), $amount, array('destination' => 'Transfer from user'));
                 return true;
             }
         }

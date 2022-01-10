@@ -540,3 +540,13 @@ strong {
     box-shadow:none!important;
 }
 .currency-select select option { background: #4D5B9D ; }
+.text-gradient {
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+    &.success {
+        background: linear-gradient(
+                112.27deg, #85F362 -27.42%, #02AAFF 90.87%);
+        background: -moz-linear-gradient(112.27deg, #85F362 -27.42%, #02AAFF 90.87%);
+    }
+}

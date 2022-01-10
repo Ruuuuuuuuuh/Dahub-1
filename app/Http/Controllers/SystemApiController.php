@@ -337,9 +337,11 @@ class SystemApiController extends Controller
             $crypto = $request->input('crypto');
         }
         else $crypto = false;
+        $decimal_places = $request->input('decimal_places');
         Currency::firstOrCreate([
             'title' => $title,
-            'crypto' => $crypto
+            'crypto' => $crypto,
+            'decimal_places' => $decimal_places
         ]);
         $system = System::findOrFail(1);
         if (!$system->getWallet($title)) {

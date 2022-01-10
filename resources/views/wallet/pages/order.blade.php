@@ -12,15 +12,21 @@
                     <div class="card-header">
                         <div class="d-flex align-items-center justify-content-between">
                             <p class="inline-block mb-0">Заявка #{{$order->id}}</p>
+                            @if ($order->status != 'completed')
                             <div class="d-flex justify-content-end">
                                 <a class="btn btn-primary" href="/wallet/" >Вернуться назад</a>
                             </div>
+                            @endif
                         </div>
                     </div>
                     <div class="card-body">
-                        <h2>Получение {{$order->dhb_amount}} DHB <span class="deposit-status">@if ($order->status == 'created') Шаг 2 из 3. В ожидании подтверждения шлюза @elseif ($order->status == 'accepted') Шаг 3 из 3. Ожидание отправки средств  @elseif ($order->status == 'created')Выполнена@endif</span></h2>
+                        @if ($order->status != 'completed')
+                        <h2>Получение {{$order->dhb_amount}} DHB <span class="deposit-status">@if ($order->status == 'created') Шаг 2 из 3. В ожидании подтверждения шлюза @elseif ($order->status == 'accepted') Шаг 3 из 3. Ожидание отправки средств @endif</span></h2>
+                        @else
+                        <h2>Заявка выполнена</h2>
+                        @endif
                         @if ($order->status == 'created')
-                        <p>Ожидайте, как только мы подберем для вас платежный шлюз, вы получите уведомление в Telegram и дальнейшие инструкции с реквизитами оплаты. </p>
+                        <p class="mt-4">Ожидайте, как только мы подберем для вас платежный шлюз, вы получите уведомление в Telegram и дальнейшие инструкции с реквизитами оплаты. </p>
                         <a onclick="decline('{{$order->id}}');" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
                         @elseif ($order->status == 'accepted')
                             <div class="created-block form-inline">
@@ -59,25 +65,15 @@
                                 <a onclick="decline();" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
                             </div>
                         @elseif ($order->status == 'completed')
-                            <div class="text-block">
-                                <p><small>Статус:</small></p>
+                            <div class="mt-4 mb-3">
+                                <p>
+                                    <strong>Отправлено:</strong> {{number_format($order->amount, Auth::user()->getWallet($order->currency)->decimal_places, '.', ' ').' '.$order->currency}} в сети {{$order->payment}} <br />
+                                    <strong>Получено:</strong> {{number_format($order->dhb_amount, 2, '.', ' ').' DHB'}} <br />
+                                    <strong>На адрес: </strong>{{$order->payment_details}}<br />
+                                    <strong>Хеш транзакции:</strong> {{ $order->orderSystemTransaction()->uuid}}<br />
+                                </p>
 
-                                <p>Заявка выполнена,<br /> Отправлено {{number_format($order->amount, Auth::user()->getWallet($order->currency)->decimal_places, '.', ' ').' '.$order->currency}} в сети {{$order->payment}} <br />по адресу{{$order->payment_details}}</p>
-                            </div>
-                            <div class="text-block">
-                                <p>Хеш транзакции:</p>
-                                <a class="copy-link" data-toggle="popover" data-placement="bottom" data-content="Хеш скопирован в буфер обмена." data-original-title="" title="">
-                                    <span>{{ $order->orderSystemTransaction()->uuid}}</span>
-                                    <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M4.375 14C4.9 14 5.25 13.65 5.25 13.125C5.25 12.6 4.9 12.25 4.375 12.25H3.5C2.975 12.25 2.625 11.9 2.625 11.375V3.5C2.625 2.975 2.975 2.625 3.5 2.625H11.375C11.9 2.625 12.25 2.975 12.25 3.5V4.375C12.25 4.9 12.6 5.25 13.125 5.25C13.65 5.25 14 4.9 14 4.375V3.5C14 2.0125 12.8625 0.875 11.375 0.875H3.5C2.0125 0.875 0.875 2.0125 0.875 3.5V11.375C0.875 12.8625 2.0125 14 3.5 14H4.375ZM17.5 7H9.625C8.1375 7 7 8.1375 7 9.625V17.5C7 18.9875 8.1375 20.125 9.625 20.125H17.5C18.9875 20.125 20.125 18.9875 20.125 17.5V9.625C20.125 8.1375 18.9875 7 17.5 7ZM18.375 17.5C18.375 18.025 18.025 18.375 17.5 18.375H9.625C9.1 18.375 8.75 18.025 8.75 17.5V9.625C8.75 9.1 9.1 8.75 9.625 8.75H17.5C18.025 8.75 18.375 9.1 18.375 9.625V17.5Z" fill="black"/>
-                                        <mask id="mask0_525:2851" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="21" height="21">
-                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.375 14C4.9 14 5.25 13.65 5.25 13.125C5.25 12.6 4.9 12.25 4.375 12.25H3.5C2.975 12.25 2.625 11.9 2.625 11.375V3.5C2.625 2.975 2.975 2.625 3.5 2.625H11.375C11.9 2.625 12.25 2.975 12.25 3.5V4.375C12.25 4.9 12.6 5.25 13.125 5.25C13.65 5.25 14 4.9 14 4.375V3.5C14 2.0125 12.8625 0.875 11.375 0.875H3.5C2.0125 0.875 0.875 2.0125 0.875 3.5V11.375C0.875 12.8625 2.0125 14 3.5 14H4.375ZM17.5 7H9.625C8.1375 7 7 8.1375 7 9.625V17.5C7 18.9875 8.1375 20.125 9.625 20.125H17.5C18.9875 20.125 20.125 18.9875 20.125 17.5V9.625C20.125 8.1375 18.9875 7 17.5 7ZM18.375 17.5C18.375 18.025 18.025 18.375 17.5 18.375H9.625C9.1 18.375 8.75 18.025 8.75 17.5V9.625C8.75 9.1 9.1 8.75 9.625 8.75H17.5C18.025 8.75 18.375 9.1 18.375 9.625V17.5Z" fill="white"/>
-                                        </mask>
-                                        <g mask="url(#mask0_525:2851)">
-                                            <rect width="21" height="21" fill="#0D1F3C"/>
-                                        </g>
-                                    </svg>
-                                </a>
+                                <a href="/wallet" style="margin-top:40px;" class="button button-orange">Вернуться на главную</a>
                             </div>
                         @endif
                     </div>
