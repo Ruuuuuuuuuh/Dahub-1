@@ -175,8 +175,9 @@ class ApiController extends Controller
 
 
     /**
-     * Assignee self order by User
-     * @return mixed
+     * Подтверждение заявки пользователем, возможно устарела, протестировать и удалить
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function assigneeOrderByUser(Request $request)
     {

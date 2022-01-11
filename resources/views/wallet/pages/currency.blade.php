@@ -31,12 +31,19 @@
                         <h2 style="margin-bottom: 30px;">Редактирование валюты</h2>
                         <form action="{{url()->current()}}" method="POST">
                             <div class="form-group">
+                                <label for="title">Название</label>
                                 <input class="form-control" name="title" value="{{$currency->title}}">
                             </div>
                             <div class="form-group">
+                                <label for="subtitle">Описание</label>
                                 <input class="form-control" name="subtitle" value="{{$currency->subtitle}}">
                             </div>
                             <div class="form-group">
+                                <label for="decimal_places">Количество знаков после нуля</label>
+                                <input class="form-control" name="decimal_places" value="{{$currency->decimal_places}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="icon">Иконка (svg)</label>
                                 <textarea class="form-control" id="icon-textarea" name="icon" rows="3">
                                     {{$currency->icon}}
                                 </textarea>
@@ -109,10 +116,11 @@
                     "_token": "{{ csrf_token() }}",
                     "title": $('input[name="title"]').val(),
                     "subtitle": $('input[name="subtitle"]').val(),
+                    "decimal_places": $('input[name="decimal_places"]').val(),
                     "icon": $('textarea[name="icon"]').val(),
                 })
                     .done(function( data ) {
-                        alert('Иконка сохранена')
+                        alert('Изменения сохранены')
                         window.location.href = '{{Request::url()}}';
                     });
             })

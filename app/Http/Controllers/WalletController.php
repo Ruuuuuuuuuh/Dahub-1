@@ -138,6 +138,7 @@ class WalletController extends Controller
         $currency->title = $request->input('title');
         $currency->subtitle = $request->input('subtitle');
         $currency->icon = $request->input('icon');
+        $currency->decimal_places = $request->input('decimal_places');
         $currency->save();
         return true;
     }

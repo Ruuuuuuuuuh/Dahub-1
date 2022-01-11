@@ -52,11 +52,13 @@
                 e.preventDefault();
                 let title = prompt("Введите название валюты / токена");
                 let crypto = prompt("Это криптовалюта? 1 – да, 0 – нет");
+                let decimal_places = prompt("Число знаков после нуля");
                 if (title != null) {
                     $.post( "/api/add_currency", {
                         "_token": "{{ csrf_token() }}",
                         "title": title,
                         "crypto": crypto,
+                        "decimal_places": decimal_places,
                     })
                     .done(function( data ) {
                         alert('Валюта успешно добавлена')

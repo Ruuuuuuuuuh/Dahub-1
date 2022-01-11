@@ -60,30 +60,8 @@ class SystemApiController extends Controller
     public function startTokenSale()
     {
         $system = System::findOrFail(1);
-        //$system->getWallet('DHBFundWallet')->depositFloat('12196300');
         $system->getWallet('DHBFundWallet')->refreshBalance();
         $system->getWallet('DHBFundWallet')->transferFloat( $system->getWallet('TokenSale'), 2000000, array('destination' => 'StartTokenSale'));
-        /*$system->createWallet(
-            [
-                'name' => 'USDT',
-                'slug' => 'USDT',
-            ]
-        );
-        $system->createWallet(
-            [
-                'name' => 'BTC',
-                'slug' => 'BTC',
-                'decimal_places' => '8'
-            ]
-        );
-        $system->createWallet(
-            [
-                'name' => 'ETH',
-                'slug' => 'ETH',
-                'decimal_places' => '6'
-            ]
-        );
-        $system->save();*/
         return true;
     }
 
@@ -337,7 +315,12 @@ class SystemApiController extends Controller
             $crypto = $request->input('crypto');
         }
         else $crypto = false;
-        $decimal_places = $request->input('decimal_places');
+
+        if ($request->has('decimal_places')) {
+            $decimal_places = $request->input('decimal_places');
+        }
+        else $decimal_places = 0;
+
         Currency::firstOrCreate([
             'title' => $title,
             'crypto' => $crypto,

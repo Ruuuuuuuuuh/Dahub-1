@@ -90,6 +90,6 @@ Route::post('/api/getOrdersByFilter', [App\Http\Controllers\ApiController::class
 
 // Telegram Web Api
 Route::post(\Telegram::getAccessToken().'/webhook', function () {
-    $update = Telegram::commandsHandler(true);
+    Telegram::commandsHandler(true);
     return 'ok';
 });
