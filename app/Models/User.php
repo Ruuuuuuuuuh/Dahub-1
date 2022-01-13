@@ -121,7 +121,7 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
                 [
                     'name' => $currency,
                     'slug' => $currency,
-                    'decimal_places' => System::findOrFail(1)->getWallet(str_replace('_gate', '', $currency))->decimal_places
+                    'decimal_places' => Currency::where('title', $currency)->findOrfFail()->decimal_places
                 ]
             );
         }
