@@ -82,6 +82,12 @@
 
     <script>
         window.user = {!! Auth::User()->toJson(JSON_PRETTY_PRINT) !!}
+        window.currencies = {};
+            @foreach (\App\Models\Currency::all() as $currency)
+            window.currencies.{{$currency->title}} = {}
+            window.currencies.{{$currency->title}}.decimalPlaces = {{$currency->decimal_places}}
+            @endforeach
+
 
         $('[data-toggle="popover"]').popover()
         $('.copy-link, .copy-link *').click(function(e){
@@ -143,11 +149,11 @@
             }
             if ($(e.target).is(total)) {
                 let amountTotal = rate[currency.val()] * total.val() / rate['DHB']
-                amount.val( + amountTotal.toFixed(5))
+                amount.val( + amountTotal.toFixed(window.currencies[currency.val()]['decimalPlaces']))
             }
             else {
                 let amountTotal = rate['DHB'] * amount.val() / rate[currency.val()]
-                total.val( + amountTotal.toFixed(5))
+                total.val( + amountTotal.toFixed(window.currencies[currency.val()]['decimalPlaces']))
             }
             subtotal = parseFloat(balance) + parseFloat(amount.val())
             $('.subtotal-amount span').html( new Intl.NumberFormat('ru-RU').format(subtotal) + ',00' )

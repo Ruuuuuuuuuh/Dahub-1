@@ -365,23 +365,5 @@ class SystemApiController extends Controller
         return 'success';
     }
 
-    public function payReferral(User $user, $currency, $amount) {
-        $curAmount = 0;
-
-        $tax = 9; // Процент на первом уровне
-        $refAmount = 0;
-        $curAmount = 0;
-        while ($user->referred_by && $tax > 0) {
-            $user = User::where('affiliate_id', $user->referred_by)->first();
-            $refAmount = ($amount * $tax ) / 100;
-            $user->getWallet($currency)->depositFloat($refAmount, array('destination' => 'referral'));
-            $user->getWallet($currency)->refreshBalance();
-            if (config('notifications')) $user->notify(new ReferralBonusPay(array('amount' => $refAmount, 'currency' => $currency)));
-            $curAmount = $amount - $refAmount;
-            $tax = $tax - 3;
-        }
-        return $curAmount;
-    }
-
 }
 

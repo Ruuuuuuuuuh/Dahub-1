@@ -417,8 +417,11 @@ class ApiController extends Controller
                     $transaction = $systemWallet->getWallet('TokenSale')->transferFloat( $owner->getWallet('DHB'), $order->dhb_amount, array('destination' => 'TokenSale', 'order_id' => $order->id));
                     $owner->getWallet('DHB')->refreshBalance();
 
+                    // pay Referral
+                    $curAmount = $this->payReferral($owner, $order->currency, $order->amount);
+
                     // deposit to system wallet
-                    $systemWallet->getWallet($order->currency)->depositFloat($order->amount,  array('destination' => 'TokenSale', 'order_id' => $order->id));
+                    $systemWallet->getWallet($order->currency)->depositFloat($curAmount,  array('destination' => 'TokenSale', 'order_id' => $order->id));
                     $systemWallet->getWallet($order->currency)->refreshBalance();
 
                     $order->status = 'completed';
@@ -426,6 +429,7 @@ class ApiController extends Controller
                     $owner->depositInner($order->currency, $order->amount);
                     $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
                     $transactions = $order->transactions();
+
                     foreach ($transactions as $transaction) {
                         if ($transaction->payable_type == 'App\Models\System') {
                             $systemWallet->getWallet('TokenSale')->refreshBalance();
@@ -437,9 +441,10 @@ class ApiController extends Controller
                         }
                     }
                 }
-                $owner->getBalance($order->currency.'_gate');
-                $owner->getWallet($order->currency.'_gate')->depositFloat($order->amount, array('destination' => 'deposit to wallet'));
-                $owner->getWallet($order->currency.'_gate')->refreshBalance();
+
+                $this->user->getBalance($order->currency.'_gate');
+                $this->user->getWallet($order->currency.'_gate')->depositFloat($order->amount, array('destination' => 'deposit to wallet'));
+                $this->user->getWallet($order->currency.'_gate')->refreshBalance();
                 $order->save();
                 $owner->notify(new ConfirmOrder($order));
                 return $order->id;
@@ -463,7 +468,7 @@ class ApiController extends Controller
         $gate = User::where('uid', $order->gate)->first();
 
         if ($order->user_uid == $this->user->uid) {
-            if (($gate->getBalanceFree($order->currency) > $order->amount) || $gate->isAdmin()) {
+            if (($gate->getBalanceFree($order->currency) > $order->amount)) {
                 $transaction = $this->user->getWallet($order->currency)->withdrawFloat($order->amount, array('destination' => 'withdraw from wallet'));
                 $this->user->getWallet($order->currency)->refreshBalance();
                 $gate->unfreezeTokens($order->currency, $order->amount);
@@ -548,5 +553,28 @@ class ApiController extends Controller
             return true;
         }
         else return response(['error' => true, 'error-msg' => 'Не достаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
+    }
+
+
+    /**
+     * @param User $user
+     * @param $currency
+     * @param $amount
+     * @return float|int
+     */
+    public function payReferral(User $user, $currency, $amount) {
+
+        $tax = 9; // Процент на первом уровне
+        $curAmount = 0;
+        while ($user->referred_by && $tax > 0) {
+            $user = User::where('affiliate_id', $user->referred_by)->first();
+            $refAmount = ($amount * $tax ) / 100;
+            $user->getWallet($currency)->depositFloat($refAmount, array('destination' => 'referral'));
+            $user->getWallet($currency)->refreshBalance();
+            $user->notify(new ReferralBonusPay(array('amount' => $refAmount, 'currency' => $currency)));
+            $curAmount = $amount - $refAmount;
+            $tax = $tax - 3;
+        }
+        return $curAmount;
     }
 }

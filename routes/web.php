@@ -34,6 +34,7 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/orders/{id}', [App\Http\Controllers\DashboardController::class, 'getOrder'])->name('getOrder');
     Route::get('/settings/', [App\Http\Controllers\DashboardController::class, 'settings'])->name('settings');
+    Route::get('/system/', [App\Http\Controllers\DashboardController::class, 'systemConfigPage'])->name('systemConfigPage')->middleware('admin');
 });
 
 Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');

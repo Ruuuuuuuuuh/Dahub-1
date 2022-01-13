@@ -67,6 +67,17 @@ class DashboardController extends Controller {
 
     }
 
+
+    public function systemConfigPage()
+    {
+        $user = Auth::user();
+        $currency = new Currency();
+        $wallets = $user->wallets()->get();
+
+        return view('dashboard.pages.systemconfigpage', compact('user', 'currency', 'wallets'));
+
+    }
+
     public function getOrder($id) {
         $user = Auth::user();
         $order = Order::findOrFail($id);
