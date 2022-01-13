@@ -39,7 +39,7 @@ class Gate extends User implements Wallet, Confirmable, WalletFloat
                 [
                     'name' => $currencyGate,
                     'slug' => $currencyGate,
-                    'decimal_places' => Currency::where('title', $currency)->decimal_places
+                    'decimal_places' => Currency::where('title', $currency)->first()->decimal_places
                 ]
             );
         }
