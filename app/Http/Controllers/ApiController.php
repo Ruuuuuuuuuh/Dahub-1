@@ -224,6 +224,7 @@ class ApiController extends Controller
             $order->forceDelete();
             return $order->id;
         }
+
         else abort(404);
 
     }
