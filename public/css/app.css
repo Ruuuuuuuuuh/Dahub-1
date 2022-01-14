@@ -10262,7 +10262,7 @@ p.balance-amount {
 }
 
 a.copy-link {
-  font-size: 22px;
+  font-size: 16px;
   line-height: 80px;
   padding: 0 33px;
   background-color: #F6F8FA;
@@ -10386,6 +10386,10 @@ hr {
   outline: none;
 }
 
+input[name=deposit-amount], input[name=deposit-receive], select[name=deposit-payment] {
+  min-width: 300px;
+}
+
 .deposit-block input:active, .deposit-block input:focus {
   border: 1px solid #ccc !important;
 }
@@ -10406,7 +10410,6 @@ strong {
 
 .deposit-block .input-group input {
   border-radius: 15px !important;
-  width: 220px;
   padding-right: 70px;
 }
 
@@ -10475,7 +10478,6 @@ strong {
 .button-danger {
   background-image: linear-gradient(45deg, #ff6436, #d5006c);
   background-image: -moz-linear-gradient(45deg, #ff6436, #d5006c);
-  margin-left: 25px;
 }
 
 .deposit-status {
@@ -10623,6 +10625,16 @@ strong {
 
 .currency-select select option {
   background: #4D5B9D;
+}
+
+.text-gradient {
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+}
+.text-gradient.success {
+  background: linear-gradient(112.27deg, #85F362 -27.42%, #02AAFF 90.87%);
+  background: -moz-linear-gradient(112.27deg, #85F362 -27.42%, #02AAFF 90.87%);
 }
 
 @media screen and (max-width: 767px) {
@@ -11045,6 +11057,11 @@ strong {
   }
   .explorer .order .order-wrapper .amount-source:before {
     content: "Sent: ";
+  }
+
+  .currency-select select, .currency-select select:active, .currency-select select:focus {
+    width: 120px;
+    margin-top: 0;
   }
 }
 @media screen and (max-width: 360px) {

@@ -10365,9 +10365,10 @@ main#main-screen .main-screen-wrapper .orders {
 main#main-screen .screen-rollover {
   position: absolute;
   top: -21px;
-  left: calc(50% - 22px);
+  left: 0;
   cursor: pointer;
   width: 100%;
+  text-align: center;
 }
 main#main-screen .screen-rollover svg {
   border-radius: 100%;
@@ -10444,13 +10445,6 @@ main#main-screen .orders .order-item .order-status {
   margin-left: 10px;
 }
 
-@media screen and (orientation: landscape) {
-  body {
-    width: 100vh;
-    height: 100vw;
-    transform-origin: 0 0;
-  }
-}
 footer {
   padding: 10px 50px 10px;
   background: #EDF1F9;
@@ -10482,6 +10476,13 @@ footer .footer-nav a span {
 footer .create-order-open {
   position: absolute;
   top: -26px;
+  border: none !important;
+  outline: none !important;
+  text-decoration: none !important;
+}
+footer .create-order-open * {
+  border: none !important;
+  outline: none !important;
 }
 footer .create-order-open span {
   font-weight: 500;
@@ -10491,6 +10492,10 @@ footer .create-order-open span {
   color: #78839C;
 }
 
+.balance-items {
+  max-height: calc(100vh - 400px);
+  overflow: auto;
+}
 .balance-items .balance-item {
   font-weight: 600;
   font-size: 16px;
@@ -10562,11 +10567,15 @@ section.screen .payment-items .payment-item {
   border-bottom: 2px solid #EDF1F9;
   padding: 24px 0 28px;
 }
+section.screen .payment-items .payment-item .payment-details-icon {
+  min-width: 55px;
+}
 section.screen .payment-items .payment-item .payment-details {
   margin-left: 22px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  word-break: break-all;
 }
 section.screen .payment-items .payment-item .payment-details .address {
   font-weight: 600;
@@ -10798,6 +10807,10 @@ input[type=button] {
   color: #485068;
   font-weight: normal;
   margin-top: -5px;
+}
+
+.crypto .holder-name {
+  display: none;
 }
 
 header.header {
