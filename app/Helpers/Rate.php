@@ -30,7 +30,7 @@ class Rate
         }
 
         elseif ($currency == 'HFT') {
-            return 1;
+            return 0;
         }
 
         elseif ($currency == 'RUB') {
