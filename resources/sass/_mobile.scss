@@ -363,6 +363,10 @@
             }
         }
     }
+    .currency-select select, .currency-select select:active, .currency-select select:focus {
+        width:120px;
+        margin-top:0;
+    }
 }
 @media screen and (max-width:480px) {
     .explorer {

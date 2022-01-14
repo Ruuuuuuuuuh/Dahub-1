@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="section-main">
-        <h4>Выберите подходящую карту</h4>
+        <h4 class="accept-order-title crypto-hidden">Выберите подходящие реквизиты</h4>
         <div class="payment-items">
             @foreach (Auth::user()->paymentDetails()->get() as $payment)
             <a class="payment-item d-flex align-items-center justify-content-start" data-address="{{$payment->address}}" data-payment="{{$payment->payment()->first()->title}}">
@@ -37,7 +37,7 @@
                 <rect width="55" height="36" rx="5" fill="#EFF2F9"/>
                 <path d="M38.144 20.8H30.356V28.5H25.648V20.8H17.86V16.4H25.648V8.7H30.356V16.4H38.144V20.8Z" fill="white"/>
             </svg>
-            <span>Добавить новую карту</span>
+            <span>Добавить реквизиты</span>
         </a>
 
         <a href="#" class="btn btn-primary order-accept disabled">Принять заявку</a>
@@ -53,14 +53,14 @@
                         <rect width="40" height="4" rx="2" transform="matrix(-0.707107 0.707107 0.707107 0.707107 28.2842 0)" fill="white"/>
                     </svg>
                 </button>
-                <h4>Добавить новую карту</h4>
+                <h4>Добавить реквизиты</h4>
                 <form class="payment-details-form">
                     @csrf
                     <input type="hidden" name="payment">
                     <div class="form-group">
                         <input type="text" class="form-control" name="address" placeholder="Номер карты">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group holder-name">
                         <input type="text" class="form-control" name="holder_name" placeholder="Имя держателя">
                     </div>
                     <a href="#" class="btn btn-primary confirm-modal disabled">Добавить</a>

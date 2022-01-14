@@ -46,7 +46,7 @@
     </div>
     <div class="orders-deposit">
         @foreach ($orders['deposit'] as $order)
-            <a href="{{Route('getOrder', $order->id)}}" class="order-item @if ($order->destination == 'TokenSale') order-deposit @else order-{{$order->destination}} @endif order-{{$order->status}} gate-order d-flex justify-content-between align-items-center" data-id="{{$order->id}}">
+            <a href="{{Route('getOrder', $order->id)}}" class="order-item @if ($order->destination == 'TokenSale') order-deposit @else order-{{$order->destination}} @endif order-{{$order->status}} gate-order d-flex justify-content-between align-items-center" data-id="{{$order->id}}" data-crypto="{{\App\Models\Currency::where('title', $order->currency)->first()->crypto}}">
                 <div class="d-flex align-items-start flex-column justify-content-center order-destination">
                     @if ($order->destination == 'deposit' || $order->destination == 'TokenSale')
                     <svg width="26" height="18" viewBox="0 0 26 18" fill="none" xmlns="http://www.w3.org/2000/svg">

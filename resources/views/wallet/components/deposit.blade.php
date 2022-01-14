@@ -19,7 +19,7 @@
 
             <div class="form-group currency-select">
                 <select class="form-number form-control" name="deposit-currency">
-                    <option value="USDT">USDT</option>
+                    <option style="color:#fff;" value="USDT" selected="selected">USDT</option>
                     <option value="BTC">BTC</option>
                     <option value="ETH">ETH</option>
                 </select>

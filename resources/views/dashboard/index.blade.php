@@ -238,17 +238,22 @@
                 $('.payment-items .payment-item').removeClass('d-flex').addClass('d-none')
                 $('.payment-item[data-payment="' + payment + '"]').removeClass('d-none').addClass('d-flex')
             }
+            if ($(this).data('crypto') == 1) {
+                $('#accept-order').addClass('crypto')
+                $('.payment-details-form input[name="address"]').attr('placeholder', 'Адрес кошелька')
+                $('.payment-details-form').addClass('crypto')
+            }
+            else {
+                $('#accept-order').removeClass('crypto')
+                $('.payment-details-form input[name="address"]').attr('placeholder', 'Номер карты')
+                $('.payment-details-form').removeClass('crypto')
+            }
         })
-
         @endif
         $('.payment-details-form input').on('change keyup', function() {
             let filledtextboxes = 1;
-            $('.payment-details-form input:text').each(function(i) {
-                if ($(this).val().length == 0) {
-                    filledtextboxes = 0
-                }
-            });
-            if ($('.payment-details-form').closest('#add-payment-details').hasClass('crypto') && $('.payment-details-form input[name="address"]').val().length != 0) filledtextboxes = 1
+            if ($('.payment-details-form input[name="address"]').val().length == 0) filledtextboxes = 0;
+            // if ($('.payment-details-form').closest('#add-payment-details').hasClass('crypto') && $('.payment-details-form input[name="address"]').val().length != 0) filledtextboxes = 1
             if (filledtextboxes != 0) $('.payment-details-form .confirm-modal').removeClass('disabled')
             else $('.payment-details-form .confirm-modal').addClass('disabled')
         })
