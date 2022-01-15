@@ -403,58 +403,65 @@ class ApiController extends Controller
     public function confirmOrderByGate(Request $request)
     {
         $order = Order::where('id', $request->input('id'))->firstOrFail();
-        $owner = $order->user()->first();
+        if ($order->status == 'accepted') {
+            $owner = $order->user()->first();
 
-        if ($order->gate == $this->user->uid) {
-            if (($this->user->getBalanceFree($order->currency) > $order->amount)) {
-                if ($order->destination == 'deposit') {
-                    $transaction = $owner->getWallet($order->currency)->depositFloat($order->amount, array('destination' => 'deposit to wallet'));
-                    $owner->getWallet($order->currency)->refreshBalance();
-                    $order->status = 'completed';
-                    $order->transaction()->attach($transaction->id);
-                }
-                if ($order->destination == 'TokenSale') {
-                    $systemWallet = System::findOrFail(1);
-                    $transaction = $systemWallet->getWallet('TokenSale')->transferFloat( $owner->getWallet('DHB'), $order->dhb_amount, array('destination' => 'TokenSale', 'order_id' => $order->id));
-                    $owner->getWallet('DHB')->refreshBalance();
+            if ($order->gate == $this->user->uid) {
+                if (($this->user->getBalanceFree($order->currency) > $order->amount)) {
+                    if ($order->destination == 'deposit') {
+                        $transaction = $owner->getWallet($order->currency)->depositFloat($order->amount, array('destination' => 'deposit to wallet'));
+                        $owner->getWallet($order->currency)->refreshBalance();
+                        $order->status = 'completed';
+                        $order->transaction()->attach($transaction->id);
+                        $order->save();
+                    }
+                    if ($order->destination == 'TokenSale') {
+                        $systemWallet = System::findOrFail(1);
+                        $transaction = $systemWallet->getWallet('TokenSale')->transferFloat( $owner->getWallet('DHB'), $order->dhb_amount, array('destination' => 'TokenSale', 'order_id' => $order->id));
+                        $owner->getWallet('DHB')->refreshBalance();
 
-                    // pay Referral
-                    $curAmount = $this->payReferral($owner, $order->currency, $order->amount);
+                        // pay Referral
+                        $curAmount = $this->payReferral($owner, $order->currency, $order->amount);
 
-                    // deposit to system wallet
-                    $systemWallet->getWallet($order->currency)->depositFloat($curAmount,  array('destination' => 'TokenSale', 'order_id' => $order->id));
-                    $systemWallet->getWallet($order->currency)->refreshBalance();
+                        // deposit to system wallet
+                        $systemWallet->getWallet($order->currency)->depositFloat($curAmount,  array('destination' => 'TokenSale', 'order_id' => $order->id));
+                        $systemWallet->getWallet($order->currency)->refreshBalance();
 
-                    $order->status = 'completed';
-                    $order->transaction()->attach($transaction->id);
-                    $owner->depositInner($order->currency, $order->amount);
-                    $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
-                    $transactions = $order->transactions();
+                        $order->status = 'completed';
+                        $order->transaction()->attach($transaction->id);
+                        $owner->depositInner($order->currency, $order->amount);
+                        $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
+                        $transactions = $order->transactions();
+                        $order->save();
 
-                    foreach ($transactions as $transaction) {
-                        if ($transaction->payable_type == 'App\Models\System') {
-                            $systemWallet->getWallet('TokenSale')->refreshBalance();
-                            $telegram->sendMessage([
-                                'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
-                                'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>↗️ Sent: </b>' . $order->amount . ' ' . $order->currency .PHP_EOL.'<b>↙️ Recieved: </b>' . $order->dhb_amount . ' DHB' .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid. PHP_EOL.PHP_EOL.'<b>🔥 TokenSale: </b>'. number_format($systemWallet->getWallet('TokenSale')->balanceFloat, 0, '.', ' ') . ' DHB left until the end of stage 1',
-                                'parse_mode' => 'html'
-                            ]);
+                        foreach ($transactions as $transaction) {
+                            if ($transaction->payable_type == 'App\Models\System') {
+                                $systemWallet->getWallet('TokenSale')->refreshBalance();
+                                $telegram->sendMessage([
+                                    'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
+                                    'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>↗️ Sent: </b>' . $order->amount . ' ' . $order->currency .PHP_EOL.'<b>↙️ Recieved: </b>' . $order->dhb_amount . ' DHB' .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid. PHP_EOL.PHP_EOL.'<b>🔥 TokenSale: </b>'. number_format($systemWallet->getWallet('TokenSale')->balanceFloat, 0, '.', ' ') . ' DHB left until the end of stage 1',
+                                    'parse_mode' => 'html'
+                                ]);
+                            }
                         }
                     }
-                }
 
-                $this->user->getBalance($order->currency.'_gate');
-                $this->user->getWallet($order->currency.'_gate')->depositFloat($order->amount, array('destination' => 'deposit to wallet'));
-                $this->user->getWallet($order->currency.'_gate')->refreshBalance();
-                $order->save();
-                $owner->notify(new ConfirmOrder($order));
-                return $order->id;
+                    $this->user->getBalance($order->currency.'_gate');
+                    $this->user->getWallet($order->currency.'_gate')->depositFloat($order->amount, array('destination' => 'deposit to wallet'));
+                    $this->user->getWallet($order->currency.'_gate')->refreshBalance();
+
+                    $owner->notify(new ConfirmOrder($order));
+                    return $order->id;
+                }
+                else return response(['error' => true, 'error-msg' => 'Недостаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
             }
-            else return response(['error' => true, 'error-msg' => 'Недостаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
+            else {
+                return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
+            }
+
+
         }
-        else {
-            return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
-        }
+        return response(['error'=>true, 'error-msg' => 'Заявка не может быть выполнена'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
     }
 
 
