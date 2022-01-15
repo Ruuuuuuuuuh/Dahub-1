@@ -29,10 +29,6 @@ class Rate
             return \App\Models\Rate::where('title', 'DHB')->orderBy('created_at', 'desc')->first()->value;
         }
 
-        elseif ($currency == 'HFT') {
-            return 0;
-        }
-
         elseif ($currency == 'RUB') {
             if (!Cache::get($currency)) {
                 $response = Http::get('https://www.cbr.ru/scripts/XML_daily.asp');

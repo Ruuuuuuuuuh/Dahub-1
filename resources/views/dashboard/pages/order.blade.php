@@ -1,7 +1,11 @@
 @extends('dashboard.layouts.app')
 @section('content')
     <section class="screen opened order-page" data-status="{{$order->status}}">
+        @if ($order->destination != 'TokenSale')
         @include('dashboard.components.order.'.$order->destination.'.'.$order->status)
+        @else
+            @include('dashboard.components.order.deposit.'.$order->status)
+        @endif
     </section>
 @endsection
 
