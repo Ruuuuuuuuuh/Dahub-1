@@ -72,7 +72,7 @@ class AuthController extends Controller
                 'auth_token' => $token
             ]);
 
-            return 'Добро пожаловать! Ваша временная ссылка для авторизации в системе: ' . env('APP_URL').'/auth/'.$authUser->auth_token;
+            return 'Добро пожаловать! Ваша временная ссылка для авторизации в dahub.app: ' . env('APP_URL').'/auth/'.$authUser->auth_token;
         }
         else {
 

@@ -21,12 +21,12 @@
                     </div>
                     <div class="card-body">
                         @if ($order->status != 'completed')
-                        <h2>Получение {{$order->dhb_amount}} DHB <span class="deposit-status">@if ($order->status == 'created') Шаг 2 из 3. В ожидании подтверждения шлюза @elseif ($order->status == 'accepted') Шаг 3 из 3. Ожидание отправки средств @endif</span></h2>
+                        <h2>Получение {{$order->dhb_amount}} DHB <span class="deposit-status">@if ($order->status == 'created') Шаг 2 из 3. Ожидайте назначение шлюза @elseif ($order->status == 'accepted') Шаг 3 из 3. Ожидание отправки средств @endif</span></h2>
                         @else
                         <h2>Заявка выполнена</h2>
                         @endif
                         @if ($order->status == 'created')
-                        <p class="mt-4">Ожидайте, как только мы подберем для вас платежный шлюз, вы получите уведомление в Telegram и дальнейшие инструкции с реквизитами оплаты. </p>
+                        <p class="mt-4">Как только шлюз примет в работу заявку, вы получите уведомление от @DaHubBot с дальнейшими инструкциями и реквизитами оплаты. </p>
                         <a onclick="decline('{{$order->id}}');" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
                         @elseif ($order->status == 'accepted')
                             <div class="created-block form-inline">
