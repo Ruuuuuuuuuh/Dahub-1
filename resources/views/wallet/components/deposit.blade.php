@@ -1,9 +1,9 @@
 <div class="deposit-section">
     <div class="new-order">
         <h2>Получить DHB <span class="deposit-status">Шаг 1 из 3</span></h2>
+        @if ($max > 2000)
         <div class="deposit-block form-inline">
-
-            <p class="w-100">Введите количество токенов DHB (доступно {{number_format($max, 0, ',', ' ')}} токенов)</p>
+            <p class="w-100">Введите количество DHB (доступно для покупки {{number_format($max, 0, ',', ' ')}} DHB)</p>
             <div class="form-group input-group">
                 <input type="number" class="form-number form-control" name="deposit-amount" value="2000" step="1000"  data-min="2000" data-max="{{$max}}"  />
                 <div class="input-group-append">
@@ -33,7 +33,6 @@
                     @endforeach
                 </select>
             </div>
-
         </div>
 
         <div class="subtotal">
@@ -42,6 +41,9 @@
         </div>
 
         <a onclick="deposit();" style="margin-top:40px;" class="button button-orange">Получить DHB</a>
+        @else
+            <p style="margin-top: 25px;margin-bottom: -15px;font-weight: 500;color: #e93878;">Вы уже владеете максимальным количеством DHB</p>
+        @endif
     </div>
 
 

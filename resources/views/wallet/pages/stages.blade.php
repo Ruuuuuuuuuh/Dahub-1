@@ -8,7 +8,7 @@
                 <div class="card main-screen">
                     <div class="card-header">
                         <div class="d-flex align-items-center justify-content-between">
-                            <p class="inline-block mb-0">Этапы токен сейла</p>
+                            <p class="inline-block mb-0">Настройка токен сейла</p>
                             <div class="d-flex justify-content-end">
                                 <a class="btn btn-primary" href="/wallet/" >Вернуться назад</a>
                             </div>
@@ -20,6 +20,8 @@
                         <p>Замороженные токены (в заявках)</p>
                         <a class="btn btn-success set-dhb-rate">Установить курс токенов</a>
 {{--                        <a class="start-token-sale">старт токен сейл</a>--}}
+                        <a class="btn btn-primary set-dhb-per-user">Лимит DHB в одни руки</a>
+                        <a class="btn btn-warning set-dhb-per-order">Лимит DHB в одной заявке</a>
                     </div>
                 </div>
             </div>
@@ -44,6 +46,36 @@
                     });
                 }
             })
+
+            $('.set-dhb-per-user').bind('click', function(e) {
+                e.preventDefault();
+                let amount = prompt("Введите, сколько токенов ограничить в одни руки");
+                if (amount != null) {
+                    $.post( "/api/set_dhb_per_user", {
+                        "_token": "{{ csrf_token() }}",
+                        "amount": amount,
+                    })
+                    .done(function( data ) {
+                        alert('Количество DHB в одни руки установлено на значении ' + amount)
+                    });
+                }
+            })
+
+            $('.set-dhb-per-order').bind('click', function(e) {
+                e.preventDefault();
+                let amount = prompt("Введите, сколько токенов ограничить в одной заявке");
+                if (amount != null) {
+                    $.post( "/api/set_dhb_per_order", {
+                        "_token": "{{ csrf_token() }}",
+                        "amount": amount,
+                    })
+                    .done(function( data ) {
+                        alert('Количество DHB в одной заявке установлено на значении ' + amount)
+                    });
+                }
+            })
+
+
             $('.start-token-sale').bind('click', function(e) {
                 e.preventDefault();
                 let _token = $('meta[name="csrf-token"]').attr('content');

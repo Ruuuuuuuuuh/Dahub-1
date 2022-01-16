@@ -80,6 +80,22 @@ class SystemApiController extends Controller
         return true;
     }
 
+    public function setDHBPerUser(Request $request): bool
+    {
+        $system = System::findOrFail(1);
+        $system->amount_per_user = $request->input('amount');
+        $system->save();
+        return true;
+    }
+
+    public function setDHBPerOrder(Request $request): bool
+    {
+        $system = System::findOrFail(1);
+        $system->amount_per_order = $request->input('amount');
+        $system->save();
+        return true;
+    }
+
     /**
      * Вывод токенов из системного кошелька.
      *

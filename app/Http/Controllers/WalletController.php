@@ -50,8 +50,7 @@ class WalletController extends Controller
          * Доступный баланс токен сейла
          * @var float $available
          */
-        $available = $system->getWallet('TokenSale')->balanceFloat;
-
+        $available = $system->getWallet('TokenSale')->balanceFloat - $system->getFrozenTokens();
 
         /**
          * Баланс пользователя

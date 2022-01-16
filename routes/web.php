@@ -69,6 +69,8 @@ Route::post('/api/add_payment', [App\Http\Controllers\SystemApiController::class
 Route::post('/api/attach_payment_to_currency', [App\Http\Controllers\SystemApiController::class, 'attachPaymentToCurrency'])->middleware('admin');
 Route::post('/api/orders/admin/create', [App\Http\Controllers\SystemApiController::class, 'createOrder'])->middleware('admin');
 Route::post('/api/transfer', [App\Http\Controllers\ApiController::class, 'transfer'])->middleware('admin');
+Route::post('/api/set_dhb_per_user', [App\Http\Controllers\SystemApiController::class, 'setDHBPerUser'])->middleware('admin');
+Route::post('/api/set_dhb_per_order', [App\Http\Controllers\SystemApiController::class, 'setDHBPerOrder'])->middleware('admin');
 
 // API ROUTES
 Route::post('/api/deposit', [App\Http\Controllers\ApiController::class, 'deposit']);
