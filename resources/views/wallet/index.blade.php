@@ -109,7 +109,7 @@
                 $('[data-toggle="popover"]').popover('hide');
             }
         });
-        $('.deposit-block input, .deposit-block select').on('change keyup', function(e){
+        $('.deposit-block input, .deposit-block select').on('change', function(e){
             let min = parseInt($('.deposit-block input[name="deposit-amount"]').attr('min'));
             if ($('.deposit-block input[name="deposit-amount"]').val() < min)
             {
