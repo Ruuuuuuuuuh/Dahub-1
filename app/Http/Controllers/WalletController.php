@@ -9,6 +9,9 @@ use App\Models\Payment;
 use App\Models\System;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\WalletService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -28,17 +31,53 @@ class WalletController extends Controller
 
 
     /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return Application|Factory|View
      */
     public function index()
     {
-
+        $user = Auth::user();
         $system = System::find(1);
         $system->getWallet('TokenSale')->refreshBalance();
+        $user->getWallet('DHB')->refreshBalance();
+
+        /**
+         * Сколько токенов продано
+         * @var float $balances
+         */
         $balances = $system->getSoldTokens() + $system->getFrozenTokens();
-        return view('wallet.index', compact('balances', 'system'));
+
+        /**
+         * Доступный баланс токен сейла
+         * @var float $available
+         */
+        $available = $system->getWallet('TokenSale')->balanceFloat;
+
+
+        /**
+         * Баланс пользователя
+         * @var float $userBalance
+         */
+        $userBalance = $user->getWallet('DHB')->balanceFloat;
+
+
+        /**
+         * Максимальное допустимое количество токенов для покупки
+         * @var float $max
+         */
+        $max = 0;
+
+        if ($system->amount_per_user != 0) {
+            if ($system->amount_per_user > $userBalance) $max = $system->amount_per_user - $userBalance;
+            else $max = 0;
+        }
+        else $max = $available;
+
+        if ($max > 0) {
+            if ($system->amount_per_order != 0) $max = min($system->amount_per_order, $max, $available);
+            else $max = min($max, $available);
+        }
+
+        return view('wallet.index', compact('balances', 'system', 'max'));
     }
 
     public function profile()

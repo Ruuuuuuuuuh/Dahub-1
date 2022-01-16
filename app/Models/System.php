@@ -16,6 +16,7 @@ use Questocat\Referral\Traits\UserReferral;
 
 /**
  * @method static findOrFail(int $int)
+ * @method static find(int $int)
  */
 class System extends Model implements Wallet, WalletFloat
 {

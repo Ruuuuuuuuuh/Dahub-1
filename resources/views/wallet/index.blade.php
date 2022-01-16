@@ -109,12 +109,7 @@
                 $('[data-toggle="popover"]').popover('hide');
             }
         });
-        $('.deposit-block input, .deposit-block select').on('change', function(e){
-            let min = parseInt($('.deposit-block input[name="deposit-amount"]').attr('min'));
-            if ($('.deposit-block input[name="deposit-amount"]').val() < min)
-            {
-                $('.deposit-block input[name="deposit-amount"]').val(min);
-            }
+        $('.deposit-block input, .deposit-block select').on('change', function(e) {
             changeInputValues(e)
         })
 
@@ -139,7 +134,7 @@
             let balance = {{ Auth::User()->getBalance('DHB') }}
             let amount = $('input[name="deposit-amount"]')
             let currency = $('select[name="deposit-currency"]')
-            let total = $('.deposit-receive')
+            let depositRecieve = $('.deposit-receive')
             let subtotal = $('.subtotal-amount span').html() + 0
             let rate = {
                 DHB : '{!! Rate::getRates('DHB') !!}',
@@ -147,19 +142,22 @@
                 BTC : '{!! Rate::getRates('BTC') !!}',
                 ETH : '{!! Rate::getRates('ETH') !!}',
             }
-            if ($(e.target).is(total)) {
-                let amountTotal = rate[currency.val()] * total.val() / rate['DHB']
-                amount.val( + amountTotal.toFixed(window.currencies[currency.val()]['decimalPlaces']))
+
+            let min = parseInt($('.deposit-block input[name="deposit-amount"]').data('min'));
+            let max = parseInt($('.deposit-block input[name="deposit-amount"]').data('max'));
+
+            if ($(e.target).is(depositRecieve)) {
+                let amountTotal = rate[currency.val()] * depositRecieve.val() / rate['DHB']
+                amount.val(amountTotal.toFixed(window.currencies[currency.val()]['decimalPlaces']))
             }
-            else {
-                let amountTotal = rate['DHB'] * amount.val() / rate[currency.val()]
-                total.val( + amountTotal.toFixed(window.currencies[currency.val()]['decimalPlaces']))
-            }
+            if (amount.val() > max) amount.val(max)
+            if (amount.val() < min) amount.val(min)
+            let amountTotal = rate['DHB'] * amount.val() / rate[currency.val()]
+            depositRecieve.val(amountTotal.toFixed(window.currencies[currency.val()]['decimalPlaces']))
+
             subtotal = parseFloat(balance) + parseFloat(amount.val())
             $('.subtotal-amount span').html( new Intl.NumberFormat('ru-RU').format(subtotal) + ',00' )
-            if (amount.val() < 2000) amount.val(2000)
             amount.val(parseInt(amount.val()))
-
 
 
         }
