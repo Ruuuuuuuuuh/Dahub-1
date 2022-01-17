@@ -447,7 +447,7 @@ class ApiController extends Controller
                     }
 
                     $this->user->getBalance($order->currency.'_gate');
-                    $this->user->getWallet($order->currency.'_gate')->depositFloat($order->amount, array('destination' => 'deposit to wallet'));
+                    $this->user->getWallet($order->currency.'_gate')->depositFloat($order->amount, array('destination' => 'deposit to wallet', 'order_id' => $order->id));
                     $this->user->getWallet($order->currency.'_gate')->refreshBalance();
 
                     $owner->notify(new ConfirmOrder($order));
