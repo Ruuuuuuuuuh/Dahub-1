@@ -15,6 +15,7 @@ use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Traits\CanConfirm;
 use Questocat\Referral\Traits\UserReferral;
+use App\Models\Currency as Currency;
 
 
 
@@ -114,14 +115,14 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
     }
 
 
-    public function getBalance($currency, $decimal = 2): float
+    public function getBalance($currency): float
     {
         if (!$this->hasWallet($currency)) {
             $this->createWallet(
                 [
                     'name' => $currency,
                     'slug' => $currency,
-                    'decimal_places' => Currency::where('title', $currency)->first()->decimal_places
+                    'decimal_places' => Currency::where('title', str_replace('_gate', '', $currency))->first()->decimal_places
                 ]
             );
         }
