@@ -159,7 +159,7 @@ class ApiController extends Controller
             $this->user->notify(new OrderCreate($order));
 
             // Добавление валюты в список валют на главном экране
-            $visibleWallets = json_decode(json_decode($this->getUserConfig('visible_wallets'))->value);
+            $visibleWallets = $this->getVisibleWallets();
             if (!in_array($currency, $visibleWallets)) {
                 $visibleWallets[] = $currency;
                 UserConfig::updateOrCreate(
@@ -584,5 +584,12 @@ class ApiController extends Controller
             $tax = $tax - 3;
         }
         return $curAmount;
+    }
+
+    public function getVisibleWallets() {
+        return json_decode(UserConfig::firstOrCreate(
+            ['user_uid' => Auth::user()->uid, 'meta' => 'visible_wallets'],
+            ['value' => json_encode(['DHB', 'BTC', 'ETH'])]
+        )->value, true);
     }
 }
