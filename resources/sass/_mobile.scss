@@ -1,4 +1,4 @@
-@media screen and (max-width:767px) {
+@media screen and (max-width:1023px) {
     .button {
         margin-left:0;
     }
@@ -38,9 +38,6 @@
     .navbar-nav .nav-item .dropdown-toggle::after {
         content:none;
     }
-    .card-header {
-        padding: 10px 20px 26px;
-    }
     a.button {
         margin-top: 40px;
         font-size: 16px;
@@ -50,7 +47,8 @@
         text-align: center;
     }
     .card-body {
-        padding: 30px 20px 25px;
+        padding: 40px 30px 35px;
+        overflow: auto;
     }
     .progress {
         height:20px;
@@ -75,10 +73,10 @@
 
     #balance-tabs .nav-item a svg {
         height:16px;
-        margin-right: 0px;
+        margin-right: 5px;
     }
     #balance-tabs .nav-item a {
-        font-size: 12px;
+        font-size: 14px;
         padding: 10px 0 5px;
         background:transparent!important;
     }
@@ -86,11 +84,11 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 105px;
+        max-width: 125px;
         line-height: 14px;
     }
     .card-header .nav {
-        justify-content: space-around;
+        justify-content: space-between;
         width:100%;
     }
     .orders-list {
@@ -121,16 +119,26 @@
         text-align: center;
     }
     .card-body h2 {
+        font-size: 24px;
+        text-align: left;
+    }
+    .status-text {
+        margin-top: 25px;
         font-size: 18px;
+        font-weight: 400;
+        width: 100%;
+        text-align: center;
+        line-height: 20px;
     }
     .deposit-block {
-        margin-top:30px;
+        margin-top:25px;
     }
     .deposit-status {
         font-size:14px;
     }
     .deposit-block input, .deposit-block select {
-        font-size:14px;
+        font-size:18px;
+        font-weight: 500;
     }
     .deposit-recieve-group {
         margin-left:0;
@@ -152,7 +160,11 @@
         font-size: 14px;
         padding: 0 15px;
         border-radius: 15px;
-        line-height: 45px;
+        line-height: 60px;
+        height: 60px;
+    }
+    .order-wallet a.copy-link {
+        margin-top:35px;
     }
     a.copy-link svg {
         width:16px;
@@ -172,7 +184,7 @@
         padding-top: 25px;
     }
     .qr-code {
-        margin-top: 30px;
+        margin-top: 40px;
     }
     .created-block {
         margin-top:25px;
@@ -366,6 +378,26 @@
     .currency-select select, .currency-select select:active, .currency-select select:focus {
         width:120px;
         margin-top:0;
+    }
+    .order-wallet-wrapper {
+        text-align: left;
+    }
+    .main-screen .nav-item a svg, #balance-tabs .nav-item a span {
+        vertical-align: middle;
+    }
+    .main-screen .nav-item a svg {
+        margin-top:0;
+    }
+    .card-header {
+        padding:0 30px;
+        height:56px;
+        .btn {
+            border-radius: 30px;
+            padding: 7px 25px;
+        }
+    }
+    .frontpage .card-header {
+        padding: 0 30px;
     }
 }
 @media screen and (max-width:480px) {

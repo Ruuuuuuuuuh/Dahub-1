@@ -19,14 +19,22 @@
                             @endif
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body order-wallet">
+                        <div class="order-wallet-wrapper">
                         @if ($order->status != 'completed')
-                        <h2>Получение {{$order->dhb_amount}} DHB <span class="deposit-status">@if ($order->status == 'created') Шаг 2 из 3. Ожидайте назначение шлюза @elseif ($order->status == 'accepted') Шаг 3 из 3. Ожидание отправки средств @endif</span></h2>
+                            <h2>Получение {{$order->dhb_amount}} DHB</h2>
+                            <h3>@if ($order->status == 'created')Ожидайте назначения шлюза @elseif ($order->status == 'accepted')Ожидание отправки средств @endif</h3>
+                            <h3 class="status-text">@if ($order->status == 'created')Шаг 2 из 3 @elseif ($order->status == 'accepted')Шаг 3 из 3 @endif</h3>
+                            <div class="status-bar">
+                                <span></span>
+                                <span @if ($order->status == 'created') class="active" @endif></span>
+                                <span @if ($order->status == 'accepted') class="active" @endif></span>
+                            </div>
                         @else
                         <h2>Заявка выполнена</h2>
                         @endif
                         @if ($order->status == 'created')
-                        <p class="mt-4">Как только шлюз примет в работу заявку, вы получите уведомление от @DaHubBot с дальнейшими инструкциями и реквизитами оплаты. </p>
+                        <p class="order-created-text">Как только шлюз примет в работу заявку, вы получите уведомление от @DaHubBot с дальнейшими инструкциями и реквизитами оплаты.</p>
                         <a onclick="decline('{{$order->id}}');" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
                         @elseif ($order->status == 'accepted')
                             <div class="created-block form-inline">
@@ -53,16 +61,16 @@
                                                     </a>
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-md-3">
-                                                <div class="row justify-content-center">
-                                                    <div class="qr-code"><canvas width="256" height="256"></canvas></div>
+                                            <div class="col-12 col-lg-5">
+                                                <div class="row justify-content-center justify-content-lg-end">
+                                                    <div class="qr-code"></div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <a onclick="decline();" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
+                                <a onclick="decline('{{$order->id}}');" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
                             </div>
                         @elseif ($order->status == 'completed')
                             <div class="mt-4 mb-3">
@@ -76,6 +84,7 @@
                                 <a href="/wallet" style="margin-top:40px;" class="button button-orange">Вернуться на главную</a>
                             </div>
                         @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -112,6 +121,16 @@
             $('.qr-code').qrcode(a)
         })
 
+        $('.copy-link, .copy-link *').click(function(e){
+            e.preventDefault()
+            let l = $(this).find('span').html()
+            let i = document.createElement('input')
+            i.setAttribute('value', l)
+            document.body.appendChild(i)
+            i.select()
+            let r = document.execCommand('copy')
+            document.body.removeChild(i)
+        })
 
     </script>
 @endsection

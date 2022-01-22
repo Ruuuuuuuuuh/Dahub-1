@@ -4,9 +4,9 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card main-screen">
+                <div class="card main-screen frontpage">
                     <div class="card-header">
-                        <div class="d-flex align-items-center justify-content-start" style="margin-bottom: -20px;">
+                        <div class="d-flex align-items-center justify-content-start">
                             <ul class="nav nav-pills" id="balance-tabs" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link btn btn-outline-secondary active" id="dashboard-tab" data-toggle="tab" href="#dashboard-area" role="tab" aria-controls="dashboard-area" aria-selected="true">
