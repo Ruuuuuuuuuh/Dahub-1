@@ -424,7 +424,7 @@ class ApiController extends Controller
                         $curAmount = $this->payReferral($owner, $order->currency, $order->amount);
 
                         // deposit to system wallet
-                        $systemWallet->getWallet($order->currency)->depositFloat(($order->amount - $curAmount),  array('destination' => 'TokenSale', 'order_id' => $order->id));
+                        $systemWallet->getWallet($order->currency)->depositFloat($order->amount,  array('destination' => 'TokenSale', 'order_id' => $order->id));
                         $systemWallet->getWallet($order->currency)->refreshBalance();
 
                         $order->status = 'completed';
