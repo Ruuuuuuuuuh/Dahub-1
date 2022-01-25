@@ -31,7 +31,7 @@ class System extends Model implements Wallet, WalletFloat
         $orders = Order::where('status', '!=', 'completed')->get();
         $frozenTokens = 0;
         foreach ($orders as $order) {
-            $frozenTokens += $order->amount;
+            $frozenTokens += $order->dhb_amount;
         }
         return $frozenTokens;
     }
