@@ -200,4 +200,9 @@ class WalletController extends Controller
         if (Auth::user()->uid == $order->user_uid) return view('wallet.pages.order')->with('order', $order);
         else abort(404);
     }
+
+    public function gates() {
+        $gates = User::getGates()->get();
+        return view('wallet.pages.gates')->with('gates', $gates);
+    }
 }

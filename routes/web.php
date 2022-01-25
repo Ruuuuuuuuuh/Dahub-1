@@ -53,6 +53,7 @@ Route::get('/wallet/currencies/{slug}', [App\Http\Controllers\WalletController::
 Route::post('/wallet/currencies/{slug}', [App\Http\Controllers\WalletController::class, 'updateCurrency'])->middleware('admin');
 Route::get('/wallet/payments/', [App\Http\Controllers\WalletController::class, 'payments'])->middleware('admin')->name('wallet.payments');
 Route::get('/wallet/users', [App\Http\Controllers\WalletController::class, 'getUsers'])->name('wallet.users')->middleware('admin');
+Route::get('/wallet/gates', [App\Http\Controllers\WalletController::class, 'gates'])->name('wallet.gates')->middleware('admin');
 
 // ADMIN ROUTES
 Route::post('/api/tags/', [App\Http\Controllers\SystemApiController::class, 'getTags'])->middleware('admin')->name('api.tags');
@@ -71,6 +72,8 @@ Route::post('/api/orders/admin/create', [App\Http\Controllers\SystemApiControlle
 Route::post('/api/transfer', [App\Http\Controllers\ApiController::class, 'transfer'])->middleware('admin');
 Route::post('/api/set_dhb_per_user', [App\Http\Controllers\SystemApiController::class, 'setDHBPerUser'])->middleware('admin');
 Route::post('/api/set_dhb_per_order', [App\Http\Controllers\SystemApiController::class, 'setDHBPerOrder'])->middleware('admin');
+Route::post('/api/set_gate', [App\Http\Controllers\SystemApiController::class, 'setGate'])->middleware('admin');
+Route::post('/api/remove_gate', [App\Http\Controllers\SystemApiController::class, 'removeGate'])->middleware('admin');
 
 // API ROUTES
 Route::post('/api/deposit', [App\Http\Controllers\ApiController::class, 'deposit']);

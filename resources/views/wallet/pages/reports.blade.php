@@ -50,6 +50,9 @@
                                 <a class="nav-link" id="pills-withdraw-tab" data-toggle="pill" href="#pills-withdraw" role="tab" aria-controls="pills-withdraw" aria-selected="false">Отправка</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" id="pills-balances-tab" data-toggle="pill" href="#pills-balances" role="tab" aria-controls="pills-balances" aria-selected="false">Балансы системы</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" id="pills-gates-tab" data-toggle="pill" href="#pills-gates" role="tab" aria-controls="pills-gates" aria-selected="false">Балансы шлюзов</a>
                             </li>
                             <li class="nav-item button-send" data-toggle="modal" data-target="#modal-send">
@@ -168,18 +171,18 @@
                                 <table class="table table-striped">
                                     <thead>
                                     <tr>
-                                        <td>Telegram ID</td>
                                         <td>Username</td>
                                         <td>Имя</td>
                                         @foreach (\App\Models\Currency::payableCurrencies()->get() as $currency)
                                         <td>{{$currency->title}}</td>
                                         @endforeach
+                                        <td>iUSDT</td>
+                                        <td>iUSDT_frozen</td>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     @foreach (\App\Models\User::getGates()->get() as $gate)
                                         <tr>
-                                            <td>{{$gate->uid}}</td>
                                             <td>{{$gate->username}}</td>
                                             <td>{{$gate->name}}</td>
                                             @foreach (\App\Models\Currency::payableCurrencies()->get() as $currency)
@@ -191,20 +194,26 @@
                                                     @endif
                                                 </td>
                                             @endforeach
+                                            <td>{{$gate->getBalanceInner()}}</td>
+                                            <td>{{$gate->getBalanceFrozen()}}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="tab-pane fade" id="pills-balances" role="tabpanel" aria-labelledby="pills-balances-tab">
+                                <hr>
+                                <h3 class="mb-3">Балансы системного кошелька</h3>
+                                <h4>{{$system->getWallet('TokenSale')->balanceFloat}} DHB (Токен Сейл)</h4>
+                                <h4>{{$system->getWallet('DHBFundWallet')->balanceFloat}} DHB (Резервы Фонда)</h4>
+                                <h4>{{$system->getWallet('USDT')->balanceFloat}} USDT</h4>
+                                <h4>{{$system->getWallet('BTC')->balanceFloat}} BTC</h4>
+                                <h4>{{$system->getWallet('ETH')->balanceFloat}} ETH</h4>
+                            </div>
                         </div>
 
 <hr />
-                        <h2 class="mb-3">Балансы системного кошелька</h2>
-                        <h4>{{$system->getWallet('TokenSale')->balanceFloat}} DHB (Токен Сейл)</h4>
-                        <h4>{{$system->getWallet('DHBFundWallet')->balanceFloat}} DHB (Резервы Фонда)</h4>
-                        <h4>{{$system->getWallet('USDT')->balanceFloat}} USDT</h4>
-                        <h4>{{$system->getWallet('BTC')->balanceFloat}} BTC</h4>
-                        <h4>{{$system->getWallet('ETH')->balanceFloat}} ETH</h4>
+
                     </div>
                 </div>
             </div>

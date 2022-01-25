@@ -25,7 +25,6 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th scope="col" class="pl-5">Аватар</th>
                                     <th scope="col">Телеграм ID</th>
                                     <th scope="col">Имя</th>
                                     <th scope="col">TG @username</th>
@@ -37,14 +36,16 @@
                                 @foreach ($users as $user)
 
                                         <tr id="{{$user->uid}}">
-                                            <td class="pl-4"><a class="user_avatar ml-3" style="background-image:url({{$user->avatar}})"></a></td>
                                             <td>{{$user->uid}}</td>
                                             <td>{{$user->name}}</td>
                                             <td>{{$user->username}}</td>
                                             <td class="user-balance">{{number_format($user->getWallet('DHB')->balanceFloat, 0, ',', ' ')}} </td>
-                                            <td>
-                                                <a data-uid="{{$user->uid}}" class="btn btn-success user-deposit">+</a>
-                                                <a data-uid="{{$user->uid}}"  class="btn btn-danger user-withdraw">-</a>
+                                            <td class="gate-actions">
+                                                @if ($user->isGate())
+                                                <a data-uid="{{$user->uid}}" class="btn btn-danger user-remove-gate">Убрать из шлюзов</a>
+                                                @else
+                                                <a data-uid="{{$user->uid}}" class="btn btn-success user-set-gate">Назначить шлюзом</a>
+                                                @endif
                                             </td>
                                         </tr>
                                  @endforeach
@@ -61,37 +62,30 @@
 @section('script')
     <script>
         $(document).ready(function(){
-            $('.user-deposit').bind('click', function(e) {
-                let uid = $(this).data('uid');
+            $('.user-set-gate').bind('click', function(e) {
                 e.preventDefault();
-                let amount = prompt("Введите количество токенов DHB", "");
-                if (amount != null) {
-                    $.post( "/api/orders/admin/create", {
-                        "_token": "{{ csrf_token() }}",
-                        "user_uid": uid,
-                        "amount": amount,
-                        "currency": 'USDT',
-                    })
-                    .done(function( data ) {
-                        $('#' + uid + ' .user-balance').html(data);
-                    });
-                }
+                let uid = $(this).data('uid');
+                $.post( "/api/set_gate", {
+                    "_token": "{{ csrf_token() }}",
+                    "user_uid": uid,
+                })
+                .done(function() {
+                    alert('Вы успешно назначили пользователю права шлюза')
+                    $('#' + uid + ' .gate-actions').html('<a data-uid="' + uid + '" class="btn btn-danger user-remove-gate">Убрать из шлюзов</a>');
+                });
             })
 
-            $('.user-withdraw').bind('click', function(e) {
-                let uid = $(this).data('uid');
+            $('.user-remove-gate').bind('click', function(e) {
                 e.preventDefault();
-                let amount = prompt("Введите количество токенов", "");
-                if (amount != null) {
-                    $.post( "/api/withdraw", {
-                        "_token": "{{ csrf_token() }}",
-                        "uid": uid,
-                        "amount": amount
-                    })
-                    .done(function( data ) {
-                        $('#' + uid + ' .user-balance').html(data);
-                    });
-                }
+                let uid = $(this).data('uid');
+                $.post( "/api/remove_gate", {
+                    "_token": "{{ csrf_token() }}",
+                    "user_uid": uid,
+                })
+                .done(function() {
+                    alert('Вы успешно убрали у пользователя права шлюза')
+                    $('#' + uid + ' .gate-actions').html('<a data-uid="' + uid + '" class="btn btn-success user-set-gate">Сделать шлюзом</a>');
+                });
             })
         })
     </script>

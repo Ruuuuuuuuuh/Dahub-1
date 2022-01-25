@@ -381,5 +381,20 @@ class SystemApiController extends Controller
         return 'success';
     }
 
+    public function setGate(Request $request): bool
+    {
+        $user = User::where('uid', $request->input('user_uid'))->firstOrFail();
+        $user->roles = 'gate';
+        $user->save();
+        return true;
+    }
+
+    public function removeGate(Request $request): bool
+    {
+        $user = User::where('uid', $request->input('user_uid'))->firstOrFail();
+        $user->roles = '';
+        $user->save();
+        return true;
+    }
 }
 
