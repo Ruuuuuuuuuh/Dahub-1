@@ -239,6 +239,10 @@ a.copy-link {
     justify-content: space-between;
     width: 60%;
     cursor:pointer;
+    svg {
+        min-width: 33px;
+        margin-left: 15px;
+    }
 }
 .wallet-link-section .tab-content {
     padding-top:35px;
@@ -680,5 +684,8 @@ strong {
     font-weight: 500;
 }
 .deposit-section, .order-wallet .order-wallet-wrapper {
-    max-width:640px;
+    max-width:780px;
+}
+#balance-tabs {
+    flex-shrink: 0;
 }

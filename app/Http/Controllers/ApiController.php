@@ -169,15 +169,17 @@ class ApiController extends Controller
                 );
             }
 
-            $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+            // Отправление сообщения боту в паблик шлюзов
+            if(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN') !== null && env('TELEGRAM_BOT_GATE_ORDERS_TOKEN') !== '') {
+                $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                $destination_message = ($destination == 'deposit' || $destination == 'TokenSale') ? 'получение' : 'отправление';
+                $telegram->sendMessage([
+                    'chat_id' => env('TELEGRAM_GATE_ORDERS_CHAT_ID'),
+                    'text' => '<b>Новая заявка: </b> №' . $order->id . ' на '. $destination_message . ' ' . $amount . ' ' . $currency.PHP_EOL . '<b>Платежная сеть: </b> ' . $order->payment . PHP_EOL .'<a href="' . env('APP_URL') .'/orders/'. $order->id . '/confirm">Принять заявку</a>',
+                    'parse_mode' => 'html'
+                ]);
+            }
 
-            $destination_message = ($destination == 'deposit' || $destination == 'TokenSale') ? 'получение' : 'отправление';
-
-            $telegram->sendMessage([
-                'chat_id' => env('TELEGRAM_GATE_ORDERS_CHAT_ID'),
-                'text' => '<b>Новая заявка: </b> №' . $order->id . ' на '. $destination_message . ' ' . $amount . ' ' . $currency.PHP_EOL . '<b>Платежная сеть: </b> ' . $order->payment . PHP_EOL .'<a href="' . env('APP_URL') .'/orders/'. $order->id . '/confirm">Принять заявку</a>',
-                'parse_mode' => 'html'
-            ]);
 
             return response($order->id, 200, $this->headers);
         }
