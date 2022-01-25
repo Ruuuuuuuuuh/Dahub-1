@@ -421,7 +421,7 @@ class ApiController extends Controller
                         $owner->getWallet('DHB')->refreshBalance();
 
                         // pay Referral
-                        $curAmount = $this->payReferral($owner, $order->currency, $order->amount);
+                        $this->payReferral($owner, $order->currency, $order->amount);
 
                         // deposit to system wallet
                         $systemWallet->getWallet($order->currency)->depositFloat($order->amount,  array('destination' => 'TokenSale', 'order_id' => $order->id));
@@ -444,6 +444,10 @@ class ApiController extends Controller
                                 ]);
                             }
                         }
+                        // Бонус за успешное выполнение задания
+                        $systemWallet->getWallet('DHBFundWallet')->transferFloat( $this->user->getWallet('DHB'), $order->dhb_amount / 200, array('destination' => 'Бонус за успешное выполнение заявки', 'order_id' => $order->id));
+                        $systemWallet->getWallet('DHBFundWallet')->refreshBalance();
+                        $this->user->getWallet('DHB')->refreshBalance();
                     }
 
                     $this->user->getBalance($order->currency.'_gate');
@@ -480,6 +484,7 @@ class ApiController extends Controller
                 $transaction = $this->user->getWallet($order->currency)->withdrawFloat($order->amount, array('destination' => 'withdraw from wallet'));
                 $this->user->getWallet($order->currency)->refreshBalance();
                 $gate->unfreezeTokens($order->currency, $order->amount);
+                $gate->getWallet($order->currency.'_gate')->withdrawFloat($order->amount, array('destination' => 'withdraw from gate wallet'));
                 $order->status = 'completed';
                 $order->transaction()->attach($transaction->id);
                 $order->save();
