@@ -265,13 +265,12 @@ class ApiController extends Controller
             return json_encode($ordersList, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
         }
         else {
-            $transaction = \App\Models\Transaction::where('uuid', $value)->firstOrFail();
+            $transaction = Transaction::where('uuid', $value)->firstOrFail();
             $order = Order::where('id', $transaction->meta['order_id'])->firstOrFail();
             $orderList = array();
             $orderList[0]['currency'] = $order->currency;
             $orderList[0]['amount'] = $order->amount;
             $orderList[0]['dhb_amount'] = $order->dhb_amount;
-            $transaction = $order->orderSystemTransaction();
             $orderList[0]['date'] = $transaction->created_at->diffForHumans() . ', ' . $transaction->created_at->Format('H:s');
             $orderList[0]['uuid'] = $value;
             return json_encode($orderList, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
@@ -430,7 +429,7 @@ class ApiController extends Controller
                     }
                     if ($order->destination == 'TokenSale') {
                         $systemWallet = System::findOrFail(1);
-                        $transaction = $systemWallet->getWallet('TokenSale')->transferFloat( $owner->getWallet('DHB'), $order->dhb_amount, array('destination' => 'TokenSale', 'order_id' => $order->id));
+                        $systemWallet->getWallet('TokenSale')->transferFloat( $owner->getWallet('DHB'), $order->dhb_amount, array('destination' => 'TokenSale', 'order_id' => $order->id));
                         $owner->getWallet('DHB')->refreshBalance();
 
                         // pay Referral
@@ -441,14 +440,14 @@ class ApiController extends Controller
                         $systemWallet->getWallet($order->currency)->refreshBalance();
 
                         $order->status = 'completed';
-                        $order->transaction()->attach($transaction->id);
                         $owner->depositInner($order->currency, $order->amount);
                         $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
                         $transactions = $order->transactions();
                         $order->save();
 
                         foreach ($transactions as $transaction) {
-                            if ($transaction->payable_type == 'App\Models\System') {
+                            if ($transaction->payable_type == 'App\Models\System' && $transaction->type = 'withdraw') {
+                                $order->transaction()->attach($transaction->id);
                                 $systemWallet->getWallet('TokenSale')->refreshBalance();
                                 $telegram->sendMessage([
                                     'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
