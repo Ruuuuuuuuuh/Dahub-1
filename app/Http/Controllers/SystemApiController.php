@@ -396,5 +396,14 @@ class SystemApiController extends Controller
         $user->save();
         return true;
     }
+
+    public function setTokenSaleStartDate(Request $request): bool
+    {
+        $system = System::findOrFail(1);
+        $datetime = $request->input('datetime');
+        $system->start_token_sale_date = $datetime;
+        $system->save();
+        return true;
+    }
 }
 

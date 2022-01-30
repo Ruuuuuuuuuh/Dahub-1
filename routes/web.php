@@ -73,6 +73,7 @@ Route::post('/api/transfer', [App\Http\Controllers\ApiController::class, 'transf
 Route::post('/api/set_dhb_per_user', [App\Http\Controllers\SystemApiController::class, 'setDHBPerUser'])->middleware('admin');
 Route::post('/api/set_dhb_per_order', [App\Http\Controllers\SystemApiController::class, 'setDHBPerOrder'])->middleware('admin');
 Route::post('/api/set_gate', [App\Http\Controllers\SystemApiController::class, 'setGate'])->middleware('admin');
+Route::post('/api/set-token-sale-date', [App\Http\Controllers\SystemApiController::class, 'setTokenSaleStartDate'])->middleware('admin');
 Route::post('/api/remove_gate', [App\Http\Controllers\SystemApiController::class, 'removeGate'])->middleware('admin');
 
 // API ROUTES

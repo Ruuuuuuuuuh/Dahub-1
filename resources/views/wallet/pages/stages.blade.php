@@ -22,6 +22,12 @@
 {{--                        <a class="start-token-sale">старт токен сейл</a>--}}
                         <a class="btn btn-primary set-dhb-per-user">Лимит DHB в одни руки</a>
                         <a class="btn btn-warning set-dhb-per-order">Лимит DHB в одной заявке</a>
+                        <div class="form-group w-50 mt-4">
+                            <p>Установите таймер заморозки токенсейла:</p>
+                            <input type="datetime-local" name="token-sale-date" class="form-control mb-3" @if ($system->start_token_sale_date) value="{{\Carbon\Carbon::parse($system->start_token_sale_date)->format('Y-m-d\TH:i')}}" @endif>
+                            <a class="btn btn-success set-token-sale-date">Установить таймер</a>
+                            <a class="btn btn-secondary reset-token-sale-date">Сбросить таймер</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,37 +81,42 @@
                 }
             })
 
+            $('.set-token-sale-date').bind('click', function(e) {
+                e.preventDefault();
+                let _token = $('meta[name="csrf-token"]').attr('content');
+                let datetime = $('input[name="token-sale-date"]').val()
+                $.ajax({
+                    url: "/api/set-token-sale-date",
+                    type:"POST",
+                    data:{
+                        _token: _token,
+                        datetime: datetime
+                    },
+                    success:function(response){
+                        alert('Таймер старта токенсейла успешно установлен')
+                        window.location.href = '/wallet/stages/';
+                    },
+                });
+            })
 
-            $('.start-token-sale').bind('click', function(e) {
+            $('.reset-token-sale-date').bind('click', function(e) {
                 e.preventDefault();
                 let _token = $('meta[name="csrf-token"]').attr('content');
+                let datetime = ''
                 $.ajax({
-                    url: "/api/start_token_sale",
+                    url: "/api/set-token-sale-date",
                     type:"POST",
                     data:{
                         _token: _token,
+                        datetime: datetime
                     },
                     success:function(response){
-                        alert('Токен сейл успешно запущен по цене токена в 0.05$ На системный кошелек начислено 2 млн токенов DHB')
+                        alert('Таймер токенсейла успешно сброшен')
                         window.location.href = '/wallet/stages/';
                     },
                 });
             })
-            $('.generate_user_wallets').bind('click', function(e) {
-                e.preventDefault();
-                let _token = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: "/api/generate_user_wallets",
-                    type:"POST",
-                    data:{
-                        _token: _token,
-                    },
-                    success:function(response){
-                        alert('Пользовательские кошельки сгенерированы автоматически')
-                        window.location.href = '/wallet/stages/';
-                    },
-                });
-            })
+
 
         })
     </script>

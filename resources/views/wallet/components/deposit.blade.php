@@ -1,6 +1,7 @@
 <div class="deposit-section">
     <div class="new-order">
         <h2>Получить DHB</h2>
+        @if ($system->amount_per_order > 1999)
         <h3 class="status-text">Шаг 1 из 3</h3>
         <div class="status-bar">
             <span class="active"></span>
@@ -54,6 +55,8 @@
         <a onclick="deposit();" style="margin-top:40px;" class="button button-blue">Получить DHB</a>
         @else
             <p style="margin-top: 25px;margin-bottom: -15px;font-weight: 500;color: #e93878;">Вы уже владеете максимальным количеством DHB</p>
+        @endif
+
         @endif
     </div>
 
