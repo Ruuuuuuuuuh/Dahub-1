@@ -10190,17 +10190,61 @@ main {
   font-weight: 500;
 }
 
-.bg-success {
-  background: linear-gradient(81.97deg, #85F362 -4.91%, #02AAFF 58.19%) !important;
+.progress-labels {
+  margin-bottom: 8px;
+  margin-top: -25px;
+}
+.progress-labels .mobile-visible {
+  display: none;
+}
+.progress-labels span {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 18px;
+  text-align: center;
+}
+.progress-labels span:not(.frozen-label) {
+  min-width: calc(20% - 5px);
 }
 
 .progress {
   background: linear-gradient(100.13deg, #2691E2 -25.88%, #1A2453 53.71%);
   border-radius: 20px;
+  position: relative;
+}
+.progress .bg-success {
+  background-color: #5061A2 !important;
+  z-index: 99;
+}
+.progress .bg-blue {
+  background: #03ABFF;
+  z-index: 10;
+}
+.progress .bg-green {
+  background: #63E08D;
+  z-index: 9;
+}
+.progress .bg-yellow {
+  background: #FFC700;
+  z-index: 8;
+}
+.progress .bg-orange {
+  background: #FF9134;
+  z-index: 7;
+}
+.progress .bg-red {
+  background: #EB4372;
+  z-index: 6;
 }
 
 .progress-bar {
   border-radius: 20px;
+  margin-left: -10px;
+}
+.progress-bar:first-of-type {
+  margin-left: 0;
+  position: absolute;
+  height: 16px;
 }
 
 .navbar-nav .dropdown-menu {
@@ -10495,7 +10539,7 @@ strong {
   background-position: center;
   line-height: 60px;
   padding: 0 100px;
-  border-radius: 20px;
+  border-radius: 300px;
   display: inline-block;
   cursor: pointer;
 }
@@ -10786,6 +10830,41 @@ strong {
   flex-shrink: 0;
 }
 
+.token-sale-freeze {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.start-token-sale-content {
+  text-align: center;
+}
+.start-token-sale-content h2 {
+  font-weight: 500;
+  font-size: 30px;
+  line-height: 30px;
+  text-align: center;
+  text-transform: uppercase;
+  width: 100%;
+}
+.start-token-sale-content .timer {
+  text-align: center;
+  font-weight: 500;
+  font-size: 48px;
+  line-height: 48px;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent;
+  background: linear-gradient(81.97deg, #85F362 -4.91%, #02AAFF 58.19%);
+  margin: 35px 0;
+}
+.start-token-sale-content .button {
+  margin-top: 35px;
+  display: inline-flex;
+  align-items: center;
+}
+.start-token-sale-content .button svg {
+  margin-right: 12px;
+}
+
 @media screen and (max-width: 1023px) {
   .button {
     margin-left: 0;
@@ -10860,13 +10939,12 @@ strong {
   }
 
   .main-screen p {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .progress + p {
-    font-size: 10px !important;
-    text-align: center !important;
-    font-weight: bold !important;
+    font-size: 14px !important;
+    margin-top: 50px !important;
   }
 
   .users-button a svg {
@@ -10876,6 +10954,19 @@ strong {
   .app .navbar {
     background: linear-gradient(100.13deg, #6CA8E0 -25.88%, #4D5B9D 53.71%);
     padding: 12px 0 14px;
+  }
+
+  .start-token-sale-content .timer {
+    font-size: 36px;
+    margin: 25px 0;
+  }
+  .start-token-sale-content h2 {
+    font-size: 24px !important;
+    line-height: 24px !important;
+    text-align: center !important;
+  }
+  .start-token-sale-content .button {
+    text-align: center;
   }
 
   #balance-tabs .nav-item a svg {
@@ -11249,6 +11340,47 @@ strong {
 
   .frontpage .card-header {
     padding: 0 30px;
+  }
+
+  .progress-bar {
+    margin-left: -10px;
+    border-radius: 0 20px 20px 0;
+  }
+
+  .progress-labels {
+    margin-bottom: 12px;
+    margin-top: 40px;
+  }
+
+  .progress-bar:first-of-type {
+    margin-left: 0;
+    position: absolute;
+    height: 20px;
+  }
+
+  .progress-labels {
+    padding-left: 0 !important;
+  }
+  .progress-labels span {
+    font-size: 9px;
+    transform: rotate(-90deg);
+    min-width: 0 !important;
+  }
+  .progress-labels span:not(.frozen-label) {
+    width: calc(20% - 5px);
+  }
+  .progress-labels span svg {
+    width: 12px;
+    height: 16px;
+  }
+  .progress-labels span.mobile-visible {
+    width: calc(50% - 10px);
+    min-width: calc(50% - 10px) !important;
+    display: inline-block;
+  }
+
+  .progress-labels span:last-child {
+    transform: rotate(0deg);
   }
 }
 @media screen and (max-width: 360px) {

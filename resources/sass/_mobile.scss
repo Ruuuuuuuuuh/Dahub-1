@@ -69,7 +69,20 @@
             , #6CA8E0 -25.88%, #4D5B9D 53.71%);
         padding: 12px 0 14px;
     }
-
+    .start-token-sale-content {
+        .timer {
+            font-size:36px;
+            margin:25px 0;
+        }
+        h2 {
+            font-size: 24px!important;
+            line-height:24px!important;
+            text-align: center!important;
+        }
+        .button {
+            text-align: center;
+        }
+    }
     #balance-tabs .nav-item a svg {
         height:16px;
         margin-right: 5px;
