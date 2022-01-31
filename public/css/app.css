@@ -11091,6 +11091,7 @@ strong {
 
   a.copy-link svg {
     min-width: 16px;
+    width: 16px;
   }
 
   .deposit-section a.button {
