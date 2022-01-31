@@ -163,8 +163,13 @@ main {
 .progress-labels {
     margin-bottom: 8px;
     margin-top:-25px;
+    .mobile-visible {
+        display:none;
+    }
     span {
-        width: 20%;
+        &:not(.frozen-label) {
+            min-width: calc(20% - 5px);
+        }
         font-weight: 500;
         font-size: 18px;
         line-height: 18px;
