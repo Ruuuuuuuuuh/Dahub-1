@@ -21,7 +21,7 @@
             <div class="progress-bar bg-red" role="progressbar" style="width: calc(10% + 10px)" aria-valuenow="" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <p style="margin-top:10px; font-size:18px;">Продано: {{number_format($balances['sold'], 0, ',', ' ')}} из 2 000 000 DHB
-        <br/>Заморожено: {{number_format($balances['frozen'], 0, ',', ' ')}} DHB
+        <br/>Заблокировано в заявках: {{number_format($balances['frozen'], 0, ',', ' ')}} DHB
         </p>
         <p class="our_balance"><strong>Ваш баланс</strong></p>
         <p>{{ number_format(Auth::User()->getWallet('DHB')->balanceFloat, 2, ',',' ') }} DHB = {{ number_format((Auth::User()->getWallet('DHB')->balanceFloat * Rate::getRates('DHB')), 2, ',' , ' ')}} USD</p>
