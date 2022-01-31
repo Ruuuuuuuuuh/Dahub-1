@@ -45,7 +45,9 @@ class WalletController extends Controller
          * Сколько токенов продано
          * @var float $balances
          */
-        $balances = $system->getSoldTokens() + $system->getFrozenTokens();
+        $balances = array();
+        $balances['sold'] = $system->getSoldTokens();
+        $balances['frozen'] = $system->getFrozenTokens();
 
         /**
          * Доступный баланс токен сейла

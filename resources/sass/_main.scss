@@ -160,15 +160,54 @@ main {
     color:#fff;
     font-weight: 500;
 }
-.bg-success {
-    background: linear-gradient(81.97deg, #85F362 -4.91%, #02AAFF 58.19%) !important;
+.progress-labels {
+    margin-bottom: 8px;
+    margin-top:-25px;
+    span {
+        width: 20%;
+        font-weight: 500;
+        font-size: 18px;
+        line-height: 18px;
+        text-align: center;
+    }
 }
 .progress {
     background: linear-gradient(100.13deg, #2691E2 -25.88%, #1A2453 53.71%);
     border-radius: 20px;
+    position: relative;
+    .bg-success {
+        background-color: #5061A2!important;
+        z-index: 99;
+    }
+    .bg-blue {
+        background: #03ABFF;
+        z-index:10;
+    }
+    .bg-green {
+        background: #63E08D;
+        z-index:9;
+    }
+    .bg-yellow {
+        background: #FFC700;
+        z-index:8;
+    }
+    .bg-orange {
+        background: #FF9134;
+        z-index:7;
+    }
+    .bg-red {
+        background: #EB4372;
+        z-index:6;
+    }
 }
 .progress-bar {
     border-radius: 20px;
+    margin-left:-10px;
+    &:first-of-type {
+        margin-left:0;
+        position: absolute;
+        height: 16px;
+    }
 }
 .navbar-nav .dropdown-menu {
     position: absolute;
