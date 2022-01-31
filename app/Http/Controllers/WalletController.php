@@ -9,6 +9,7 @@ use App\Models\Payment;
 use App\Models\System;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\WalletService;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -76,7 +77,10 @@ class WalletController extends Controller
             else $max = min($max, $available);
         }
 
-        return view('wallet.index', compact('balances', 'system', 'max'));
+        $startTokenSale = Carbon::parse($system->start_token_sale_date);
+        $timeNow = Carbon::now();
+
+        return view('wallet.index', compact('balances', 'system', 'max', 'startTokenSale', 'timeNow'));
     }
 
     public function profile()
