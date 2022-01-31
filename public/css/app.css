@@ -10967,6 +10967,7 @@ strong {
   }
   .start-token-sale-content .button {
     text-align: center;
+    justify-content: center;
   }
 
   #balance-tabs .nav-item a svg {
