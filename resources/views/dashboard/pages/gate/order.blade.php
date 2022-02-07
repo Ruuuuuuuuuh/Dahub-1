@@ -6,8 +6,10 @@
         @else
             @include('dashboard.components.gate.order.'.$order->destination.'.'.$order->status)
         @endif
-
     </section>
+    @if ($order->status == 'created')
+        @include('dashboard.components.gate.accept_form')
+    @endif
 @endsection
 
 @section('scripts')
@@ -51,6 +53,100 @@
                 },
             });
         }
+
+
+
+        function openAcceptForm() {
+            $('#accept-order').addClass('opened');
+        }
+
+        $('.payment-details-form .confirm-modal').click(function(e){
+            e.preventDefault()
+            if (!$(this).hasClass('disabled')) {
+                return new Promise(function (resolve, reject) {
+                    let form = $('.payment-details-form');
+                    let data = {
+                        "_token": "{{ csrf_token() }}",
+                        "address": form.find('input[name="address"]').val(),
+                        "payment": form.find('input[name="payment"]').val(),
+                        "holder_name": form.find('input[name="holder_name"]').val(),
+                    }
+                    $.ajax({
+                        url: "/api/payment_details/add",
+                        type: "POST",
+                        data: data,
+                        success: function (data) {
+                            resolve(data)
+                            console.log(data)
+                            $('.payment-items').append('<a class="payment-item d-flex align-items-center justify-content-start" data-address="' + data[0].address + '" data-payment="' + data[0].payment + '">' +
+                                '<svg class="payment-details-icon" width="55" height="36" viewBox="0 0 56 36" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                                '<rect x="1" width="55" height="36" rx="5" fill="#EFF2F9"></rect>' +
+                                '<rect y="23" width="56" height="6" fill="white"></rect>' +
+                                '</svg>' +
+                                '<div class="payment-details">' +
+                                '<span class="payment-system">' + data[0].payment + '</span>' +
+                                '<span class="address">' + data[0].address + '</span>' +
+                                '<span class="holder-name">' + data[0].holder + '</span>' +
+                                '</div></a>');
+                            $('#add-payment-details').modal('hide')
+                        },
+                        error: function (err) {
+                            reject(err)
+                        }
+                    })
+                })
+            }
+        })
+
+        $('#accept-order .payment-items').on('click', '.payment-item', function() {
+            $('.payment-item').removeClass('active')
+            $(this).addClass('active')
+            $('.order-accept').removeClass('disabled').attr('data-address', $(this).data('address'))
+        })
+        $('#payment-details-list .payment-items').on('click', '.payment-item', function() {
+            $('.payment-item').removeClass('active')
+            $(this).addClass('active')
+            let address = $(this).find('.address').text();
+            $('#payment-details-list').removeClass('opened')
+            $('.input-address').val(address)
+        })
+
+        $('.add-payment_item').click(function() {
+            $('#add-payment-details').modal()
+        })
+
+        $('.payment-details-form input').on('change keyup', function() {
+            let filledtextboxes = 1;
+            if ($('.payment-details-form input[name="address"]').val().length == 0) filledtextboxes = 0;
+            // if ($('.payment-details-form').closest('#add-payment-details').hasClass('crypto') && $('.payment-details-form input[name="address"]').val().length != 0) filledtextboxes = 1
+            if (filledtextboxes != 0) $('.payment-details-form .confirm-modal').removeClass('disabled')
+            else $('.payment-details-form .confirm-modal').addClass('disabled')
+        })
+
+        $('.order-accept').click(function(e) {
+            e.preventDefault()
+            if (!$(this).hasClass('disabled')) {
+                let data = {
+                    "_token": "{{ csrf_token() }}",
+                    "id": {{$order->id}},
+                    "payment_details": $(this).data('address'),
+                }
+                return new Promise(function (resolve, reject) {
+                    $.ajax({
+                        url: "/api/orders/acceptOrderByGate",
+                        type: "POST",
+                        data: data,
+                        success: function (data) {
+                            resolve(data)
+                            window.location.href = '/dashboard/orders/' + data;
+                        },
+                        error: function (err) {
+                            reject(err)
+                        }
+                    })
+                })
+            }
+        })
 
         function acceptSending() {
             let _token = "{{ csrf_token() }}";

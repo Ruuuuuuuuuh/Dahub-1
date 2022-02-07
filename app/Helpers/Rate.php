@@ -45,8 +45,14 @@ class Rate
 
         else {
             if (!Cache::get($currency)) {
-                $response = Http::get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=' . $currency . '&convert=USD&CMC_PRO_API_KEY=96fc9b4e-ab30-4d60-b0fb-23c9da6456b6');
-                static::Cache($currency, $response->json()["data"][$currency]["quote"]["USD"]["price"]);
+                if ($currency == 'TON') {
+                    $response = Http::get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=TONCOIN&convert=USD&CMC_PRO_API_KEY=96fc9b4e-ab30-4d60-b0fb-23c9da6456b6');
+                    static::Cache($currency, $response->json()["data"]['TONCOIN']["quote"]["USD"]["price"]);
+                }
+                else {
+                    $response = Http::get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=' . $currency . '&convert=USD&CMC_PRO_API_KEY=96fc9b4e-ab30-4d60-b0fb-23c9da6456b6');
+                    static::Cache($currency, $response->json()["data"][$currency]["quote"]["USD"]["price"]);
+                }
                 return Cache::get($currency);
             }
             else return Cache::get($currency);

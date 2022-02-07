@@ -173,10 +173,24 @@ class ApiController extends Controller
             if(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN') !== null && env('TELEGRAM_BOT_GATE_ORDERS_TOKEN') !== '') {
                 $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
                 $destination_message = ($destination == 'deposit' || $destination == 'TokenSale') ? 'получение' : 'отправление';
+                $inline_button = array(
+                    "text"  => "Принять заявку",
+                    "url"   =>  env('APP_URL') .'/dashboard/orders/'. $order->id . '/accept'
+                );
+                $inline_keyboard = [[$inline_button]];
+                $keyboard = array("inline_keyboard" => $inline_keyboard);
+                $replyMarkup = json_encode($keyboard);
+                $message = '🔥 <b>Новая заявка: </b> #' . $order->id . ' на '. $destination_message . ' ' . $amount . ' ' . $currency;
+                if ($currency == 'TON') $message .= ' 💎';
+                $message .= PHP_EOL;
+                if (Currency::where('title', $currency)->firstOrFail()->crypto) $message .= '🌐 ';
+                else $message .= '💳 ';
+                $message .= '<b>Платежная сеть: </b> ' . $order->payment;
                 $telegram->sendMessage([
                     'chat_id' => env('TELEGRAM_GATE_ORDERS_CHAT_ID'),
-                    'text' => '<b>Новая заявка: </b> №' . $order->id . ' на '. $destination_message . ' ' . $amount . ' ' . $currency.PHP_EOL . '<b>Платежная сеть: </b> ' . $order->payment . PHP_EOL .'<a href="' . env('APP_URL') .'/orders/'. $order->id . '/confirm">Принять заявку</a>',
-                    'parse_mode' => 'html'
+                    'text' => $message,
+                    'parse_mode' => 'html',
+                    'reply_markup' => $replyMarkup
                 ]);
             }
 
@@ -363,7 +377,7 @@ class ApiController extends Controller
     {
         if ($this->user->isGate()) {
             $order = Order::where('id', $request->input('id'))->firstOrFail();
-            if ($order->status == 'created') {
+            if ($order->status == 'created' && $this->user->getBalanceFree($order->currency) >= $order->amount) {
                 $order->gate = $this->user->uid;
                 $owner = User::where('uid', $order->user_uid)->first();
                 if ($order->destination == 'deposit' || $order->destination == 'TokenSale') {

@@ -27,4 +27,24 @@
         <p><small>На пополнение:</small></p>
         <p>{{$order->amount}} {{$order->currency}}</p>
     </div>
+    <div class="text-block">
+        <p><small>Оставшееся время:</small></p>
+        <p class="timeleft">@include('dashboard.components.order.timeleft')</p>
+    </div>
+    <div class="text-block">
+        <p><small>Статус:</small></p>
+        <p style="color:#347AF0">Новая заявка</p>
+    </div>
+    @if (Auth::user()->getBalanceFree($order->currency) >= $order->amount)
+    <div class="footer">
+        <a class="button button-blue" onclick="openAcceptForm()">Принять заявку</a>
+    </div>
+    @else
+    <div class="footer">
+        <div class="text-block mt-0 pt-0">
+            <h4 class="text-left">Вы не можете принять заявку,<br /> не достаточно средств</h4>
+        </div>
+        <a href="/dashboard/" class="button button-red">Вернуться на главную</a>
+    </div>
+    @endif
 </div>

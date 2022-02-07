@@ -141,6 +141,7 @@
                 USDT : '{!! Rate::getRates('USDT') !!}',
                 BTC : '{!! Rate::getRates('BTC') !!}',
                 ETH : '{!! Rate::getRates('ETH') !!}',
+                TON : '{!! Rate::getRates('TON') !!}',
             }
 
             let min = parseInt($('.deposit-block input[name="deposit-amount"]').data('min'));

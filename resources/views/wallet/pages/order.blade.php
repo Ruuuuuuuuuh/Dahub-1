@@ -34,7 +34,7 @@
                         <h2>Заявка выполнена</h2>
                         @endif
                         @if ($order->status == 'created')
-                        <p class="order-created-text">Как только шлюз примет в работу заявку, вы получите уведомление от @DaHubBot с дальнейшими инструкциями и реквизитами оплаты.</p>
+                                <p class="order-created-text">Как только шлюз примет в работу заявку, вы получите уведомление от <a href="https://t.me/DaHubBot" target="_blank">@DaHubBot</a> с дальнейшими инструкциями и реквизитами оплаты.</p>
                         <a onclick="decline('{{$order->id}}');" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
                         @elseif ($order->status == 'accepted')
                             <div class="created-block form-inline">

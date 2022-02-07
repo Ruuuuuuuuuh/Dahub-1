@@ -1,3 +1,18 @@
+<div class="swiper">
+    <!-- Additional required wrapper -->
+    <div class="swiper-wrapper">
+        @foreach ($visibleWallets as $visibleWallet)
+            <div class="swiper-slide">
+                <div class="total-amount">
+                    <p class="total-amount-title">{{$user->getBalance($visibleWallet)}} <span>{{$visibleWallet}}</span></p>
+                    <p class="total-currency">≈ $ <span>{{ number_format($user->getBalance($visibleWallet) * $rates::getRates($visibleWallet), 2, ',', ' ') }}</span></p>
+                </div>
+            </div>
+        @endforeach
+    </div>
+</div>
+
+
 <div class="balance-items">
     @foreach ($visibleWallets as $visibleWallet)
     <div class="balance-item d-flex justify-content-between w-100">

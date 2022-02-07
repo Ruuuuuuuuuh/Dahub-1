@@ -22,6 +22,7 @@
                         <option value="USDT" selected="selected">USDT</option>
                         <option value="BTC">BTC</option>
                         <option value="ETH">ETH</option>
+                        <option value="TON">TON</option>
                     </select>
                     <div class="select-angle">
                         <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">

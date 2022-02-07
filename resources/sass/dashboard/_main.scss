@@ -741,6 +741,15 @@ input[type="button"] {
     width: 100%;
 }
 
+.icon-ton {
+    path {
+        fill:#253550;
+    }
+    circle {
+        fill:#fff;
+    }
+}
+
 .settings {
     .balance-items {
         margin-top: 50px;
@@ -767,8 +776,17 @@ input[type="button"] {
                 .icon-wrapper {
                     svg {
                         margin-right:20px;
+                        max-width: 24px;
                         path {
                             fill:#253550;
+                        }
+                        &.icon-ton {
+                            path {
+                                fill:#fff;
+                            }
+                            circle {
+                                fill:#253550;
+                            }
                         }
                     }
                 }
