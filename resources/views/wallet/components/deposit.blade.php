@@ -20,8 +20,6 @@
                 <div class="deposit-currency-wrapper">
                     <select name="deposit-currency">
                         <option value="USDT" selected="selected">USDT</option>
-                        <option value="BTC">BTC</option>
-                        <option value="ETH">ETH</option>
                         <option value="TON">TON</option>
                     </select>
                     <div class="select-angle">

@@ -57,7 +57,6 @@ class DashboardController extends Controller {
         $mode = $this->getMode();
         $visibleWallets = $this->getVisibleWallets();
         if ($mode == 'pro' && $this->user->isGate()) {
-            $user = Gate::findOrFail($this->user->id);
             $orders['deposit'] = Order::where('status', 'created')->whereIn('destination', ['TokenSale', 'deposit'])->orderBy('id', 'DESC')->take(30)->get();
             $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->take(30)->get();
             $orders['owned'] = Order::where('status', 'accepted')->where('gate', $user->uid)->orderBy('id', 'DESC')->take(30)->get();

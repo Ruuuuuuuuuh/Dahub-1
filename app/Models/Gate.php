@@ -31,7 +31,7 @@ class Gate extends User implements Wallet, Confirmable, WalletFloat
      * @param int $decimal
      * @return float
      */
-    public function getBalance($currency, $decimal = 2): float
+    public function getBalance($currency, int $decimal = 2): float
     {
         $currencyGate = $currency.'_gate';
         if (!$this->hasWallet($currencyGate)) {

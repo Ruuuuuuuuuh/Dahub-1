@@ -115,89 +115,92 @@ class ApiController extends Controller
             ]
         );
 
-        $error = false;
+        if (!$this->user->hasActiveOrder()) {
+            $error = false;
 
-        $destination = $request->input('destination');
-        $amount = $request->input('amount');
-        $currency = $request->input('currency');
-        $payment = $request->input('payment');
-
-        if ($destination == 'TokenSale') {
-            $dhb_rate = Rate::getRates('DHB');
-            $dhb_amount = $request->input('dhb_amount');
+            $destination = $request->input('destination');
             $amount = $request->input('amount');
+            $currency = $request->input('currency');
+            $payment = $request->input('payment');
+
+            if ($destination == 'TokenSale') {
+                $dhb_rate = Rate::getRates('DHB');
+                $dhb_amount = $request->input('dhb_amount');
+                $amount = $request->input('amount');
+            } else {
+                $dhb_rate = '';
+                $dhb_amount = '';
+            }
+
+            if ($destination == 'withdraw') {
+                if ($this->user->getBalance($currency) < $amount) $error = 'Недостаточно средств для создания заявки';
+            }
+
+            if (!($request->has('amount') && $request->input('amount') != null)) {
+                $error = 'Вы не ввели сумму';
+            }
+
+            if (!$error) {
+                $address = $destination == 'deposit' ? null : $request->input('address');
+
+                $order = Order::create([
+                    'user_uid' => $this->user->uid,
+                    'destination' => $destination,
+                    'payment' => $payment,
+                    'currency' => $currency,
+                    'amount' => $amount,
+                    'status' => 'created',
+                    'rate' => Rate::getRates($currency),
+                    'payment_details' => $address,
+                    'dhb_rate' => $dhb_rate,
+                    'dhb_amount' => $dhb_amount
+                ]);
+                $order->save();
+
+                $this->user->notify(new OrderCreate($order));
+
+                // Добавление валюты в список валют на главном экране
+                $visibleWallets = $this->getVisibleWallets();
+                if (!in_array($currency, $visibleWallets)) {
+                    $visibleWallets[] = $currency;
+                    UserConfig::updateOrCreate(
+                        ['user_uid' => $this->user->uid, 'meta' => 'visible_wallets'],
+                        ['value' => $visibleWallets]
+                    );
+                }
+
+                // Отправление сообщения боту в паблик шлюзов
+                if (env('TELEGRAM_BOT_GATE_ORDERS_TOKEN') !== null && env('TELEGRAM_BOT_GATE_ORDERS_TOKEN') !== '') {
+                    $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                    $destination_message = ($destination == 'deposit' || $destination == 'TokenSale') ? 'получение' : 'отправление';
+                    $inline_button = array(
+                        "text" => "Принять заявку",
+                        "url" => env('APP_URL') . '/dashboard/orders/' . $order->id . '/accept'
+                    );
+                    $inline_keyboard = [[$inline_button]];
+                    $keyboard = array("inline_keyboard" => $inline_keyboard);
+                    $replyMarkup = json_encode($keyboard);
+                    $message = '🔥 <b>Новая заявка: </b> #' . $order->id . ' на ' . $destination_message . ' ' . $amount . ' ' . $currency;
+                    if ($currency == 'TON') $message .= ' 💎';
+                    $message .= PHP_EOL;
+                    if (Currency::where('title', $currency)->firstOrFail()->crypto) $message .= '🌐 ';
+                    else $message .= '💳 ';
+                    $message .= '<b>Платежная сеть: </b> ' . $order->payment;
+                    $telegram->sendMessage([
+                        'chat_id' => env('TELEGRAM_GATE_ORDERS_CHAT_ID'),
+                        'text' => $message,
+                        'parse_mode' => 'html',
+                        'reply_markup' => $replyMarkup
+                    ]);
+                }
+
+
+                return response($order->id, 200, $this->headers);
+            } else return response(['error' => true, 'error-msg' => $error], 404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
         else {
-            $dhb_rate = '';
-            $dhb_amount = '';
+            return response(['error' => true, 'error-msg' => 'У вас уже есть активная заявка'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
-
-        if ($destination == 'withdraw') {
-            if ($this->user->getBalance($currency) < $amount) $error = 'Недостаточно средств для создания заявки';
-        }
-
-        if (!($request->has('amount') && $request->input('amount') != null)) {
-            $error = 'Вы не ввели сумму';
-        }
-
-        if (!$error) {
-            $address = $destination == 'deposit' ? null : $request->input('address');
-
-            $order = Order::create([
-                'user_uid'        => $this->user->uid,
-                'destination'     => $destination,
-                'payment'         => $payment,
-                'currency'        => $currency,
-                'amount'          => $amount,
-                'status'          => 'created',
-                'rate'            => Rate::getRates($currency),
-                'payment_details' => $address,
-                'dhb_rate'        => $dhb_rate,
-                'dhb_amount'      => $dhb_amount
-            ]);
-            $order->save();
-
-            $this->user->notify(new OrderCreate($order));
-
-            // Добавление валюты в список валют на главном экране
-            $visibleWallets = $this->getVisibleWallets();
-            if (!in_array($currency, $visibleWallets)) {
-                $visibleWallets[] = $currency;
-                UserConfig::updateOrCreate(
-                    ['user_uid' => $this->user->uid, 'meta' => 'visible_wallets'],
-                    ['value' => $visibleWallets]
-                );
-            }
-
-            // Отправление сообщения боту в паблик шлюзов
-            if(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN') !== null && env('TELEGRAM_BOT_GATE_ORDERS_TOKEN') !== '') {
-                $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
-                $destination_message = ($destination == 'deposit' || $destination == 'TokenSale') ? 'получение' : 'отправление';
-                $inline_button = array(
-                    "text"  => "Принять заявку",
-                    "url"   =>  env('APP_URL') .'/dashboard/orders/'. $order->id . '/accept'
-                );
-                $inline_keyboard = [[$inline_button]];
-                $keyboard = array("inline_keyboard" => $inline_keyboard);
-                $replyMarkup = json_encode($keyboard);
-                $message = '🔥 <b>Новая заявка: </b> #' . $order->id . ' на '. $destination_message . ' ' . $amount . ' ' . $currency;
-                if ($currency == 'TON') $message .= ' 💎';
-                $message .= PHP_EOL;
-                if (Currency::where('title', $currency)->firstOrFail()->crypto) $message .= '🌐 ';
-                else $message .= '💳 ';
-                $message .= '<b>Платежная сеть: </b> ' . $order->payment;
-                $telegram->sendMessage([
-                    'chat_id' => env('TELEGRAM_GATE_ORDERS_CHAT_ID'),
-                    'text' => $message,
-                    'parse_mode' => 'html',
-                    'reply_markup' => $replyMarkup
-                ]);
-            }
-
-
-            return response($order->id, 200, $this->headers);
-        }
-        else return response(['error'=> true, 'error-msg' => $error],404, $this->headers, JSON_UNESCAPED_UNICODE);
     }
 
 

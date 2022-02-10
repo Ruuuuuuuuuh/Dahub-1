@@ -91,7 +91,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="http://t.me/DA_HUB_CHAT" class="nav-link" target="_blank">
+                        <a href="http://t.me/DaHubSupportBot" class="nav-link" target="_blank">
                             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g clip-path="url(#clip0)">
                                     <path opacity="0.9" d="M2.91194 18.8045H1.49483L2.49687 17.8025C3.03716 17.2622 3.37455 16.5595 3.46526 15.7971C1.15153 14.2788 0 12.0791 0 9.77307C0 5.51873 3.91015 1.19531 10.0339 1.19531C16.5213 1.19531 20 5.17366 20 9.40034C20 13.6549 16.4846 17.6306 10.0339 17.6306C8.90388 17.6306 7.72473 17.4797 6.67198 17.2029C5.67541 18.2251 4.32514 18.8045 2.91194 18.8045Z" fill="white"/>
@@ -102,7 +102,7 @@
                                     </clipPath>
                                 </defs>
                             </svg>
-                            <span>Чат</span>
+                            <span>Поддержка</span>
                         </a>
                     </li>
 

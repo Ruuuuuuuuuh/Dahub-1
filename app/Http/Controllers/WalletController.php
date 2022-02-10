@@ -81,7 +81,6 @@ class WalletController extends Controller
 
         $startTokenSale = Carbon::parse($system->start_token_sale_date);
         $timeNow = Carbon::now();
-
         return view('wallet.index', compact('balances', 'system', 'max', 'startTokenSale', 'timeNow'));
     }
 

@@ -99,6 +99,15 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         return $this->hasMany('App\Models\Order', 'user_uid', 'uid');
     }
 
+    /**
+     * Если есть активная заявка
+     * @return bool
+     */
+    public function hasActiveOrder(): bool
+    {
+        return $this->orders()->where('status', '!=', 'completed')->exists();
+    }
+
 
     /**
      * Получить настройки.
