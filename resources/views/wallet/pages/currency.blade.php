@@ -35,6 +35,10 @@
                                 <input class="form-control" name="title" value="{{$currency->title}}">
                             </div>
                             <div class="form-group">
+                                <label for="title">Включить (Да / Нет)</label>
+                                <input name="visible" type="checkbox" class="form-control" style="width: 20px;display: inline-block;vertical-align: middle;margin-left: 15px;" @if($currency->visible) checked @endif>
+                            </div>
+                            <div class="form-group">
                                 <label for="subtitle">Описание</label>
                                 <input class="form-control" name="subtitle" value="{{$currency->subtitle}}">
                             </div>
@@ -116,6 +120,7 @@
                     "_token": "{{ csrf_token() }}",
                     "title": $('input[name="title"]').val(),
                     "subtitle": $('input[name="subtitle"]').val(),
+                    "visible": $('input[name="visible"]').is(':checked') ? 1 : 0,
                     "decimal_places": $('input[name="decimal_places"]').val(),
                     "icon": $('textarea[name="icon"]').val(),
                 })

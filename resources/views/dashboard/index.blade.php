@@ -133,7 +133,7 @@
             })
             @endif
             @if ($mode == 'pro')
-                swiper.on('transitionEnd', function () {
+                /*swiper.on('transitionEnd', function () {
                     let activeCurrency = $('.swiper-slide.swiper-slide-active .total-amount-title span').html()
                     console.log(activeCurrency)
                     $('.balance-item.balance-available .balance-amount span').html(balances[activeCurrency]['amountFree'] * balances[activeCurrency]['rate'])
@@ -143,7 +143,7 @@
                     else progressBarWidth = 100
                     console.log(progressBarWidth)
                     $('.progress-bar').css('width', progressBarWidth + '%')
-                });
+                });*/
             @endif
         });
         function getPayments(currency) {

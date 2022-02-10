@@ -27,6 +27,6 @@ class Currency extends Model
 
     public function scopePayableCurrencies($query)
     {
-        return $query->where('title', '!=', 'HFT')->where('title', '!=', 'DHB');
+        return $query->where('title', '!=', 'HFT')->where('visible', '1');
     }
 }
