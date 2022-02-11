@@ -115,6 +115,7 @@ class DashboardController extends Controller {
     public function acceptOrderPage($id) {
         if ($this->user->isGate()) {
             $order = Order::findOrFail($id);
+            $this->user->switchMode('pro');
             $mode = $this->getMode();
             $dt = Carbon::now();
             $seconds_left = $dt->diffInSeconds($order->created_at);

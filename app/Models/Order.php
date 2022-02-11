@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @method static create(array $array)
  * @method static where(string $string, mixed $id)
+ * @method static findOrFail($id)
  */
 class Order extends Model
 {

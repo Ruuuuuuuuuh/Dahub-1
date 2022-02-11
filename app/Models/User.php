@@ -18,9 +18,9 @@ use Questocat\Referral\Traits\UserReferral;
 use App\Models\Currency as Currency;
 
 
-
 /**
  * @property mixed $roles
+ * @property mixed $uid
  * @method static findOrFail($id)
  * @method static where(string $string, string $string1)
  */
@@ -117,6 +117,19 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         return $this->hasMany('App\Models\UserConfig', 'user_uid', 'uid');
     }
 
+
+    /**
+     * Переключить режим кошелька 'pro' или 'lite'
+     * @param string $mode
+     */
+    public function switchMode(string $mode) {
+        if ($this->isGate()) {
+            UserConfig::updateOrCreate(
+                ['user_uid' => $this->uid, 'meta' => 'mode'],
+                ['value' => $mode]
+            );
+        }
+    }
 
     public function paymentDetails(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
