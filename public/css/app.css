@@ -10434,6 +10434,19 @@ hr {
   font-size: 18px;
 }
 
+.payments li a.detach-payment {
+  cursor: pointer;
+  width: 42px;
+}
+.payments li a.detach-payment svg {
+  width: 100%;
+}
+.payments li p {
+  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: 500;
+}
+
 .deposit-block input, .deposit-block select {
   background: #F6F8FA;
   border: 1px solid #EFEFEF !important;

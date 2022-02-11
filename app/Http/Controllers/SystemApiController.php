@@ -371,7 +371,12 @@ class SystemApiController extends Controller
         return 'success';
     }
 
-    public function addPayment(Request $request)
+    /**
+     * Метод добавления платежной системы / сети
+     * @param Request $request
+     * @return string
+     */
+    public function addPayment(Request $request): string
     {
         $title = $request->input('title');
         if ($request->has('crypto')) {
@@ -387,7 +392,13 @@ class SystemApiController extends Controller
         return 'success';
     }
 
-    public function attachPaymentToCurrency(Request $request)
+
+    /**
+     * Метод присоединения платежной системы / сети к валюте
+     * @param Request $request
+     * @return string
+     */
+    public function attachPaymentToCurrency(Request $request): string
     {
         $currency = $request->input('currency');
         $payment = $request->input('payment');
@@ -396,6 +407,23 @@ class SystemApiController extends Controller
 
         return 'success';
     }
+
+
+    /**
+     * Отсоединение платежной системы / сети от валюты
+     * @param Request $request
+     * @return string
+     */
+    public function detachPaymentFromCurrency(Request $request): string
+    {
+        $currency = $request->input('currency');
+        $payment = $request->input('payment');
+        $currency = Currency::where('title', $currency)->first();
+        $currency->payments()->detach(Payment::where('title', $payment)->first()->id);
+
+        return 'success';
+    }
+
 
     public function setGate(Request $request): bool
     {

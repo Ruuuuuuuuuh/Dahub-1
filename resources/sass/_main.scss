@@ -369,6 +369,20 @@ hr {
     color: #e7223d;
     font-size:18px;
 }
+.payments li {
+    a.detach-payment {
+        cursor:pointer;
+        width:42px;
+        svg {
+            width:100%;
+        }
+    }
+    p {
+        margin-bottom: 0;
+        font-size: 20px;
+        font-weight: 500;
+    }
+}
 .deposit-block input, .deposit-block select {
     background: #F6F8FA;
     border: 1px solid #EFEFEF!important;

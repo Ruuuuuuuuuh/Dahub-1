@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @method static where(string $string, mixed $payment)
+ * @method static firstOrCreate(array $array)
  */
 class Payment extends Model
 {
