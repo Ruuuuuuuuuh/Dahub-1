@@ -41,4 +41,5 @@ class Currency extends Model
     {
         return $query->where('title', '!=', 'HFT')->where('visible', '1');
     }
+
 }
