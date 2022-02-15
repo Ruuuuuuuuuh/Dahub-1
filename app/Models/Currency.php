@@ -32,6 +32,7 @@ class Currency extends Model
     }
 
 
+
     /**
      * Возвращает список доступных валют
      * @param $query
