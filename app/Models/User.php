@@ -129,6 +129,12 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
                 ['value' => $mode]
             );
         }
+        else {
+            UserConfig::updateOrCreate(
+                ['user_uid' => $this->uid, 'meta' => 'mode'],
+                ['value' => 'lite']
+            );
+        }
     }
 
     public function paymentDetails(): \Illuminate\Database\Eloquent\Relations\HasMany

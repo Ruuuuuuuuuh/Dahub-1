@@ -1,6 +1,7 @@
 <div class="orders">
 
     <div class="order-owned">
+        @if (isset($orders['owned']))
         @foreach ($orders['owned'] as $order)
             <a href="{{Route('getOrder', $order->id)}}" class="order-item @if ($order->destination == 'TokenSale') order-deposit @else order-{{$order->destination}} @endif order-{{$order->status}} gate-order d-flex justify-content-between align-items-center" data-id="{{$order->id}}">
                 <div class="d-flex align-items-start flex-column justify-content-center order-destination">
@@ -43,6 +44,7 @@
                 </div>
             </a>
         @endforeach
+    @endif
     </div>
     <div class="orders-deposit">
         @foreach ($orders['deposit'] as $order)
