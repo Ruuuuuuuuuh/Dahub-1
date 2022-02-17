@@ -10944,6 +10944,12 @@ header.header .balance .balance-items .balance-item .balance-item-amount-descrip
 #menu-swipe.opened {
   transform: translateX(200vw);
 }
+#menu-swipe a.icon-close {
+  position: absolute;
+  top: 35px;
+  right: 40px;
+  cursor: pointer;
+}
 #menu-swipe .user-info {
   padding: 30px 35px 25px;
 }

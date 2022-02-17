@@ -107,7 +107,9 @@
                 excludedElements: '.balance',
             });
         }
-
+        $('.menu-close').click(function (){
+            $('#menu-swipe').removeClass('opened');
+        })
         window.mode = $('.app').data('mode')
         if (window.mode == 'pro') $('.switch-pro').addClass('active')
 

@@ -10,6 +10,12 @@
     &.opened {
         transform:translateX(200vw);
     }
+    a.icon-close {
+        position: absolute;
+        top: 35px;
+        right: 40px;
+        cursor:pointer;
+    }
     .user-info {
         padding: 30px 35px 25px;
         h2 {
