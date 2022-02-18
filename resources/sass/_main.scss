@@ -383,6 +383,13 @@ hr {
         font-weight: 500;
     }
 }
+.icon-remove {
+    cursor:pointer;
+    width:42px;
+    svg {
+        width:100%;
+    }
+}
 .deposit-block input, .deposit-block select {
     background: #F6F8FA;
     border: 1px solid #EFEFEF!important;

@@ -22,6 +22,7 @@
             width: 100%;
             height: 37px;
             padding-top: 5px;
+            display:table;
         }
     </style>
 @endsection
@@ -324,11 +325,16 @@
         let elt = $('input[name="destination"]');
         elt.tagsinput({
             typeahead: {
+                afterSelect: function(val) { this.$element.val(""); },
                 source: function(query) {
                     return $.post('/api/tags', { _token : $('meta[name="csrf-token"]').attr('content')});
                 }
             },
         });
+        elt.on('itemAdded', function(event) {
+            console.log(event.item)
+            $('.bootstrap-tagsinput input').val('')
+        })
     </script>
     <script>
         function withdrawPayment() {

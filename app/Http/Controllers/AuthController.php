@@ -20,7 +20,7 @@ class AuthController extends Controller
      *
      * @return Response
      */
-    public function login()
+    public function login(): Response
     {
         return redirect('/');
     }

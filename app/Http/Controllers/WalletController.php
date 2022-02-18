@@ -7,6 +7,7 @@ use App\Models\Currency;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\System;
+use App\Models\Tag;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\WalletService;
 use Carbon\Carbon;
@@ -89,13 +90,13 @@ class WalletController extends Controller
         $system = System::find(1);
         $system->getWallet('TokenSale')->refreshBalance();
         $balances = $system->getSoldTokens() + $system->getFrozenTokens();
-        return view('wallet.profile', compact('balances', 'system'));
+        return view('wallet.pages.profile', compact('balances', 'system'));
     }
 
     public function orders()
     {
         $orders = Order::where('destination','TokenSale')->orderBy('id', 'DESC')->get();
-        return view('wallet.pages.orders', compact('orders'));
+        return view('wallet.pages.admin.orders', compact('orders'));
     }
 
     // Этапы токен сейла
@@ -103,7 +104,7 @@ class WalletController extends Controller
     {
         $system = System::findOrFail(1);
         $system->getWallet('DHBFundWallet')->refreshBalance();
-        return view('wallet.pages.stages', compact('system'));
+        return view('wallet.pages.admin.stages', compact('system'));
     }
 
     // Пополнить HFT
@@ -119,7 +120,7 @@ class WalletController extends Controller
             );
         }
         $system->getWallet('HFT')->refreshBalance();
-        return view('wallet.pages.hft', compact('system'));
+        return view('wallet.pages.admin.hft', compact('system'));
     }
 
     // Бухгалтерия
@@ -143,7 +144,7 @@ class WalletController extends Controller
         $orders = Order::orderBy('id', 'DESC')->get();
         $wallet = new Wallet;
         $users = User::all();
-        return view('wallet.pages.reports', compact('system', 'orders', 'wallet', 'users'));
+        return view('wallet.pages.admin.reports', compact('system', 'orders', 'wallet', 'users'));
     }
 
     public function explorer(Request $request)
@@ -168,12 +169,12 @@ class WalletController extends Controller
 
     public function currencies() {
         $currencies = Currency::all();
-        return view('wallet.pages.currencies')->with('currencies', $currencies);
+        return view('wallet.pages.admin.currencies')->with('currencies', $currencies);
     }
 
     public function currency($slug) {
         $currency = Currency::where('title', $slug)->first();
-        return view('wallet.pages.currency')->with('currency', $currency);
+        return view('wallet.pages.admin.currency')->with('currency', $currency);
     }
 
     public function updateCurrency($slug, Request $request) {
@@ -189,12 +190,12 @@ class WalletController extends Controller
 
     public function payments() {
         $payments = Payment::all();
-        return view('wallet.pages.payments')->with('payments', $payments);
+        return view('wallet.pages.admin.payments')->with('payments', $payments);
     }
 
     public function getUsers() {
         $users = User::all();
-        return view('wallet.pages.users')->with('users', $users);
+        return view('wallet.pages.admin.users')->with('users', $users);
     }
 
     public function transfer() {
@@ -209,6 +210,11 @@ class WalletController extends Controller
 
     public function gates() {
         $gates = User::getGates()->get();
-        return view('wallet.pages.gates')->with('gates', $gates);
+        return view('wallet.pages.admin.gates')->with('gates', $gates);
+    }
+
+    public function tags() {
+        $tags = Tag::all();
+        return view('wallet.pages.admin.tags')->with('tags', $tags);
     }
 }

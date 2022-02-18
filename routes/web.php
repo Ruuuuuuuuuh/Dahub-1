@@ -55,9 +55,12 @@ Route::post('/wallet/currencies/{slug}', [App\Http\Controllers\WalletController:
 Route::get('/wallet/payments/', [App\Http\Controllers\WalletController::class, 'payments'])->middleware('admin')->name('wallet.payments');
 Route::get('/wallet/users', [App\Http\Controllers\WalletController::class, 'getUsers'])->name('wallet.users')->middleware('admin');
 Route::get('/wallet/gates', [App\Http\Controllers\WalletController::class, 'gates'])->name('wallet.gates')->middleware('admin');
+Route::get('/wallet/tags', [App\Http\Controllers\WalletController::class, 'tags'])->name('wallet.tags')->middleware('admin');
 
 // ADMIN ROUTES
 Route::post('/api/tags/', [App\Http\Controllers\SystemApiController::class, 'getTags'])->middleware('admin')->name('api.tags');
+Route::post('/api/tags/add', [App\Http\Controllers\SystemApiController::class, 'addTag'])->middleware('admin');
+Route::post('/api/tags/remove', [App\Http\Controllers\SystemApiController::class, 'removeTag'])->middleware('admin');
 Route::post('/api/start_token_sale/', [App\Http\Controllers\SystemApiController::class, 'startTokenSale'])->middleware('admin');
 Route::post('/api/generate_user_wallets/', [App\Http\Controllers\SystemApiController::class, 'generateUserWallets'])->middleware('admin');
 Route::post('/api/orders/{id}/confirm', [App\Http\Controllers\SystemApiController::class, 'confirmOrder'])->middleware('admin');

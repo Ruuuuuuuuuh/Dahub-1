@@ -15,6 +15,7 @@ use App\Notifications\OrderCreate;
 use App\Notifications\OrderDecline;
 use App\Notifications\ReferralBonusPay;
 use Bavix\Wallet\Models\Transaction;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
@@ -124,6 +125,7 @@ class SystemApiController extends Controller
         return true;
     }
 
+
     public function sendTokens(Request $request)
     {
 
@@ -202,10 +204,45 @@ class SystemApiController extends Controller
         }
     }
 
-    public function getTags() {
+    /**
+     * Получение списка тегов
+     * @return JsonResponse
+     */
+    public function getTags(): JsonResponse
+    {
         $data = Tag::all()->pluck('name');
         $headers = [ 'Content-Type' => 'application/json; charset=utf-8' ];
         return response()->json($data, 200, $headers, JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * Добавление тегов
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function addTag(Request $request): JsonResponse
+    {
+        $title = $request->input('title');
+        if (!Tag::where('name', $title)->exists()) {
+            $tag = new Tag;
+            $tag->name = $title;
+            $tag->save();
+        }
+        $headers = [ 'Content-Type' => 'application/json; charset=utf-8' ];
+        return response()->json('success', 200, $headers, JSON_UNESCAPED_UNICODE);
+    }
+
+    /**
+     * Удаление тегов
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function removeTag(Request $request): JsonResponse
+    {
+        $title = $request->input('title');
+        Tag::where('name', $title)->forceDelete();
+        $headers = [ 'Content-Type' => 'application/json; charset=utf-8' ];
+        return response()->json('success', 200, $headers, JSON_UNESCAPED_UNICODE);
     }
 
     /**
