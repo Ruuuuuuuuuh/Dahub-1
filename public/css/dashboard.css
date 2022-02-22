@@ -10570,8 +10570,11 @@ section.screen .payment-items .payment-item {
 section.screen .payment-items .payment-item .payment-details-icon {
   min-width: 55px;
 }
+section.screen .payment-items .payment-item .payment-details-icon .payment-item-icon-inner {
+  fill: #EDF1F9;
+}
 section.screen .payment-items .payment-item .payment-details {
-  margin-left: 22px;
+  margin-left: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10580,7 +10583,7 @@ section.screen .payment-items .payment-item .payment-details {
 section.screen .payment-items .payment-item .payment-details .address {
   font-weight: 600;
   font-size: 16px;
-  line-height: 22px;
+  line-height: 16px;
   color: #0D1F3C;
 }
 section.screen .payment-items .payment-item .payment-details .holder-name {
@@ -10595,21 +10598,27 @@ section.screen .payment-items .payment-item .payment-details .payment-system {
   line-height: 22px;
   color: #B5BBC9;
 }
+section.screen .payment-items .payment-item.active .payment-details-icon .payment-item-icon-inner {
+  fill: #356AF1;
+}
+section.screen .payment-items .payment-item:last-of-type {
+  border-bottom: none;
+}
 section.screen .add-payment_item {
-  height: 80px;
-  display: flex;
-  align-items: center;
-  padding: 18px 0 26px;
-}
-section.screen .add-payment_item span {
-  margin-left: 22px;
+  margin: 25px 0;
+  height: 46px;
+  padding: 0;
   font-weight: 600;
-  font-size: 14px;
-  line-height: 24px;
-  color: #0D1F3C;
-}
-section.screen .add-payment_item span span {
-  margin-left: 0;
+  font-size: 18px;
+  line-height: 44px;
+  text-align: center;
+  color: #347AF0;
+  background: #fff;
+  display: block;
+  border: 1px solid #347AF0;
+  box-sizing: border-box;
+  border-radius: 23px;
+  transition: 0.2s ease-in-out all;
 }
 
 #add-payment-details.crypto .holder-name {
@@ -10732,8 +10741,8 @@ input[type=button] {
   font-size: 18px;
   line-height: 44px;
   text-align: center;
-  color: #347AF0;
-  background: #fff;
+  color: #fff;
+  background: #347AF0;
   display: block;
   border: 1px solid #347AF0;
   box-sizing: border-box;

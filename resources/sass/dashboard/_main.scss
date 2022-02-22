@@ -538,9 +538,12 @@ section.screen {
             padding:24px 0 28px;
             .payment-details-icon {
                 min-width:55px;
+                .payment-item-icon-inner {
+                    fill: #EDF1F9
+                }
             }
             .payment-details {
-                margin-left:22px;
+                margin-left:10px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -548,7 +551,7 @@ section.screen {
                 .address {
                     font-weight: 600;
                     font-size: 16px;
-                    line-height: 22px;
+                    line-height: 16px;
                     color: #0D1F3C;
                 }
                 .holder-name {
@@ -564,23 +567,31 @@ section.screen {
                     color: #B5BBC9;
                 }
             }
+            &.active {
+                .payment-details-icon .payment-item-icon-inner {
+                    fill: #356AF1
+                }
+            }
+            &:last-of-type {
+                border-bottom: none;
+            }
         }
     }
     .add-payment_item {
-        height:80px;
-        display: flex;
-        align-items: center;
-        padding:18px 0 26px;
-        span {
-            margin-left:22px;
-            font-weight: 600;
-            font-size: 14px;
-            line-height: 24px;
-            color: #0D1F3C;
-            span {
-                margin-left:0;
-            }
-        }
+        margin: 25px 0;
+        height: 46px;
+        padding: 0;
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 44px;
+        text-align: center;
+        color: #347AF0;
+        background: #fff;
+        display: block;
+        border: 1px solid #347AF0;
+        box-sizing: border-box;
+        border-radius: 23px;
+        transition: 0.2s ease-in-out all;
     }
 }
 #add-payment-details {
@@ -700,8 +711,8 @@ input[type="button"] {
         font-size: 18px;
         line-height: 44px;
         text-align: center;
-        color: #347AF0;
-        background: #fff;
+        color: #fff;
+        background: #347AF0;
         display: block;
         border: 1px solid #347AF0;
         box-sizing: border-box;

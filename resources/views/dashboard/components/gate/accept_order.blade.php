@@ -20,23 +20,18 @@
         <div class="payment-items">
             @foreach (Auth::user()->paymentDetails()->get() as $payment)
             <a class="payment-item d-flex align-items-center justify-content-start" data-address="{{$payment->address}}" data-payment="{{$payment->payment()->first()->title}}">
-                <svg class="payment-details-icon" width="55" height="36" viewBox="0 0 56 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="1" width="55" height="36" rx="5" fill="#EFF2F9"/>
-                    <rect y="23" width="56" height="6" fill="white"/>
+                <svg class="payment-details-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10" cy="10" r="10" fill="#EDF1F9"/>
+                    <circle class="payment-item-icon-inner" cx="10" cy="10" r="6" fill="#EDF1F9"/>
                 </svg>
                 <div class="payment-details">
-                    <span class="payment-system">{{$payment->payment()->first()->title}}</span>
                     <span class="address">{{$payment->address}}</span>
                     <span class="holder-name">{{$payment->holder}}</span>
                 </div>
             </a>
             @endforeach
         </div>
-        <a class="add-payment_item d-flex align-items-center justify-content-start">
-            <svg width="55" height="36" viewBox="0 0 55 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="55" height="36" rx="5" fill="#EFF2F9"/>
-                <path d="M38.144 20.8H30.356V28.5H25.648V20.8H17.86V16.4H25.648V8.7H30.356V16.4H38.144V20.8Z" fill="white"/>
-            </svg>
+        <a class="add-payment_item d-flex align-items-center justify-content-center">
             <span>Добавить реквизиты</span>
         </a>
 
