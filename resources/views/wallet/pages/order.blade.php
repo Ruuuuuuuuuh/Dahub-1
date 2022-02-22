@@ -23,7 +23,7 @@
                         <div class="order-wallet-wrapper">
                         @if ($order->status != 'completed')
                             <h2>Получение {{$order->dhb_amount}} DHB</h2>
-                            <h3>@if ($order->status == 'created')Ожидайте назначения шлюза @elseif ($order->status == 'accepted')Ожидание отправки средств @endif</h3>
+                            <h3>@if ($order->status == 'created')Ожидайте назначения кипера @elseif ($order->status == 'accepted')Отправка средств @endif</h3>
                             <h3 class="status-text">@if ($order->status == 'created')Шаг 2 из 3 @elseif ($order->status == 'accepted')Шаг 3 из 3 @endif</h3>
                             <div class="status-bar">
                                 <span></span>
@@ -34,11 +34,11 @@
                         <h2>Заявка выполнена</h2>
                         @endif
                         @if ($order->status == 'created')
-                                <p class="order-created-text">Как только шлюз примет в работу заявку, вы получите уведомление от <a href="https://t.me/DaHubBot" target="_blank">@DaHubBot</a> с дальнейшими инструкциями и реквизитами оплаты.</p>
+                                <p class="order-created-text">Как только кипер примет в работу заявку, вы получите уведомление от <a href="https://t.me/DaHubBot" target="_blank">@DaHubBot</a> с дальнейшими инструкциями и реквизитами оплаты.</p>
                         <a onclick="decline('{{$order->id}}');" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
                         @elseif ($order->status == 'accepted')
                             <div class="created-block form-inline">
-                                <p>Отправьте <strong><span class="step2-amount">{{$order->amount}} </span> <span class="step2-currency"> {{$order->currency}}</span> </strong> на следующий адрес:</p>
+                                <p>Отправьте <strong><span class="step2-amount">{{$order->amount}} </span> <span class="step2-currency"> {{$order->currency}}</span> </strong>в <strong>{{$order->payment}}</strong> на адрес:</p>
                                 <div class="w-100">
                                     <div class="col-12">
 
@@ -69,6 +69,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <p style="margin-top:25px;">Как только заявка будет выполнена, вы получите уведомление от <a href="https://t.me/DaHubBot" target="_blank">@DaHubBot</a>.</p>
 
                                 <a onclick="decline('{{$order->id}}');" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
                             </div>

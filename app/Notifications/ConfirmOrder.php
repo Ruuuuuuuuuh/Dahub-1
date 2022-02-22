@@ -38,17 +38,17 @@ class ConfirmOrder extends Notification
 
     public function toTelegram($notifiable)
     {
-        $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/wallet/orders/'.$this->order->id);
+        $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/wallet/');
 
         return TelegramMessage::create()
             // Optional recipient user id.
             ->to($notifiable->uid)
             // Markdown supported.
-            ->content("Заявка №" . $this->order->id . " на " . $this->order->dhb_amount . " DHB выполнена")
+            ->content("Заявка №" . $this->order->id . " на получение " . $this->order->dhb_amount . " DHB выполнена.\nИстория и статус ваших заявок в разделе TokenSale 👉 «Мои заявки»")
 
             // (Optional) Blade template for the content.
             // ->view('notification', ['url' => $url])
 
-            ->button('Перейти в заявку', $url);
+            ->button('Мои заявки', $url);
     }
 }

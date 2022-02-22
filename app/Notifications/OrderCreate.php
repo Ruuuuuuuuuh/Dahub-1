@@ -44,7 +44,7 @@ class OrderCreate extends Notification
             // Optional recipient user id.
             ->to($notifiable->uid)
             // Markdown supported.
-            ->content("Заявка №" . $this->order->id . " на получение " . $this->order->dhb_amount . " DHB успешно создана.")
+            ->content("Заявка №" . $this->order->id . " на получение " . $this->order->dhb_amount . " DHB успешно создана.\nОжидайте назначения кипера.")
 
             // (Optional) Blade template for the content.
             // ->view('notification', ['url' => $url])
