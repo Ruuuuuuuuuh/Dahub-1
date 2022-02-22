@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between w-100">
-                        <div class="tax">Комиссия 1%  (+{{$order->amount / 100}} {{$order->currency}})</div>
+                        <div class="tax">Комиссия 0.5%  (+{{round($order->amount * Rate::getRates($order->currency) / 200 / Rate::getRates('DHB'))}} DHB)</div>
                         <div class="payment_details">
                             @if ($order->payment)
                                 <svg width="19" height="13" viewBox="0 0 19 13" fill="none" xmlns="http://www.w3.org/2000/svg">
