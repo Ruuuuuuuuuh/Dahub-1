@@ -32,8 +32,8 @@ class StartCommand extends Command
         $telegram_user = Telegram::getWebhookUpdates()['message'];
         $referral = stripos('/start login', $text) === false ? str_replace('/start login', '', $text) : '';
         //str_replace('/start login', '', $text)
-        $username = isset($telegram_user['from']['username']) ? $telegram_user['from']['username'] : $telegram_user['from']['first_name'];
-        $first_name = isset($telegram_user['from']['first_name']) ? $telegram_user['from']['first_name'] : '';
+        $username = $telegram_user['from']['username'] ?? $telegram_user['from']['first_name'];
+        $first_name = $telegram_user['from']['first_name'] ?? '';
         $first_name .= isset($telegram_user['from']['last_name']) ? ' '.$telegram_user['from']['last_name'] : '';
         $user = array(
             'user_id'       => $telegram_user['from']['id'],
@@ -43,18 +43,17 @@ class StartCommand extends Command
         );
         $auth = new AuthController;
         $message = $auth->findOrCreateUser($user);
-        $this->replyWithMessage(['text' => $message]);
-
-/*      $response = Telegram::getUserProfilePhotos(['user_id' => $telegram_user['from']['id'], 'offset' => 0, 'limit' => 1]);
-        $photos = $response->getPhotos();
-        foreach ($photos[0] as $photo) {
-            if ($photo['width'] == 320) {
-                $this->replyWithMessage([ 'text' =>  $photo['file_id'] ]);
-            }
-        }
-
-        https://api.telegram.org/file/bot1150126504:AAGHppcIXIcZ0pBmhx1mFQfZRfbfb-DPWWQ
-        $this->replyWithMessage(['text' => json_encode($photos[0])]);*/
-
+        $inline_button = array(
+            "text" => "Перейти в кошелёк",
+            "url" => $message['linkWallet']
+        );
+        $inline_keyboard = [[$inline_button]];
+        $keyboard = array("inline_keyboard" => $inline_keyboard);
+        $replyMarkup = json_encode($keyboard);
+        $this->replyWithMessage([
+            'text' => $message['text'],
+            'parse_mode' => 'html',
+            'reply_markup' => $replyMarkup
+        ]);
     }
 }
