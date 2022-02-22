@@ -11405,6 +11405,11 @@ strong {
   .progress-labels span:last-child {
     transform: rotate(0deg);
   }
+
+  .icon-support svg {
+    height: 23px !important;
+    margin-top: 2px;
+  }
 }
 @media screen and (max-width: 360px) {
   .explorer .hash {
