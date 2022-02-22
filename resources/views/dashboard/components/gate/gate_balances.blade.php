@@ -5,7 +5,7 @@
             <div class="swiper-slide">
                 <div class="total-amount">
                     <p class="total-amount-title">{{number_format($user->getBalance($currency->title.'_gate'), $currency->decimal_places, '.', ' ')}} <span>{{$currency->title}}</span></p>
-                    <p class="total-currency">≈ $ <span>{{ number_format($user->getBalance($currency->title.'_gate') * $rates::getRates($currency->title), $currency->decimal_places, '.', ' ') }}</span></p>
+                    <p class="total-currency">≈ $ <span>{{ number_format($user->getBalance($currency->title.'_gate') * $rates::getRates($currency->title), 2, '.', ' ') }}</span></p>
                 </div>
             </div>
         @endforeach
