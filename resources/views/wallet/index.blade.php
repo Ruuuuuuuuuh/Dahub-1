@@ -180,7 +180,6 @@
                     dhb_amount:     dhb_amount
                 },
                 success:function(response){
-                    alert('Заявка на получение ' + dhb_amount + ' DHB успешно создана')
                     window.location.href = '/wallet/orders/' + response
                 },
             });
