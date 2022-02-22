@@ -248,7 +248,11 @@
                         </div>
                         <div class="form-group">
                             <label for="destination">Назначение</label>
-                            <input type="text" class="form-control" name="destination" data-role="tagsinput" placeholder="Назначение платежа">
+                            <select class="form-control selectable" name="destination" placeholder="Назначение платежа" multiple>
+                                @foreach ($tags as $tag)
+                                    <option value="{{$tag->name}}">{{$tag->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="message">Комментарий</label>
@@ -299,7 +303,11 @@
                         </div>
                         <div class="form-group">
                             <label for="destination">Назначение</label>
-                            <input type="text" class="form-control" name="destination" data-role="tagsinput" placeholder="Назначение платежа">
+                            <select class="form-control selectable" name="destination" placeholder="Назначение платежа" multiple>
+                                @foreach ($tags as $tag)
+                                    <option value="{{$tag->name}}">{{$tag->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="message">Комментарий</label>
@@ -340,7 +348,7 @@
         function withdrawPayment() {
             let currency = $('#withdraw-payment select[name="currency"]').val();
             let amount = $('#withdraw-payment input[name="amount"]').val();
-            let destination = $('#withdraw-payment input[name="destination"]').val();
+            let destination = $('#withdraw-payment select[name="destination"]').val();
             let message = $('#withdraw-payment textarea').val();
             let _token = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
@@ -363,7 +371,7 @@
         function sendPayment() {
             let currency = $('#send-payment select[name="currency"]').val();
             let amount = $('#send-payment input[name="amount"]').val();
-            let destination = $('#send-payment input[name="destination"]').val();
+            let destination = $('#send-payment select[name="destination"]').val();
             let message = $('#send-payment textarea').val();
             let username = $('#send-payment select[name="username"]').val();
             let _token = $('meta[name="csrf-token"]').attr('content');

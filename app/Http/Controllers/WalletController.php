@@ -144,7 +144,8 @@ class WalletController extends Controller
         $orders = Order::orderBy('id', 'DESC')->get();
         $wallet = new Wallet;
         $users = User::all();
-        return view('wallet.pages.admin.reports', compact('system', 'orders', 'wallet', 'users'));
+        $tags = Tag::all();
+        return view('wallet.pages.admin.reports', compact('system', 'orders', 'wallet', 'users', 'tags'));
     }
 
     public function explorer(Request $request)

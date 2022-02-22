@@ -29,7 +29,7 @@
                     </div>
                     <div class="card-body">
                         <h2>Список тегов</h2>
-                        <a class="btn btn-success action">Добавить новый тег</a>
+                        <a style="margin:35px 0 25px" class="btn btn-success action">Добавить новый тег</a>
                         <ul class="nav flex-column currencies tags">
                             @foreach ($tags as $tag)
                                 <li class="nav-item d-flex justify-content-between align-items-center">

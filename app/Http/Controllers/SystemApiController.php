@@ -108,20 +108,12 @@ class SystemApiController extends Controller
 
         $amount = $request->input('amount');
         $currency = $request->input('currency');
-        $destination = $request->input('destination');
-        $destinations = explode(',', $destination );
+        $destination = implode(',', $request->input('destination'));
         $message = '';
         if ( $request->has('message')) $message = $request->input('message');
-        foreach ($destinations as $destination) {
-            if (!Tag::where('name', $destination)->exists()) {
-                $tag = new Tag;
-                $tag->name = $destination;
-                $tag->save();
-            }
-        }
 
         $systemWallet = System::findOrFail(1);
-        $systemWallet->getWallet($currency)->withdrawFloat($amount, array('destination' => $destinations, 'comment' => $message));
+        $systemWallet->getWallet($currency)->withdrawFloat($amount, array('destination' => $destination, 'comment' => $message));
         return true;
     }
 
@@ -131,26 +123,15 @@ class SystemApiController extends Controller
 
         $amount = $request->input('amount');
         $currency = $request->input('currency');
+        $destination = implode(', ', $request->input('destination'));
+
         $message = '';
         if ( $request->has('message')) $message = $request->input('message');
-        $destinations = false;
-        if ($request->has('destination')) {
-            $destination = $request->input('destination');
-            $destinations = explode(',', $destination );
-        }
+
 
         $username = $request->input('username');
         $user = User::where('uid', $username)->first();
         if ($user) {
-            if ($destinations) {
-                foreach ($destinations as $destination) {
-                    if (!Tag::where('name', $destination)->exists()) {
-                        $tag = new Tag;
-                        $tag->name = $destination;
-                        $tag->save();
-                    }
-                }
-            }
             if (!$user->getWallet($currency)) {
                 $user->createWallet(
                     [
@@ -161,10 +142,10 @@ class SystemApiController extends Controller
             }
             $systemWallet = System::findOrFail(1);
             if ($currency == 'DHBFundWallet') {
-                $systemWallet->getWallet($currency)->transferFloat($user->getWallet('DHB'), $amount, array('destination' => $destinations, 'comment' => $message));
+                $systemWallet->getWallet($currency)->transferFloat($user->getWallet('DHB'), $amount, array('destination' => $destination, 'comment' => $message));
             }
             else {
-                $systemWallet->getWallet($currency)->transferFloat($user->getWallet($currency), $amount, array('destination' => $destinations, 'comment' => $message));
+                $systemWallet->getWallet($currency)->transferFloat($user->getWallet($currency), $amount, array('destination' => $destination, 'comment' => $message));
                 $systemWallet->getWallet($currency)->refreshBalance();
                 if ($currency == 'HFT') {
                     $telegram = new Api(env('TELEGRAM_BOT_HARVEST_TOKEN'));
@@ -183,12 +164,12 @@ class SystemApiController extends Controller
                     $transaction = $user->getWallet($currency)->transactions()->orderBy('id', 'desc')->first();
                     $response = $telegram->sendMessage([
                         'chat_id' => env('TELEGRAM_ORDA_CHAT_ID'),
-                        'text' => '<b>🆕 Новая транзакция в бухгалтерии</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' ' . $currency . ' '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL . '🏷 Назначение: ' . implode(",", $destinations).PHP_EOL . '💬 Комментарий: ' . $message,
+                        'text' => '<b>🆕 Новая транзакция в бухгалтерии</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' ' . $currency . ' '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL . '🏷 Назначение: ' . $destination.PHP_EOL . '💬 Комментарий: ' . $message,
                         'parse_mode' => 'html'
                     ]);
                     $response = $telegram->sendMessage([
                         'chat_id' => env('TELEGRAM_DAHUB_RESPONSE_CHAT_ID'),
-                        'text' => '<b>🆕 Новая транзакция в бухгалтерии</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' ' . $currency . ' '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL . '🏷 Назначение: ' . implode(",", $destinations).PHP_EOL . '💬 Комментарий: ' . $message,
+                        'text' => '<b>🆕 Новая транзакция в бухгалтерии</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' ' . $currency . ' '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL . '🏷 Назначение: ' . $destination.PHP_EOL . '💬 Комментарий: ' . $message,
                         'parse_mode' => 'html'
                     ]);
                 }
