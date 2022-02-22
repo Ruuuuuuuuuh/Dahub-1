@@ -262,12 +262,11 @@
                             resolve(data)
                             console.log(data)
                             $('.payment-items').append('<a class="payment-item d-flex align-items-center justify-content-start" data-address="' + data[0].address + '" data-payment="' + data[0].payment + '">' +
-                                '<svg class="payment-details-icon" width="55" height="36" viewBox="0 0 56 36" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-                                '<rect x="1" width="55" height="36" rx="5" fill="#EFF2F9"></rect>' +
-                                '<rect y="23" width="56" height="6" fill="white"></rect>' +
+                                '<svg class="payment-details-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                                '<circle cx="10" cy="10" r="10" fill="#EDF1F9"/>' +
+                                '<circle class="payment-item-icon-inner" cx="10" cy="10" r="6" fill="#EDF1F9"/>' +
                             '</svg>' +
                             '<div class="payment-details">' +
-                                '<span class="payment-system">' + data[0].payment + '</span>' +
                                 '<span class="address">' + data[0].address + '</span>' +
                                 '<span class="holder-name">' + data[0].holder + '</span>' +
                             '</div></a>');

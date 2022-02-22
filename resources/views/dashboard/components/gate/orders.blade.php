@@ -48,6 +48,7 @@
     </div>
     <div class="orders-deposit">
         @foreach ($orders['deposit'] as $order)
+            @if ($order->amount <= $user->getBalanceFree($order->currency))
             <a href="{{Route('getOrder', $order->id)}}" class="order-item @if ($order->destination == 'TokenSale') order-deposit @else order-{{$order->destination}} @endif order-{{$order->status}} gate-order d-flex justify-content-between align-items-center" data-id="{{$order->id}}" data-crypto="{{\App\Models\Currency::where('title', $order->currency)->first()->crypto}}">
                 <div class="d-flex align-items-start flex-column justify-content-center order-destination">
                     @if ($order->destination == 'deposit' || $order->destination == 'TokenSale')
@@ -82,10 +83,12 @@
                     </div>
                 </div>
             </a>
+            @endif
         @endforeach
     </div>
     <div class="orders-withdraw" style="display:none;">
         @foreach ($orders['withdraw'] as $order)
+            @if ($order->amount <= $user->getBalance($order->currency.'_gate'))
             <a href="{{Route('getOrder', $order->id)}}" class="order-item order-{{$order->destination}} order-{{$order->status}} gate-order d-flex justify-content-between align-items-center" data-id="{{$order->id}}">
                 <div class="d-flex align-items-start flex-column justify-content-center order-destination">
                     @if ($order->destination == 'deposit')
@@ -125,6 +128,7 @@
                     @endif
                 </div>
             </a>
+            @endif
         @endforeach
     </div>
 </div>

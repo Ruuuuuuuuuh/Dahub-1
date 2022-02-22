@@ -663,6 +663,17 @@ section.screen {
                     opacity: 0.5;
                     border: 1px solid #CFD2D8;
                 }
+
+                /* Change the white to any color */
+                input:-webkit-autofill,
+                input:-webkit-autofill:hover,
+                input:-webkit-autofill:focus,
+                input:-webkit-autofill:active{
+                    -webkit-box-shadow: 0 0 0 30px white inset !important;
+                }
+                input:-webkit-autofill{
+                    -webkit-text-fill-color: #333 !important;
+                }
             }
             a.confirm-modal {
                 position: absolute;
