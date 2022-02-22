@@ -44,10 +44,16 @@ class StartCommand extends Command
         $auth = new AuthController;
         $message = $auth->findOrCreateUser($user);
         $inline_button = array(
-            "text" => "Перейти в кошелёк",
-            "url" => $message['linkWallet']
+            [
+                "text" => "Токенсейл🔥",
+                "url" => $message['linkWallet']
+            ],
+            [
+                "text" => "Кошелёк",
+                "url" => $message['linkDashboard']
+            ]
         );
-        $inline_keyboard = [[$inline_button]];
+        $inline_keyboard = [$inline_button];
         $keyboard = array("inline_keyboard" => $inline_keyboard);
         $replyMarkup = json_encode($keyboard);
         $this->replyWithMessage([
