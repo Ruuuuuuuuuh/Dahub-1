@@ -473,7 +473,7 @@ class SystemApiController extends Controller
         $users = User::all();
         $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
 
-        foreach ($users as $user) {
+/*        foreach ($users as $user) {
             if ($user->getWallet('DHB')->balanceFloat > 0 && $user->id > 37) {
                 try {
                     $telegram->sendPhoto([
@@ -500,7 +500,7 @@ class SystemApiController extends Controller
                     echo "user has been blocked! uid=". $user->uid." id=".$user->id."<br />";
                 }
             }
-        }
+        }*/
     }
 }
 
