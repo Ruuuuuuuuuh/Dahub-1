@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Telegram\Bot\Api;
+use Telegram\Bot\Exceptions\TelegramResponseException;
 
 class SystemApiController extends Controller
 {
@@ -473,26 +474,31 @@ class SystemApiController extends Controller
         $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
 
         foreach ($users as $user) {
-            if ($user->getWallet('DHB')->balanceFloat > 0) {
-                $telegram->sendPhoto([
-                    'chat_id' => $user->uid,
-                    'photo' => \Telegram\Bot\FileUpload\InputFile::create("https://test.dahub.app/img/tg_message.jpg"),
-                    'caption' =>
-                        'Приветствуем всех держателей DHB!'
-                        .PHP_EOL.PHP_EOL.
-                        'На связи команда проекта Dahub!'
-                        .PHP_EOL.
-                        'Просим вас добавиться во все паблики, где вас нет. Мы будем очень рады вашей вовлечённости и обратной связи. 🙌💪🔥'
-                        .PHP_EOL.PHP_EOL.
-                        '1 - <a href="https://t.me/DA_HUB">Dahub News</a> (Открытая информация по проекту для всех желающих)'
-                        .PHP_EOL.
-                        '2 - <a href="https://t.me/+Uydxy_Jmh-3Y_BUg">Dahub for owners of DHB</a> (Информация только для владельцев DHB)'
-                        .PHP_EOL.
-                        '3 - <a href="https://t.me/DaHubExplorer">Dahub Explorer</a> (Обзор транзакций на платформе)'
-                        .PHP_EOL.PHP_EOL.
-                        'Спасибо за внимание️! ☺',
-                    'parse_mode' => 'html',
-                ]);
+            if ($user->getWallet('DHB')->balanceFloat > 0 && $user->id > 37) {
+                try {
+                    $telegram->sendPhoto([
+                        'chat_id' => $user->uid,
+                        'photo' => \Telegram\Bot\FileUpload\InputFile::create("https://test.dahub.app/img/tg_message.jpg"),
+                        'caption' =>
+                            'Приветствуем всех держателей DHB!'
+                            . PHP_EOL . PHP_EOL .
+                            'На связи команда проекта Dahub!'
+                            . PHP_EOL .
+                            'Просим вас добавиться во все паблики, где вас нет. Мы будем очень рады вашей вовлечённости и обратной связи. 🙌💪🔥'
+                            . PHP_EOL . PHP_EOL .
+                            '1 - <a href="https://t.me/DA_HUB">Dahub News</a> (Открытая информация по проекту для всех желающих)'
+                            . PHP_EOL .
+                            '2 - <a href="https://t.me/+Uydxy_Jmh-3Y_BUg">Dahub for owners of DHB</a> (Информация только для владельцев DHB)'
+                            . PHP_EOL .
+                            '3 - <a href="https://t.me/DaHubExplorer">Dahub Explorer</a> (Обзор транзакций на платформе)'
+                            . PHP_EOL . PHP_EOL .
+                            'Спасибо за внимание️! ☺',
+                        'parse_mode' => 'html',
+                    ]);
+                }
+                catch (TelegramResponseException $e) {
+                    echo "user has been blocked! uid=". $user->uid." id=".$user->id."<br />";
+                }
             }
         }
     }
