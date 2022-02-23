@@ -17,6 +17,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Telegram\Bot\Api;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 class WalletController extends Controller
@@ -217,5 +218,9 @@ class WalletController extends Controller
     public function tags() {
         $tags = Tag::all();
         return view('wallet.pages.admin.tags')->with('tags', $tags);
+    }
+
+    public function telegram() {
+        return view('wallet.pages.admin.telegram');
     }
 }

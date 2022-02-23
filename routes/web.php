@@ -56,6 +56,7 @@ Route::get('/wallet/payments/', [App\Http\Controllers\WalletController::class, '
 Route::get('/wallet/users', [App\Http\Controllers\WalletController::class, 'getUsers'])->name('wallet.users')->middleware('admin');
 Route::get('/wallet/gates', [App\Http\Controllers\WalletController::class, 'gates'])->name('wallet.gates')->middleware('admin');
 Route::get('/wallet/tags', [App\Http\Controllers\WalletController::class, 'tags'])->name('wallet.tags')->middleware('admin');
+Route::get('/wallet/telegram', [App\Http\Controllers\WalletController::class, 'telegram'])->name('wallet.telegram')->middleware('admin');
 
 // ADMIN ROUTES
 Route::post('/api/tags/', [App\Http\Controllers\SystemApiController::class, 'getTags'])->middleware('admin')->name('api.tags');
@@ -80,6 +81,7 @@ Route::post('/api/set_dhb_per_order', [App\Http\Controllers\SystemApiController:
 Route::post('/api/set_gate', [App\Http\Controllers\SystemApiController::class, 'setGate'])->middleware('admin');
 Route::post('/api/set-token-sale-date', [App\Http\Controllers\SystemApiController::class, 'setTokenSaleStartDate'])->middleware('admin');
 Route::post('/api/remove_gate', [App\Http\Controllers\SystemApiController::class, 'removeGate'])->middleware('admin');
+Route::post('/api/telegram/send_message', [App\Http\Controllers\SystemApiController::class, 'sendMessageByTelegram'])->middleware('admin');
 
 // API ROUTES
 Route::post('/api/deposit', [App\Http\Controllers\ApiController::class, 'deposit']);
