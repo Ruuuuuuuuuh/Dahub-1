@@ -26,7 +26,6 @@
                     </svg>
                     <div class="payment-details">
                         <span class="address">{{$payment->address}}</span>
-                        <span class="holder-name">{{$payment->holder}}</span>
                     </div>
                 </a>
             @endforeach

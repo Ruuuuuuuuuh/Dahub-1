@@ -69,7 +69,6 @@
                         "_token": "{{ csrf_token() }}",
                         "address": form.find('input[name="address"]').val(),
                         "payment": form.find('input[name="payment"]').val(),
-                        "holder_name": form.find('input[name="holder_name"]').val(),
                     }
                     $.ajax({
                         url: "/api/payment_details/add",
@@ -85,7 +84,6 @@
                                 '</svg>' +
                                 '<div class="payment-details">' +
                                 '<span class="address">' + data[0].address + '</span>' +
-                                '<span class="holder-name">' + data[0].holder + '</span>' +
                                 '</div></a>');
                             $('#add-payment-details').modal('hide')
                         },

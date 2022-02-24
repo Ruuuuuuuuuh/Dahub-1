@@ -116,15 +116,18 @@ class DashboardController extends Controller {
     }
 
     public function acceptOrderPage($id) {
+        $order = Order::findOrFail($id);
         if ($this->user->isGate()) {
-            $order = Order::findOrFail($id);
-            $this->user->getBalance($order->currency);
-            $this->user->switchMode('pro');
-            $mode = $this->getMode();
-            $dt = Carbon::now();
-            $seconds_left = $dt->diffInSeconds($order->created_at);
-            $order = Order::findOrFail($id);
-            return view('dashboard.pages.gate.order', compact('order', 'mode', 'seconds_left'));
+            if ($order->status == 'created') {
+                $this->user->getBalance($order->currency);
+                $this->user->switchMode('pro');
+                $mode = $this->getMode();
+                $dt = Carbon::now();
+                $seconds_left = $dt->diffInSeconds($order->created_at);
+                $order = Order::findOrFail($id);
+                return view('dashboard.pages.gate.order', compact('order', 'mode', 'seconds_left'));
+            }
+            else abort(404);
         }
         else abort(404);
     }

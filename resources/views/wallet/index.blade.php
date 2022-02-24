@@ -138,10 +138,9 @@
             let subtotal = $('.subtotal-amount span').html() + 0
             let rate = {
                 DHB : '{!! Rate::getRates('DHB') !!}',
-                USDT : '{!! Rate::getRates('USDT') !!}',
-                BTC : '{!! Rate::getRates('BTC') !!}',
-                ETH : '{!! Rate::getRates('ETH') !!}',
-                TON : '{!! Rate::getRates('TON') !!}',
+                @foreach (\App\Models\Currency::payableCurrencies()->get() as $currency)
+                {{$currency->title}} : '{!! Rate::getRates($currency->title) !!}',
+                @endforeach
             }
 
             let min = parseInt($('.deposit-block input[name="deposit-amount"]').data('min'));

@@ -26,7 +26,6 @@
                 </svg>
                 <div class="payment-details">
                     <span class="address">{{$payment->address}}</span>
-                    <span class="holder-name">{{$payment->holder}}</span>
                 </div>
             </a>
             @endforeach
@@ -54,9 +53,6 @@
                     <input type="hidden" name="payment">
                     <div class="form-group">
                         <input type="text" class="form-control" name="address" placeholder="Номер карты">
-                    </div>
-                    <div class="form-group holder-name">
-                        <input type="text" class="form-control" name="holder_name" placeholder="Имя держателя">
                     </div>
                     <a href="#" class="btn btn-primary confirm-modal disabled">Добавить</a>
                 </form>

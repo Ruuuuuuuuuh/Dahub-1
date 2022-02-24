@@ -19,8 +19,9 @@
                 <input class="deposit-receive" name="deposit-receive" value="{!! 2000 * Rate::getRates('DHB') !!}"/>
                 <div class="deposit-currency-wrapper">
                     <select name="deposit-currency">
-                        <option value="USDT" selected="selected">USDT</option>
-                        <option value="TON">TON</option>
+                        @foreach ($currencies->get() as $currency)
+                            <option value="{{$currency->title}}" @if ($currency->title=='USDT') selected @endif>{{$currency->title}}</option>
+                        @endforeach
                     </select>
                     <div class="select-angle">
                         <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,7 +35,7 @@
             <p class="w-100 mt-2">Выберите платежную систему</p>
             <div class="payment-select">
                 <select class="ml-0" name="deposit-payment">
-                    @foreach (\App\Models\Currency::where('title', 'USDT')->first()->payments()->get() as $payment)
+                    @foreach ($currencies->where('title', 'USDT')->first()->payments()->get() as $payment)
                         <option value="{{$payment->title}}">{{$payment->title}}</option>
                     @endforeach
                 </select>

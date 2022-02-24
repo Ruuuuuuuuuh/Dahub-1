@@ -268,7 +268,6 @@
                             '</svg>' +
                             '<div class="payment-details">' +
                                 '<span class="address">' + data[0].address + '</span>' +
-                                '<span class="holder-name">' + data[0].holder + '</span>' +
                             '</div></a>');
                             $('#add-payment-details').modal('hide')
                         },

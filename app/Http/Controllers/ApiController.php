@@ -183,9 +183,8 @@ class ApiController extends Controller
                     $message = '🔥 <b>Новая заявка: </b> #' . $order->id . ' на ' . $destination_message . ' ' . $amount . ' ' . $currency;
                     if ($currency == 'TON') $message .= ' 💎';
                     $message .= PHP_EOL;
-                    if (Currency::where('title', $currency)->firstOrFail()->crypto) $message .= '🌐 ';
-                    else $message .= '💳 ';
-                    $message .= '<b>Платежная сеть: </b> ' . $order->payment;
+                    if (Currency::where('title', $currency)->firstOrFail()->crypto) $message .= '🌐 <b>Платежная сеть: </b> ' . $order->payment;
+                    else $message .= '💳  <b>Платежная система: </b> ' . $order->payment;
                     $telegram->sendMessage([
                         'chat_id' => env('TELEGRAM_GATE_ORDERS_CHAT_ID'),
                         'text' => $message,

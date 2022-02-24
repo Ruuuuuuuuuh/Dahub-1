@@ -42,6 +42,7 @@ class WalletController extends Controller
         $system = System::find(1);
         $system->getWallet('TokenSale')->refreshBalance();
         $user->getWallet('DHB')->refreshBalance();
+        $currencies = Currency::payableCurrencies();
 
         /**
          * Сколько токенов продано
@@ -83,7 +84,7 @@ class WalletController extends Controller
 
         $startTokenSale = Carbon::parse($system->start_token_sale_date);
         $timeNow = Carbon::now();
-        return view('wallet.index', compact('balances', 'system', 'max', 'startTokenSale', 'timeNow'));
+        return view('wallet.index', compact('balances', 'system', 'max', 'startTokenSale', 'timeNow', 'currencies'));
     }
 
     public function profile()
@@ -176,6 +177,16 @@ class WalletController extends Controller
 
     public function currency($slug) {
         $currency = Currency::where('title', $slug)->first();
+        $system = System::firstOrFail();
+        if (!$system->hasWallet($slug)) {
+            $system->createWallet(
+                [
+                    'name' => $currency->subtitle,
+                    'slug' => $slug,
+                    'decimal_places' => $currency->decimal_places
+                ]
+            );
+        }
         return view('wallet.pages.admin.currency')->with('currency', $currency);
     }
 
