@@ -39,12 +39,14 @@ class OrderCreate extends Notification
     public function toTelegram($notifiable)
     {
         $url = url('/wallet/orders/'.$this->order->id);
+        if ($this->order->destination == 'withdraw') $destination = 'на отправление';
+        else $destination = 'на получение';
 
         return TelegramMessage::create()
             // Optional recipient user id.
             ->to($notifiable->uid)
             // Markdown supported.
-            ->content("Заявка №" . $this->order->id . " на получение " . $this->order->dhb_amount . " DHB успешно создана.\nОжидайте назначения кипера.")
+            ->content("Заявка №" . $this->order->id . " " . $destination . " " . $this->order->dhb_amount . " DHB успешно создана.\nОжидайте назначения кипера.")
 
             // (Optional) Blade template for the content.
             // ->view('notification', ['url' => $url])
