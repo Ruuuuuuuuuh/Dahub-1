@@ -156,7 +156,7 @@
                     id: id,
                 },
                 success:function(response) {
-                    window.location.href = "{{Request::url()}}"
+                    window.location.href = '/dashboard/orders/' + id;
                 },
             });
         }
