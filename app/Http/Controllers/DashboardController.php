@@ -47,7 +47,6 @@ class DashboardController extends Controller {
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
@@ -65,7 +64,7 @@ class DashboardController extends Controller {
             $orders['owned'] = Order::where('status', 'accepted')->where('gate', $user->uid)->orderBy('id', 'DESC')->get();
         }
         else {
-            $orders = Order::where('user_uid', $this->user->uid)->userOrders()->orderBy('id', 'DESC')->take(10)->get();
+            $orders = Order::where('user_uid', $this->user->uid)->orderBy('id', 'DESC')->take(10)->get();
         }
         foreach ($currency::all() as $item) {
             $this->user->getBalance($item->title);

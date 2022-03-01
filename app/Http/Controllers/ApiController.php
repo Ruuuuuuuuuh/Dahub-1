@@ -589,13 +589,13 @@ class ApiController extends Controller
         $filter = $request->input('filter');
         switch ($filter) {
             case'deposit':
-                return $this->user->orders()->OrdersDeposit()->limit(10)->get();
+                return $this->user->orders()->OrdersDeposit()->limit(10)->orderBy('id', 'DESC')->get();
                 break;
             case'withdraw':
-                return $this->user->orders()->OrdersWithdraw()->limit(10)->get();
+                return $this->user->orders()->OrdersWithdraw()->limit(10)->orderBy('id', 'DESC')->get();
                 break;
             case'all':
-                return $this->user->orders()->UserOrders()->limit(10)->get();
+                return $this->user->orders()->limit(10)->orderBy('id', 'DESC')->get();
                 break;
         }
     }

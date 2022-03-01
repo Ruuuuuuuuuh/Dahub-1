@@ -3,14 +3,10 @@
     @foreach ($orders as $order)
     <a href="{{Route('getOrder', $order->id)}}" class="order-item d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-start flex-column justify-content-center">
-            <div class="destination {{$order->destination}}">@if ($order->destination == 'deposit')Ввод@elseif ($order->destination == 'withdraw')Вывод@endif</div>
+            <div class="destination  @if ($order->destination == 'deposit' || $order->destination == 'TokenSale') deposit @elseif ($order->destination == 'withdraw') withdraw @endif">@if ($order->destination == 'deposit' || $order->destination == 'TokenSale')Ввод@elseif ($order->destination == 'withdraw')Вывод@endif</div>
             <div class="currency">{{$order->currency}}</div>
         </div>
         <div class="d-flex align-items-end flex-column justify-content-center">
-            @if ($order->rate)
-                <div class="datetime">{{$order->created_at->format('d.m.Y H:i')}}</div>
-                <div class="amount">{{number_format($order->amount / $order->rate, Auth::user()->getWallet($order->currency)->decimal_places, '.', ' ')}}</div>
-            @else
             <div class="d-flex align-items-center">
                 <div class="datetime">
                     {{$order->created_at->format('d.m.Y H:i')}}
@@ -43,7 +39,6 @@
             <div class="amount">{{number_format($order->amount, Auth::user()->getWallet($order->currency)->decimal_places, '.', ' ')}}</div>
 
 
-            @endif
         </div>
     </a>
     @endforeach
