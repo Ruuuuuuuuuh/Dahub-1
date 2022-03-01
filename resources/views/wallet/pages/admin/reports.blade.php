@@ -241,7 +241,7 @@
                                 <option value="DHBFundWallet">{{$system->getWallet('DHBFundWallet')->balanceFloat}} DHB (Резерв Фонда)</option>
                                 <option value="BTC">{{$system->getWallet('BTC')->balanceFloat}} BTC</option>
                                 <option value="ETH">{{$system->getWallet('ETH')->balanceFloat}} ETH</option>
-                                <option value="HFT">{{$system->getWallet('TON')->balanceFloat}} TON</option>K
+                                <option value="TON">{{$system->getWallet('TON')->balanceFloat}} TON</option>K
                             </select>
                         </div>
                         <div class="form-group">
@@ -289,7 +289,7 @@
                                 <option value="BTC">{{$system->getWallet('BTC')->balanceFloat}} BTC</option>
                                 <option value="ETH">{{$system->getWallet('ETH')->balanceFloat}} ETH</option>
                                 <option value="HFT">{{$system->getWallet('HFT')->balanceFloat}} HFT</option>
-                                <option value="HFT">{{$system->getWallet('TON')->balanceFloat}} TON</option>
+                                <option value="TON">{{$system->getWallet('TON')->balanceFloat}} TON</option>
                             </select>
                         </div>
                         <div class="form-group">
