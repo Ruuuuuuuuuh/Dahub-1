@@ -11002,7 +11002,7 @@ strong {
   }
 
   .progress {
-    height: 20px;
+    height: 18px;
   }
 
   .main-screen p {
@@ -11423,15 +11423,14 @@ strong {
 
   .progress-bar:first-of-type {
     margin-left: 0;
-    position: absolute;
-    height: 20px;
+    height: 18px;
   }
 
   .progress-labels {
     padding-left: 0 !important;
   }
   .progress-labels span {
-    font-size: 9px;
+    font-size: 9px !important;
     transform: rotate(-90deg);
     min-width: 0 !important;
   }
@@ -11447,9 +11446,9 @@ strong {
     min-width: calc(50% - 10px) !important;
     display: inline-block;
   }
-
-  .progress-labels span:last-child {
+  .progress-labels span.frozen-label {
     transform: rotate(0deg);
+    text-align: center;
   }
 
   .icon-support svg {

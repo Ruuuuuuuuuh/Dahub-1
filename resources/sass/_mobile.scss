@@ -51,7 +51,7 @@
         overflow: auto;
     }
     .progress {
-        height:20px;
+        height:18px;
     }
     .main-screen p {
         font-size:14px;
@@ -423,13 +423,12 @@
     }
     .progress-bar:first-of-type {
         margin-left: 0;
-        position: absolute;
-        height: 20px;
+        height: 18px;
     }
     .progress-labels {
         padding-left:0!important;
         span {
-            font-size: 9px;
+            font-size: 9px!important;
             transform:rotate(-90deg);
             min-width:0!important;
             &:not(.frozen-label) {
@@ -445,12 +444,13 @@
                 min-width:calc(50% - 10px)!important;
                 display:inline-block;
             }
+            &.frozen-label {
+                transform: rotate(0deg);
+                text-align: center;
+            }
         }
     }
 
-    .progress-labels span:last-child {
-        transform:rotate(0deg);
-    }
 
     .icon-support {
         svg {
