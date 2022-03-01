@@ -476,6 +476,7 @@ class ApiController extends Controller
                         $systemWallet->getWallet('DHBFundWallet')->transferFloat( $this->user->getWallet('DHB'), $order->dhb_amount / 200, array('destination' => 'Бонус за успешное выполнение заявки', 'order_id' => $order->id));
                         $systemWallet->getWallet('DHBFundWallet')->refreshBalance();
                         $this->user->getWallet('DHB')->refreshBalance();
+
                     }
 
                     $this->user->getBalance($order->currency.'_gate');
@@ -483,6 +484,36 @@ class ApiController extends Controller
                     $this->user->getWallet($order->currency.'_gate')->refreshBalance();
 
                     $owner->notify(new ConfirmOrder($order));
+
+                    // Отправка сообщения, если пользователь впервые купил токены
+                    $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+                    if ($owner->orders()->where('status', 'completed')->where('destination', 'TokenSale')->get()->count() == 1) {
+                        try {
+                            $telegram->sendPhoto([
+                                'chat_id' => $owner->uid,
+                                'photo' => \Telegram\Bot\FileUpload\InputFile::create("https://test.dahub.app/img/welcome.png"),
+                                'caption' =>
+                                    '<b>На связи команда проекта DaHub!</b>'
+                                    . PHP_EOL .
+                                    'Присоединяйся в наши паблики, чат и поддержку, чтобы всегда быть в курсе событий и иметь доступ ко всем материалам проекта.'
+                                    . PHP_EOL . PHP_EOL .
+                                    '▪️ <a href="https://t.me/+Uydxy_Jmh-3Y_BUg">Dahub for owners of DHB</a> – закрытый чат и информация для держателей DHB'
+                                    . PHP_EOL .
+                                    '▪️ <a href="https://t.me/DA_HUB">Dahub News</a> – новости проекта'
+                                    . PHP_EOL .
+                                    '▪️ <a href="https://t.me/DaHubExplorer">Dahub Explorer</a> – обозреватель транзакций на платформе'
+                                    . PHP_EOL .
+                                    '▪️ <a href="https://t.me/DaHubSupportBot?start=public">DaHubSupportBot</a> – служба поддержки проекта. По всем вопрос сюда;)'
+                                    . PHP_EOL . PHP_EOL .
+                                    'Мы за дружественную коммуникацию, пиши, задавай вопросы, делись инсайтами. Добро пожаловать в DaHub DAO!',
+                                'parse_mode' => 'html',
+                            ]);
+                        }
+                        catch (TelegramResponseException $e) {
+
+                        }
+                    }
+
                     return $order->id;
                 }
                 else return response(['error' => true, 'error-msg' => 'Недостаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
