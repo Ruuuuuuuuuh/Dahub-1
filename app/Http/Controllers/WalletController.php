@@ -84,7 +84,33 @@ class WalletController extends Controller
 
         $startTokenSale = Carbon::parse($system->start_token_sale_date);
         $timeNow = Carbon::now();
-        return view('wallet.index', compact('balances', 'system', 'max', 'startTokenSale', 'timeNow', 'currencies'));
+        $stage = 1;
+        switch ($balances['sold']) {
+            case ($balances['sold'] <= 1000000):
+                $stage = 1;
+                break;
+
+            case ($balances['sold'] <= 1200000):
+                $stage = 2;
+                break;
+
+            case ($balances['sold'] <= 1400000):
+                $stage = 3;
+                break;
+
+            case ($balances['sold'] <= 1600000):
+                $stage = 4;
+                break;
+
+            case ($balances['sold'] <= 1800000):
+                $stage = 5;
+                break;
+
+            case ($balances['sold'] <= 2000000):
+                $stage = 6;
+                break;
+        }
+        return view('wallet.index', compact('balances', 'system', 'max', 'startTokenSale', 'timeNow', 'currencies', 'stage'));
     }
 
     public function profile()

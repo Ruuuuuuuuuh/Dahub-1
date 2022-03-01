@@ -10194,57 +10194,103 @@ main {
   margin-bottom: 8px;
   margin-top: -25px;
 }
-.progress-labels .mobile-visible {
-  display: none;
+.progress-labels .available-label {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
 }
-.progress-labels span {
+.progress-labels .available-label > span {
+  width: 10%;
   font-weight: 500;
   font-size: 18px;
   line-height: 18px;
   text-align: center;
 }
-.progress-labels span:not(.frozen-label) {
-  min-width: calc(20% - 5px);
+.progress-labels .mobile-visible {
+  width: calc(50% + 5px) !important;
+}
+.progress-labels .mobile-visible span {
+  display: none;
 }
 
 .progress {
   background: linear-gradient(100.13deg, #2691E2 -25.88%, #1A2453 53.71%);
   border-radius: 20px;
   position: relative;
+  overflow: visible;
 }
 .progress .bg-success {
-  background-color: #5061A2 !important;
+  background: #859CF4 !important;
+  border: 2px solid #5061A2 !important;
+  border-radius: 20px !important;
   z-index: 99;
 }
+.progress .bg-success .progress-bar {
+  border-radius: 0 20px 20px 0 !important;
+  background-color: #5061A2 !important;
+}
 .progress .bg-blue {
-  background: #03ABFF;
-  z-index: 10;
+  background: #82D5FF;
+  border: 2px solid #03ABFF !important;
+  z-index: 12;
+}
+.progress .bg-blue .progress-bar {
+  background: #03ABFF !important;
 }
 .progress .bg-green {
-  background: #63E08D;
-  z-index: 9;
+  background: #A6FFC4;
+  border: 2px solid #63E08D !important;
+  z-index: 11;
+}
+.progress .bg-green .progress-bar {
+  background: #63E08D !important;
 }
 .progress .bg-yellow {
-  background: #FFC700;
+  background: #FFE6A6;
   z-index: 8;
+  border: 2px solid #FFC700 !important;
+}
+.progress .bg-yellow .progress-bar {
+  background: #FFC700 !important;
 }
 .progress .bg-orange {
-  background: #FF9134;
+  background: #FFC6A5 !important;
   z-index: 7;
+  border: 2px solid #FF9134 !important;
+}
+.progress .bg-orange .progress-bar {
+  background: #FFC700 !important;
 }
 .progress .bg-red {
-  background: #EB4372;
+  background: #FFBBD1 !important;
   z-index: 6;
+  border: 2px solid #FF9134 !important;
+}
+.progress .bg-red .progress-bar {
+  background: #EB4372 !important;
+}
+.progress .icon-coin {
+  position: absolute;
+  width: 25px;
+  height: 26px;
+  top: -5px;
+  z-index: 100;
+  background-image: url("/img/icon-coin.png");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .progress-bar {
-  border-radius: 20px;
+  overflow: visible;
+  border-radius: 0px 20px 20px 0;
   margin-left: -10px;
+}
+.progress-bar .progress-bar {
+  height: 16px;
 }
 .progress-bar:first-of-type {
   margin-left: 0;
-  position: absolute;
-  height: 16px;
 }
 
 .navbar-nav .dropdown-menu {
