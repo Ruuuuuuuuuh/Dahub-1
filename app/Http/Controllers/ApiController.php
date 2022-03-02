@@ -435,88 +435,85 @@ class ApiController extends Controller
             $owner = $order->user()->first();
 
             if ($order->gate == $this->user->uid) {
-                if (($this->user->getBalanceFree($order->currency) > $order->amount)) {
-                    if ($order->destination == 'deposit') {
-                        $transaction = $owner->getWallet($order->currency)->depositFloat($order->amount, array('destination' => 'deposit to wallet'));
-                        $owner->getWallet($order->currency)->refreshBalance();
-                        $order->status = 'completed';
-                        $order->transaction()->attach($transaction->id);
-                        $order->save();
-                    }
-                    if ($order->destination == 'TokenSale') {
-                        $systemWallet = System::findOrFail(1);
-                        $systemWallet->getWallet('TokenSale')->transferFloat( $owner->getWallet('DHB'), $order->dhb_amount, array('destination' => 'TokenSale', 'order_id' => $order->id));
-                        $owner->getWallet('DHB')->refreshBalance();
+                if ($order->destination == 'deposit') {
+                    $transaction = $owner->getWallet($order->currency)->depositFloat($order->amount, array('destination' => 'deposit to wallet'));
+                    $owner->getWallet($order->currency)->refreshBalance();
+                    $order->status = 'completed';
+                    $order->transaction()->attach($transaction->id);
+                    $order->save();
+                }
+                if ($order->destination == 'TokenSale') {
+                    $systemWallet = System::findOrFail(1);
+                    $systemWallet->getWallet('TokenSale')->transferFloat( $owner->getWallet('DHB'), $order->dhb_amount, array('destination' => 'TokenSale', 'order_id' => $order->id));
+                    $owner->getWallet('DHB')->refreshBalance();
 
-                        // pay Referral
-                        $this->payReferral($owner, $order->currency, $order->amount);
+                    // pay Referral
+                    $this->payReferral($owner, $order->currency, $order->amount);
 
-                        // deposit to system wallet
-                        $systemWallet->getWallet($order->currency)->depositFloat($order->amount,  array('destination' => 'TokenSale', 'order_id' => $order->id));
-                        $systemWallet->getWallet($order->currency)->refreshBalance();
+                    // deposit to system wallet
+                    $systemWallet->getWallet($order->currency)->depositFloat($order->amount,  array('destination' => 'TokenSale', 'order_id' => $order->id));
+                    $systemWallet->getWallet($order->currency)->refreshBalance();
 
-                        $order->status = 'completed';
-                        $owner->depositInner($order->currency, $order->amount);
-                        $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
-                        $transactions = $order->transactions();
-                        $order->save();
+                    $order->status = 'completed';
+                    $owner->depositInner($order->currency, $order->amount);
+                    $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
+                    $transactions = $order->transactions();
+                    $order->save();
 
-                        foreach ($transactions as $transaction) {
-                            if ($transaction->payable_type == 'App\Models\System' && $transaction->type = 'withdraw') {
-                                $order->transaction()->attach($transaction->id);
-                                $systemWallet->getWallet('TokenSale')->refreshBalance();
-                                $telegram->sendMessage([
-                                    'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
-                                    'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>↗️ Sent: </b>' . $order->amount . ' ' . $order->currency .PHP_EOL.'<b>↙️ Recieved: </b>' . $order->dhb_amount . ' DHB' .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid. PHP_EOL.PHP_EOL.'<b>🔥 TokenSale: </b>'. number_format($systemWallet->getWallet('TokenSale')->balanceFloat, 0, '.', ' ') . ' DHB left until the end of stage 1',
-                                    'parse_mode' => 'html'
-                                ]);
-                            }
-                        }
-                        // Бонус за успешное выполнение задания
-                        $systemWallet->getWallet('DHBFundWallet')->transferFloat( $this->user->getWallet('DHB'), $order->dhb_amount / 200, array('destination' => 'Бонус за успешное выполнение заявки', 'order_id' => $order->id));
-                        $systemWallet->getWallet('DHBFundWallet')->refreshBalance();
-                        $this->user->getWallet('DHB')->refreshBalance();
-
-                    }
-
-                    $this->user->getBalance($order->currency.'_gate');
-                    $this->user->getWallet($order->currency.'_gate')->depositFloat($order->amount, array('destination' => 'deposit to wallet', 'order_id' => $order->id));
-                    $this->user->getWallet($order->currency.'_gate')->refreshBalance();
-
-                    $owner->notify(new ConfirmOrder($order));
-
-                    // Отправка сообщения, если пользователь впервые купил токены
-                    $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
-                    if ($owner->orders()->where('status', 'completed')->where('destination', 'TokenSale')->get()->count() == 1) {
-                        try {
-                            $telegram->sendPhoto([
-                                'chat_id' => $owner->uid,
-                                'photo' => \Telegram\Bot\FileUpload\InputFile::create("https://test.dahub.app/img/welcome.png"),
-                                'caption' =>
-                                    '<b>На связи команда проекта DaHub!</b>'
-                                    . PHP_EOL .
-                                    'Присоединяйся в наши паблики, чат и поддержку, чтобы всегда быть в курсе событий и иметь доступ ко всем материалам проекта.'
-                                    . PHP_EOL . PHP_EOL .
-                                    '▪️ <a href="https://t.me/+Uydxy_Jmh-3Y_BUg">Dahub for owners of DHB</a> – закрытый чат и информация для держателей DHB'
-                                    . PHP_EOL .
-                                    '▪️ <a href="https://t.me/DA_HUB">Dahub News</a> – новости проекта'
-                                    . PHP_EOL .
-                                    '▪️ <a href="https://t.me/DaHubExplorer">Dahub Explorer</a> – обозреватель транзакций на платформе'
-                                    . PHP_EOL .
-                                    '▪️ <a href="https://t.me/DaHubSupportBot?start=public">DaHubSupportBot</a> – служба поддержки проекта. По всем вопрос сюда;)'
-                                    . PHP_EOL . PHP_EOL .
-                                    'Мы за дружественную коммуникацию, пиши, задавай вопросы, делись инсайтами. Добро пожаловать в DaHub DAO!',
-                                'parse_mode' => 'html',
+                    foreach ($transactions as $transaction) {
+                        if ($transaction->payable_type == 'App\Models\System' && $transaction->type = 'withdraw') {
+                            $order->transaction()->attach($transaction->id);
+                            $systemWallet->getWallet('TokenSale')->refreshBalance();
+                            $telegram->sendMessage([
+                                'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
+                                'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>↗️ Sent: </b>' . $order->amount . ' ' . $order->currency .PHP_EOL.'<b>↙️ Recieved: </b>' . $order->dhb_amount . ' DHB' .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid. PHP_EOL.PHP_EOL.'<b>🔥 TokenSale: </b>'. number_format($systemWallet->getWallet('TokenSale')->balanceFloat, 0, '.', ' ') . ' DHB left until the end of stage 1',
+                                'parse_mode' => 'html'
                             ]);
                         }
-                        catch (TelegramResponseException $e) {
-
-                        }
                     }
+                    // Бонус за успешное выполнение задания
+                    $systemWallet->getWallet('DHBFundWallet')->transferFloat( $this->user->getWallet('DHB'), $order->dhb_amount / 200, array('destination' => 'Бонус за успешное выполнение заявки', 'order_id' => $order->id));
+                    $systemWallet->getWallet('DHBFundWallet')->refreshBalance();
+                    $this->user->getWallet('DHB')->refreshBalance();
 
-                    return $order->id;
                 }
-                else return response(['error' => true, 'error-msg' => 'Недостаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
+
+                $this->user->getBalance($order->currency.'_gate');
+                $this->user->getWallet($order->currency.'_gate')->depositFloat($order->amount, array('destination' => 'deposit to wallet', 'order_id' => $order->id));
+                $this->user->getWallet($order->currency.'_gate')->refreshBalance();
+
+                $owner->notify(new ConfirmOrder($order));
+
+                // Отправка сообщения, если пользователь впервые купил токены
+                $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
+                if ($owner->orders()->where('status', 'completed')->where('destination', 'TokenSale')->get()->count() == 1) {
+                    try {
+                        $telegram->sendPhoto([
+                            'chat_id' => $owner->uid,
+                            'photo' => \Telegram\Bot\FileUpload\InputFile::create("https://test.dahub.app/img/welcome.png"),
+                            'caption' =>
+                                '<b>На связи команда проекта DaHub!</b>'
+                                . PHP_EOL .
+                                'Присоединяйся в наши паблики, чат и поддержку, чтобы всегда быть в курсе событий и иметь доступ ко всем материалам проекта.'
+                                . PHP_EOL . PHP_EOL .
+                                '▪️ <a href="https://t.me/+Uydxy_Jmh-3Y_BUg">Dahub for owners of DHB</a> – закрытый чат и информация для держателей DHB'
+                                . PHP_EOL .
+                                '▪️ <a href="https://t.me/DA_HUB">Dahub News</a> – новости проекта'
+                                . PHP_EOL .
+                                '▪️ <a href="https://t.me/DaHubExplorer">Dahub Explorer</a> – обозреватель транзакций на платформе'
+                                . PHP_EOL .
+                                '▪️ <a href="https://t.me/DaHubSupportBot?start=public">DaHubSupportBot</a> – служба поддержки проекта. По всем вопрос сюда;)'
+                                . PHP_EOL . PHP_EOL .
+                                'Мы за дружественную коммуникацию, пиши, задавай вопросы, делись инсайтами. Добро пожаловать в DaHub DAO!',
+                            'parse_mode' => 'html',
+                        ]);
+                    }
+                    catch (TelegramResponseException $e) {
+
+                    }
+                }
+
+                return $order->id;
             }
             else {
                 return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
