@@ -214,7 +214,7 @@
         })
         $('.add-payment_item').click(function() {
             $('#add-payment-details').modal()
-            $('input[name="payment"]').val($('#accept-ordery').data('payment'))
+            $('input[name="payment"]').val($('#accept-order').data('payment'))
         })
         @if ($mode == 'pro')
         $('.gate-order.order-created').click(function(e){

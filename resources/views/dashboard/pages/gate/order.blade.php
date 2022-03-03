@@ -110,6 +110,7 @@
 
         $('.add-payment_item').click(function() {
             $('#add-payment-details').modal()
+            $('input[name="payment"]').val($('#accept-order').data('payment'))
         })
 
         $('.payment-details-form input').on('change keyup', function() {

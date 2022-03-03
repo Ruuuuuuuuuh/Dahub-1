@@ -1,4 +1,4 @@
-<section id="accept-order" class="screen">
+<section id="accept-order" class="screen" data-payment="{{$order->payment}}">
     <div class="section-header">
         <div class="top-nav">
             <a href="#" class="back-link">
