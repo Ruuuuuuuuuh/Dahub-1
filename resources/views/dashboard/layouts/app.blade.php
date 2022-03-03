@@ -53,6 +53,10 @@
 
 
     $(function() {
+
+        $('.screen .back-link').click(function(e) {
+            $(this).closest('.screen').not('.order-page').removeClass('opened');
+        })
         //lock orientation for Android devices
         // screen.orientation.lock('portrait')
 

@@ -46,9 +46,6 @@
         function createOrderScreenOpen() {
             $('#create-order').toggleClass('opened');
         }
-        $('.back-link').click(function(){
-            $(this).closest('.screen').removeClass('opened');
-        })
         $(function() {
             window.currencies = {
                 @foreach (\App\Models\Currency::all() as $currency)
