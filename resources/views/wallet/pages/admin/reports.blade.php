@@ -211,6 +211,7 @@
                                 <h4>{{$system->getWallet('BTC')->balanceFloat}} BTC</h4>
                                 <h4>{{$system->getWallet('ETH')->balanceFloat}} ETH</h4>
                                 <h4>{{$system->getWallet('TON')->balanceFloat}} TON</h4>
+                                <h4>{{$system->getWallet('RUB')->balanceFloat}} RUB</h4>
                             </div>
                         </div>
 
