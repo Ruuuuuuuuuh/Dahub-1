@@ -38,7 +38,7 @@
         <p style="color:#347AF0">Заявка принята.</p>
     </div>
     <div class="text-block">
-        <p>Переведите {{$order->amount}} {{$order->currency}} по адресу:</p>
+        <p>Переведите {{$order->amount}} {{$order->currency}} по @if (App\Models\Payment::where('title', $order->payment)->firstOrFail()->crypto)адресу@elseномеру карты@endif:</p>
         <a class="copy-link" data-toggle="popover" data-placement="bottom" data-content="Ссылка скопирована в буфер обмена." data-original-title="" title="">
             <span>{{$order->payment_details}}</span>
             <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
