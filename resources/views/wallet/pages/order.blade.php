@@ -38,7 +38,7 @@
                         <a onclick="decline('{{$order->id}}');" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
                         @elseif ($order->status == 'accepted')
                             <div class="created-block form-inline">
-                                <p>Отправьте <strong><span class="step2-amount">{{$order->amount}} </span> <span class="step2-currency"> {{$order->currency}}</span> </strong>в <strong>{{$order->payment}}</strong> на адрес:</p>
+                                <p>Отправьте <strong><span class="step2-amount">{{$order->amount}} </span> <span class="step2-currency"> {{$order->currency}}</span> </strong>в <strong>{{$order->payment}}</strong>@if (App\Models\Payment::where('title', $order->payment)->firstOrFail()->crypto) на адрес:@else по номеру карты:@endif</p>
                                 <div class="w-100">
                                     <div class="col-12">
 
@@ -76,9 +76,9 @@
                         @elseif ($order->status == 'completed')
                             <div class="mt-4 mb-3">
                                 <p>
-                                    <strong>Отправлено:</strong> {{number_format($order->amount, Auth::user()->getWallet($order->currency)->decimal_places, '.', ' ').' '.$order->currency}} в сети {{$order->payment}} <br />
+                                    <strong>Отправлено:</strong> {{number_format($order->amount, Auth::user()->getWallet($order->currency)->decimal_places, '.', ' ').' '.$order->currency}} в @if (App\Models\Payment::where('title', $order->payment)->firstOrFail()->crypto)сети @else @endif{{$order->payment}} <br />
                                     <strong>Получено:</strong> {{number_format($order->dhb_amount, 2, '.', ' ').' DHB'}} <br />
-                                    <strong>На адрес: </strong>{{$order->payment_details}}<br />
+                                    <strong>@if (App\Models\Payment::where('title', $order->payment)->firstOrFail()->crypto)На адрес: @elseПо номеру карты: @endif</strong>{{$order->payment_details}}<br />
                                     <strong>Хеш транзакции:</strong> {{ $order->orderSystemTransaction()->uuid}}<br />
                                 </p>
 
