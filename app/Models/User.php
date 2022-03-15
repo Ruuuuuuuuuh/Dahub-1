@@ -105,7 +105,7 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
      */
     public function hasActiveOrder(): bool
     {
-        return $this->orders()->where('status', '!=', 'completed')->exists();
+        return $this->orders()->where('status', '!=', 'completed')->where('destination', 'TokenSale')->exists();
     }
 
 
