@@ -11,6 +11,7 @@ use App\Models\System;
 use App\Models\UserConfig;
 use App\Notifications\AcceptDepositOrder;
 use App\Notifications\AcceptSendingByGate;
+use App\Notifications\AcceptSendingByUser;
 use App\Notifications\AcceptWithdrawOrder;
 use App\Notifications\AdminNotifications;
 use App\Notifications\ConfirmOrder;
@@ -468,6 +469,31 @@ class ApiController extends Controller
 
 
     /**
+     * Подтверждение отправки средств пользователем
+     * @param Request $request
+     * @return void | integer $order->id
+     */
+    public function acceptSendingByUser(Request $request)
+    {
+        $order = Order::where('id', $request->input('id'))->firstOrFail();
+        if ($this->user->uid == $order->user_uid) {
+            if ($order->status == 'accepted') {
+                $order->status = 'pending';
+                $order->comment = $request->input('comment');
+                $gate = $order->gate()->first();
+                $order->save();
+                try {
+                    $gate->notify(new AcceptSendingByUser($order));
+                } catch (CouldNotSendNotification $e) {
+                    report ($e);
+                }
+                return $order->id;
+            }
+        }
+        else abort(404);
+    }
+
+    /**
      * Подтверждение поступления средств шлюзом
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
@@ -476,7 +502,7 @@ class ApiController extends Controller
     public function confirmOrderByGate(Request $request)
     {
         $order = Order::where('id', $request->input('id'))->firstOrFail();
-        if ($order->status == 'accepted') {
+        if ($order->status == 'accepted' || $order->status == 'pending') {
             $owner = $order->user()->first();
 
             if ($order->gate == $this->user->uid) {

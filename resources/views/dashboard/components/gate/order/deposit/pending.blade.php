@@ -30,7 +30,12 @@
     </div>
     <div class="text-block">
         <p><small>Статус:</small></p>
-        <p style="color:#347AF0">Ожидание перевода</p>
+        <p style="color:#347AF0">Ожидание подтверждения шлюзом.</p>
+    </div>
+
+    <div class="text-block">
+        <p><small>Статус:</small></p>
+        <p>Пользователь подтвердил перевод средств. Последние 4 цифры номера карты (счета) отправителя *{{$order->comment}}. Как только средства поступят, подтвердите получение.</p>
     </div>
     <div class="footer">
         <a class="button button-blue" onclick="confirmOrder()">Подтвердить получение</a>

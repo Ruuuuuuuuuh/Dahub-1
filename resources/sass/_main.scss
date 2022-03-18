@@ -186,6 +186,16 @@ main {
         text-align: center;
     }
 }
+.accept_buttons {
+    .button {
+        padding: 0px 50px;
+        width: 100%;
+        text-align: center;
+    }
+    .button-accept {
+        margin-right:15px;
+    }
+}
 .progress {
     background: linear-gradient(100.13deg, #2691E2 -25.88%, #1A2453 53.71%);
     border-radius: 20px;

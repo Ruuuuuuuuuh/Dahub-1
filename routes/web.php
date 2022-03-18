@@ -99,6 +99,7 @@ Route::post('/api/orders/confirmOrderByGate', [App\Http\Controllers\ApiControlle
 Route::post('/api/orders/confirmOrderByUser', [App\Http\Controllers\ApiController::class, 'confirmOrderByUser']);
 Route::post('/api/orders/declineOrderByGate', [App\Http\Controllers\ApiController::class, 'declineOrderByGate']);
 Route::post('/api/orders/acceptSendingByGate', [App\Http\Controllers\ApiController::class, 'acceptSendingByGate']);
+Route::post('/api/orders/acceptSendingByUser', [App\Http\Controllers\ApiController::class, 'acceptSendingByUser']);
 Route::post('/api/getOrdersByFilter', [App\Http\Controllers\ApiController::class, 'getOrdersByFilter']);
 
 

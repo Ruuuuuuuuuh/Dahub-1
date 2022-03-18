@@ -1,4 +1,9 @@
 @media screen and (max-width:1023px) {
+    .accept_buttons {
+        .button {
+            padding: 10px 50px;
+        }
+    }
     .header-top {
         padding:0 30px!important;
     }
@@ -459,6 +464,20 @@
         svg {
             height: 23px!important;
             margin-top: 2px;
+        }
+    }
+}
+@media screen and (max-width:720px) {
+    .accept_buttons {
+        flex-wrap: wrap;
+        .button {
+            padding: 10px 50px;
+            width: 100%;
+            text-align: center;
+            margin-top:15px;
+        }
+        .button-accept {
+            margin-right:0px;
         }
     }
 }

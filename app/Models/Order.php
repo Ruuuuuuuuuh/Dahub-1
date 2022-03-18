@@ -44,6 +44,14 @@ class Order extends Model
         return $this->belongsTo('App\Models\User', 'user_uid', 'uid');
     }
 
+    /**
+     * Получить шлюза
+     */
+    public function gate(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo('App\Models\User', 'gate', 'uid');
+    }
+
     public function payment(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo('App\Models\Payment', 'title', 'title');
