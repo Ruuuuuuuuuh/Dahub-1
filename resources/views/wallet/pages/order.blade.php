@@ -109,7 +109,6 @@
                                         </div>
                                     </div>
                                     <p style="margin-top:25px;">Как только заявка будет выполнена, вы получите уведомление от <a href="https://t.me/DaHubBot" target="_blank">@DaHubBot</a>.</p>
-                                    <a onclick="decline('{{$order->id}}');" style="margin-top:40px;" class="button button-danger">Отменить заявку</a>
                                 </div>
                             @elseif ($order->status == 'completed')
                             <div class="mt-4 mb-3">
