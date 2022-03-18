@@ -155,12 +155,6 @@
                                 </a>
                                 @if (\Auth::user()->isAdmin())
                                     <hr class="dropdown-divider">
-                                    <a class="dropdown-item" href="{{Route('wallet.users')}}" >
-                                        Пользователи
-                                    </a>
-                                    <a class="dropdown-item" href="{{Route('wallet.orders')}}" >
-                                        Заявки
-                                    </a>
                                     <a class="dropdown-item" href="{{Route('wallet.reports')}}" >
                                         Бухгалтерия
                                     </a>
@@ -181,6 +175,18 @@
                                     </a>
                                     <a class="dropdown-item" href="{{Route('wallet.transfer')}}" >
                                         Перевод средств
+                                    </a>
+                                @endif
+                                <hr class="dropdown-divider">
+                                @if (\Auth::user()->isGateManager())
+                                    <a class="dropdown-item" href="{{Route('wallet.users')}}" >
+                                        Пользователи
+                                    </a>
+                                    <a class="dropdown-item" href="{{Route('wallet.orders')}}" >
+                                        Заявки
+                                    </a>
+                                    <a class="dropdown-item" href="{{Route('wallet.gates')}}" >
+                                        Шлюзы
                                     </a>
                                 @endif
                                     <hr class="dropdown-divider">

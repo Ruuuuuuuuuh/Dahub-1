@@ -65,5 +65,6 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\IsAdmin::class,
         'referral' => \App\Http\Middleware\CheckReferral::class,
         'accessOrder' => \App\Http\Middleware\AccessOrder::class,
+        'gate_manager' => \App\Http\Middleware\IsGateManager::class,
     ];
 }

@@ -446,20 +446,26 @@ class SystemApiController extends Controller
     }
 
 
-    public function setGate(Request $request): bool
+    public function setGate(Request $request)
     {
         $user = User::where('uid', $request->input('user_uid'))->firstOrFail();
-        $user->roles = 'gate';
-        $user->save();
-        return true;
+        if (!$user->roles) {
+            $user->roles = 'gate';
+            $user->save();
+            return true;
+        }
+        else abort(404);
     }
 
-    public function removeGate(Request $request): bool
+    public function removeGate(Request $request)
     {
         $user = User::where('uid', $request->input('user_uid'))->firstOrFail();
-        $user->roles = '';
-        $user->save();
-        return true;
+        if ($user->roles == 'gate') {
+            $user->roles = '';
+            $user->save();
+            return true;
+        }
+        else abort(404);
     }
 
     public function setTokenSaleStartDate(Request $request): bool

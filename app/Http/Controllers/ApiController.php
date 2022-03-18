@@ -565,8 +565,8 @@ class ApiController extends Controller
                             'parse_mode' => 'html',
                         ]);
                     }
-                    catch (TelegramResponseException $e) {
-
+                    catch (CouldNotSendNotification $e) {
+                        report ($e);
                     }
                 }
 
