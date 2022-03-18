@@ -28,60 +28,84 @@
                     </div>
                     <div class="card-body">
 
-                        <h2>Список заявок</h2>
-                        <div class="orders-list">
-                            @if (count($orders) != 0)
+                        <h2 class="mb-4">Список заявок</h2>
+
+                        <div class="order-list">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <td>ID</td>
+                                        <td>Дата создания</td>
+                                        <td>Username</td>
+                                        <td>Тип</td>
+                                        <td>Сумма</td>
+                                        <td>Статус</td>
+                                        <td>Шлюз</td>
+                                        <td>Действия</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
                                 @foreach ($orders as $order)
-                                    @php
-                                        if ($order->currency == 'USDT') $dec = 0; else $dec = 5;
-                                    @endphp
-                                    <div class="order col-12 {{$order->status}}">
-                                        <div class="row">
-                                            <div class="col-12 col-md-9 order-wrapper">
-                                                <div class="row align-items-center">
-                                                    <div class="col-6 col-lg-3">
-                                                        <p>@php echo '<a href="tg://user?id=' . $order->user()->first()->uid .'">' . $order->user()->first()->username . '</a>'; @endphp</p>
-                                                        <p>@php echo '<a href="tg://resolve?domain=' . $order->user()->first()->username .'">@' . $order->user()->first()->username . '</a>'; @endphp</p>
-                                                    </div>
+                                <tr>
+                                    <td>#{{$order->id}}</td>
+                                    <td>{{$order->created_at->diffForHumans()}}</td>
+                                    <td>@php $owner = $order->user()->first(); echo '<a href="tg://user?id=' . $owner->uid .'">' . $owner->name . '</a><br /><a href="tg://resolve?domain=' . $owner->username .'">@' . $owner->username . '</a>'; @endphp</td>
+                                    <td>
+                                        @switch($order->destination)
+                                            @case('TokenSale')
+                                            ТокенСейл (ввод)
+                                            @break
 
-                                                    <div class="col-6 col-lg-3">
-                                                        <p><strong>{{number_format($order->dhb_amount, 0, ',', ' ')}} DHB</strong></p>
-                                                    </div>
+                                            @case('deposit')
+                                            Ввод
+                                            @break
 
-                                                    <div class="col-6 col-lg-3">
-                                                        <p>за {{number_format($order->amount, $dec, ',', ' ') }} {{$order->currency}}</p>
-                                                    </div>
+                                            @case('withdraw')
+                                            Вывод
+                                            @break
 
-                                                    <div class="col-6 col-lg-3">
-                                                        <p>{{ $order->created_at->format('d.m.Y H:i') }}</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 col-md-3">
-                                                <div class="orders-actions justify-content-md-around justify-content-around d-flex align-items-center h-100">
-                                                    <p class="mr-4">#{{$order->id}}</p>
-                                                    @if ($order->status == 'created')
-                                                        <a data-id="{{$order->id}}" class="btn btn-warning order-confirm">Подтвердить</a>
-                                                    @endif
-                                                    @if ($order->status == 'assignee')
-                                                    <a data-id="{{$order->id}}" class="btn btn-success order-confirm">Подтвердить</a>
-                                                    @endif
-                                                    @if ($order->status != 'completed')
-                                                    <a data-id="{{$order->id}}"  class="btn btn-danger order-decline">Отклонить</a>
-                                                    @else
-                                                    <p>Выполнена</p>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                            @default
+                                            {{$order->destination}}
+                                        @endswitch
+                                    </td>
+                                    <td>{{$order->amount}} {{$order->currency}} @if ($order->destination == 'TokenSale') ({{$order->dhb_amount}} DHB) @endif</td>
+                                    <td>
+                                        @switch($order->status)
+                                            @case('created')
+                                            Новая
+                                            @break
+
+                                            @case('accepted')
+                                            Принята шлюзом
+                                            @break
+
+                                            @case('pending')
+                                            Ожидание перевода средств
+                                            @break
+
+                                            @case('completed')
+                                            Выполнена
+                                            @break
+
+                                            @default
+                                            В обработке
+                                        @endswitch
+                                    </td>
+                                    <td>
+                                        @if ($order->gate)
+                                        @php $gate = \App\Models\User::where('uid', $order->gate)->first(); echo '<a href="tg://user?id=' . $gate->uid .'">' . $gate->name . '</a><br /><a href="tg://resolve?domain=' . $gate->username .'">@' . $gate->username . '</a>'; @endphp
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($order->status == 'created')
+                                            <a data-id="{{$order->id}}" class="btn btn-danger order-decline">Отменить заявку</a>
+                                        @endif
+                                    </td>
+                                </tr>
                                 @endforeach
-                            @else
-                                <p>Вы еще не создали ни единой заявки на получение DHB.</p>
-                                <a onclick="$('#deposit-tab').click()" style="margin-top:40px;" class="button button-orange">Получить DHB</a>
-                            @endif
+                                </tbody>
+                            </table>
                         </div>
-
 
                     </div>
                 </div>
@@ -93,22 +117,6 @@
 @section('script')
     <script>
         $(document).ready(function(){
-            $('.order-confirm').bind('click', function(e) {
-                e.preventDefault();
-                let id = $(this).data('id');
-                let _token = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: "/api/orders/" + id + "/confirm",
-                    type:"POST",
-                    data:{
-                        _token: _token,
-                    },
-                    success:function(response){
-                        alert('Заявка подтверждена')
-                        window.location.href = '/wallet/orders/';
-                    },
-                });
-            })
 
             $('.order-decline').bind('click', function(e) {
                 e.preventDefault();

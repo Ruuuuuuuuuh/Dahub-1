@@ -38,22 +38,27 @@ class OrderDecline extends Notification
 
     public function toTelegram($notifiable)
     {
-        $url = url('/wallet/');
+        $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/wallet/');
 
-
-        try {
-            TelegramMessage::create()
-                // Optional recipient user id.
-                ->to($notifiable->uid)
-                // Markdown supported.
-                ->content("Заявка №" . $this->order->id . " на получение " . $this->order->amount . " DHB отменена.")
-
-                // (Optional) Blade template for the content.
-                // ->view('notification', ['url' => $url])
-
-                ->button('Перейти в кошелек', $url);
-        } catch (\Exception $e) {
-            return $e->getMessage();
+        if ($this->order->destination == 'TokenSale') $content = "Заявка №" . $this->order->id . " на получение " . $this->order->dhb_amount . " DHB отменена.";
+        else {
+            if ($this->order->destination == 'deposit') {
+                $content = "Заявка №" . $this->order->id . " на получение " . $this->order->amount . " " . $this->order->currency . " отменена.";
+            }
+            else {
+                $content = "Заявка №" . $this->order->id . " на отправление " . $this->order->amount . " " . $this->order->currency . " отменена.";
+            }
         }
+
+        return TelegramMessage::create()
+            // Optional recipient user id.
+            ->to($notifiable->uid)
+            // Markdown supported.
+            ->content($content)
+
+            // (Optional) Blade template for the content.
+            // ->view('notification', ['url' => $url])
+
+            ->button('Перейти в кошелек', $url);
     }
 }

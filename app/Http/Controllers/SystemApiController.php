@@ -339,7 +339,13 @@ class SystemApiController extends Controller
         $user = User::where('uid', $order->user_uid)->first();
 
         // Send message via telegram
-        if (config('notifications')) $user->notify(new OrderDecline($order));
+        if (config('notifications'))
+            try {
+                $user->notify(new OrderDecline($order));
+            }
+            catch (CouldNotSendNotification $e) {
+                report ($e);
+            }
 
         $order->forceDelete();
         return $order->id;

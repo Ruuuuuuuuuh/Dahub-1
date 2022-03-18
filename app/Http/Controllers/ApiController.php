@@ -273,25 +273,23 @@ class ApiController extends Controller
     {
         $id = $request->input('id');
         $order = Order::where('id', $id)->where('user_uid', $this->user->uid)->first();
-        if ($order->status != 'completed') {
-            if ($order->status != 'created') {
-                $gate = User::where('uid', $order->gate)->first();
-            }
-            // Send message via telegram
-            if (config('notifications')) {
+
+        if ($order->user_uid == $this->user->uid) {
+            if ($order->status != 'completed') {
+
                 try {
                     $this->user->notify(new OrderDecline($order));
                 } catch (CouldNotSendNotification $e) {
                     report ($e);
                 }
+
+                $order->forceDelete();
+                return $order->id;
             }
 
-            $order->forceDelete();
-            return $order->id;
+            else abort(404);
         }
-
         else abort(404);
-
     }
 
 

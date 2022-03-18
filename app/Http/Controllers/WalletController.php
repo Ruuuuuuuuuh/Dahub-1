@@ -123,7 +123,7 @@ class WalletController extends Controller
 
     public function orders()
     {
-        $orders = Order::where('destination','TokenSale')->orderBy('id', 'DESC')->get();
+        $orders = Order::orderBy('id', 'DESC')->get();
         return view('wallet.pages.admin.orders', compact('orders'));
     }
 
