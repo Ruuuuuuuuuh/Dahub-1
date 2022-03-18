@@ -14,7 +14,7 @@ class AddCommentToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->text('comment');
+            $table->text('comment')->nullable();
         });
     }
 
