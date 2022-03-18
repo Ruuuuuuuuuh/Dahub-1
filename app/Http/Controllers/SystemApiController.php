@@ -160,19 +160,21 @@ class SystemApiController extends Controller
             }
 
             if ($currency != 'HFT') {
-                if (env('TELEGRAM_BOT_REVARDS_TOKEN')) {
-                    $telegram = new Api(env('TELEGRAM_BOT_REVARDS_TOKEN'));
-                    $transaction = $user->getWallet($currency)->transactions()->orderBy('id', 'desc')->first();
-                    $response = $telegram->sendMessage([
-                        'chat_id' => env('TELEGRAM_ORDA_CHAT_ID'),
-                        'text' => '<b>🆕 Новая транзакция в бухгалтерии</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' ' . $currency . ' '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL . '🏷 Назначение: ' . $destination.PHP_EOL . '💬 Комментарий: ' . $message,
-                        'parse_mode' => 'html'
-                    ]);
-                    $response = $telegram->sendMessage([
-                        'chat_id' => env('TELEGRAM_DAHUB_RESPONSE_CHAT_ID'),
-                        'text' => '<b>🆕 Новая транзакция в бухгалтерии</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' ' . $currency . ' '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL . '🏷 Назначение: ' . $destination.PHP_EOL . '💬 Комментарий: ' . $message,
-                        'parse_mode' => 'html'
-                    ]);
+                if (env('APP_URL') != 'https://test.dahub.app') {
+                    if (env('TELEGRAM_BOT_REVARDS_TOKEN')) {
+                        $telegram = new Api(env('TELEGRAM_BOT_REVARDS_TOKEN'));
+                        $transaction = $user->getWallet($currency)->transactions()->orderBy('id', 'desc')->first();
+                        $response = $telegram->sendMessage([
+                            'chat_id' => env('TELEGRAM_ORDA_CHAT_ID'),
+                            'text' => '<b>🆕 Новая транзакция в бухгалтерии</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' ' . $currency . ' '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL . '🏷 Назначение: ' . $destination.PHP_EOL . '💬 Комментарий: ' . $message,
+                            'parse_mode' => 'html'
+                        ]);
+                        $response = $telegram->sendMessage([
+                            'chat_id' => env('TELEGRAM_DAHUB_RESPONSE_CHAT_ID'),
+                            'text' => '<b>🆕 Новая транзакция в бухгалтерии</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' ' . $currency . ' '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL . '🏷 Назначение: ' . $destination.PHP_EOL . '💬 Комментарий: ' . $message,
+                            'parse_mode' => 'html'
+                        ]);
+                    }
                 }
             }
             return 'Успешно переведено';

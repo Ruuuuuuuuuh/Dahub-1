@@ -245,7 +245,6 @@ class ApiController extends Controller
         if ($order->status != 'completed') {
             if ($order->status != 'created') {
                 $gate = User::where('uid', $order->gate)->first();
-                $gate->unfreezeTokens($order->currency, $order->amount);
             }
             // Send message via telegram
             if (config('notifications')) $this->user->notify(new OrderDecline($order));
@@ -383,7 +382,6 @@ class ApiController extends Controller
                 $order->gate = $this->user->uid;
                 $owner = User::where('uid', $order->user_uid)->first();
                 if ($order->destination == 'deposit' || $order->destination == 'TokenSale') {
-                    $this->user->freezeTokens($order->currency, $order->amount);
                     $order->payment_details = $request->input('payment_details');
                     $owner->notify(new AcceptDepositOrder($order));
                 }
@@ -539,7 +537,6 @@ class ApiController extends Controller
             if (($gate->getBalanceFree($order->currency) > $order->amount)) {
                 $transaction = $this->user->getWallet($order->currency)->withdrawFloat($order->amount, array('destination' => 'withdraw from wallet'));
                 $this->user->getWallet($order->currency)->refreshBalance();
-                $gate->unfreezeTokens($order->currency, $order->amount);
                 $gate->getWallet($order->currency.'_gate')->withdrawFloat($order->amount, array('destination' => 'withdraw from gate wallet'));
                 $order->status = 'completed';
                 $order->transaction()->attach($transaction->id);

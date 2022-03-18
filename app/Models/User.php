@@ -14,6 +14,7 @@ use Bavix\Wallet\Traits\HasWallets;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Traits\CanConfirm;
+use Illuminate\Support\Carbon;
 use Questocat\Referral\Traits\UserReferral;
 use App\Models\Currency as Currency;
 
@@ -92,6 +93,18 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
     }
 
     /**
+     * @return bool
+     * Check gateway permissions
+     */
+    public function isGateManager(): bool
+    {
+        if ($this->roles == 'admin' || $this->roles == 'gate_manager') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Получить заявки.
      */
     public function orders(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -158,40 +171,54 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
     }
 
     /**
-     * Получить баланс внутреннего токена
+     * Получить общий баланс DHB / USDT
      * @return float
      */
     public function getBalanceInner(): float
     {
-        if (!$this->hasWallet('iUSDT')) {
-            $this->createWallet(
-                [
-                    'name' => 'Inner USD Token',
-                    'slug' => 'iUSDT',
-                    'decimal_places' => 2
-                ]
-            );
-        }
-        return $this->getWallet('iUSDT')->balanceFloat;
+        return $this->getWallet('DHB')->balanceFloat * Rate::getRates('DHB');
     }
 
-    public function getBalanceFrozen(): float
+    public function getBalanceFrozen()
     {
-        if (!$this->hasWallet('iUSDT_frozen')) {
-            $this->createWallet(
-                [
-                    'name' => 'iUSDT frozen',
-                    'slug' => 'iUSDT_frozen',
-                    'decimal_places' => 2
-                ]
-            );
+        $balance = 0;
+        foreach ($this->wallets()->get() as $wallet) {
+            if (stripos($wallet->name, '_gate')) {
+                $balance += $wallet->balanceFloat * Rate::getRates(str_replace('_gate', '', $wallet->name));
+            }
         }
-        return $this->getWallet('iUSDT_frozen')->balanceFloat;
+        foreach ($this->orders()->where('gate', $this->uid)->where('status', '!=', 'completed')->where('destination', '!=', 'withdraw')->get() as $order) {
+            $balance += $order->amount * Rate::getRates($order->currency);
+        }
+        return $balance;
     }
 
     public function getBalanceFree($currency): float
     {
         return ($this->getBalanceInner() - $this->getBalanceFrozen()) / Rate::getRates($currency);
+    }
+
+    /**
+     * Считает количество долларов на балансе исходя из графика изменения стоимости токена
+     * @return float|int
+     */
+    public function getAvailableBalance() {
+        $balance = 0;
+        $rates = \App\Models\Rate::all()->toArray();
+        foreach (\App\Models\Transaction::where('payable_id', $this->id)->where('wallet_id', $this->getWallet('DHB')->id)->get() as $transaction) {
+            $curRate = 0;
+            foreach ($rates as $i => $rate) {
+                if ($transaction->created_at->gte($rate['created_at'])) {
+                    $curRate = $rates[$i]['value'];
+                }
+                else {
+                    $curRate = $rates[$i-1]['value'];
+                    break;
+                }
+            }
+            $balance += ($transaction->amount / 100) * $curRate;
+        }
+        return $balance;
     }
 
     public function freezeTokens($currency, $amount)
