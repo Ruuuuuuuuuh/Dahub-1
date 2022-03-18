@@ -28,7 +28,7 @@
             <span>Заявки</span>
         </a>
     </div>
-    @if ($user->mode == 'lite')
+    @if ($mode == 'lite')
     <a class="create-order-open d-flex justify-content-center align-items-center flex-column" onclick="createOrderScreenOpen();">
         <svg width="72" height="69" viewBox="0 0 72 69" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g filter="url(#filter0_d_629:268)">

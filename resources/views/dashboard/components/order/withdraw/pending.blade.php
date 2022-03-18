@@ -34,8 +34,8 @@
     <div class="text-block">
         <p><small>Статус:</small></p>
         <p style="color:#347AF0">Заявка выполнена.<br />
-            Отправлено {{number_format($order->amount, 2, '.', '').' '.$order->currency}} на карту {{$order->payment}}.
-            Подветрдите получение средств.
+            Отправлено {{number_format($order->amount, 2, '.', '').' '.$order->currency}} на {{$order->payment}}.
+            Подтвердите получение средств.
         </p>
     </div>
     <div class="footer">

@@ -191,7 +191,7 @@ class ApiController extends Controller
                 // Отправление сообщения боту в паблик шлюзов
                 if (env('TELEGRAM_BOT_GATE_ORDERS_TOKEN') !== null && env('TELEGRAM_BOT_GATE_ORDERS_TOKEN') !== '') {
                     $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
-                    $destination_message = ($destination == 'deposit' || $destination == 'TokenSale') ? 'получение' : 'отправление';
+                    $destination_message = ($destination == 'deposit' || $destination == 'TokenSale') ? '⬇️ Получение' : '⬆️ Отправление';
                     $inline_button = array(
                         "text" => "Принять заявку",
                         "url" => env('APP_URL') . '/dashboard/orders/' . $order->id . '/accept'
@@ -199,11 +199,12 @@ class ApiController extends Controller
                     $inline_keyboard = [[$inline_button]];
                     $keyboard = array("inline_keyboard" => $inline_keyboard);
                     $replyMarkup = json_encode($keyboard);
-                    $message = '🔥 <b>Новая заявка: </b> #' . $order->id . ' на ' . $destination_message . ' ' . $amount . ' ' . $currency;
+                    $message = '🔥 Новая заявка:  #' . $order->id;
                     if ($currency == 'TON') $message .= ' 💎';
+                    $message .= PHP_EOL . '<b>'.$destination_message . ':  ' . $amount . ' ' . $currency.'</b>';
                     $message .= PHP_EOL;
-                    if (Currency::where('title', $currency)->firstOrFail()->crypto) $message .= '🌐 <b>Платежная сеть: </b> ' . $order->payment;
-                    else $message .= '💳  <b>Платежная система: </b> ' . $order->payment;
+                    if (Currency::where('title', $currency)->firstOrFail()->crypto) $message .= '🌐 Платежная сеть:  ' . $order->payment;
+                    else $message .= '💳  <b>Платежная система: </b>  ' . $order->payment;
 
                     try {
                         $response = $telegram->sendMessage([
