@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Rate;
 use App\Models\Currency;
 use App\Models\Gate;
+use App\Models\Message;
 use App\Models\Payment;
 use App\Models\PaymentDetail;
 use App\Models\System;
@@ -205,12 +206,21 @@ class ApiController extends Controller
                     else $message .= '💳  <b>Платежная система: </b> ' . $order->payment;
 
                     try {
-                        $telegram->sendMessage([
+                        $response = $telegram->sendMessage([
                             'chat_id' => env('TELEGRAM_GATE_ORDERS_CHAT_ID'),
                             'text' => $message,
                             'parse_mode' => 'html',
                             'reply_markup' => $replyMarkup
                         ]);
+                        $text = $message;
+                        // Сохраняем в базу все данные
+                        $message = new Message();
+                        $message->order_id = $order->id;
+                        $message->message_id = $response['message_id'];
+                        $message->message = $text;
+                        $message->chat_id = env('TELEGRAM_GATE_ORDERS_CHAT_ID');
+                        $message->save();
+
                     } catch (CouldNotSendNotification $e) {
                         report ($e);
                     }
@@ -434,6 +444,21 @@ class ApiController extends Controller
                 }
                 $order->status = 'accepted';
                 $order->save();
+                try {
+                    $message = Message::where('order_id', $order->id)->first();
+                    if ($message) {
+                        $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                        $telegram->editMessageText([
+                            'chat_id' => $message->chat_id,
+                            'message_id' => $message->message_id,
+                            'text' => $message->message.PHP_EOL.'✅ <b>Заявка принята шлюзом</b>',
+                            'parse_mode' => 'html',
+                            'reply_markup' => NULL
+                        ]);
+                    }
+                } catch (CouldNotSendNotification $e) {
+                    report ($e);
+                }
                 return $order->id;
             }
         }

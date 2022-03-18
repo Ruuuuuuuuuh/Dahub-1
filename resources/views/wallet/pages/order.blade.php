@@ -73,6 +73,7 @@
                                     <a onclick="acceptSending('{{$order->id}}');" class="button button-blue button-accept">Переведено, далее...</a>
                                     <a onclick="decline('{{$order->id}}');" style="" class="button button-danger">Отменить заявку</a>
                                 </div>
+                                <p class="mt-3">* для подтверждения отправки средств приготовьте последние 4 цифры счета / номера карты</p>
 
                             </div>
                             @elseif ($order->status == 'pending')
@@ -108,7 +109,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <p style="margin-top:25px;">Как только заявка будет выполнена, вы получите уведомление от <a href="https://t.me/DaHubBot" target="_blank">@DaHubBot</a>.</p>
+                                    <p style="margin-top:25px;">После подтверждения поступления средств кипером вы получите сообщение от <a href="https://t.me/DaHubBot" target="_blank">@DaHubBot</a> о зачислении токенов DHB на ваш счет.</p>
                                 </div>
                             @elseif ($order->status == 'completed')
                             <div class="mt-4 mb-3">

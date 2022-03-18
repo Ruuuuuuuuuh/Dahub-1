@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Telegram\Bot\Api;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 class DashboardController extends Controller {
@@ -87,11 +88,6 @@ class DashboardController extends Controller {
 
     public function systemConfigPage()
     {
-        $user = $this->user;
-        $currency = new Currency();
-        $wallets = $user->wallets()->get();
-
-        return view('dashboard.pages.systemconfigpage', compact('user', 'currency', 'wallets'));
 
     }
 
