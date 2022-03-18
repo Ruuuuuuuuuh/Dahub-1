@@ -49,7 +49,7 @@
     <div class="orders-deposit">
         @foreach ($orders['deposit'] as $order)
             @if ($order->amount <= $user->getBalanceFree($order->currency))
-            <a href="{{Route('getOrder', $order->id)}}" class="order-item @if ($order->destination == 'TokenSale') order-deposit @else order-{{$order->destination}} @endif order-{{$order->status}} gate-order d-flex justify-content-between align-items-center" data-id="{{$order->id}}" data-crypto="{{\App\Models\Currency::where('title', $order->currency)->first()->crypto}}">
+            <a href="{{Route('getOrder', $order->id)}}/accept" class="order-item @if ($order->destination == 'TokenSale') order-deposit @else order-{{$order->destination}} @endif order-{{$order->status}} gate-order d-flex justify-content-between align-items-center" data-id="{{$order->id}}" data-crypto="{{\App\Models\Currency::where('title', $order->currency)->first()->crypto}}">
                 <div class="d-flex align-items-start flex-column justify-content-center order-destination">
                     @if ($order->destination == 'deposit' || $order->destination == 'TokenSale')
                     <svg width="26" height="18" viewBox="0 0 26 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -89,7 +89,7 @@
     <div class="orders-withdraw" style="display:none;">
         @foreach ($orders['withdraw'] as $order)
             @if ($order->amount <= $user->getBalance($order->currency.'_gate'))
-            <a href="{{Route('getOrder', $order->id)}}" class="order-item order-{{$order->destination}} order-{{$order->status}} gate-order d-flex justify-content-between align-items-center" data-id="{{$order->id}}">
+            <a href="{{Route('getOrder', $order->id)}}/accept" class="order-item order-{{$order->destination}} order-{{$order->status}} gate-order d-flex justify-content-between align-items-center" data-id="{{$order->id}}">
                 <div class="d-flex align-items-start flex-column justify-content-center order-destination">
                     @if ($order->destination == 'deposit')
                         <svg width="26" height="18" viewBox="0 0 26 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -114,7 +114,7 @@
                             <div class="datetime">#{{$order->id}}</div>
                         </div>
                         <div class="d-flex justify-content-between w-100">
-                            <div class="tax">Комиссия 1%  (+{{$order->amount / 100}} {{$order->currency}})</div>
+                            <div class="tax">Комиссия 0.5%  (+{{round($order->amount * Rate::getRates($order->currency) / 200 / Rate::getRates('DHB'))}} DHB)</div>
                             <div class="payment_details">
                                 @if ($order->payment)
                                     <svg width="19" height="13" viewBox="0 0 19 13" fill="none" xmlns="http://www.w3.org/2000/svg">

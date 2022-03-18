@@ -12,11 +12,11 @@
                     </g>
                 </svg>
             </a>
-            <h2>Принять {{$order->amount}} {{$order->currency}}</h2>
+            <h2>Принять {{$order->amount}} {{$order->currency}} </h2>
         </div>
     </div>
     <div class="section-main">
-        <h4 class="accept-order-title crypto-hidden">Выберите подходящие реквизиты</h4>
+        <h4 class="accept-order-title crypto-hidden">Выберите реквизиты {{$order->payment}}</h4>
         <div class="payment-items">
             @foreach (Auth::user()->paymentDetails()->get() as $payment)
 

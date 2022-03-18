@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="section-main">
-        <h4 class="accept-order-title crypto-hidden">Выберите подходящие реквизиты</h4>
+        <h4 class="accept-order-title crypto-hidden">Выберите реквизиты</h4>
         <div class="payment-items">
             @foreach (Auth::user()->paymentDetails()->get() as $payment)
             <a class="payment-item d-flex align-items-center justify-content-start" data-address="{{$payment->address}}" data-payment="{{$payment->payment()->first()->title}}">

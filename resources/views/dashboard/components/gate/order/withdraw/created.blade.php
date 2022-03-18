@@ -31,6 +31,10 @@
         <p><small>Платежная система:</small></p>
         <p>{{$order->payment}}</p>
     </div>
+    <div class="text-block">
+        <p><small>Размер вознаграждения:</small></p>
+        <p>{{round($order->amount * Rate::getRates($order->currency) / 200 / Rate::getRates('DHB'))}} DHB</p>
+    </div>
     <div class="footer">
         <a class="button button-blue" onclick="acceptOrder()">Принять заявку</a>
     </div>

@@ -28,6 +28,10 @@
         <p>{{$order->amount}} {{$order->currency}}</p>
     </div>
     <div class="text-block">
+        <p><small>@if (\App\Models\Payment::where('title', $order->payment)->first()->crypto) Cеть: @else Платежная система: @endif</small></p>
+        <p>{{$order->payment}}</p>
+    </div>
+    <div class="text-block">
         <p><small>Оставшееся время:</small></p>
         <p class="timeleft">@include('dashboard.components.order.timeleft')</p>
     </div>

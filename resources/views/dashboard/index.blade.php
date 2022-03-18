@@ -217,37 +217,10 @@
             if ($('#accept-order').data('payment')) $('input[name="payment"]').val($('#accept-order').data('payment'))
             else $('input[name="payment"]').val($(this).data('payment'))
         })
-        @if ($mode == 'pro')
-        $('.gate-order.order-created').click(function(e){
-            if ($(this).hasClass('order-deposit')) {
-                e.preventDefault();
-                let amount = $(this).find('.amount').html();
-                let payment = $(this).find('.payment_details span').html();
-                let orderID = $(this).data('id');
-                $('#accept-order .top-nav h2').text('Принять ' + amount)
-                $('.payment-details-form input[name="payment"]').val(payment);
-                $('#accept-order').attr('data-payment', payment);
-                $('#accept-order a.order-accept').attr('data-id', orderID);
-                $('#accept-order').addClass('opened');
-                $('.payment-items .payment-item').removeClass('d-flex').addClass('d-none')
-                $('.payment-item[data-payment="' + payment + '"]').removeClass('d-none').addClass('d-flex')
-            }
-            if ($(this).data('crypto') == 1) {
-                $('#accept-order').addClass('crypto')
-                $('.payment-details-form input[name="address"]').attr('placeholder', 'Адрес кошелька')
-                $('.payment-details-form').addClass('crypto')
-            }
-            else {
-                $('#accept-order').removeClass('crypto')
-                $('.payment-details-form input[name="address"]').attr('placeholder', 'Номер карты')
-                $('.payment-details-form').removeClass('crypto')
-            }
-        })
-        @endif
+
         $('.payment-details-form input').on('change keyup', function() {
             let filledtextboxes = 1;
             if ($('.payment-details-form input[name="address"]').val().length == 0) filledtextboxes = 0;
-            // if ($('.payment-details-form').closest('#add-payment-details').hasClass('crypto') && $('.payment-details-form input[name="address"]').val().length != 0) filledtextboxes = 1
             if (filledtextboxes != 0) $('.payment-details-form .confirm-modal').removeClass('disabled')
             else $('.payment-details-form .confirm-modal').addClass('disabled')
         })

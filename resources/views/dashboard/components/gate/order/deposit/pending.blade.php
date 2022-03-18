@@ -23,7 +23,14 @@
         <p><small>Заявка #</small></p>
         <p>{{$order->id}}</p>
     </div>
-
+    <div class="text-block">
+        <p><small>На пополнение:</small></p>
+        <p>{{$order->amount}} {{$order->currency}}</p>
+    </div>
+    <div class="text-block">
+        <p><small>@if (\App\Models\Payment::where('title', $order->payment)->first()->crypto) Cеть: @else Платежная система: @endif</small></p>
+        <p>{{$order->payment}}</p>
+    </div>
     <div class="text-block">
         <p><small>Оставшееся время:</small></p>
         <p class="timeleft">@include('dashboard.components.order.timeleft')</p>
@@ -34,7 +41,6 @@
     </div>
 
     <div class="text-block">
-        <p><small>Статус:</small></p>
         <p>Пользователь подтвердил перевод средств. Последние 4 цифры номера карты (счета) отправителя *{{$order->comment}}. Как только средства поступят, подтвердите получение.</p>
     </div>
     <div class="footer">

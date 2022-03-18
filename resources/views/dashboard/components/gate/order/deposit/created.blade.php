@@ -28,12 +28,20 @@
         <p>{{$order->amount}} {{$order->currency}}</p>
     </div>
     <div class="text-block">
+        <p><small>@if (\App\Models\Payment::where('title', $order->payment)->first()->crypto) Cеть: @else Платежная система: @endif</small></p>
+        <p>{{$order->payment}}</p>
+    </div>
+    <div class="text-block">
         <p><small>Оставшееся время:</small></p>
         <p class="timeleft">@include('dashboard.components.order.timeleft')</p>
     </div>
     <div class="text-block">
         <p><small>Статус:</small></p>
         <p style="color:#347AF0">Новая заявка</p>
+    </div>
+    <div class="text-block">
+        <p><small>Бонус кипера:</small></p>
+        <p>{{round($order->amount * Rate::getRates($order->currency) / 200 / Rate::getRates('DHB'))}} DHB</p>
     </div>
     @if (Auth::user()->getBalanceFree($order->currency) >= $order->amount)
     <div class="footer">

@@ -34,8 +34,14 @@
         <p>{{$order->amount}} {{$order->currency}}</p>
     </div>
     <div class="text-block">
+        <p><small>@if (\App\Models\Payment::where('title', $order->payment)->first()->crypto) Cеть: @else Платежная система: @endif</small></p>
+        <p>{{$order->payment}}</p>
+    </div>
+    <div class="text-block">
         <p><small>Статус:</small></p>
-        <p style="color:#347AF0">Заявка выполнена. Получение подтверждено.</p>
+        <p style="color:#347AF0">Заявка выполнена.
+            <br />Получение подтверждено.
+            <br />Вам начислено {{round($order->amount * Rate::getRates($order->currency) / 200 / Rate::getRates('DHB'))}} DHB.</p>
     </div>
     <div class="footer">
         <a href="{{ Route('dashboard') }}" class="button button-blue">Закрыть</a>
