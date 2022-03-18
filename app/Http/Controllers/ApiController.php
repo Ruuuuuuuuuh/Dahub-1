@@ -82,9 +82,21 @@ class ApiController extends Controller
                 $admins = User::where('roles', 'admin')->get();
                 foreach ($admins as $admin) {
                     $message = 'Новая заявка ' . $order->id . ' на покупку ' . $order->amount . ' DHB. [Написать пользователю](tg://user?id='.$this->user->uid.')';
-                    if (config('notifications')) $admin->notify(new AdminNotifications($message));
+                    if (config('notifications')) {
+                        try {
+                            $admin->notify(new AdminNotifications($message));
+                        } catch (CouldNotSendNotification $e) {
+                            report ($e);
+                        }
+                    }
                 }
-                if (config('notifications')) $this->user->notify(new OrderCreate($order));
+                if (config('notifications')) {
+                    try {
+                        $this->user->notify(new OrderCreate($order));
+                    } catch (CouldNotSendNotification $e) {
+                        report ($e);
+                    }
+                }
                 return response($order->id, 200);
             }
             else {
@@ -157,7 +169,12 @@ class ApiController extends Controller
                 ]);
                 $order->save();
 
-                $this->user->notify(new OrderCreate($order));
+                try {
+                    $this->user->notify(new OrderCreate($order));
+                } catch (CouldNotSendNotification $e) {
+                    report ($e);
+                }
+
 
                 // Добавление валюты в список валют на главном экране
                 $visibleWallets = $this->getVisibleWallets();
@@ -185,12 +202,18 @@ class ApiController extends Controller
                     $message .= PHP_EOL;
                     if (Currency::where('title', $currency)->firstOrFail()->crypto) $message .= '🌐 <b>Платежная сеть: </b> ' . $order->payment;
                     else $message .= '💳  <b>Платежная система: </b> ' . $order->payment;
-                    $telegram->sendMessage([
-                        'chat_id' => env('TELEGRAM_GATE_ORDERS_CHAT_ID'),
-                        'text' => $message,
-                        'parse_mode' => 'html',
-                        'reply_markup' => $replyMarkup
-                    ]);
+
+                    try {
+                        $telegram->sendMessage([
+                            'chat_id' => env('TELEGRAM_GATE_ORDERS_CHAT_ID'),
+                            'text' => $message,
+                            'parse_mode' => 'html',
+                            'reply_markup' => $replyMarkup
+                        ]);
+                    } catch (CouldNotSendNotification $e) {
+                        report ($e);
+                    }
+
                 }
 
 
@@ -214,7 +237,15 @@ class ApiController extends Controller
         $order = Order::where('id', $id)->where('user_uid', $this->user->uid)->first();
 
         if ($order->status != 'completed') {
-            if (config('notifications')) $this->user->notify(new OrderAssignee($order));
+
+            if (config('notifications')) {
+                try {
+                    $this->user->notify(new OrderAssignee($order));
+                } catch (CouldNotSendNotification $e) {
+                    report ($e);
+                }
+            }
+
             $order->status = 'assignee';
             $order->save();
             return $order->id;
@@ -247,7 +278,13 @@ class ApiController extends Controller
                 $gate = User::where('uid', $order->gate)->first();
             }
             // Send message via telegram
-            if (config('notifications')) $this->user->notify(new OrderDecline($order));
+            if (config('notifications')) {
+                try {
+                    $this->user->notify(new OrderDecline($order));
+                } catch (CouldNotSendNotification $e) {
+                    report ($e);
+                }
+            }
 
             $order->forceDelete();
             return $order->id;
@@ -383,10 +420,18 @@ class ApiController extends Controller
                 $owner = User::where('uid', $order->user_uid)->first();
                 if ($order->destination == 'deposit' || $order->destination == 'TokenSale') {
                     $order->payment_details = $request->input('payment_details');
-                    $owner->notify(new AcceptDepositOrder($order));
+                    try {
+                        $owner->notify(new AcceptDepositOrder($order));
+                    } catch (CouldNotSendNotification $e) {
+                        report ($e);
+                    }
                 }
                 else {
-                    $owner->notify(new AcceptWithdrawOrder($order));
+                    try {
+                        $owner->notify(new AcceptWithdrawOrder($order));
+                    } catch (CouldNotSendNotification $e) {
+                        report ($e);
+                    }
                 }
                 $order->status = 'accepted';
                 $order->save();
@@ -411,7 +456,11 @@ class ApiController extends Controller
                 if ($order->destination == 'withdraw') {
                     $order->status = 'pending';
                     $order->save();
-                    $owner->notify(new AcceptSendingByGate($order));
+                    try {
+                        $owner->notify(new AcceptSendingByGate($order));
+                    } catch (CouldNotSendNotification $e) {
+                        report ($e);
+                    }
                     return $order->id;
                 }
             }
@@ -462,11 +511,17 @@ class ApiController extends Controller
                         if ($transaction->payable_type == 'App\Models\System' && $transaction->type = 'withdraw') {
                             $order->transaction()->attach($transaction->id);
                             $systemWallet->getWallet('TokenSale')->refreshBalance();
-                            $telegram->sendMessage([
-                                'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
-                                'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>↗️ Sent: </b>' . $order->amount . ' ' . $order->currency .PHP_EOL.'<b>↙️ Recieved: </b>' . $order->dhb_amount . ' DHB' .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid. PHP_EOL.PHP_EOL.'<b>🔥 TokenSale: </b>'. number_format($systemWallet->getWallet('TokenSale')->balanceFloat, 0, '.', ' ') . ' DHB left until the end of stage 1',
-                                'parse_mode' => 'html'
-                            ]);
+
+                            try {
+                                $telegram->sendMessage([
+                                    'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
+                                    'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>↗️ Sent: </b>' . $order->amount . ' ' . $order->currency .PHP_EOL.'<b>↙️ Recieved: </b>' . $order->dhb_amount . ' DHB' .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid. PHP_EOL.PHP_EOL.'<b>🔥 TokenSale: </b>'. number_format($systemWallet->getWallet('TokenSale')->balanceFloat, 0, '.', ' ') . ' DHB left until the end of stage 1',
+                                    'parse_mode' => 'html'
+                                ]);
+                            } catch (CouldNotSendNotification $e) {
+                                report ($e);
+                            }
+
                         }
                     }
                     // Бонус за успешное выполнение задания
@@ -480,7 +535,11 @@ class ApiController extends Controller
                 $this->user->getWallet($order->currency.'_gate')->depositFloat($order->amount, array('destination' => 'deposit to wallet', 'order_id' => $order->id));
                 $this->user->getWallet($order->currency.'_gate')->refreshBalance();
 
-                $owner->notify(new ConfirmOrder($order));
+                try {
+                    $owner->notify(new ConfirmOrder($order));
+                } catch (CouldNotSendNotification $e) {
+                    report ($e);
+                }
 
                 // Отправка сообщения, если пользователь впервые купил токены
                 $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
@@ -564,7 +623,13 @@ class ApiController extends Controller
             $owner = User::where('uid', $order->user_uid)->first();
 
             // Send message via telegram
-            if (config('notifications')) $owner->notify(new OrderDecline($order));
+            if (config('notifications')) {
+                try {
+                    $owner->notify(new OrderDecline($order));
+                } catch (CouldNotSendNotification $e) {
+                    report ($e);
+                }
+            }
             $order->forceDelete();
             return true;
         }
@@ -637,7 +702,13 @@ class ApiController extends Controller
             $refAmount = ($amount * $tax ) / 100;
             $user->getWallet($currency)->depositFloat($refAmount, array('destination' => 'referral'));
             $user->getWallet($currency)->refreshBalance();
-            $user->notify(new ReferralBonusPay(array('amount' => $refAmount, 'currency' => $currency)));
+
+            try {
+                $user->notify(new ReferralBonusPay(array('amount' => $refAmount, 'currency' => $currency)));
+            } catch (CouldNotSendNotification $e) {
+                report ($e);
+            }
+
             $curAmount = $amount - $refAmount;
             $tax = $tax - 3;
         }
