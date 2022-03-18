@@ -122,17 +122,19 @@
                 e.preventDefault();
                 let id = $(this).data('id');
                 let _token = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: "/api/orders/" + id + "/decline",
-                    type:"POST",
-                    data:{
-                        _token: _token,
-                    },
-                    success:function(response){
-                        alert('Заявка отменена')
-                        window.location.href = '/wallet/orders/';
-                    },
-                });
+                if (confirm("Отменить заявку?") == true) {
+                    $.ajax({
+                        url: "/api/orders/" + id + "/decline",
+                        type: "POST",
+                        data: {
+                            _token: _token,
+                        },
+                        success: function (response) {
+                            alert('Заявка отменена')
+                            window.location.href = '/wallet/orders/';
+                        },
+                    });
+                }
             })
 
         })
