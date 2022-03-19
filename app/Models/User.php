@@ -167,6 +167,7 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
                 ]
             );
         }
+        $this->getWallet($currency)->refreshBalance();
         return $this->getWallet($currency)->balanceFloat;
     }
 
