@@ -652,7 +652,8 @@ class ApiController extends Controller
                 $order->save();
                 // Бонус за успешное выполнение задания
                 $systemWallet = System::findOrFail(1);
-                $systemWallet->getWallet('DHBFundWallet')->transferFloat( round($order->amount * Rate::getRates($order->currency) / 200 / Rate::getRates('DHB')), array('destination' => 'Бонус за успешное выполнение заявки', 'order_id' => $order->id));
+                $tax = round($order->amount * Rate::getRates($order->currency) / 200 / Rate::getRates('DHB'));
+                $systemWallet->getWallet('DHBFundWallet')->transferFloat( $gate->getWallet('DHB'), $tax, array('destination' => 'Бонус за успешное выполнение заявки', 'order_id' => $order->id));
                 $systemWallet->getWallet('DHBFundWallet')->refreshBalance();
                 $gate->getWallet('DHB')->refreshBalance();
 
