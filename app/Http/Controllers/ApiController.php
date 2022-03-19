@@ -650,6 +650,12 @@ class ApiController extends Controller
                 $order->status = 'completed';
                 $order->transaction()->attach($transaction->id);
                 $order->save();
+                // Бонус за успешное выполнение задания
+                $systemWallet = System::findOrFail(1);
+                $systemWallet->getWallet('DHBFundWallet')->transferFloat( round($order->amount * Rate::getRates($order->currency) / 200 / Rate::getRates('DHB')), array('destination' => 'Бонус за успешное выполнение заявки', 'order_id' => $order->id));
+                $systemWallet->getWallet('DHBFundWallet')->refreshBalance();
+                $gate->getWallet('DHB')->refreshBalance();
+
                 return $order->id;
             }
             else response(['error'=>true, 'error-msg' => 'Недостаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
