@@ -104,28 +104,24 @@
                     @endif
                 </div>
                 <div class="d-flex align-items-end flex-column justify-content-center w-100">
-                    @if ($order->rate)
-                        <div class="amount">{{number_format($order->amount / $order->rate, Auth::user()->getWallet($order->currency)->decimal_places, '.', ' ')}} {{$order->currency}}</div>
-                        <div class="datetime">{{$order->created_at->format('d.m.Y H:i')}}</div>
-                    @else
-                        <div class="d-flex justify-content-between w-100">
-                            <div class="amount">{{number_format($order->amount, Auth::user()->getWallet($order->currency)->decimal_places, '.', ' ')}} {{$order->currency}}</div>
-                            <div class="datetime">{{$order->created_at->format('H:i')}}</div>
-                            <div class="datetime">#{{$order->id}}</div>
+
+                    <div class="d-flex justify-content-between w-100">
+                        <div class="amount">{{number_format($order->amount, Auth::user()->getWallet($order->currency)->decimal_places, '.', ' ')}} {{$order->currency}}</div>
+                        <div class="datetime">{{$order->created_at->format('H:i')}}</div>
+                        <div class="datetime">#{{$order->id}}</div>
+                    </div>
+                    <div class="d-flex justify-content-between w-100">
+                        <div class="tax">Комиссия 0.5%  (+{{round($order->amount * Rate::getRates($order->currency) / 200 / Rate::getRates('DHB'))}} DHB)</div>
+                        <div class="payment_details">
+                            @if ($order->payment)
+                                <svg width="19" height="13" viewBox="0 0 19 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="19" height="13" rx="3" fill="#B5BBC9"/>
+                                    <rect x="1" y="8" width="17" height="2" fill="#EDF1F9"/>
+                                </svg>
+                                <span>{{$order->payment}}</span>
+                            @endif
                         </div>
-                        <div class="d-flex justify-content-between w-100">
-                            <div class="tax">Комиссия 0.5%  (+{{round($order->amount * Rate::getRates($order->currency) / 200 / Rate::getRates('DHB'))}} DHB)</div>
-                            <div class="payment_details">
-                                @if ($order->payment)
-                                    <svg width="19" height="13" viewBox="0 0 19 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect width="19" height="13" rx="3" fill="#B5BBC9"/>
-                                        <rect x="1" y="8" width="17" height="2" fill="#EDF1F9"/>
-                                    </svg>
-                                    <span>{{$order->payment}}</span>
-                                @endif
-                            </div>
-                        </div>
-                    @endif
+                    </div>
                 </div>
             </a>
             @endif
