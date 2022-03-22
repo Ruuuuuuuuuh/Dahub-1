@@ -75,7 +75,6 @@ Route::post('/api/add_payment', [App\Http\Controllers\SystemApiController::class
 Route::post('/api/attach_payment_to_currency', [App\Http\Controllers\SystemApiController::class, 'attachPaymentToCurrency'])->middleware('admin');
 Route::post('/api/detach_payment_from_currency', [App\Http\Controllers\SystemApiController::class, 'detachPaymentFromCurrency'])->middleware('admin');
 Route::post('/api/orders/admin/create', [App\Http\Controllers\SystemApiController::class, 'createOrder'])->middleware('admin');
-Route::post('/api/transfer', [App\Http\Controllers\ApiController::class, 'transfer'])->middleware('admin');
 Route::post('/api/set_dhb_per_user', [App\Http\Controllers\SystemApiController::class, 'setDHBPerUser'])->middleware('admin');
 Route::post('/api/set_dhb_per_order', [App\Http\Controllers\SystemApiController::class, 'setDHBPerOrder'])->middleware('admin');
 Route::post('/api/set_gate', [App\Http\Controllers\SystemApiController::class, 'setGate'])->middleware('gate_manager');
@@ -101,6 +100,7 @@ Route::post('/api/orders/declineOrderByGate', [App\Http\Controllers\ApiControlle
 Route::post('/api/orders/acceptSendingByGate', [App\Http\Controllers\ApiController::class, 'acceptSendingByGate']);
 Route::post('/api/orders/acceptSendingByUser', [App\Http\Controllers\ApiController::class, 'acceptSendingByUser']);
 Route::post('/api/getOrdersByFilter', [App\Http\Controllers\ApiController::class, 'getOrdersByFilter']);
+Route::post('/api/transfer', [App\Http\Controllers\ApiController::class, 'transfer']);
 
 
 // Telegram Web Api
