@@ -95,6 +95,33 @@
             }
         })
 
+        //Swipe по реквизитам
+
+        $('.gradient').swipe({
+            swipeStatus: function(event, phase, direction, distance, duration, fingerCount, fingerData,
+                currentDirection) {
+                if (phase == "start") {
+                    // сработает в начале swipe
+                }
+                if (phase == "end") {
+                    //сработает через 20 пикселей то число которое выбрали в threshold
+                    if (direction == 'left') {
+                        console.log('gradient left')
+                    }
+                    if (direction == 'right') {
+                        console.log('gradient right')
+                    }
+                    if (direction == 'up') {
+                        //сработает при движении вверх
+                    }
+                    if (direction == 'down') {
+                        //сработает при движении вниз
+                    }
+                }
+            },
+            triggerOnTouchEnd: true,
+            threshold: 30,
+        });
         $('#accept-order .payment-items').on('click', '.payment-item', function() {
             $('.payment-item').removeClass('active')
             $(this).addClass('active')
