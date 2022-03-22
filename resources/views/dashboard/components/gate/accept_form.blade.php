@@ -28,7 +28,9 @@
                     </svg>
                     <div class="payment-details">
                         <span class="address">{{$payment->address}}</span>
+
                     </div>
+                    <span class="gradient"></span>
                 </a>
                 @endif
             @endforeach
@@ -63,3 +65,5 @@
         </div>
     </div>
 </div>
+
+
