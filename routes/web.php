@@ -44,7 +44,7 @@ Route::get('/wallet/explorer', [App\Http\Controllers\WalletController::class, 'e
 Route::get('/wallet/orders/{id}', [App\Http\Controllers\WalletController::class, 'order'])->name('wallet.pages.order');
 
 // ADMIN PAGES
-Route::get('/wallet/transfer', [App\Http\Controllers\WalletController::class, 'transfer'])->middleware('admin')->name('wallet.transfer');
+Route::get('/wallet/transfer', [App\Http\Controllers\WalletController::class, 'transfer'])->name('wallet.transfer');
 Route::get('/wallet/orders/', [App\Http\Controllers\WalletController::class, 'orders'])->middleware('gate_manager')->name('wallet.orders');
 Route::get('/wallet/stages/', [App\Http\Controllers\WalletController::class, 'stages'])->middleware('admin')->name('wallet.stages');
 Route::get('/wallet/reports/', [App\Http\Controllers\WalletController::class, 'reports'])->middleware('admin')->name('wallet.reports');
