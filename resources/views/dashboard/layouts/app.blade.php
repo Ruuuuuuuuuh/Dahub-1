@@ -108,7 +108,7 @@
                 },
                 triggerOnTouchEnd: true,
                 threshold: 100,
-                excludedElements: '.balance .address',
+                excludedElements: '.balance, .payment-item',
             });
         }
         $('.menu-close').click(function (){
