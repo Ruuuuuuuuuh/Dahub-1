@@ -10566,12 +10566,20 @@ section.screen .payment-items .payment-item {
   height: 84px;
   border-bottom: 2px solid #EDF1F9;
   padding: 24px 0 28px;
+  position: relative;
 }
 section.screen .payment-items .payment-item .payment-details-icon {
   min-width: 55px;
 }
 section.screen .payment-items .payment-item .payment-details-icon .payment-item-icon-inner {
   fill: #EDF1F9;
+}
+section.screen .payment-items .payment-item .gradient {
+  background: linear-gradient(270deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%);
+  width: 100px;
+  height: 16px;
+  position: absolute;
+  right: 0;
 }
 section.screen .payment-items .payment-item .payment-details {
   margin-left: 10px;
@@ -10590,6 +10598,14 @@ section.screen .payment-items .payment-item .payment-details .address {
   font-size: 16px;
   line-height: 16px;
   color: #0D1F3C;
+  display: flex;
+}
+section.screen .payment-items .payment-item .payment-details .address::after {
+  content: "";
+  width: 40px;
+  height: 16px;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 section.screen .payment-items .payment-item .payment-details .holder-name {
   font-size: 14px;

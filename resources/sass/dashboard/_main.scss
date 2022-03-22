@@ -536,11 +536,19 @@ section.screen {
             height:84px;
             border-bottom: 2px solid #EDF1F9;
             padding:24px 0 28px;
+            position: relative;
             .payment-details-icon {
                 min-width:55px;
                 .payment-item-icon-inner {
                     fill: #EDF1F9
                 }
+            }
+            .gradient {
+                background: linear-gradient(270deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%);
+                width: 100px;
+                height: 16px;
+                position: absolute;
+                right: 0;
             }
             .payment-details {
                 margin-left:10px;
@@ -553,11 +561,20 @@ section.screen {
                     width: 0;
                     height: 0;
                 }
+
                 .address {
                     font-weight: 600;
                     font-size: 16px;
                     line-height: 16px;
                     color: #0D1F3C;
+                    display: flex;
+                    &::after {
+                        content:'';
+                        width: 40px;
+                        height: 16px;
+                        box-sizing: border-box;
+                        flex-shrink: 0;
+                    }
                 }
                 .holder-name {
                     font-size: 14px;
