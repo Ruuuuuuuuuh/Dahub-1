@@ -77,7 +77,7 @@
                         success: function (data) {
                             resolve(data)
                             console.log(data)
-                            $('.payment-items').append('<a class="payment-item d-flex align-items-center justify-content-start" data-address="' + data[0].address + '" data-payment="' + data[0].payment + '">' +
+                            $('.payment-items').append('<a class="payment-item d-flex align-items-center justify-content-start" data-address="' + data[0].address + '" data-id="' + data[0].id + '" data-payment="' + data[0].payment + '">' +
                                 '<svg class="payment-details-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
                                 '<circle cx="10" cy="10" r="10" fill="#EDF1F9"/>' +
                                 '<circle class="payment-item-icon-inner" cx="10" cy="10" r="6" fill="#EDF1F9"/>' +

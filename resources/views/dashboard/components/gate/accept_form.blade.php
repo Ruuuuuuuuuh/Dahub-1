@@ -21,7 +21,7 @@
             @foreach (Auth::user()->paymentDetails()->get() as $payment)
 
                 @if ($payment->payment()->first()->title == $order->payment)
-                <a class="payment-item d-flex align-items-center justify-content-start" data-address="{{$payment->address}}" data-payment="{{$payment->payment()->first()->title}}">
+                <a class="payment-item d-flex align-items-center justify-content-start" data-address="{{$payment->address}}" data-id="{{ $payment->id }}" data-payment="{{$payment->payment()->first()->title}}">
                     <svg class="payment-details-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="10" cy="10" r="10" fill="#EDF1F9"/>
                         <circle class="payment-item-icon-inner" cx="10" cy="10" r="6" fill="#EDF1F9"/>
