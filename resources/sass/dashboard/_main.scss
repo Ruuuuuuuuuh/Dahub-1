@@ -547,7 +547,12 @@ section.screen {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                word-break: break-all;
+                overflow: hidden;
+                overflow-x: scroll;
+                &::-webkit-scrollbar {
+                    width: 0;
+                    height: 0;
+                }
                 .address {
                     font-weight: 600;
                     font-size: 16px;
