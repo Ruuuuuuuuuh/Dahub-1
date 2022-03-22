@@ -10578,7 +10578,12 @@ section.screen .payment-items .payment-item .payment-details {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  word-break: break-all;
+  overflow: hidden;
+  overflow-x: scroll;
+}
+section.screen .payment-items .payment-item .payment-details::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 section.screen .payment-items .payment-item .payment-details .address {
   font-weight: 600;
