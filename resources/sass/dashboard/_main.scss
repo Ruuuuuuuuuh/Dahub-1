@@ -542,7 +542,7 @@ section.screen {
             .payment-item_content {
                 transition: transform .3s ease-in;
                 &.swipe {
-                    transform: translateX(-50%);
+                    transform: translateX(-55%);
                 }
             }
             .payment-details-icon {
