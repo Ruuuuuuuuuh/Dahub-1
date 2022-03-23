@@ -67,8 +67,8 @@
     </div>
 </section>
 <div class="modal fade" id="add-payment-details" tabindex="-1" role="dialog" aria-labelledby="add-payment-details" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content ">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -91,8 +91,8 @@
 </div>
 
 
-{{-- <div class="modal fade" id="edit-payment-details" tabindex="-1" role="dialog" aria-labelledby="edit-payment-details" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="edit-payment-details" tabindex="-1" role="dialog" aria-labelledby="edit-payment-details" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -105,6 +105,6 @@
             </div>
         </div>
     </div>
-</div> --}}
+</div>
 
 
