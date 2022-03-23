@@ -114,7 +114,14 @@
         })
 
         $('.edit-payment_item').click(function() {
-            $('#edit-payment-details').modal()
+            let id = $(this).data('id')
+            // let name = $(this).data('name')
+            let address = $(this).data('address')
+            let $modal = $('#edit-payment-details')
+            $modal.find('input[name="address"]').val(address)
+            $modal.find('input[name="name"]').val(id) // На время
+            $modal.modal()
+
         })
 
         $('.delete-payment_item').click(function() {
