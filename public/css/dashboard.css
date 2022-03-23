@@ -10565,8 +10565,16 @@ section.screen .footer-relative {
 section.screen .payment-items .payment-item {
   height: 84px;
   border-bottom: 2px solid #EDF1F9;
-  padding: 24px 0 28px;
+  padding: 14px 0 24px;
   position: relative;
+  overflow: hidden;
+  display: block;
+}
+section.screen .payment-items .payment-item .payment-item_content {
+  transition: transform 0.3s ease-in;
+}
+section.screen .payment-items .payment-item .payment-item_content.swipe {
+  transform: translateX(-50%);
 }
 section.screen .payment-items .payment-item .payment-details-icon {
   min-width: 55px;
@@ -10587,15 +10595,17 @@ section.screen .payment-items .payment-item .payment-details {
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  overflow-x: scroll;
+  min-width: 100%;
 }
 section.screen .payment-items .payment-item .payment-details::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
-section.screen .payment-items .payment-item .payment-details .address {
+section.screen .payment-items .payment-item .payment-details .name {
   font-weight: 600;
-  font-size: 16px;
+}
+section.screen .payment-items .payment-item .payment-details .address {
+  font-size: 10px;
   line-height: 16px;
   color: #0D1F3C;
   display: flex;
@@ -10624,6 +10634,24 @@ section.screen .payment-items .payment-item.active .payment-details-icon .paymen
 }
 section.screen .payment-items .payment-item:last-of-type {
   border-bottom: none;
+}
+section.screen .action-btn {
+  display: flex;
+}
+section.screen .action-btn .icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 8px;
+}
+section.screen .action-btn .icon-edit {
+  background: #347AF0;
+}
+section.screen .action-btn .icon-delete {
+  background: #DF5060;
 }
 section.screen .add-payment_item {
   margin: 25px 0;

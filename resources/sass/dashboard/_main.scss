@@ -535,8 +535,16 @@ section.screen {
         .payment-item {
             height:84px;
             border-bottom: 2px solid #EDF1F9;
-            padding:24px 0 28px;
+            padding: 14px 0 24px;
             position: relative;
+            overflow: hidden;
+            display: block;
+            .payment-item_content {
+                transition: transform .3s ease-in;
+                &.swipe {
+                    transform: translateX(-50%);
+                }
+            }
             .payment-details-icon {
                 min-width:55px;
                 .payment-item-icon-inner {
@@ -556,15 +564,17 @@ section.screen {
                 flex-direction: column;
                 justify-content: center;
                 overflow: hidden;
-                overflow-x: scroll;
+                min-width: 100%;
                 &::-webkit-scrollbar {
                     width: 0;
                     height: 0;
                 }
-
-                .address {
+                .name {
                     font-weight: 600;
-                    font-size: 16px;
+                }
+                .address {
+
+                    font-size: 10px;
                     line-height: 16px;
                     color: #0D1F3C;
                     display: flex;
@@ -597,6 +607,24 @@ section.screen {
             &:last-of-type {
                 border-bottom: none;
             }
+        }
+    }
+    .action-btn {
+        display: flex;
+        .icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 8px;
+        }
+        .icon-edit {
+            background: #347AF0;
+        }
+        .icon-delete {
+            background: #DF5060;
         }
     }
     .add-payment_item {

@@ -97,7 +97,7 @@
 
         //Swipe по реквизитам
 
-        $('.gradient').swipe({
+        $('.payment-item').swipe({
             swipeStatus: function(event, phase, direction, distance, duration, fingerCount, fingerData,
                 currentDirection) {
                 if (phase == "start") {
@@ -106,10 +106,11 @@
                 if (phase == "end") {
                     //сработает через 20 пикселей то число которое выбрали в threshold
                     if (direction == 'left') {
-                        console.log('gradient left')
+                        $('.payment-item_content').removeClass('swipe')
+                        $(this).find('.payment-item_content').addClass('swipe')
                     }
                     if (direction == 'right') {
-                        console.log('gradient right')
+                        $(this).find('.payment-item_content').removeClass('swipe')
                     }
                     if (direction == 'up') {
                         //сработает при движении вверх

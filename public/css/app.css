@@ -10216,6 +10216,15 @@ main {
   text-align: center;
 }
 
+.accept_buttons .button {
+  padding: 0px 50px;
+  width: 100%;
+  text-align: center;
+}
+.accept_buttons .button-accept {
+  margin-right: 15px;
+}
+
 .progress {
   background: linear-gradient(100.13deg, #2691E2 -25.88%, #1A2453 53.71%);
   border-radius: 20px;
@@ -10936,6 +10945,10 @@ strong {
 }
 
 @media screen and (max-width: 1023px) {
+  .accept_buttons .button {
+    padding: 10px 50px;
+  }
+
   .header-top {
     padding: 0 30px !important;
   }
@@ -11461,6 +11474,20 @@ strong {
   .icon-support svg {
     height: 23px !important;
     margin-top: 2px;
+  }
+}
+@media screen and (max-width: 720px) {
+  .accept_buttons {
+    flex-wrap: wrap;
+  }
+  .accept_buttons .button {
+    padding: 10px 50px;
+    width: 100%;
+    text-align: center;
+    margin-top: 15px;
+  }
+  .accept_buttons .button-accept {
+    margin-right: 0px;
   }
 }
 @media screen and (max-width: 360px) {
