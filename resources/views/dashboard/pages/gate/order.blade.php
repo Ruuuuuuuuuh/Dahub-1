@@ -141,6 +141,19 @@
             $('input[name="payment"]').val($('#accept-order').data('payment'))
         })
 
+        $('.edit-payment_item').click(function() {
+            alert('Редактирование')
+        })
+
+        $('.delete-payment_item').click(function() {
+            let confirmation = confirm("Точно удалить?")
+
+            if(confirmation) {
+                alert('Реквизиты удалены')
+            }
+
+        })
+
         $('.payment-details-form input').on('change keyup', function() {
             let filledtextboxes = 1;
             if ($('.payment-details-form input[name="address"]').val().length == 0) filledtextboxes = 0;
