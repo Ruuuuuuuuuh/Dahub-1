@@ -92,6 +92,8 @@ Route::post('/api/getPayments', [App\Http\Controllers\ApiController::class, 'get
 Route::post('/api/createOrderByUser', [App\Http\Controllers\ApiController::class, 'createOrderByUser']);
 Route::post('/api/saveUserConfig', [App\Http\Controllers\ApiController::class, 'saveUserConfig']);
 Route::post('/api/payment_details/add', [App\Http\Controllers\ApiController::class, 'addPaymentDetails']);
+Route::post('/api/payment_details/edit', [App\Http\Controllers\ApiController::class, 'editPaymentDetails']);
+Route::post('/api/payment_details/remove', [App\Http\Controllers\ApiController::class, 'removePaymentDetails']);
 Route::post('/api/payment_details/get', [App\Http\Controllers\ApiController::class, 'getPaymentDetails']);
 Route::post('/api/orders/acceptOrderByGate', [App\Http\Controllers\ApiController::class, 'acceptOrderByGate']);
 Route::post('/api/orders/confirmOrderByGate', [App\Http\Controllers\ApiController::class, 'confirmOrderByGate']);

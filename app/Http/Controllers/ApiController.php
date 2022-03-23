@@ -22,11 +22,16 @@ use App\Notifications\OrderDecline;
 use App\Notifications\ReferralBonusPay;
 use Bavix\Wallet\Models\Transaction;
 use http\Client\Response;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Telegram\Bot\Api;
+use Telegram\Bot\Exceptions\TelegramSDKException;
+use Telegram\Bot\FileUpload\InputFile;
 
 class ApiController extends Controller
 {
@@ -66,7 +71,7 @@ class ApiController extends Controller
      * Create Order from users
      *
      * @param Request $request
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return ResponseFactory|\Illuminate\Http\Response
      */
     public function createOrder(Request $request)
     {
@@ -113,8 +118,8 @@ class ApiController extends Controller
     /**
      * Create self order by user
      * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     * @throws \Telegram\Bot\Exceptions\TelegramSDKException
+     * @return Application|ResponseFactory|\Illuminate\Http\Response
+     * @throws TelegramSDKException
      */
     public function createOrderByUser(Request $request) {
 
@@ -240,8 +245,8 @@ class ApiController extends Controller
 
     /**
      * Подтверждение заявки пользователем, возможно устарела, протестировать и удалить
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @param Request $request
+     * @return Application|ResponseFactory|\Illuminate\Http\Response
      */
     public function assigneeOrderByUser(Request $request)
     {
@@ -306,7 +311,7 @@ class ApiController extends Controller
 
 
     /**
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return false|string
      */
     public function getTransactions(Request $request) {
@@ -342,7 +347,7 @@ class ApiController extends Controller
 
     /**
      * Получить платежные сети привязанные к валюте
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return mixed
      */
     public function getPayments(Request $request) {
@@ -380,31 +385,67 @@ class ApiController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
-    public function addPaymentDetails(Request $request): \Illuminate\Http\JsonResponse
+    public function addPaymentDetails(Request $request): JsonResponse
     {
+        $title = $request->has('title') ? $request->input('title') : NULL;
         $payment = $request->input('payment');
         $holder = Payment::where('title', $payment)->firstOrFail()->currencies()->firstOrFail()->crypto ? $request->input('holder_name') : null;
         $address = $request->input('address');
         $payment_details = PaymentDetail::create(
             [
-                'user_uid' => $this->user->uid,
-                'payment_id' => Payment::where('title', $payment)->firstOrFail()->id,
-                'address' => $address,
-                'holder' => $holder,
+                'user_uid'      => $this->user->uid,
+                'payment_id'    => Payment::where('title', $payment)->firstOrFail()->id,
+                'address'       => $address,
+                'holder'        => $holder,
+                'title'         => $title
             ],
         );
         $data[]       = [
-            'user_uid' => $this->user->uid,
-            'payment' => $payment,
-            'address' => $address,
-            'holder' => $holder,
-            'id'    => $payment_details->id
+            'title'     => $title,
+            'user_uid'  => $this->user->uid,
+            'payment'   => $payment,
+            'address'   => $address,
+            'holder'    => $holder,
+            'id'        => $payment_details->id
         ];
         return response()->json($data);
     }
 
+    /**
+     * Редактирование реквизитов
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function editPaymentDetails(Request $request): JsonResponse
+    {
+        $paymentDetails = PaymentDetail::where('id', $request->input('id'))->where('user_uid', $this->user->uid)->firstOrFail();
+
+        $title = $request->has('title') ? $request->input('title') : NULL;
+        $address = $request->input('address');
+
+        $paymentDetails->title     = $title;
+        $paymentDetails->address   = $address;
+        $paymentDetails->save();
+
+        return response('Payment updated successful', 200);
+    }
+
+    /**
+     * Удаление реквизитов
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function removePaymentDetails(Request $request): JsonResponse
+    {
+        $paymentDetails = PaymentDetail::where('id', $request->input('id'))->where('user_uid', $this->user->uid)->firstOrFail();
+        if ($paymentDetails->user_uid == $this->user->uid) {
+            $paymentDetails->forceDelete();
+            return response('Payment updated successful', 200);
+        }
+        else return response('У вас нет прав для этого действия', 404);
+    }
 
     /**
      * Возвращаем реквизиты
@@ -521,9 +562,9 @@ class ApiController extends Controller
 
     /**
      * Подтверждение поступления средств шлюзом
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     * @throws \Telegram\Bot\Exceptions\TelegramSDKException
+     * @param Request $request
+     * @return Application|ResponseFactory|\Illuminate\Http\Response
+     * @throws TelegramSDKException
      */
     public function confirmOrderByGate(Request $request)
     {
@@ -597,7 +638,7 @@ class ApiController extends Controller
                     try {
                         $telegram->sendPhoto([
                             'chat_id' => $owner->uid,
-                            'photo' => \Telegram\Bot\FileUpload\InputFile::create("https://test.dahub.app/img/welcome.png"),
+                            'photo' => InputFile::create("https://test.dahub.app/img/welcome.png"),
                             'caption' =>
                                 '<b>На связи команда проекта DaHub!</b>'
                                 . PHP_EOL .
@@ -634,8 +675,8 @@ class ApiController extends Controller
 
     /**
      * Подтверждение заявки пользователем
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response|void
+     * @param Request $request
+     * @return Application|ResponseFactory|\Illuminate\Http\Response|void
      */
     public function confirmOrderByUser(Request $request)
     {
@@ -669,8 +710,8 @@ class ApiController extends Controller
 
     /**
      * Метод отмены заявки шлюзом, пока не используется
-     * @param \Illuminate\Http\Request $request
-     * @return bool|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @param Request $request
+     * @return bool|Application|ResponseFactory|\Illuminate\Http\Response
      */
     public function declineOrderByGate(Request $request)
     {
@@ -697,7 +738,7 @@ class ApiController extends Controller
 
     /**
      * Фильтрация пользовательских заявок
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      * @return mixed \App\Models\Order
      */
     public function getOrdersByFilter(Request $request)
@@ -719,8 +760,8 @@ class ApiController extends Controller
 
     /**
      * Перевод средств между пользователями
-     * @param \Illuminate\Http\Request $request
-     * @return bool|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @param Request $request
+     * @return bool|Application|ResponseFactory|\Illuminate\Http\Response
      */
     public function transfer(Request $request) {
 
