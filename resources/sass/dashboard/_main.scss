@@ -562,7 +562,19 @@ section.screen {
                 flex-direction: column;
                 justify-content: center;
                 overflow: hidden;
+                position: relative;
                 width: 100%;
+                &::after {
+                    content:'';
+                    position: absolute;
+                    right: 0;
+                    bottom: 0;
+                    width: 40px;
+                    height: 18px;
+                    box-sizing: border-box;
+                    flex-shrink: 0;
+                    background: linear-gradient(270deg, #FFFFFF 0%, rgba(255, 255, 255, 0) 100%);
+                }
                 .name {
                     font-weight: 600;
                 }
@@ -581,7 +593,7 @@ section.screen {
                     &::after {
                         content:'';
                         width: 40px;
-                        height: 16px;
+                        height: 18px;
                         box-sizing: border-box;
                         flex-shrink: 0;
                     }
