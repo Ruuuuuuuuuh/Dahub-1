@@ -10563,9 +10563,8 @@ section.screen .footer-relative {
   margin-top: 45px;
 }
 section.screen .payment-items .payment-item {
-  height: 84px;
   border-bottom: 2px solid #EDF1F9;
-  padding: 14px 0 24px;
+  padding: 20px 0 20px;
   position: relative;
   overflow: hidden;
   display: block;
@@ -10577,7 +10576,7 @@ section.screen .payment-items .payment-item .payment-item_content.swipe {
   transform: translateX(-55%);
 }
 section.screen .payment-items .payment-item .payment-details-icon {
-  min-width: 55px;
+  margin-right: 10px;
 }
 section.screen .payment-items .payment-item .payment-details-icon .payment-item-icon-inner {
   fill: #EDF1F9;
@@ -10590,25 +10589,27 @@ section.screen .payment-items .payment-item .gradient {
   right: 0;
 }
 section.screen .payment-items .payment-item .payment-details {
-  margin-left: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  min-width: 100%;
-}
-section.screen .payment-items .payment-item .payment-details::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+  width: 100%;
 }
 section.screen .payment-items .payment-item .payment-details .name {
   font-weight: 600;
 }
 section.screen .payment-items .payment-item .payment-details .address {
-  font-size: 10px;
-  line-height: 16px;
+  font-size: 12px;
+  line-height: 18px;
   color: #0D1F3C;
   display: flex;
+  overflow-x: scroll;
+}
+section.screen .payment-items .payment-item .payment-details .address::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+  opacity: 0;
 }
 section.screen .payment-items .payment-item .payment-details .address::after {
   content: "";
@@ -10639,13 +10640,16 @@ section.screen .action-btn {
   display: flex;
 }
 section.screen .action-btn .icon {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
   border-radius: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 8px;
+  margin-right: 4px;
+}
+section.screen .action-btn .icon:last-of-type {
+  margin-right: 0px;
 }
 section.screen .action-btn .icon-edit {
   background: #347AF0;
@@ -10675,18 +10679,14 @@ section.screen .add-payment_item {
 }
 
 .modal-open .modal {
-  display: flex !important;
   align-items: center;
   justify-content: center;
 }
 .modal-open .modal .modal-dialog {
-  height: 415px;
-  border-radius: 20px;
-  width: 100%;
-  margin: 0 25px;
+  padding: 0 25px;
 }
 .modal-open .modal .modal-content {
-  height: 100%;
+  height: 415px;
   border-radius: 20px;
 }
 .modal-open .modal .modal-body {

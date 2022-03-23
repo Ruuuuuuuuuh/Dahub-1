@@ -95,34 +95,6 @@
             }
         })
 
-        //Swipe по реквизитам
-
-        $('.payment-item').swipe({
-            swipeStatus: function(event, phase, direction, distance, duration, fingerCount, fingerData,
-                currentDirection) {
-                if (phase == "start") {
-                    // сработает в начале swipe
-                }
-                if (phase == "end") {
-                    //сработает через 20 пикселей то число которое выбрали в threshold
-                    if (direction == 'left') {
-                        $('.payment-item_content').removeClass('swipe')
-                        $(this).find('.payment-item_content').addClass('swipe')
-                    }
-                    if (direction == 'right') {
-                        $(this).find('.payment-item_content').removeClass('swipe')
-                    }
-                    if (direction == 'up') {
-                        //сработает при движении вверх
-                    }
-                    if (direction == 'down') {
-                        //сработает при движении вниз
-                    }
-                }
-            },
-            triggerOnTouchEnd: true,
-            threshold: 30,
-        });
         $('#accept-order .payment-items').on('click', '.payment-item', function() {
             $('.payment-item').removeClass('active')
             $(this).addClass('active')
@@ -142,7 +114,7 @@
         })
 
         $('.edit-payment_item').click(function() {
-            alert('Редактирование')
+            $('#edit-payment-details').modal()
         })
 
         $('.delete-payment_item').click(function() {
