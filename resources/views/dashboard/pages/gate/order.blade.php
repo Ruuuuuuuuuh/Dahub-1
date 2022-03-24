@@ -123,10 +123,11 @@
                 })
             }
         })
+
         $('#accept-order .payment-items').on('click', '.payment-item', function(e) {
             $('.payment-item').removeClass('active')
             $(this).addClass('active')
-            $('.order-accept').removeClass('disabled').attr('data-address', $(this).data('address'))
+            $('.order-accept').removeClass('disabled').attr('data-address', $(this).attr('data-address'))
         })
 
         $('#payment-details-list .payment-items').on('click', '.payment-item', function() {
