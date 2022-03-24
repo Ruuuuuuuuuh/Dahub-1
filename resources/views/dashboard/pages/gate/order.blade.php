@@ -60,17 +60,12 @@
             $('#accept-order').addClass('opened');
         }
 
-        $('.payment-details-form .confirm-modal').click(function(e){
-            e.preventDefault()
-            if (!$(this).hasClass('disabled')) {
-                return new Promise(function (resolve, reject) {
+        //Вызов создание нового реквизита /api/payment_details/add
+        function addPaymentItem () {
+            return new Promise(function (resolve, reject) {
                     let form = $('.payment-details-form');
-                    let data = {
-                        "_token": "{{ csrf_token() }}",
-                        "address": form.find('input[name="address"]').val(),
-                        "payment": form.find('input[name="payment"]').val(),
-                        "title": form.find('input[name="title"]').val(),
-                    }
+                    let data = form.serialize()
+                    console.log(data)
                     $.ajax({
                         url: "/api/payment_details/add",
                         type: "POST",
@@ -121,6 +116,26 @@
                         }
                     })
                 })
+        }
+
+        $('.payment-details-form').on('submit', function(e) {
+            e.preventDefault()
+            let $address = $(this).find('[name="address"]').val()
+            let checkDataCrypto = parseInt($(this).attr('data-crypto'))
+            if(checkDataCrypto) {
+                //Для крипты
+                if(validateEmpty($address)) {
+                    addPaymentItem()
+                } else {
+                    alert('Адрес колешька не может быть пустым')
+                }
+            } else {
+                //Для фиата
+                if(validateCard($address)) {
+                    addPaymentItem()
+                } else {
+                    alert('У карты должно быть 16 символов')
+                }
             }
         })
 
@@ -146,19 +161,11 @@
         })
 
 
-
-
-        //Отправка формы редактирование реквизитов
-        $('.edit-payment-details-form .confirm-modal').click(function(e){
-            e.preventDefault()
-                return new Promise(function (resolve, reject) {
+        //Вызов /api/payment_details/edit
+        function editPaymentItem() {
+            return new Promise(function (resolve, reject) {
                     let form = $('.edit-payment-details-form');
-                    let data = {
-                        "_token": "{{ csrf_token() }}",
-                        "address": form.find('input[name="address"]').val(),
-                        "title": form.find('input[name="title"]').val(),
-                        "id": parseInt(form.find('input[name="id"]').val())
-                    }
+                    let data = form.serialize()
                     $.ajax({
                         url: "/api/payment_details/edit",
                         type: "POST",
@@ -174,6 +181,7 @@
                             if($(".payment-item[data-id='" + data.id + "']").hasClass('active') ) {
                                 $('.order-accept').attr('data-address', data.address)
                             }
+
                             $('#edit-payment-details').modal('hide')
                         },
                         error: function (err) {
@@ -182,7 +190,48 @@
                         }
                     })
                 })
+        }
+
+        //Валидация карты на 16 цифр
+        function validateCard(numberCard) {
+            if(numberCard.length === 16 ) {
+                return true
+            } else {
+                return false
+            }
+        }
+
+        //Валидация поля на пустоту
+        function validateEmpty(inputVal) {
+            if(inputVal.length > 1 ) {
+                return true
+            } else {
+                return false
+            }
+        }
+
+        //Отправка формы редактирование реквизитов
+        $('.edit-payment-details-form').on('submit', function(e) {
+            e.preventDefault()
+            let $address = $(this).find('[name="address"]').val()
+            let checkDataCrypto = parseInt($(this).attr('data-crypto'))
+            if(checkDataCrypto) {
+                //Для крипты
+                if(validateEmpty($address)) {
+                    editPaymentItem()
+                } else {
+                    alert('Адрес колешька не может быть пустым')
+                }
+            } else {
+                //Для фиата
+                if(validateCard($address)) {
+                    editPaymentItem()
+                } else {
+                    alert('У карты должно быть 16 символов')
+                }
+            }
         })
+
         //Вызов модалки для редактирование реквизитов
         $('.payment-items').delegate('.edit-payment_item', 'click', function() {
             let id = $(this).data('id')
@@ -194,6 +243,7 @@
             $modal.find('input[name="id"]').val(id)
             $modal.modal()
         })
+
         //Удаление реквизитов
         $('.payment-items').delegate('.delete-payment_item', 'click', function() {
             let confirmation = confirm("Точно удалить?")
@@ -228,16 +278,16 @@
         $('.edit-payment-details-form input').on('change keyup', function() {
             let filledtextboxes = 1;
             if ($('.edit-payment-details-form input[name="address"]').val().length == 0) filledtextboxes = 0;
-            if (filledtextboxes != 0) $('.edit-payment-details-form .confirm-modal').removeClass('disabled')
-            else $('.edit-payment-details-form .confirm-modal').addClass('disabled')
+            if (filledtextboxes != 0) $('.edit-payment-details-form .confirm-modal').removeAttr('disabled')
+            else $('.edit-payment-details-form .confirm-modal').attr('disabled')
         })
 
         $('.payment-details-form input').on('change keyup', function() {
             let filledtextboxes = 1;
             if ($('.payment-details-form input[name="address"]').val().length == 0) filledtextboxes = 0;
             // if ($('.payment-details-form').closest('#add-payment-details').hasClass('crypto') && $('.payment-details-form input[name="address"]').val().length != 0) filledtextboxes = 1
-            if (filledtextboxes != 0) $('.payment-details-form .confirm-modal').removeClass('disabled')
-            else $('.payment-details-form .confirm-modal').addClass('disabled')
+            if (filledtextboxes != 0) $('.payment-details-form .confirm-modal').removeAttr('disabled')
+            else $('.payment-details-form .confirm-modal').attr('disabled')
         })
 
         $('.order-accept').click(function(e) {
