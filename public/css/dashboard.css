@@ -10766,7 +10766,7 @@ section.screen .add-payment_item {
 .modal-open .modal .modal-body .form-group input:-webkit-autofill {
   -webkit-text-fill-color: #333 !important;
 }
-.modal-open .modal .modal-body a.confirm-modal {
+.modal-open .modal .modal-body .confirm-modal {
   position: absolute;
   bottom: 40px;
   width: 225px;
@@ -10787,7 +10787,7 @@ section.screen .add-payment_item {
   margin: 0 auto;
   transition: 0.2s ease-in-out all;
 }
-.modal-open .modal .modal-body a.confirm-modal.disabled {
+.modal-open .modal .modal-body .confirm-modal.disabled {
   color: #B5BBC9;
   border-color: #B5BBC9;
 }
