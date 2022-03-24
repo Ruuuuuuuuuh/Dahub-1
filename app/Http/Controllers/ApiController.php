@@ -389,7 +389,7 @@ class ApiController extends Controller
      */
     public function addPaymentDetails(Request $request): JsonResponse
     {
-        $title = $request->has('title') ? $request->input('title') : NULL;
+        $title = $request->input('title') ? $request->input('title') : $request->input('payment');
         $payment = $request->input('payment');
         $holder = Payment::where('title', $payment)->firstOrFail()->currencies()->firstOrFail()->crypto ? $request->input('holder_name') : null;
         $address = $request->input('address');
@@ -422,7 +422,7 @@ class ApiController extends Controller
     {
         $paymentDetails = PaymentDetail::where('id', $request->input('id'))->where('user_uid', $this->user->uid)->firstOrFail();
 
-        $title = $request->has('title') ? $request->input('title') : NULL;
+        $title = $request->input('title') ? $request->input('title') : $paymentDetails->title;
         $address = $request->input('address');
 
         $paymentDetails->title     = $title;
