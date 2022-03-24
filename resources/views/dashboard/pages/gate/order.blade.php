@@ -131,10 +131,10 @@
                 }
             } else {
                 //Для фиата
-                if(validateCard($address)) {
+                if(validateEmpty($address)) {
                     addPaymentItem()
                 } else {
-                    alert('У карты должно быть 16 символов')
+                    alert('Номер карты не может быть пустым')
                 }
             }
         })
@@ -224,10 +224,10 @@
                 }
             } else {
                 //Для фиата
-                if(validateCard($address)) {
+                if(validateEmpty($address)) {
                     editPaymentItem()
                 } else {
-                    alert('У карты должно быть 16 символов')
+                    alert('Номер карты не может быть пустым')
                 }
             }
         })
