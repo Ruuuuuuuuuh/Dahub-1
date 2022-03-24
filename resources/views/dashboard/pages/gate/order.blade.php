@@ -213,10 +213,8 @@
                             resolve(data)
                             console.log(data)
                             $(".payment-item[data-id='" + data.id + "']").remove()
-                            alert('Реквизиты c адресом «'+ data.address + '» удалены')
-                            if($('.payment-items').html().trim()===''){
-                                $('.order-accept').addClass('disabled')
-                            }
+                            // alert('Реквизиты c адресом «'+ data.address + '» удалены')
+                            $('.order-accept').addClass('disabled')
                         },
                         error: function (err) {
                             reject(err)
