@@ -30,7 +30,7 @@
                             <span class="address">{{$payment->address}}</span>
                         </div>
                         <div class="action-btn">
-                            <button type="button" class="icon icon-edit edit-payment_item" data-address="{{$payment->address}}" data-id="{{ $payment->id }}" data-title="{{ $payment->title }}">
+                            <button type="button" class="icon icon-edit edit-payment_item" data-id="{{ $payment->id }}">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M3 18H7C7.3 18 7.5 17.9 7.7 17.7L18.7 6.7C19.1 6.3 19.1 5.7 18.7 5.3L14.7 1.3C14.3 0.9 13.7 0.9 13.3 1.3L2.3 12.3C2.1 12.5 2 12.7 2 13V17C2 17.6 2.4 18 3 18ZM4 13.4L14 3.4L16.6 6L6.6 16H4V13.4ZM21 23C21.6 23 22 22.6 22 22C22 21.4 21.6 21 21 21H3C2.4 21 2 21.4 2 22C2 22.6 2.4 23 3 23H21Z" fill="black"/>
                                     <mask id="mask0_856_1420" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="2" y="1" width="20" height="22">
@@ -108,12 +108,12 @@
                     @csrf
                     <input type="hidden" name="id">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="title" placeholder="Имя кошелька"">
+                        <input type="text" class="form-control" name="title" placeholder="Новое имя кошелька"">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="address" placeholder="Адрес кошелька">
+                        <input type="text" class="form-control" name="address" placeholder="Новый адрес кошелька*">
                     </div>
-                    <a href="#" class="btn btn-primary confirm-modal">Изменить</a>
+                    <a href="#" class="btn btn-primary confirm-modal disabled">Изменить</a>
                 </form>
             </div>
         </div>

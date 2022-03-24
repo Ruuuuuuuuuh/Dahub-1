@@ -138,22 +138,14 @@
         })
 
         $('.add-payment_item').click(function() {
+            $('.payment-details-form').find('input[name="title"]').val('')
+            $('.payment-details-form').find('input[name="address"]').val('')
             $('#add-payment-details').modal()
             $('input[name="payment"]').val($('#accept-order').data('payment'))
         })
 
 
-        //Вызов модалки для редактирование реквизитов
-        $('.payment-items').delegate('.edit-payment_item', 'click', function() {
-            let id = $(this).data('id')
-            let title = $(this).data('title')
-            let address = $(this).data('address')
-            let $modal = $('#edit-payment-details')
-            $modal.find('input[name="address"]').val(address)
-            $modal.find('input[name="title"]').val(title)
-            $modal.find('input[name="id"]').val(id)
-            $modal.modal()
-        })
+
 
         //Отправка формы редактирование реквизитов
         $('.edit-payment-details-form .confirm-modal').click(function(e){
@@ -172,8 +164,15 @@
                         data: data,
                         success: function (data) {
                             resolve(data)
-                            $("[data-id='" + data.id + "'] .name").html(data.title)
+                            $("[data-id='" + data.id + "'] .name").html(data.title ? data.title : '<span class="text-danger"> Имя кошелька не задано</span>')
                             $("[data-id='" + data.id + "'] .address").html(data.address)
+
+                            $(".payment-item[data-id='" + data.id + "']").attr('data-title', data.title)
+                            $(".payment-item[data-id='" + data.id + "']").attr('data-address', data.address)
+
+                            if($(".payment-item[data-id='" + data.id + "']").hasClass('active') ) {
+                                $('.order-accept').attr('data-address', data.address)
+                            }
                             $('#edit-payment-details').modal('hide')
                         },
                         error: function (err) {
@@ -183,7 +182,17 @@
                     })
                 })
         })
-
+        //Вызов модалки для редактирование реквизитов
+        $('.payment-items').delegate('.edit-payment_item', 'click', function() {
+            let id = $(this).data('id')
+            // let title = $(this).data('title')
+            // let address = $(this).data('address')
+            let $modal = $('#edit-payment-details')
+            $modal.find('input[name="address"]').val('')
+            $modal.find('input[name="title"]').val('')
+            $modal.find('input[name="id"]').val(id)
+            $modal.modal()
+        })
         //Удаление реквизитов
         $('.payment-items').delegate('.delete-payment_item', 'click', function() {
             let confirmation = confirm("Точно удалить?")
@@ -203,7 +212,10 @@
                             resolve(data)
                             console.log(data)
                             $(".payment-item[data-id='" + data.id + "']").remove()
-                            alert('Реквизиты c именем «'+ data.title + '» удалены')
+                            alert('Реквизиты c адресом «'+ data.address + '» удалены')
+                            if($('.payment-items').html().trim()===''){
+                                $('.order-accept').addClass('disabled')
+                            }
                         },
                         error: function (err) {
                             reject(err)
@@ -212,6 +224,13 @@
                     })
                 })
             }
+        })
+
+        $('.edit-payment-details-form input').on('change keyup', function() {
+            let filledtextboxes = 1;
+            if ($('.edit-payment-details-form input[name="address"]').val().length == 0) filledtextboxes = 0;
+            if (filledtextboxes != 0) $('.edit-payment-details-form .confirm-modal').removeClass('disabled')
+            else $('.edit-payment-details-form .confirm-modal').addClass('disabled')
         })
 
         $('.payment-details-form input').on('change keyup', function() {
