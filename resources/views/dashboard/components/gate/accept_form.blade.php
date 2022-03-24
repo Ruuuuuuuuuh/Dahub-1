@@ -87,11 +87,11 @@
                     <input type="hidden" name="payment" value="{{$order->payment}}">
                     <small class="form-text text-muted"> По умолчанию «{{$order->payment}}»</small>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="title" placeholder="Название {{$crypto ? 'кошелька' : 'карты'}}">
+                        <input type="text" autocomplete="off" class="form-control" name="title" placeholder="Название {{$crypto ? 'кошелька' : 'карты'}}">
                     </div>
                     <small class="form-text text-muted"> {{$crypto ? 'Введите адрес кошелька' : 'Введите 16 цифр карты'}}</small>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="address" placeholder="{{$crypto ? 'Адрес кошелька*' : 'Номер карты*'}}">
+                        <input type="text" autocomplete="off" class="form-control" name="address" placeholder="{{$crypto ? 'Адрес кошелька*' : 'Номер карты*'}}">
                     </div>
                     <button class="btn btn-primary confirm-modal">Добавить</button>
                 </form>
@@ -116,11 +116,11 @@
                     @csrf
                     <input type="hidden" name="id">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="title" placeholder="Новое название  {{$crypto ? 'кошелька' : 'карты'}}">
+                        <input type="text" autocomplete="off" class="form-control" name="title" placeholder="Новое название  {{$crypto ? 'кошелька' : 'карты'}}">
                     </div>
                     <small class="form-text text-muted"> {{$crypto ? 'Введите адрес кошелька' : 'Введите 16 цифр карты'}}</small>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="address" placeholder="Новый {{$crypto ? 'aдрес кошелька*' : 'номер карты*'}}">
+                        <input type="text" autocomplete="off" class="form-control" name="address" placeholder="Новый {{$crypto ? 'aдрес кошелька*' : 'номер карты*'}}">
                     </div>
                     <button type="submit"  class="btn btn-primary confirm-modal">Изменить</button>
                 </form>
