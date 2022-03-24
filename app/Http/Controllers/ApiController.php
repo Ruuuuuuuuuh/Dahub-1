@@ -429,7 +429,7 @@ class ApiController extends Controller
         $paymentDetails->address   = $address;
         $paymentDetails->save();
 
-        return response('Payment updated successful', 200);
+        return response()->json($paymentDetails);
     }
 
     /**
@@ -442,7 +442,7 @@ class ApiController extends Controller
         $paymentDetails = PaymentDetail::where('id', $request->input('id'))->where('user_uid', $this->user->uid)->firstOrFail();
         if ($paymentDetails->user_uid == $this->user->uid) {
             $paymentDetails->forceDelete();
-            return response('Payment updated successful', 200);
+            return response()->json($paymentDetails);
         }
         else return response('У вас нет прав для этого действия', 404);
     }
