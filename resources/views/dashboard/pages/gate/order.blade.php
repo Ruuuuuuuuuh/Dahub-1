@@ -85,7 +85,7 @@
                                     <circle class="payment-item-icon-inner" cx="10" cy="10" r="6" fill="#EDF1F9"/>
                                 </svg>
                                 <div class="payment-details">
-                                    <div class="name">${data[0].title}</div>
+                                    <div class="name">${data[0].title ? data[0].title : '<span class="text-danger"> Имя кошелька не задано</span>'}</div>
                                     <span class="address">${data[0].address}</span>
                                 </div>
                                 <div class="action-btn">
