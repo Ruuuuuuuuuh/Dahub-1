@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Rate;
 use App\Models\Currency;
-use App\Models\Gate;
 use App\Models\Message;
 use App\Models\Payment;
 use App\Models\PaymentDetail;
@@ -21,7 +20,6 @@ use App\Notifications\OrderCreate;
 use App\Notifications\OrderDecline;
 use App\Notifications\ReferralBonusPay;
 use Bavix\Wallet\Models\Transaction;
-use http\Client\Response;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
