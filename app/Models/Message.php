@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Message|mixed $message
  * @property mixed $chat_id
  * Модель сообщений с телеграм бота
+ * @method static where(string $string, $id)
  */
 class Message extends Model
 {

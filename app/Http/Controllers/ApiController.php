@@ -26,6 +26,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
@@ -69,7 +70,7 @@ class ApiController extends Controller
      * Create Order from users
      *
      * @param Request $request
-     * @return ResponseFactory|\Illuminate\Http\Response
+     * @return ResponseFactory|Response
      */
     public function createOrder(Request $request)
     {
@@ -87,28 +88,19 @@ class ApiController extends Controller
                 $admins = User::where('roles', 'admin')->get();
                 foreach ($admins as $admin) {
                     $message = 'Новая заявка ' . $order->id . ' на покупку ' . $order->amount . ' DHB. [Написать пользователю](tg://user?id='.$this->user->uid.')';
-                    if (config('notifications')) {
-                        try {
-                            $admin->notify(new AdminNotifications($message));
-                        } catch (CouldNotSendNotification $e) {
-                            report ($e);
-                        }
-                    }
                 }
-                if (config('notifications')) {
-                    try {
-                        $this->user->notify(new OrderCreate($order));
-                    } catch (CouldNotSendNotification $e) {
-                        report ($e);
-                    }
+                try {
+                    $this->user->notify(new OrderCreate($order));
+                } catch (CouldNotSendNotification $e) {
+                    report ($e);
                 }
                 return response($order->id, 200);
             }
             else {
-                return response(['error'=> true, 'error-msg' => 'У вас уже есть активная заявка'],404, $this->headers, JSON_UNESCAPED_UNICODE);
+                return response(['error'=> true, 'error-msg' => 'У вас уже есть активная заявка'],409, $this->headers, JSON_UNESCAPED_UNICODE);
             }
         else {
-            return response(['error'=> true, 'error-msg' => 'Не достаточно токенов для получения'],404, $this->headers, JSON_UNESCAPED_UNICODE);
+            return response(['error'=> true, 'error-msg' => 'Не достаточно токенов для получения'],403, $this->headers, JSON_UNESCAPED_UNICODE);
         }
 
     }
@@ -116,36 +108,44 @@ class ApiController extends Controller
     /**
      * Create self order by user
      * @param Request $request
-     * @return Application|ResponseFactory|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|Response
      * @throws TelegramSDKException
      */
     public function createOrderByUser(Request $request) {
 
         $request->validate (
             [
-                'amount' => 'required|min:0|numeric',
+                'destination'           => 'required',
+                'currency'              => 'required',
+                'payment'               => 'required',
+                'amount'                => 'required|min:0|numeric|not_in:0',
             ],
             [
-                'amount.required' => 'Вы не ввели сумму',
-                'amount.min' => 'Сумма должна быть больше 0',
-                'amount.numeric' => 'Введите корректную сумму',
+                'amount.required'       => 'Вы не ввели сумму',
+                'amount.min'            => 'Сумма должна быть больше 0',
+                'amount.not_in'         => 'Сумма должна быть больше 0',
+                'amount.numeric'        => 'Введите корректную сумму',
+                'destination.required'  => 'При создании заявки возникла ошибка',
+                'currency.required'     => 'При создании заявки возникла ошибка',
+                'payment.required'      => 'При создании заявки возникла ошибка',
             ]
         );
 
         if (!$this->user->hasActiveOrder()) {
             $error = false;
 
-            $destination = $request->input('destination');
-            $amount = $request->input('amount');
-            $currency = $request->input('currency');
-            $payment = $request->input('payment');
+            $destination    = $request->input('destination');
+            $amount         = $request->input('amount');
+            $currency       = $request->input('currency');
+            $payment        = $request->input('payment');
+            $address        = $request->has('address') ? null : $request->input('address');
 
             if ($destination == 'TokenSale') {
-                $dhb_rate = Rate::getRates('DHB');
+                $dhb_rate   = Rate::getRates('DHB');
                 $dhb_amount = $request->input('dhb_amount');
-                $amount = $request->input('amount');
+                $amount     = $request->input('amount');
             } else {
-                $dhb_rate = '';
+                $dhb_rate   = '';
                 $dhb_amount = '';
             }
 
@@ -153,25 +153,25 @@ class ApiController extends Controller
                 if ($this->user->getBalance($currency) < $amount) $error = 'Недостаточно средств для создания заявки';
             }
 
-            if (!($request->has('amount') && $request->input('amount') != null)) {
-                $error = 'Вы не ввели сумму';
+            if ($destination == 'withdraw' && $currency == 'DHB') {
+                $error = 'Вывод DHB из системы невозможен';
             }
 
             if (!$error) {
-                $address = $destination == 'deposit' ? null : $request->input('address');
 
                 $order = Order::create([
-                    'user_uid' => $this->user->uid,
-                    'destination' => $destination,
-                    'payment' => $payment,
-                    'currency' => $currency,
-                    'amount' => $amount,
-                    'status' => 'created',
-                    'rate' => Rate::getRates($currency),
-                    'payment_details' => $address,
-                    'dhb_rate' => $dhb_rate,
-                    'dhb_amount' => $dhb_amount
+                    'user_uid'          => $this->user->uid,
+                    'destination'       => $destination,
+                    'payment'           => $payment,
+                    'currency'          => $currency,
+                    'amount'            => $amount,
+                    'status'            => 'created',
+                    'rate'              => Rate::getRates($currency),
+                    'payment_details'   => $address,
+                    'dhb_rate'          => $dhb_rate,
+                    'dhb_amount'        => $dhb_amount
                 ]);
+
                 $order->save();
 
                 try {
@@ -236,7 +236,7 @@ class ApiController extends Controller
             } else return response(['error' => true, 'error-msg' => $error], 404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
         else {
-            return response(['error' => true, 'error-msg' => 'У вас уже есть активная заявка'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
+            return response(['error' => true, 'error-msg' => 'У вас уже есть активная заявка'], 403, $this->headers, JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -244,25 +244,34 @@ class ApiController extends Controller
     /**
      * Подтверждение заявки пользователем, возможно устарела, протестировать и удалить
      * @param Request $request
-     * @return Application|ResponseFactory|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|Response
      */
     public function assigneeOrderByUser(Request $request)
     {
+        $request->validate (
+            [
+                'id'            => 'required|numeric',
+            ],
+            [
+                'id.required'   => 'Ошибка выполнения запроса',
+                'id.numeric'    => 'Ошибка выполнения запроса',
+            ]
+        );
+
         $id = $request->input('id');
-        $order = Order::where('id', $id)->where('user_uid', $this->user->uid)->first();
+        $order = Order::where('id', $id)->where('user_uid', $this->user->uid)->firstOrFail();
 
         if ($order->status != 'completed') {
 
-            if (config('notifications')) {
-                try {
-                    $this->user->notify(new OrderAssignee($order));
-                } catch (CouldNotSendNotification $e) {
-                    report ($e);
-                }
-            }
-
             $order->status = 'assignee';
             $order->save();
+
+            try {
+                $this->user->notify(new OrderAssignee($order));
+            } catch (CouldNotSendNotification $e) {
+                report ($e);
+            }
+
             return $order->id;
         }
         else {
@@ -286,8 +295,18 @@ class ApiController extends Controller
      */
     public function declineOrderByUser(Request $request)
     {
+        $request->validate (
+            [
+                'id'            => 'required|numeric',
+            ],
+            [
+                'id.required'   => 'Ошибка выполнения запроса',
+                'id.numeric'    => 'Ошибка выполнения запроса',
+            ]
+        );
+
         $id = $request->input('id');
-        $order = Order::where('id', $id)->where('user_uid', $this->user->uid)->first();
+        $order = Order::where('id', $id)->where('user_uid', $this->user->uid)->firstOrFail();
 
         if ($order->user_uid == $this->user->uid) {
             if ($order->status != 'completed') {
@@ -313,6 +332,16 @@ class ApiController extends Controller
      * @return false|string
      */
     public function getTransactions(Request $request) {
+
+        $request->validate (
+            [
+                'value'             => 'required',
+            ],
+            [
+                'value.required'    => 'Ошибка выполнения запроса',
+            ]
+        );
+
         $value = $request->input('value');
         $user = User::where('uid', $value)->first();
         if ($user) {
@@ -360,6 +389,17 @@ class ApiController extends Controller
      */
     public function saveUserConfig(Request $request): bool
     {
+        $request->validate (
+            [
+                'value'             => 'required',
+                'meta'              => 'required'
+            ],
+            [
+                'value.required'    => 'Ошибка выполнения запроса',
+                'meta.required'     => 'Ошибка выполнения запроса',
+            ]
+        );
+
         $meta  = $request->input('meta');
         $value = $request->input('value');
         UserConfig::updateOrCreate(
@@ -387,6 +427,19 @@ class ApiController extends Controller
      */
     public function addPaymentDetails(Request $request): JsonResponse
     {
+        $request->validate (
+            [
+                'title'             => 'required',
+                'payment'           => 'required',
+                'address'           => 'required',
+            ],
+            [
+                'title.required'    => 'Ошибка выполнения запроса',
+                'payment.required'  => 'Ошибка выполнения запроса',
+                'address.required'  => 'Ошибка выполнения запроса',
+            ]
+        );
+
         $title = $request->has('title') ? $request->input('title') : NULL;
         $payment = $request->input('payment');
         $holder = Payment::where('title', $payment)->firstOrFail()->currencies()->firstOrFail()->crypto ? $request->input('holder_name') : null;
@@ -459,6 +512,7 @@ class ApiController extends Controller
      * Подтверждение заявки шлюзом
      * @param Request $request
      * @return void | integer $order->id
+     * @throws TelegramSDKException
      */
     public function acceptOrderByGate(Request $request)
     {
@@ -484,20 +538,20 @@ class ApiController extends Controller
                 }
                 $order->status = 'accepted';
                 $order->save();
-                try {
-                    $message = Message::where('order_id', $order->id)->first();
-                    if ($message) {
-                        $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                $message = Message::where('order_id', $order->id)->first();
+                if ($message) {
+                    $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                    try {
                         $telegram->editMessageText([
                             'chat_id' => $message->chat_id,
                             'message_id' => $message->message_id,
-                            'text' => $message->message.PHP_EOL.'✅ <b>Заявка принята шлюзом</b>',
+                            'text' => $message->message . PHP_EOL . '✅ <b>Заявка принята шлюзом</b>',
                             'parse_mode' => 'html',
                             'reply_markup' => NULL
                         ]);
+                    } catch (TelegramSDKException $e) {
+                        report ($e);
                     }
-                } catch (CouldNotSendNotification $e) {
-                    report ($e);
                 }
                 return $order->id;
             }
@@ -561,7 +615,7 @@ class ApiController extends Controller
     /**
      * Подтверждение поступления средств шлюзом
      * @param Request $request
-     * @return Application|ResponseFactory|\Illuminate\Http\Response
+     * @return Application|ResponseFactory|Response
      * @throws TelegramSDKException
      */
     public function confirmOrderByGate(Request $request)
@@ -674,7 +728,7 @@ class ApiController extends Controller
     /**
      * Подтверждение заявки пользователем
      * @param Request $request
-     * @return Application|ResponseFactory|\Illuminate\Http\Response|void
+     * @return Application|ResponseFactory|Response|void
      */
     public function confirmOrderByUser(Request $request)
     {
@@ -709,7 +763,7 @@ class ApiController extends Controller
     /**
      * Метод отмены заявки шлюзом, пока не используется
      * @param Request $request
-     * @return bool|Application|ResponseFactory|\Illuminate\Http\Response
+     * @return bool|Application|ResponseFactory|Response
      */
     public function declineOrderByGate(Request $request)
     {
@@ -719,13 +773,12 @@ class ApiController extends Controller
             $owner = User::where('uid', $order->user_uid)->first();
 
             // Send message via telegram
-            if (config('notifications')) {
-                try {
-                    $owner->notify(new OrderDecline($order));
-                } catch (CouldNotSendNotification $e) {
-                    report ($e);
-                }
+            try {
+                $owner->notify(new OrderDecline($order));
+            } catch (CouldNotSendNotification $e) {
+                report ($e);
             }
+
             $order->forceDelete();
             return true;
         }
@@ -759,7 +812,7 @@ class ApiController extends Controller
     /**
      * Перевод средств между пользователями
      * @param Request $request
-     * @return bool|Application|ResponseFactory|\Illuminate\Http\Response
+     * @return bool|Application|ResponseFactory|Response
      */
     public function transfer(Request $request) {
 
