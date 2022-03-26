@@ -2099,6 +2099,13 @@ __webpack_require__.r(__webpack_exports__);
         address: this.address,
         holder: this.holder
       });
+    },
+    checkLenghtInput: function checkLenghtInput(e) {
+      if (this.address && this.title && this.checkCrypto || this.address && this.holder && !this.checkCrypto) {
+        this.$refs.button.removeAttribute('disabled');
+      } else {
+        this.$refs.button.setAttribute('disabled', 'disabled');
+      }
     }
   }
 });
@@ -2262,13 +2269,10 @@ __webpack_require__.r(__webpack_exports__);
         _tocken: this._tocken,
         payment: this.order.payment
       };
-      console.log(paymentItem);
       axios.post("/api/payment_details/add", paymentItem).then(function (response) {
         _this2.showModal = false;
 
         _this2.getPaymentItems();
-
-        console.log(response.data);
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2284,7 +2288,6 @@ __webpack_require__.r(__webpack_exports__);
         _tocken: this._tocken,
         payment: this.order.payment
       };
-      console.log(paymentItem);
       axios.post("/api/payment_details/edit", paymentItem).then(function (response) {
         _this3.showModalEdit = false;
 
@@ -39017,12 +39020,15 @@ var render = function() {
                               },
                               domProps: { value: _vm.holder },
                               on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.holder = $event.target.value
-                                }
+                                input: [
+                                  function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.holder = $event.target.value
+                                  },
+                                  _vm.checkLenghtInput
+                                ]
                               }
                             })
                           ])
@@ -39056,12 +39062,15 @@ var render = function() {
                               },
                               domProps: { value: _vm.title },
                               on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.title = $event.target.value
-                                }
+                                input: [
+                                  function($event) {
+                                    if ($event.target.composing) {
+                                      return
+                                    }
+                                    _vm.title = $event.target.value
+                                  },
+                                  _vm.checkLenghtInput
+                                ]
                               }
                             })
                           ])
@@ -39100,19 +39109,25 @@ var render = function() {
                         },
                         domProps: { value: _vm.address },
                         on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.address = $event.target.value
-                          }
+                          input: [
+                            function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.address = $event.target.value
+                            },
+                            _vm.checkLenghtInput
+                          ]
                         }
                       })
                     ]),
                     _vm._v(" "),
                     _c(
                       "button",
-                      { staticClass: "btn btn-primary confirm-modal" },
+                      {
+                        ref: "button",
+                        staticClass: "btn btn-primary confirm-modal"
+                      },
                       [_vm._v("Изменить")]
                     )
                   ]
