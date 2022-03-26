@@ -532,12 +532,15 @@ section.screen {
         margin-top:45px;
     }
     .payment-items {
+        overflow: hidden;
+        transition: all .3s ease-in;
         .payment-item {
             border-bottom: 2px solid #EDF1F9;
             padding: 20px 0 20px;
             position: relative;
             overflow: hidden;
             display: block;
+            transition: transform .3s ease-in-out;
             .payment-item_content {
                 transition: transform .3s ease-in;
                 &.swipe {
