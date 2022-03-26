@@ -99,10 +99,10 @@ class DashboardController extends Controller {
             $dt = Carbon::now();
             $seconds_left = $dt->diffInSeconds($order->created_at);
             if ($mode == 'lite') {
-                return view('dashboard.pages.order', compact('order', 'mode', 'seconds_left'));
+                return view('dashboard.pages.order', compact('order', 'mode', 'seconds_left', 'user'));
             }
             else {
-                return view('dashboard.pages.gate.order', compact('order', 'mode', 'seconds_left'));
+                return view('dashboard.pages.gate.order', compact('order', 'mode', 'seconds_left', 'user'));
             }
         }
         else {
@@ -112,15 +112,16 @@ class DashboardController extends Controller {
 
     public function acceptOrderPage($id) {
         $order = Order::findOrFail($id);
-        if ($this->user->isGate()) {
+        $user = $this->user;
+        if ($user->isGate()) {
             if ($order->status == 'created') {
-                $this->user->getBalance($order->currency);
-                $this->user->switchMode('pro');
+                $user->getBalance($order->currency);
+                $user->switchMode('pro');
                 $mode = $this->getMode();
                 $dt = Carbon::now();
                 $seconds_left = $dt->diffInSeconds($order->created_at);
                 $order = Order::findOrFail($id);
-                return view('dashboard.pages.gate.order', compact('order', 'mode', 'seconds_left'));
+                return view('dashboard.pages.gate.order', compact('order', 'mode', 'seconds_left', 'user'));
             }
             else abort(404);
         }
