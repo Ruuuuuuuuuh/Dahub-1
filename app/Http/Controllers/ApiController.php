@@ -429,12 +429,10 @@ class ApiController extends Controller
     {
         $request->validate (
             [
-                'title'             => 'required',
                 'payment'           => 'required',
                 'address'           => 'required',
             ],
             [
-                'title.required'    => 'Ошибка выполнения запроса',
                 'payment.required'  => 'Ошибка выполнения запроса',
                 'address.required'  => 'Ошибка выполнения запроса',
             ]
