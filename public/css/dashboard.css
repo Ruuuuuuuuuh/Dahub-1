@@ -10562,12 +10562,17 @@ section.screen .footer-relative {
   width: 100%;
   margin-top: 45px;
 }
+section.screen .payment-items {
+  overflow: hidden;
+  transition: all 0.3s ease-in;
+}
 section.screen .payment-items .payment-item {
   border-bottom: 2px solid #EDF1F9;
   padding: 20px 0 20px;
   position: relative;
   overflow: hidden;
   display: block;
+  transition: transform 0.3s ease-in-out;
 }
 section.screen .payment-items .payment-item .payment-item_content {
   transition: transform 0.3s ease-in;
@@ -10690,21 +10695,21 @@ section.screen .add-payment_item {
   display: none;
 }
 
-.modal-open .modal {
+.modal {
   align-items: center;
   justify-content: center;
 }
-.modal-open .modal .modal-dialog {
+.modal .modal-dialog {
   padding: 0 25px;
 }
-.modal-open .modal .modal-content {
+.modal .modal-content {
   height: 415px;
   border-radius: 20px;
 }
-.modal-open .modal .modal-body {
+.modal .modal-body {
   padding: 30px 20px;
 }
-.modal-open .modal .modal-body h4 {
+.modal .modal-body h4 {
   text-align: center;
   font-weight: 600;
   font-size: 18px;
@@ -10712,22 +10717,22 @@ section.screen .add-payment_item {
   color: #0D1F3C;
   margin-bottom: 0;
 }
-.modal-open .modal .modal-body form {
+.modal .modal-body form {
   margin-top: 50px;
   padding: 0;
   width: 100%;
 }
-.modal-open .modal .modal-body .close {
+.modal .modal-body .close {
   position: absolute;
   top: -55px;
   right: 0;
 }
-.modal-open .modal .modal-body .form-group {
+.modal .modal-body .form-group {
   width: 100%;
   margin-bottom: 25px;
   /* Change the white to any color */
 }
-.modal-open .modal .modal-body .form-group input {
+.modal .modal-body .form-group input {
   background: none !important;
   width: 100%;
   height: 40px;
@@ -10739,16 +10744,16 @@ section.screen .add-payment_item {
   padding-left: 0;
   margin-bottom: 0;
 }
-.modal-open .modal .modal-body .form-group input::-moz-placeholder {
+.modal .modal-body .form-group input::-moz-placeholder {
   color: #485068;
 }
-.modal-open .modal .modal-body .form-group input:-ms-input-placeholder {
+.modal .modal-body .form-group input:-ms-input-placeholder {
   color: #485068;
 }
-.modal-open .modal .modal-body .form-group input::placeholder {
+.modal .modal-body .form-group input::placeholder {
   color: #485068;
 }
-.modal-open .modal .modal-body .form-group:after {
+.modal .modal-body .form-group:after {
   content: "";
   display: block;
   width: 100%;
@@ -10757,16 +10762,16 @@ section.screen .add-payment_item {
   opacity: 0.5;
   border: 1px solid #CFD2D8;
 }
-.modal-open .modal .modal-body .form-group input:-webkit-autofill,
-.modal-open .modal .modal-body .form-group input:-webkit-autofill:hover,
-.modal-open .modal .modal-body .form-group input:-webkit-autofill:focus,
-.modal-open .modal .modal-body .form-group input:-webkit-autofill:active {
+.modal .modal-body .form-group input:-webkit-autofill,
+.modal .modal-body .form-group input:-webkit-autofill:hover,
+.modal .modal-body .form-group input:-webkit-autofill:focus,
+.modal .modal-body .form-group input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
-.modal-open .modal .modal-body .form-group input:-webkit-autofill {
+.modal .modal-body .form-group input:-webkit-autofill {
   -webkit-text-fill-color: #333 !important;
 }
-.modal-open .modal .modal-body .confirm-modal {
+.modal .modal-body .confirm-modal {
   position: absolute;
   bottom: 40px;
   width: 225px;
@@ -10787,7 +10792,7 @@ section.screen .add-payment_item {
   margin: 0 auto;
   transition: 0.2s ease-in-out all;
 }
-.modal-open .modal .modal-body .confirm-modal.disabled {
+.modal .modal-body .confirm-modal.disabled {
   color: #B5BBC9;
   border-color: #B5BBC9;
 }
