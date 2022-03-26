@@ -440,7 +440,8 @@ class ApiController extends Controller
 
         $title = $request->has('title') ? $request->input('title') : NULL;
         $payment = $request->input('payment');
-        $holder = Payment::where('title', $payment)->firstOrFail()->currencies()->firstOrFail()->crypto ? $request->input('holder_name') : null;
+        $holder = Payment::where('title', $payment)->firstOrFail()->currencies()->firstOrFail()->crypto ? null : $request->input('holder_name');
+
         $address = $request->input('address');
         $payment_details = PaymentDetail::create(
             [
@@ -471,14 +472,16 @@ class ApiController extends Controller
     {
         $paymentDetails = PaymentDetail::where('id', $request->input('id'))->where('user_uid', $this->user->uid)->firstOrFail();
 
-        $title = $request->has('title') ? $request->input('title') : NULL;
+        $title = $request->input('title') ? $request->input('title') : null;
         $address = $request->input('address');
+        $holder = $request->input('holder_name') ? $request->input('holder_name') : null;
 
         $paymentDetails->title     = $title;
         $paymentDetails->address   = $address;
+        $paymentDetails->holder   = $holder;
         $paymentDetails->save();
 
-        return response('Payment updated successful', 200);
+        return response()->json($paymentDetails);
     }
 
     /**
@@ -491,18 +494,17 @@ class ApiController extends Controller
         $paymentDetails = PaymentDetail::where('id', $request->input('id'))->where('user_uid', $this->user->uid)->firstOrFail();
         if ($paymentDetails->user_uid == $this->user->uid) {
             $paymentDetails->forceDelete();
-            return response('Payment updated successful', 200);
+            return response()->json($paymentDetails);
         }
         else return response('У вас нет прав для этого действия', 404);
     }
 
     /**
      * Возвращаем реквизиты
-     * @return PaymentDetail
      */
-    public function getPaymentDetails(): PaymentDetail
+    public function getPaymentDetails()
     {
-        return $this->user->paymentDetails()->with('payment');
+        return $this->user->paymentDetails()->with('payment')->get()->toJson();
     }
 
 
