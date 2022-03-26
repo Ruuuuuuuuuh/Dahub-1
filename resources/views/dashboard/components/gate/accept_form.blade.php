@@ -1,4 +1,4 @@
-<section id="accept-order" class="screen" data-payment="{{$order->payment}}">
+<section id="accept-order" class="screen" data-payment="{{$order->payment}}"  >
     <div class="section-header">
         <div class="top-nav">
             <a href="#" class="back-link">
@@ -12,10 +12,10 @@
                     </g>
                 </svg>
             </a>
-            <h2>Принять {{$order->amount}} {{$order->currency}} </h2>
+            <h2>Принять {{number_format($order->amount, Auth::user()->getWallet($order->currency)->decimal_places, ',', ' ')}} {{$order->currency}} </h2>
         </div>
     </div>
-    <div class="section-main">
+    <div class="section-main" id="app-vue">
         <h4 class="accept-order-title crypto-hidden">Выберите реквизиты {{$order->payment}}</h4>
         <payments-list
             :order="{{$order}}"
