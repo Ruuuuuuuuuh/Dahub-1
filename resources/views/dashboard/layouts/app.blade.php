@@ -36,7 +36,7 @@
 </head>
 
 <body>
-<div id="app-vue" class="app" data-mode="{{$mode}}" data-page="{{Route::current()->getName()}}">
+<div  class="app" data-mode="{{$mode}}" data-page="{{Route::current()->getName()}}">
 
     @include('dashboard.components.header')
     @include('dashboard.components.menu')
