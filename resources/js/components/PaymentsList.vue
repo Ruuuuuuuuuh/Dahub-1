@@ -104,6 +104,7 @@ export default {
                 .then(response => {
                     this.showModalEdit = false
                     this.getPaymentItems()
+                    document.querySelector('.order-accept').dataset.address = response.data.address
                 })
                 .catch((error) => {
                     console.log(error.response);

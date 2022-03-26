@@ -2292,6 +2292,8 @@ __webpack_require__.r(__webpack_exports__);
         _this3.showModalEdit = false;
 
         _this3.getPaymentItems();
+
+        document.querySelector('.order-accept').dataset.address = response.data.address;
       })["catch"](function (error) {
         console.log(error.response);
       });
