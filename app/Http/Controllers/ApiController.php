@@ -389,9 +389,21 @@ class ApiController extends Controller
      */
     public function addPaymentDetails(Request $request): JsonResponse
     {
-        $title = $request->input('title') ? $request->input('title') : $request->input('payment');
+        $request->validate (
+            [
+                'payment'           => 'required',
+                'address'           => 'required',
+            ],
+            [
+                'payment.required'  => 'Ошибка выполнения запроса',
+                'address.required'  => 'Ошибка выполнения запроса',
+            ]
+        );
+
+        $title = $request->has('title') ? $request->input('title') : NULL;
         $payment = $request->input('payment');
-        $holder = Payment::where('title', $payment)->firstOrFail()->currencies()->firstOrFail()->crypto ? $request->input('holder_name') : null;
+        $holder = Payment::where('title', $payment)->firstOrFail()->currencies()->firstOrFail()->crypto ? null : $request->input('holder_name');
+
         $address = $request->input('address');
         $payment_details = PaymentDetail::create(
             [
@@ -422,11 +434,13 @@ class ApiController extends Controller
     {
         $paymentDetails = PaymentDetail::where('id', $request->input('id'))->where('user_uid', $this->user->uid)->firstOrFail();
 
-        $title = $request->input('title') ? $request->input('title') : $paymentDetails->title;
+        $title = $request->input('title') ? $request->input('title') : null;
         $address = $request->input('address');
+        $holder = $request->input('holder_name') ? $request->input('holder_name') : null;
 
         $paymentDetails->title     = $title;
         $paymentDetails->address   = $address;
+        $paymentDetails->holder   = $holder;
         $paymentDetails->save();
 
         return response()->json($paymentDetails);
@@ -449,11 +463,10 @@ class ApiController extends Controller
 
     /**
      * Возвращаем реквизиты
-     * @return PaymentDetail
      */
-    public function getPaymentDetails(): PaymentDetail
+    public function getPaymentDetails()
     {
-        return $this->user->paymentDetails()->with('payment');
+        return $this->user->paymentDetails()->with('payment')->get()->toJson();
     }
 
 
