@@ -1,53 +1,110 @@
 <template>
-  <p>{{time}}</p>
+    <div class="d-flex align-items-center">
+        <p class="timer" v-if="leavesTimeTimer > 0">{{ hours }}<span>:</span>{{ minutes }}<span>:</span>{{ seconds }}</p>
+        <p class="text" v-else>Вермя вышло</p>
+        <div class="danger" v-if="showDanger">
+            {{dangerText}}
+        </div>
+    </div>
 </template>
 
 <script>
-
-let lastMessage = new Date('2020-01-19 17:54:40'); // Вашу дату не стал трогать в параметре.
-let insec1 = lastMessage / 1000; // Переводим дату в секунды
-let nextMessage = new Date(lastMessage.setMinutes(lastMessage.getMinutes() + 10));
-let insec2 = nextMessage / 1000; // переводим дату следующего сообщения в секунды.
-diffsec = insec2 - insec1; // Ищем разницу секунд
-
-export default {
-    data: {
-        currentTime: diffsec, // Вставляем количество секунд
-        time: "", // Задаём переменную time, где будет отображаться с минутами, а не только в секундах.
-        timer: null,
-    },
-    mounted() {
-        this.startTimer()
-    },
-    destroyed() {
-        this.stopTimer()
-    },
-    methods: {
-        startTimer() {
-            this.timer = setInterval(() => {
-                this.currentTime--;
-                sec = this.currentTime;
-                var h = sec/3600 ^ 0 ;
-                var m = (sec-h*3600)/60 ^ 0 ;
-                var s = sec-h*3600-m*60 ;
-                this.time = (m<10?"0"+m:m)+" мин. "+(s<10?"0"+s:s)+" сек."; // Выводим дату в формате. Можно и часы добавить
-
-            }, 1000)
+    export default {
+        props: {
+            leavesTime: Number
         },
-        stopTimer() {
-            clearTimeout(this.timer)
+        data() {
+            return {
+                leavesTimeTimer: this.leavesTime > 0 ? parseInt(this.leavesTime) : 0,
+                hours: Number,
+                minutes: Number,
+                seconds: Number,
+                timer: '',
+                showDanger: false,
+                dangerText: 'Заявка скоро отмениться',
+            }
         },
-    },
-    watch: {
-        currentTime(time) {
-            if (time === 0) {
-                this.stopTimer()
+        methods: {
+            startTimer() {
+                this.updateMin()
+                if(this.leavesTimeTimer <= 300 && this.leavesTimeTimer >= 0) {
+                    this.showDanger = true
+                } else {
+                    this.showDanger = false
+                }
+                if(this.leavesTimeTimer > 0 ) {
+                    this.timer = setInterval(() => {
+                        this.leavesTimeTimer-=1
+                        this.updateMin()
+                    }, 1000)
+                } else {
+                    this.showDanger = false
+                }
+
+            },
+            updateMin(){
+                this.hours = Math.floor(this.leavesTimeTimer / 60 / 60)
+                this.minutes = Math.floor(this.leavesTimeTimer / 60) - (this.hours * 60)
+                this.seconds = this.leavesTimeTimer % 60;
+            },
+            stopTimer() {
+                clearTimeout(this.timer)
+                // alert('Время кончилось')
+                // location.reload()
+
+            }
+        },
+        mounted() {
+            this.startTimer()
+        },
+        watch: {
+            leavesTimeTimer(time) {
+                if (time === 0) {
+                    this.stopTimer()
+                }
+                if(time <= 300 && time != 0) {
+                    this.showDanger = true
+                } else {
+                    this.showDanger = false
+                }
             }
         }
-    },
-}
+    }
 </script>
 
-<style>
-
+<style scoped>
+    .timer {
+        width: 70px;
+        font-feature-settings: 'tnum' on, 'lnum' on;
+    }
+    .timer span {
+        opacity: .3;
+        display: inline;
+        margin: 0px 1px;
+        font-weight: 500;
+        animation-duration: 1s;
+        animation-name: pulse;
+        animation-iteration-count: infinite;
+        transition: opacity .3s linear ;
+    }
+    .danger {
+        margin-left: 4px;
+        font-size: 13px;
+        padding: 6px;
+        background: #DF5060;
+        border-radius: 4px;
+        color: #fff;
+        line-height: 1;
+    }
+    @keyframes pulse {
+        0% {
+            opacity: .3;
+        }
+        50% {
+            opacity: .5;
+        }
+        100% {
+            opacity: .3;
+        }
+    }
 </style>

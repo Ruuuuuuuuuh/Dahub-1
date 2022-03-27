@@ -15,7 +15,7 @@
             <h2>Принять {{number_format($order->amount, Auth::user()->getWallet($order->currency)->decimal_places, ',', ' ')}} {{$order->currency}} </h2>
         </div>
     </div>
-    <div class="section-main" id="app-vue">
+    <div class="section-main">
         <h4 class="accept-order-title crypto-hidden">Выберите реквизиты {{$order->payment}}</h4>
         <payments-list
             :order="{{$order}}"
