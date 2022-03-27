@@ -94,15 +94,16 @@ class DashboardController extends Controller {
     public function getOrder($id) {
         $user = $this->user;
         $order = Order::findOrFail($id);
+        $ordersTimer = System::findOrFail(1)->orders_timer;
         if ($order->user_uid == $user->uid || $order->gate == $user->uid) {
             $mode = $this->getMode();
             $dt = Carbon::now();
             $seconds_left = $dt->diffInSeconds($order->created_at);
             if ($mode == 'lite') {
-                return view('dashboard.pages.order', compact('order', 'mode', 'seconds_left', 'user'));
+                return view('dashboard.pages.order', compact('order', 'mode', 'seconds_left', 'user', 'ordersTimer'));
             }
             else {
-                return view('dashboard.pages.gate.order', compact('order', 'mode', 'seconds_left', 'user'));
+                return view('dashboard.pages.gate.order', compact('order', 'mode', 'seconds_left', 'user', 'ordersTimer'));
             }
         }
         else {
@@ -113,6 +114,7 @@ class DashboardController extends Controller {
     public function acceptOrderPage($id) {
         $order = Order::findOrFail($id);
         $user = $this->user;
+        $ordersTimer = System::findOrFail(1)->orders_timer;
         if ($user->isGate()) {
             if ($order->status == 'created') {
                 $user->getBalance($order->currency);
@@ -121,7 +123,7 @@ class DashboardController extends Controller {
                 $dt = Carbon::now();
                 $seconds_left = $dt->diffInSeconds($order->created_at);
                 $order = Order::findOrFail($id);
-                return view('dashboard.pages.gate.order', compact('order', 'mode', 'seconds_left', 'user'));
+                return view('dashboard.pages.gate.order', compact('order', 'mode', 'seconds_left', 'user', 'ordersTimer'));
             }
             else abort(404);
         }
