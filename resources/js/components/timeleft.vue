@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex align-items-center">
-        <p class="timer" v-if="leavesTimeTimer > 0">{{ hours }}<span>:</span>{{ minutes }}<span>:</span>{{ seconds }}</p>
+        <p class="timer" v-if="leavesTimeTimer > 0">{{ hours.toString().padStart(2, '0') }}<span>:</span>{{ minutes.toString().padStart(2, '0') }}<span>:</span>{{ seconds.toString().padStart(2, '0') }}</p>
         <p class="text" v-else>Вермя вышло</p>
         <div class="danger" v-if="showDanger">
             {{dangerText}}
@@ -22,6 +22,7 @@
                 timer: '',
                 showDanger: false,
                 dangerText: 'Заявка скоро отмениться',
+                timeDangerShow: ''
             }
         },
         methods: {
@@ -74,7 +75,6 @@
 
 <style scoped>
     .timer {
-        width: 70px;
         font-feature-settings: 'tnum' on, 'lnum' on;
     }
     .timer span {

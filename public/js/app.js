@@ -2357,7 +2357,8 @@ __webpack_require__.r(__webpack_exports__);
       seconds: Number,
       timer: '',
       showDanger: false,
-      dangerText: 'Заявка скоро отмениться'
+      dangerText: 'Заявка скоро отмениться',
+      timeDangerShow: ''
     };
   },
   methods: {
@@ -6904,7 +6905,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.timer[data-v-f13b88c2] {\n    width: 70px;\n    font-feature-settings: 'tnum' on, 'lnum' on;\n}\n.timer span[data-v-f13b88c2] {\n    opacity: .3;\n    display: inline;\n    margin: 0px 1px;\n    font-weight: 500;\n    -webkit-animation-duration: 1s;\n            animation-duration: 1s;\n    -webkit-animation-name: pulse-data-v-f13b88c2;\n            animation-name: pulse-data-v-f13b88c2;\n    -webkit-animation-iteration-count: infinite;\n            animation-iteration-count: infinite;\n    transition: opacity .3s linear ;\n}\n.danger[data-v-f13b88c2] {\n    margin-left: 4px;\n    font-size: 13px;\n    padding: 6px;\n    background: #DF5060;\n    border-radius: 4px;\n    color: #fff;\n    line-height: 1;\n}\n@-webkit-keyframes pulse-data-v-f13b88c2 {\n0% {\n        opacity: .3;\n}\n50% {\n        opacity: .5;\n}\n100% {\n        opacity: .3;\n}\n}\n@keyframes pulse-data-v-f13b88c2 {\n0% {\n        opacity: .3;\n}\n50% {\n        opacity: .5;\n}\n100% {\n        opacity: .3;\n}\n}\n", ""]);
+exports.push([module.i, "\n.timer[data-v-f13b88c2] {\n    font-feature-settings: 'tnum' on, 'lnum' on;\n}\n.timer span[data-v-f13b88c2] {\n    opacity: .3;\n    display: inline;\n    margin: 0px 1px;\n    font-weight: 500;\n    -webkit-animation-duration: 1s;\n            animation-duration: 1s;\n    -webkit-animation-name: pulse-data-v-f13b88c2;\n            animation-name: pulse-data-v-f13b88c2;\n    -webkit-animation-iteration-count: infinite;\n            animation-iteration-count: infinite;\n    transition: opacity .3s linear ;\n}\n.danger[data-v-f13b88c2] {\n    margin-left: 4px;\n    font-size: 13px;\n    padding: 6px;\n    background: #DF5060;\n    border-radius: 4px;\n    color: #fff;\n    line-height: 1;\n}\n@-webkit-keyframes pulse-data-v-f13b88c2 {\n0% {\n        opacity: .3;\n}\n50% {\n        opacity: .5;\n}\n100% {\n        opacity: .3;\n}\n}\n@keyframes pulse-data-v-f13b88c2 {\n0% {\n        opacity: .3;\n}\n50% {\n        opacity: .5;\n}\n100% {\n        opacity: .3;\n}\n}\n", ""]);
 
 // exports
 
@@ -39622,11 +39623,11 @@ var render = function() {
   return _c("div", { staticClass: "d-flex align-items-center" }, [
     _vm.leavesTimeTimer > 0
       ? _c("p", { staticClass: "timer" }, [
-          _vm._v(_vm._s(_vm.hours)),
+          _vm._v(_vm._s(_vm.hours.toString().padStart(2, "0"))),
           _c("span", [_vm._v(":")]),
-          _vm._v(_vm._s(_vm.minutes)),
+          _vm._v(_vm._s(_vm.minutes.toString().padStart(2, "0"))),
           _c("span", [_vm._v(":")]),
-          _vm._v(_vm._s(_vm.seconds))
+          _vm._v(_vm._s(_vm.seconds.toString().padStart(2, "0")))
         ])
       : _c("p", { staticClass: "text" }, [_vm._v("Вермя вышло")]),
     _vm._v(" "),
