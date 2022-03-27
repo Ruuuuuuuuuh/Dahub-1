@@ -2357,7 +2357,8 @@ __webpack_require__.r(__webpack_exports__);
       seconds: Number,
       timer: '',
       showDanger: false,
-      dangerText: 'Заявка скоро отмениться'
+      dangerText: 'Заявка скоро отмениться',
+      timeDangerShow: ''
     };
   },
   methods: {

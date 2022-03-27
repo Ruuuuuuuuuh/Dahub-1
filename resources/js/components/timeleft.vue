@@ -22,6 +22,7 @@
                 timer: '',
                 showDanger: false,
                 dangerText: 'Заявка скоро отмениться',
+                timeDangerShow: ''
             }
         },
         methods: {
