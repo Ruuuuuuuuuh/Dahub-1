@@ -31,7 +31,7 @@ class Rate
 
         elseif ($currency == 'RUB') {
             if (!Cache::get($currency)) {
-                $response = Http::get('https://www.cbr.ru/scripts/XML_daily.asp');
+                $response = Http::retry(3, 100)->get('https://www.cbr.ru/scripts/XML_daily.asp');
                 $json = json_decode(json_encode(simplexml_load_string($response->body())));
                 foreach ($json->Valute as $index => $value) {
                     if ($value->CharCode == 'USD') {
@@ -45,7 +45,7 @@ class Rate
 
         else {
             if (!Cache::get($currency)) {
-                $response = Http::get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=' . $currency . '&convert=USD&CMC_PRO_API_KEY=96fc9b4e-ab30-4d60-b0fb-23c9da6456b6');
+                $response = Http::retry(3, 100)->get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=' . $currency . '&convert=USD&CMC_PRO_API_KEY=96fc9b4e-ab30-4d60-b0fb-23c9da6456b6');
                 static::Cache($currency, $response->json()["data"][$currency]["quote"]["USD"]["price"]);
                 return Cache::get($currency);
             }

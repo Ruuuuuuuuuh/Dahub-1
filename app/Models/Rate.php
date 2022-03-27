@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * @property mixed|string $title
  * @property mixed $value
+ * @method static where(string $string, string $string1)
  */
 class Rate extends Model
 {
