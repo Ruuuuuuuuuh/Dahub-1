@@ -516,5 +516,19 @@ class SystemApiController extends Controller
             }
         }*/
     }
+
+    public function updateSystemSettings (Request $request) {
+        $data = json_decode($request->input('data'));
+        $system = System::firstOrFail();
+        foreach ($data as $item) {
+            if ($item->name = 'orders_timer') {
+                $system->orders_timer = $item->value;
+            }
+        }
+        $system->save();
+        return $system;
+    }
+
 }
+
 

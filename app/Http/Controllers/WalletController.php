@@ -260,4 +260,9 @@ class WalletController extends Controller
     public function telegram() {
         return view('wallet.pages.admin.telegram');
     }
+
+    public function settings() {
+        $system = System::firstOrFail();
+        return view('wallet.pages.admin.settings')->with('system', $system);;
+    }
 }

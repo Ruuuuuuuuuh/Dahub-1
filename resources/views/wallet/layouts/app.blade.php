@@ -176,6 +176,9 @@
                                     <a class="dropdown-item" href="{{Route('wallet.transfer')}}" >
                                         Перевод средств
                                     </a>
+                                    <a class="dropdown-item" href="{{Route('wallet.settings')}}" >
+                                        Настройки системы
+                                    </a>
                                 @endif
                                 <hr class="dropdown-divider">
                                 @if (\Auth::user()->isGateManager())
