@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3",
+        "php": "^8.1",
         "bavix/laravel-wallet": "^5.3",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
@@ -16,9 +16,11 @@
         "irazasyed/telegram-bot-sdk": "^3.4.1",
         "laravel-notification-channels/telegram": "^0.5.0",
         "laravel/framework": "^8.0",
+        "laravel/horizon": "^5.9",
         "laravel/socialite": "^5.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
+        "predis/predis": "^1.1",
         "questocat/laravel-referral": "^1.0",
         "sentry/sentry-laravel": "^2.7",
         "socialiteproviders/telegram": "^4.1.1"
