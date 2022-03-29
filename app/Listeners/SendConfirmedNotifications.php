@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Providers;
+namespace App\Listeners;
 
-use App\Providers\OrderAccepted;
+use App\Providers\OrderPending;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendAcceptedNotifications
+class SendConfirmedNotifications
 {
     /**
      * Create the event listener.
@@ -21,10 +21,10 @@ class SendAcceptedNotifications
     /**
      * Handle the event.
      *
-     * @param  \App\Providers\OrderAccepted  $event
+     * @param  \App\Providers\OrderPending  $event
      * @return void
      */
-    public function handle(OrderAccepted $event)
+    public function handle(OrderPending $event)
     {
         //
     }

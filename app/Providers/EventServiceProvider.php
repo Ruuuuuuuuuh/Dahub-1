@@ -2,9 +2,15 @@
 
 namespace App\Providers;
 
+use App\Notifications\ConfirmOrder;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use App\Events\OrderAccepted;
+use App\Events\OrderPending;
+use App\Listeners\SendAcceptedNotifications;
+use App\Listeners\ConfirmOrderListener;
+use App\Listeners\SendConfirmedNotifications;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -20,6 +26,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         OrderAccepted::class => [
             SendAcceptedNotifications::class,
+        ],
+        OrderPending::class => [
+            ConfirmOrderListener::class,
+            SendConfirmedNotifications::class
         ],
     ];
 

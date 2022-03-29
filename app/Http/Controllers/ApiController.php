@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OrderAccepted;
 use App\Helpers\Rate;
 use App\Jobs\CheckTonTransactionStatus;
 use App\Models\Currency;
@@ -513,50 +514,27 @@ class ApiController extends Controller
      * Подтверждение заявки шлюзом
      * @param Request $request
      * @return void | integer $order->id
-     * @throws TelegramSDKException
      */
     public function acceptOrderByGate(Request $request)
     {
         if ($this->user->isGate()) {
             $order = Order::where('id', $request->input('id'))->firstOrFail();
             if ($order->status == 'created' && $this->user->getBalanceFree($order->currency) >= $order->amount) {
-                $order->gate = $this->user->uid;
-                $owner = User::where('uid', $order->user_uid)->first();
+
                 if ($order->destination == 'deposit' || $order->destination == 'TokenSale') {
                     $order->payment_details = $request->input('payment_details');
-                    try {
-                        $owner->notify(new AcceptDepositOrder($order));
-                    } catch (CouldNotSendNotification $e) {
-                        report ($e);
-                    }
                 }
-                else {
-                    try {
-                        $owner->notify(new AcceptWithdrawOrder($order));
-                    } catch (CouldNotSendNotification $e) {
-                        report ($e);
-                    }
-                }
+                $order->gate = $this->user->uid;
                 $order->status = 'accepted';
                 $order->save();
-                $message = Message::where('order_id', $order->id)->first();
-                if ($message) {
-                    $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
-                    try {
-                        $telegram->editMessageText([
-                            'chat_id' => $message->chat_id,
-                            'message_id' => $message->message_id,
-                            'text' => $message->message . PHP_EOL . '✅ <b>Заявка принята шлюзом</b>',
-                            'parse_mode' => 'html',
-                            'reply_markup' => NULL
-                        ]);
-                    } catch (TelegramSDKException $e) {
-                        report ($e);
-                    }
-                }
+
                 if ($order->currency == 'TON') {
+                    // Вызов задания CheckTonTransactionStatus
                     dispatch(new CheckTonTransactionStatus($order));
                 }
+
+                // Вызов события OrderAccepted
+                OrderAccepted::dispatch($order);
                 return $order->id;
             }
         }
@@ -650,9 +628,10 @@ class ApiController extends Controller
 
                     $order->status = 'completed';
                     $owner->depositInner($order->currency, $order->amount);
-                    $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
                     $transactions = $order->transactions();
                     $order->save();
+
+                    $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
 
                     foreach ($transactions as $transaction) {
                         if ($transaction->payable_type == 'App\Models\System' && $transaction->type = 'withdraw') {
