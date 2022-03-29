@@ -18,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
             // ... other providers
             'SocialiteProviders\\Telegram\\TelegramExtendSocialite@handle',
         ],
+        OrderAccepted::class => [
+            SendAcceptedNotifications::class,
+        ],
     ];
 
     /**
