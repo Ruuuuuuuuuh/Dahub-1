@@ -7,11 +7,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-
 /**
  * @method static create(array $array)
  * @method static where(string $string, mixed $id)
  * @method static findOrFail($id)
+ * @property mixed $payment_details
+ * @property mixed $user_uid
+ * @property mixed $amount
+ * @property mixed $created_at
+ * @property mixed $updated_at
  */
 class Order extends Model
 {

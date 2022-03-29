@@ -168,14 +168,10 @@ return [
         'supervisor-1' => [
             'connection' => 'redis',
             'queue' => ['default'],
-            'balance' => 'auto',
-            'maxProcesses' => 1,
-            'maxTime' => 0,
-            'maxJobs' => 0,
-            'memory' => 128,
+            'balance' => 'simple',
+            'processes' => 10,
             'tries' => 1,
-            'timeout' => 60,
-            'nice' => 0,
+            'timeout' => 60
         ],
     ],
 
@@ -189,7 +185,7 @@ return [
         ],
 
         'local' => [
-            'supervisor-1' => [
+            'supervisor' => [
                 'maxProcesses' => 3,
             ],
         ],

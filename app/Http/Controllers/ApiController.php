@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Rate;
+use App\Jobs\CheckTonTransactionStatus;
 use App\Models\Currency;
 use App\Models\Message;
 use App\Models\Payment;
@@ -552,6 +553,9 @@ class ApiController extends Controller
                     } catch (TelegramSDKException $e) {
                         report ($e);
                     }
+                }
+                if ($order->currency == 'TON') {
+                    dispatch(new CheckTonTransactionStatus($order));
                 }
                 return $order->id;
             }
