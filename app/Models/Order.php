@@ -17,6 +17,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed $created_at
  * @property mixed $updated_at
  * @property mixed $destination
+ * @property mixed $dhb_amount
+ * @property mixed $gate
+ * @property mixed $currency
+ * @property mixed|string $status
  */
 class Order extends Model
 {

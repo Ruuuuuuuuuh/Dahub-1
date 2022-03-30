@@ -20,7 +20,7 @@ class CheckTonTransactionStatus implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected Order $order;
+    protected $order;
 
     /**
      * Create a new job instance.
@@ -40,7 +40,7 @@ class CheckTonTransactionStatus implements ShouldQueue
      */
     public function retryUntil(): DateTime
     {
-        return now()->addMinutes(10);
+        return now()->addMinutes(15);
     }
 
     /**
@@ -61,7 +61,7 @@ class CheckTonTransactionStatus implements ShouldQueue
                     $utime = $result['utime'];
                     if ($utime > $this->order->updated_at->timestamp) {
                         if ($this->order->amount <= $amount) {
-
+                            dispatch(new ConfirmOrder($this->order));
                         }
                         else $error = true;
                     }

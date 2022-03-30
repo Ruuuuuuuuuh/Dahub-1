@@ -22,6 +22,7 @@ use App\Models\Currency as Currency;
 /**
  * @property mixed $roles
  * @property mixed $uid
+ * @property mixed $referred_by
  * @method static findOrFail($id)
  * @method static where(string $string, string $string1)
  */

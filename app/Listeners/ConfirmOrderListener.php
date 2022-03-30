@@ -2,9 +2,8 @@
 
 namespace App\Listeners;
 
-use App\Providers\OrderPending;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Events\OrderConfirmed;
+use App\Jobs\ConfirmOrder;
 
 class ConfirmOrderListener
 {
@@ -21,11 +20,11 @@ class ConfirmOrderListener
     /**
      * Handle the event.
      *
-     * @param  \App\Providers\OrderPending  $event
+     * @param OrderConfirmed $event
      * @return void
      */
-    public function handle(OrderPending $event)
+    public function handle(OrderConfirmed $event)
     {
-        //
+        dispatch(new ConfirmOrder($event->order));
     }
 }
