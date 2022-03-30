@@ -11,7 +11,7 @@
                             <rect width="40" height="4" rx="2" transform="matrix(-0.707107 0.707107 0.707107 0.707107 28.2842 0)" fill="white"/>
                         </svg>
                     </button>
-                    <h4>Редактированить {{checkCrypto ? 'кошелек': 'карту'}}</h4>
+                    <h4>Редактировать {{checkCrypto ? 'кошелек': 'карту'}}</h4>
                     <form class="payment-details-form" @submit.prevent="updateFieldValue">
                         <div v-if="!checkCrypto">
                             <small class="form-text text-muted">Держатель карты</small>
