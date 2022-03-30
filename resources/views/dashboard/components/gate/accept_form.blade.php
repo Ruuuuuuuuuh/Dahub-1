@@ -18,7 +18,7 @@
     <div class="section-main">
         <h4 class="accept-order-title crypto-hidden">Выберите реквизиты {{$order->payment}}</h4>
         <payments-list
-            :order="{{$order}}"
+            payment="{{$order->payment}}"
             _tocken="{{csrf_token()}}"
             crypto= "{{ \App\Models\Currency::where('title', $order->currency)->first()->crypto }}">
         </payments-list>
