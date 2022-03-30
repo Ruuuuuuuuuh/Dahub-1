@@ -12,6 +12,7 @@
                 :payment="item.payment.title"
                 :key="item.id"
                 :checkCrypto="checkCrypto"
+                @click="clickPaymentItem(item.id, item.address)"
                 @remove="deletePaymentItem(item.id)"
                 @edit="showModalEdiPaymentItem(item.id, item.title, item.address, item.holder)"
             />
@@ -35,14 +36,15 @@ export default {
         ModalFormEditPaymentItem
     },
     props: {
-        order: Object,
+        payment: String,
         _tocken: String,
-        crypto: String
+        crypto: ''
     },
     data() {
         return {
             showModal: false,
             showModalEdit: false,
+            dataPayment: this.payment,
             items: true,
             checkCrypto: parseInt(this.crypto),
             item: {
@@ -64,10 +66,15 @@ export default {
             this.item.address = address
             this.item.holder = holder
         },
+        clickPaymentItem(id, address) {
+            this.item.id = id
+            this.item.address = address
+            this.$emit('itemData', this.item)
+        },
         getPaymentItems() {
             axios.get("/api/payment_details/get")
             .then(response => {
-                this.items = response.data.filter((item) => item.payment.title == this.order.payment)
+                this.items = response.data.filter((item) => item.payment.title == this.payment)
             })
             .catch((error) => {
                 console.log(error.response);
@@ -80,7 +87,7 @@ export default {
                 holder_name: data.holder ? data.holder : null,
                 address: data.address,
                 _tocken: this._tocken,
-                payment: this.order.payment,
+                payment: this.payment,
                 };
                 axios.post("/api/payment_details/add", paymentItem)
                 .then(response => {
@@ -98,7 +105,7 @@ export default {
                 address: data.address,
                 id: this.item.id,
                 _tocken: this._tocken,
-                payment: this.order.payment,
+                payment: this.payment,
                 };
                 axios.post("/api/payment_details/edit", paymentItem)
                 .then(response => {
@@ -129,6 +136,14 @@ export default {
     mounted() {
         this.getPaymentItems()
     },
+    watch: {
+        payment: function() {
+            this.getPaymentItems()
+        },
+        crypto: function() {
+            this.checkCrypto = this.crypto
+        }
+    }
 };
 </script>
 
