@@ -1,10 +1,15 @@
 <template>
-    <h1>Создать заявку</h1>
+    <SecondLayout title="Создать заявку">
+
+    </SecondLayout>
 </template>
 
 <script>
+import SecondLayout from '../layout/SecondLayout'
 export default {
-
+    components: {
+        SecondLayout
+    }
 }
 </script>
 

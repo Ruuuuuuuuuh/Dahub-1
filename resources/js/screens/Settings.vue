@@ -1,5 +1,7 @@
 <template>
-    <SecondLayout/>
+    <SecondLayout title="Настройки баланса">
+        контент
+    </SecondLayout>
 </template>
 
 <script>
