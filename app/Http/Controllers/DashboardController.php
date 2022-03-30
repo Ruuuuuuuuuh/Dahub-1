@@ -144,4 +144,33 @@ class DashboardController extends Controller {
             ['value' => json_encode(['DHB', 'BTC', 'ETH'])]
         )->value, true);
     }
+
+    /**
+     * Show the test application dashboard.
+     *
+     */
+    public function testPage()
+    {
+        $user = $this->user;
+        $rates = new Rate();
+        $currency = new Currency();
+        $mode = $this->getMode();
+        $visibleWallets = $this->getVisibleWallets();
+        if ($mode == 'pro' && !$this->user->isGate()) {
+            $this->user->switchMode('lite');
+        }
+        if ($mode == 'pro' && $this->user->isGate()) {
+            $orders['deposit'] = Order::where('status', 'created')->whereIn('destination', ['TokenSale', 'deposit'])->orderBy('id', 'DESC')->get();
+            $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->get();
+            $orders['owned'] = Order::where('status', 'accepted')->where('gate', $user->uid)->orderBy('id', 'DESC')->get();
+        }
+        else {
+            $orders = Order::where('user_uid', $this->user->uid)->orderBy('id', 'DESC')->take(10)->get();
+        }
+        foreach ($currency::all() as $item) {
+            $this->user->getBalance($item->title);
+        }
+        return view('dashboard.test', compact('orders', 'user', 'rates', 'currency', 'mode', 'visibleWallets'));
+
+    }
 }
