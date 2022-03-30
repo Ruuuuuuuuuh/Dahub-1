@@ -193,30 +193,30 @@
             $('.gate-controls .gate-action').removeClass('active')
             $(this).addClass('active')
         })
-        $('.form-withdraw .input-address').click(function(e){
-            e.preventDefault();
-            let payment =  $('.form-withdraw .select-payment').val();
-            if ($(this).hasClass('crypto'))
-            {
-                $('#payment-details-list').addClass('crypto')
-                $('#add-payment-details').addClass('crypto')
-                $('#add-payment-details input[name="address"]').attr('placeholder', 'Номер кошелька')
-            }
-            else {
-                $('#payment-details-list').removeClass('crypto')
-                $('#add-payment-details').removeClass('crypto')
-                $('#add-payment-details input[name="address"]').attr('placeholder', 'Номер карты')
-            }
-            $('#payment-details-list').addClass('opened')
-            $('#payment-details-list .payment-items .payment-item').removeClass('d-flex').addClass('d-none')
-            $('#payment-details-list .payment-item[data-payment="' + payment + '"]').removeClass('d-none').addClass('d-flex')
-            $('#payment-details-list .add-payment_item').attr('data-payment', payment)
-        })
-        $('.add-payment_item').click(function() {
-            $('#add-payment-details').modal()
-            if ($('#accept-order').data('payment')) $('input[name="payment"]').val($('#accept-order').data('payment'))
-            else $('input[name="payment"]').val($(this).data('payment'))
-        })
+        // $('.form-withdraw .input-address').click(function(e){
+        //     e.preventDefault();
+        //     let payment =  $('.form-withdraw .select-payment').val();
+        //     if ($(this).hasClass('crypto'))
+        //     {
+        //         $('#payment-details-list').addClass('crypto')
+        //         $('#add-payment-details').addClass('crypto')
+        //         $('#add-payment-details input[name="address"]').attr('placeholder', 'Номер кошелька')
+        //     }
+        //     else {
+        //         $('#payment-details-list').removeClass('crypto')
+        //         $('#add-payment-details').removeClass('crypto')
+        //         $('#add-payment-details input[name="address"]').attr('placeholder', 'Номер карты')
+        //     }
+        //     $('#payment-details-list').addClass('opened')
+        //     $('#payment-details-list .payment-items .payment-item').removeClass('d-flex').addClass('d-none')
+        //     $('#payment-details-list .payment-item[data-payment="' + payment + '"]').removeClass('d-none').addClass('d-flex')
+        //     $('#payment-details-list .add-payment_item').attr('data-payment', payment)
+        // })
+        // $('.add-payment_item').click(function() {
+        //     $('#add-payment-details').modal()
+        //     if ($('#accept-order').data('payment')) $('input[name="payment"]').val($('#accept-order').data('payment'))
+        //     else $('input[name="payment"]').val($(this).data('payment'))
+        // })
 
         $('.payment-details-form input').on('change keyup', function() {
             let filledtextboxes = 1;
