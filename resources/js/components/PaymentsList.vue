@@ -37,7 +37,7 @@ export default {
     },
     props: {
         payment: String,
-        _tocken: String,
+        _token: String,
         crypto: ''
     },
     data() {
@@ -86,7 +86,7 @@ export default {
                 title: data.title,
                 holder_name: data.holder ? data.holder : null,
                 address: data.address,
-                _tocken: this._tocken,
+                _token: this._token,
                 payment: this.payment,
                 };
                 axios.post("/api/payment_details/add", paymentItem)
@@ -104,7 +104,7 @@ export default {
                 holder_name: data.holder ? data.holder : null,
                 address: data.address,
                 id: this.item.id,
-                _tocken: this._tocken,
+                _token: this._token,
                 payment: this.payment,
                 };
                 axios.post("/api/payment_details/edit", paymentItem)
