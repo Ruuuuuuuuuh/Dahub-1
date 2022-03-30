@@ -2,6 +2,7 @@ require('./bootstrap');
 import Vue from 'vue';
 import VueRouter from 'vue-router'
 import routes from './routes';
+import store from './store'
 import appVue from './components/App'
 
 window.Vue = require('vue');
@@ -18,5 +19,6 @@ const app = new Vue({
 
 const newApp = new Vue({
     render: h => h(appVue),
-    router: routes
+    router: routes,
+    store
 }).$mount("#new-vue-app")
