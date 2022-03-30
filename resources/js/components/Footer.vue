@@ -29,7 +29,8 @@
             <span>Заявки</span>
         </a>
     </div>
-    <a class="create-order-open d-flex justify-content-center align-items-center flex-column">
+    <router-link to="/create-order" class="d-flex create-order-open  justify-content-center align-items-center flex-column">
+
         <svg width="72" height="69" viewBox="0 0 72 69" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g filter="url(#filter0_d_629:268)">
                 <path fill-rule="evenodd" clip-rule="evenodd" d="M36 66C53.6731 66 68 51.6731 68 34C68 16.3269 53.6731 2 36 2C18.3269 2 4 16.3269 4 34C4 51.6731 18.3269 66 36 66Z" fill="#EDF1F9"/>
@@ -55,7 +56,7 @@
             </defs>
         </svg>
         <span>Создать заявку</span>
-    </a>
+    </router-link>
 </footer>
 
 </template>
