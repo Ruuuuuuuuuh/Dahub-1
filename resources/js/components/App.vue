@@ -1,17 +1,15 @@
 <template>
-  <div id="app">
-    <v-content>
-      <router-view></router-view>
-    </v-content>
-  </div>
+    <div class="app">
+        <router-view/>
+    </div>
 </template>
 
 <script>
-  export default {
+export default {
     data() {
-      return {
-        title: 'DA-HUB'
-      }
+        return {
+            title: "DA-HUB"
+        };
     }
-  }
+};
 </script>
