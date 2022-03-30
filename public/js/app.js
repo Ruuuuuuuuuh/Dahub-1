@@ -1946,6 +1946,130 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CreateOrderWithdraw.vue?vue&type=script&lang=js&":
+/*!******************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/CreateOrderWithdraw.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _PaymentsList_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./PaymentsList.vue */ "./resources/js/components/PaymentsList.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    PaymentsList: _PaymentsList_vue__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  props: {
+    currencies: Array
+  },
+  data: function data() {
+    return {
+      fillterCurrencies: this.currencies.filter(function (item) {
+        return item.visible == 1;
+      }),
+      currenciesPayment: true,
+      currency: 'BTC',
+      payments: Array,
+      selectedPayments: 'TRC20',
+      crypto: Number,
+      showPayments: false
+    };
+  },
+  methods: {
+    checkAddress: function checkAddress(event) {
+      console.log('event ', event.address);
+      this.$refs.input.value = event.address;
+    },
+    checkCurrency: function checkCurrency(event) {
+      var _this = this;
+
+      this.payments = this.fillterCurrencies.filter(function (item) {
+        return item.title == _this.currency;
+      })[0].payments;
+      this.crypto = this.payments[0].crypto;
+      this.selectedPayments = this.payments[0].title; // this.$refs.input.value = ""
+    },
+    checkPayment: function checkPayment() {
+      console.log(this.selectedPayments);
+      this.crypto = this.payments[0].crypto; // this.$refs.input.value = ""
+      // console.log(this.crypto)
+    },
+    showPaymentsDeatails: function showPaymentsDeatails() {
+      this.showPayments = true;
+    }
+  },
+  created: function created() {
+    this.checkCurrency();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ModalFormAddPaymentItem.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ModalFormAddPaymentItem.vue?vue&type=script&lang=js& ***!
@@ -2209,6 +2333,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 
@@ -2219,14 +2344,15 @@ __webpack_require__.r(__webpack_exports__);
     ModalFormEditPaymentItem: _ModalFormEditPaymentItem_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
   props: {
-    order: Object,
+    payment: String,
     _tocken: String,
-    crypto: String
+    crypto: ''
   },
   data: function data() {
     return {
       showModal: false,
       showModalEdit: false,
+      dataPayment: this.payment,
       items: true,
       checkCrypto: parseInt(this.crypto),
       item: {
@@ -2248,12 +2374,17 @@ __webpack_require__.r(__webpack_exports__);
       this.item.address = address;
       this.item.holder = holder;
     },
+    clickPaymentItem: function clickPaymentItem(id, address) {
+      this.item.id = id;
+      this.item.address = address;
+      this.$emit('itemData', this.item);
+    },
     getPaymentItems: function getPaymentItems() {
       var _this = this;
 
       axios.get("/api/payment_details/get").then(function (response) {
         _this.items = response.data.filter(function (item) {
-          return item.payment.title == _this.order.payment;
+          return item.payment.title == _this.payment;
         });
       })["catch"](function (error) {
         console.log(error.response);
@@ -2267,7 +2398,7 @@ __webpack_require__.r(__webpack_exports__);
         holder_name: data.holder ? data.holder : null,
         address: data.address,
         _tocken: this._tocken,
-        payment: this.order.payment
+        payment: this.payment
       };
       axios.post("/api/payment_details/add", paymentItem).then(function (response) {
         _this2.showModal = false;
@@ -2286,7 +2417,7 @@ __webpack_require__.r(__webpack_exports__);
         address: data.address,
         id: this.item.id,
         _tocken: this._tocken,
-        payment: this.order.payment
+        payment: this.payment
       };
       axios.post("/api/payment_details/edit", paymentItem).then(function (response) {
         _this3.showModalEdit = false;
@@ -2321,6 +2452,14 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.getPaymentItems();
+  },
+  watch: {
+    payment: function payment() {
+      this.getPaymentItems();
+    },
+    crypto: function crypto() {
+      this.checkCrypto = this.crypto;
+    }
   }
 });
 
@@ -38802,6 +38941,317 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CreateOrderWithdraw.vue?vue&type=template&id=cd0f3e7e&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/CreateOrderWithdraw.vue?vue&type=template&id=cd0f3e7e& ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "form",
+      {
+        staticClass: "form-withdraw form-create-order",
+        attrs: { action: "index.html", method: "post" }
+      },
+      [
+        _c("input", {
+          attrs: { type: "hidden", name: "destination", value: "withdraw" }
+        }),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-control" }, [
+          _c("label", { attrs: { for: "currency" } }, [_vm._v("Валюта")]),
+          _vm._v(" "),
+          _c("div", { staticClass: "select-wrapper" }, [
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.currency,
+                    expression: "currency"
+                  }
+                ],
+                staticClass: "form-select",
+                attrs: { name: "currency" },
+                on: {
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.currency = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    },
+                    function($event) {
+                      return _vm.checkCurrency($event)
+                    }
+                  ]
+                }
+              },
+              _vm._l(_vm.fillterCurrencies, function(currency) {
+                return _c(
+                  "option",
+                  {
+                    key: currency.id,
+                    attrs: { "data-crypto": currency.crypto },
+                    domProps: { value: currency.title }
+                  },
+                  [_vm._v(_vm._s(currency.title))]
+                )
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _c(
+              "svg",
+              {
+                staticClass: "select-angle",
+                attrs: {
+                  width: "24",
+                  height: "24",
+                  viewBox: "0 0 24 24",
+                  fill: "none",
+                  xmlns: "http://www.w3.org/2000/svg"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    d:
+                      "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
+                    fill: "black"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "mask",
+                  {
+                    staticStyle: { "mask-type": "alpha" },
+                    attrs: {
+                      id: "angle-down2",
+                      maskUnits: "userSpaceOnUse",
+                      x: "5",
+                      y: "8",
+                      width: "14",
+                      height: "8"
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
+                        fill: "white"
+                      }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c("g", { attrs: { mask: "url(#angle-down2)" } }, [
+                  _c("rect", {
+                    attrs: { width: "24", height: "24", fill: "#0D1F3C" }
+                  })
+                ])
+              ]
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-control" }, [
+          _c("label", { attrs: { for: "payment-network" } }, [
+            _vm._v("Платёжная система")
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "select-wrapper" }, [
+            _c(
+              "select",
+              {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.selectedPayments,
+                    expression: "selectedPayments"
+                  }
+                ],
+                staticClass: "form-select select-payment",
+                attrs: { name: "payment-network" },
+                on: {
+                  change: [
+                    function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.selectedPayments = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    },
+                    function($event) {
+                      return _vm.checkPayment()
+                    }
+                  ]
+                }
+              },
+              _vm._l(_vm.payments, function(item) {
+                return _c(
+                  "option",
+                  { key: item.id, domProps: { value: item.title } },
+                  [_vm._v(_vm._s(item.title))]
+                )
+              }),
+              0
+            ),
+            _vm._v(" "),
+            _c(
+              "svg",
+              {
+                staticClass: "select-angle",
+                attrs: {
+                  width: "24",
+                  height: "24",
+                  viewBox: "0 0 24 24",
+                  fill: "none",
+                  xmlns: "http://www.w3.org/2000/svg"
+                }
+              },
+              [
+                _c("path", {
+                  attrs: {
+                    d:
+                      "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
+                    fill: "black"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "mask",
+                  {
+                    staticStyle: { "mask-type": "alpha" },
+                    attrs: {
+                      id: "angle-down1",
+                      maskUnits: "userSpaceOnUse",
+                      x: "5",
+                      y: "8",
+                      width: "14",
+                      height: "8"
+                    }
+                  },
+                  [
+                    _c("path", {
+                      attrs: {
+                        d:
+                          "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
+                        fill: "white"
+                      }
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c("g", { attrs: { mask: "url(#angle-down1)" } }, [
+                  _c("rect", {
+                    attrs: { width: "24", height: "24", fill: "#0D1F3C" }
+                  })
+                ])
+              ]
+            )
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-control address" }, [
+          _c("label", { attrs: { for: "address" } }, [_vm._v("Адрес")]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "select-wrapper",
+              on: {
+                click: function($event) {
+                  return _vm.showPaymentsDeatails()
+                }
+              }
+            },
+            [
+              _c("input", {
+                ref: "input",
+                staticClass: "input-address",
+                attrs: { type: "button", name: "address", value: "" }
+              })
+            ]
+          )
+        ]),
+        _vm._v(" "),
+        _vm.showPayments
+          ? _c(
+              "div",
+              [
+                _c("payments-list", {
+                  attrs: { payment: _vm.selectedPayments, crypto: _vm.crypto },
+                  on: {
+                    itemData: function($event) {
+                      return _vm.checkAddress($event)
+                    }
+                  }
+                })
+              ],
+              1
+            )
+          : _vm._e()
+      ]
+    ),
+    _vm._v(" "),
+    _c("a", { staticClass: "button button-blue create-order" }, [
+      _vm._v("Далее")
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-control amount-wrapper" }, [
+      _c("label", { attrs: { for: "amount" } }, [_vm._v("Сумма")]),
+      _vm._v(" "),
+      _c("div", { staticClass: "select-wrapper" }, [
+        _c("input", {
+          staticClass: "input-amount",
+          attrs: { type: "number", name: "amount", placeholder: "0", min: "0" }
+        })
+      ])
+    ])
+  }
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/ModalFormAddPaymentItem.vue?vue&type=template&id=4a4a0da4&scoped=true&":
 /*!**************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/ModalFormAddPaymentItem.vue?vue&type=template&id=4a4a0da4&scoped=true& ***!
@@ -38817,7 +39267,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("transition", { attrs: { name: "modal" } }, [
+  return _c("transition", { attrs: { appear: "", name: "modal" } }, [
     _c("div", [
       _c("div", { staticClass: "modal", staticStyle: { display: "block" } }, [
         _c(
@@ -39052,7 +39502,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("transition", { attrs: { name: "modal" } }, [
+  return _c("transition", { attrs: { appear: "", name: "modal" } }, [
     _c("div", [
       _c("div", { staticClass: "modal", staticStyle: { display: "block" } }, [
         _c(
@@ -39116,7 +39566,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("h4", [
                   _vm._v(
-                    "Редактированить " +
+                    "Редактировать " +
                       _vm._s(_vm.checkCrypto ? "кошелек" : "карту")
                   )
                 ]),
@@ -39313,7 +39763,12 @@ var render = function() {
     "a",
     {
       staticClass:
-        "payment-item d-flex align-items-center justify-content-between"
+        "payment-item d-flex align-items-center justify-content-between",
+      on: {
+        click: function($event) {
+          return _vm.$emit("click")
+        }
+      }
     },
     [
       _c(
@@ -39534,6 +39989,9 @@ var render = function() {
               checkCrypto: _vm.checkCrypto
             },
             on: {
+              click: function($event) {
+                return _vm.clickPaymentItem(item.id, item.address)
+              },
               remove: function($event) {
                 return _vm.deletePaymentItem(item.id)
               },
@@ -51872,6 +52330,7 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('payments-list', __webpack_require__(/*! ./components/PaymentsList.vue */ "./resources/js/components/PaymentsList.vue")["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('createorderwithdraw', __webpack_require__(/*! ./components/CreateOrderWithdraw.vue */ "./resources/js/components/CreateOrderWithdraw.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('timeleft', __webpack_require__(/*! ./components/timeleft.vue */ "./resources/js/components/timeleft.vue")["default"]);
 var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app-vue'
@@ -51921,6 +52380,75 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/components/CreateOrderWithdraw.vue":
+/*!*********************************************************!*\
+  !*** ./resources/js/components/CreateOrderWithdraw.vue ***!
+  \*********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _CreateOrderWithdraw_vue_vue_type_template_id_cd0f3e7e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./CreateOrderWithdraw.vue?vue&type=template&id=cd0f3e7e& */ "./resources/js/components/CreateOrderWithdraw.vue?vue&type=template&id=cd0f3e7e&");
+/* harmony import */ var _CreateOrderWithdraw_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./CreateOrderWithdraw.vue?vue&type=script&lang=js& */ "./resources/js/components/CreateOrderWithdraw.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _CreateOrderWithdraw_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _CreateOrderWithdraw_vue_vue_type_template_id_cd0f3e7e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _CreateOrderWithdraw_vue_vue_type_template_id_cd0f3e7e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/CreateOrderWithdraw.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/CreateOrderWithdraw.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************!*\
+  !*** ./resources/js/components/CreateOrderWithdraw.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateOrderWithdraw_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./CreateOrderWithdraw.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CreateOrderWithdraw.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateOrderWithdraw_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/CreateOrderWithdraw.vue?vue&type=template&id=cd0f3e7e&":
+/*!****************************************************************************************!*\
+  !*** ./resources/js/components/CreateOrderWithdraw.vue?vue&type=template&id=cd0f3e7e& ***!
+  \****************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateOrderWithdraw_vue_vue_type_template_id_cd0f3e7e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./CreateOrderWithdraw.vue?vue&type=template&id=cd0f3e7e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/CreateOrderWithdraw.vue?vue&type=template&id=cd0f3e7e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateOrderWithdraw_vue_vue_type_template_id_cd0f3e7e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_CreateOrderWithdraw_vue_vue_type_template_id_cd0f3e7e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
 
 /***/ }),
 
