@@ -118,7 +118,7 @@
 export default {
     methods: {
         closeMenu() {
-            this.$store.state.showBurgerMenu = false
+            this.$store.commit('changeVisibilityBurgerMenu')
         }
     }
 }

@@ -40986,7 +40986,7 @@ var render = function() {
         {
           staticClass:
             "d-flex create-order-open  justify-content-center align-items-center flex-column",
-          attrs: { to: "/create-order/deposit" }
+          attrs: { to: "/create-order" }
         },
         [
           _c(
@@ -42865,7 +42865,7 @@ var render = function() {
         {
           attrs: {
             w: "auto",
-            "min-height": 160,
+            "min-height": 140,
             "max-height": _vm.stoperResize,
             "class-name": "ordersResize",
             h: _vm.heightOrdersContainer,
@@ -43110,11 +43110,7 @@ var render = function() {
       _c(
         "transition",
         { attrs: { appear: "", name: "slideLeft" } },
-        [
-          this.$store.state.naviagation.burgerMenu
-            ? _c("BurgerNavigation")
-            : _vm._e()
-        ],
+        [this.$store.state.showBurgerMenu ? _c("BurgerNavigation") : _vm._e()],
         1
       )
     ],
