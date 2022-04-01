@@ -3,9 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\Rate;
-use App\Models\System as System;
 use Bavix\Wallet\Interfaces\WalletFloat;
-use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Traits\HasWalletFloat;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -14,15 +12,20 @@ use Bavix\Wallet\Traits\HasWallets;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Interfaces\Confirmable;
 use Bavix\Wallet\Traits\CanConfirm;
-use Illuminate\Support\Carbon;
 use Questocat\Referral\Traits\UserReferral;
 use App\Models\Currency as Currency;
 
 
 /**
- * @property mixed $roles
+ * @property mixed $id
  * @property mixed $uid
+ * @property mixed $name
+ * @property mixed $username
+ * @property mixed $avatar
  * @property mixed $referred_by
+ * @property mixed $affiliate_id
+ * @property mixed $auth_token
+ * @property mixed $roles
  * @method static findOrFail($id)
  * @method static where(string $string, string $string1)
  */
@@ -119,7 +122,7 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
      */
     public function hasActiveOrder(): bool
     {
-        return $this->orders()->where('status', '!=', 'completed')->where('destination', 'TokenSale')->exists();
+        return $this->orders()->where('status', '!=', 'completed')->exists();
     }
 
 
@@ -200,59 +203,6 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         return ($this->getBalanceInner() - $this->getBalanceFrozen()) / Rate::getRates($currency);
     }
 
-    /**
-     * Считает количество долларов на балансе исходя из графика изменения стоимости токена
-     * @return float|int
-     */
-    public function getAvailableBalance() {
-        $balance = 0;
-        $rates = \App\Models\Rate::all()->toArray();
-        foreach (\App\Models\Transaction::where('payable_id', $this->id)->where('wallet_id', $this->getWallet('DHB')->id)->get() as $transaction) {
-            $curRate = 0;
-            foreach ($rates as $i => $rate) {
-                if ($transaction->created_at->gte($rate['created_at'])) {
-                    $curRate = $rates[$i]['value'];
-                }
-                else {
-                    $curRate = $rates[$i-1]['value'];
-                    break;
-                }
-            }
-            $balance += ($transaction->amount / 100) * $curRate;
-        }
-        return $balance;
-    }
-
-    public function freezeTokens($currency, $amount)
-    {
-        $amount = Rate::getRates($currency) * $amount;
-        $this->getBalanceFrozen();
-        $this->getWallet('iUSDT_frozen')->depositFloat($amount, array('destination' => 'Заморозка токенов'));
-        $this->getWallet('iUSDT_frozen')->refreshBalance();
-    }
-
-    public function unfreezeTokens($currency, $amount)
-    {
-        $amount = Rate::getRates($currency) * $amount;
-        $this->getBalanceFrozen();
-        $this->getWallet('iUSDT_frozen')->withdrawFloat($amount, array('destination' => 'Разморозка токенов'));
-        $this->getWallet('iUSDT_frozen')->refreshBalance();
-    }
-
-    public function depositInner($currency, $amount) {
-        $amount = Rate::getRates($currency) * $amount;
-        $this->getBalanceInner();
-        $this->getWallet('iUSDT')->depositFloat($amount, array('destination' => 'deposit to Inner Wallet'));
-        $this->getWallet('iUSDT')->refreshBalance();
-    }
-
-    public function withdrawInner($currency, $amount)
-    {
-        $amount = Rate::getRates($currency) * $amount;
-        $this->getBalanceInner();
-        $this->getWallet('iUSDT')->withdrawFloat($amount, array('destination' => 'Сжигание внутренних токенов'));
-        $this->getWallet('iUSDT')->refreshBalance();
-    }
 
     /**
      * Получение списка шлюзов

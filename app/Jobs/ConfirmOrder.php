@@ -58,7 +58,6 @@ class ConfirmOrder implements ShouldQueue
             $systemWallet->getWallet($this->order->currency)->refreshBalance();
 
             $this->order->status = 'completed';
-            $owner->depositInner($this->order->currency, $this->order->amount);
             $this->order->save();
 
             // Бонус за успешное выполнение задания
