@@ -264,4 +264,20 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         return $query->where('roles', '=', 'admin')->orWhere('roles', '=', 'gate');
     }
 
+    /**
+     * Получить список всех балансов пользователя
+     * @return string
+     */
+    public function getBalances(): string
+    {
+        $balances = array();
+        foreach (Currency::all() as $currency) {
+            $balances[$currency->title] = array(
+                'payments'  => $currency->payments()->get()->toArray(),
+                'balance'   => $this->getWallet($currency->title)->balanceFloat
+            );
+        }
+        return json_encode($balances, JSON_UNESCAPED_UNICODE);
+    }
+
 }

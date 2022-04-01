@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed $gate
  * @property mixed $currency
  * @property mixed|string $status
+ * @property mixed $payment
  */
 class Order extends Model
 {
