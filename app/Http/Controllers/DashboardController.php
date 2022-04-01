@@ -27,6 +27,26 @@ class DashboardController extends Controller {
      */
     protected $user;
 
+    /**
+     *
+     * Экземпляр класса курса валют
+     * @var Rate
+     */
+    protected $rates;
+
+    /**
+     *
+     * Экземпляр класса валют
+     * @var Currency
+     */
+    protected $currency;
+
+
+    /**
+     * Режим кошелька (Pro | Lite)
+     * @var string
+     */
+    protected $mode;
 
     /**
      * Create a new controller instance.
@@ -40,8 +60,11 @@ class DashboardController extends Controller {
         $this->middleware(function ($request, $next) {
 
             $this->user = Auth::user();
-
+            $this->rates = new Rate();
+            $this->currency = new Currency();
+            $this->mode = $this->getMode();
             return $next($request);
+
         });
     }
 
@@ -51,14 +74,11 @@ class DashboardController extends Controller {
      */
     public function index()
     {
-        $rates = new Rate();
-        $currency = new Currency();
-        $mode = $this->getMode();
         $visibleWallets = $this->getVisibleWallets();
-        if ($mode == 'pro' && !$this->user->isGate()) {
+        if ($this->mode == 'pro' && !$this->user->isGate()) {
             $this->user->switchMode('lite');
         }
-        if ($mode == 'pro' && $this->user->isGate()) {
+        if ($this->mode == 'pro' && $this->user->isGate()) {
             $orders['deposit'] = Order::where('status', 'created')->whereIn('destination', ['TokenSale', 'deposit'])->orderBy('id', 'DESC')->get();
             $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->get();
             $orders['owned'] = Order::where('status', 'accepted')->where('gate', $this->user->uid)->orderBy('id', 'DESC')->get();
@@ -66,22 +86,34 @@ class DashboardController extends Controller {
         else {
             $orders = Order::where('user_uid', $this->user->uid)->orderBy('id', 'DESC')->take(10)->get();
         }
-        foreach ($currency::all() as $item) {
+        foreach ($this->currency::all() as $item) {
             $this->user->getBalance($item->title);
         }
-        return view('dashboard.index', compact('orders', 'rates', 'currency', 'mode', 'visibleWallets'))->with('user', $this->user);
+        return view('dashboard.index', compact('orders', 'visibleWallets'))->with(
+            array(
+                'user'      => $this->user,
+                'mode'      => $this->mode,
+                'currency'  => $this->currency,
+                'rates'     => $this->rates
+            )
+        );
 
     }
 
 
     public function settings()
     {
-        $user = $this->user;
         $currency = new Currency();
-        $mode = $this->getMode();
         $visibleWallets = $this->getVisibleWallets();
 
-        return view('dashboard.pages.settings', compact('user', 'currency', 'mode', 'visibleWallets'));
+        return view('dashboard.pages.settings', compact('currency', 'visibleWallets'))->with(
+            array(
+                'user'      => $this->user,
+                'mode'      => $this->mode,
+                'currency'  => $this->currency,
+                'rates'     => $this->rates
+            )
+        );
 
     }
 
@@ -92,18 +124,30 @@ class DashboardController extends Controller {
     }
 
     public function getOrder($id) {
-        $user = $this->user;
         $order = Order::findOrFail($id);
         $ordersTimer = System::findOrFail(1)->orders_timer;
-        if ($order->user_uid == $user->uid || $order->gate == $user->uid) {
-            $mode = $this->getMode();
+        if ($order->user_uid == $this->user->uid || $order->gate == $this->user->uid) {
             $dt = Carbon::now();
             $seconds_left = $dt->diffInSeconds($order->created_at);
-            if ($mode == 'lite') {
-                return view('dashboard.pages.order', compact('order', 'mode', 'seconds_left', 'user', 'ordersTimer'));
+            if ($this->mode == 'lite') {
+                return view('dashboard.pages.order', compact('order','seconds_left', 'ordersTimer'))->with(
+                    array(
+                        'user'      => $this->user,
+                        'mode'      => $this->mode,
+                        'currency'  => $this->currency,
+                        'rates'     => $this->rates
+                    )
+                );
             }
             else {
-                return view('dashboard.pages.gate.order', compact('order', 'mode', 'seconds_left', 'user', 'ordersTimer'));
+                return view('dashboard.pages.gate.order', compact('order', 'seconds_left', 'ordersTimer'))->with(
+                    array(
+                        'user'      => $this->user,
+                        'mode'      => $this->mode,
+                        'currency'  => $this->currency,
+                        'rates'     => $this->rates
+                    )
+                );
             }
         }
         else {
@@ -113,29 +157,26 @@ class DashboardController extends Controller {
 
     public function acceptOrderPage($id) {
         $order = Order::findOrFail($id);
-        $user = $this->user;
         $ordersTimer = System::findOrFail(1)->orders_timer;
-        if ($user->isGate()) {
+        if ($this->user->isGate()) {
             if ($order->status == 'created') {
-                $user->getBalance($order->currency);
-                $user->switchMode('pro');
-                $mode = $this->getMode();
+                $this->user->getBalance($order->currency);
+                $this->user->switchMode('pro');
                 $dt = Carbon::now();
                 $seconds_left = $dt->diffInSeconds($order->created_at);
                 $order = Order::findOrFail($id);
-                return view('dashboard.pages.gate.order', compact('order', 'mode', 'seconds_left', 'user', 'ordersTimer'));
+                return view('dashboard.pages.gate.order', compact('order', 'seconds_left', 'ordersTimer'))->with(
+                    array(
+                        'user'      => $this->user,
+                        'mode'      => $this->mode,
+                        'currency'  => $this->currency,
+                        'rates'     => $this->rates
+                    )
+                );
             }
             else abort(404);
         }
         else abort(404);
-    }
-
-
-    public function getMode() {
-        return UserConfig::firstOrCreate(
-            ['user_uid' => $this->user->uid, 'meta' => 'mode'],
-            ['value' => 'lite']
-        )->value;
     }
 
     public function getVisibleWallets() {
@@ -151,18 +192,15 @@ class DashboardController extends Controller {
      */
     public function testPage()
     {
-        $user = $this->user;
-        $rates = new Rate();
         $currency = new Currency();
-        $mode = $this->getMode();
         $visibleWallets = $this->getVisibleWallets();
-        if ($mode == 'pro' && !$this->user->isGate()) {
+        if ($this->mode == 'pro' && !$this->user->isGate()) {
             $this->user->switchMode('lite');
         }
-        if ($mode == 'pro' && $this->user->isGate()) {
+        if ($this->mode == 'pro' && $this->user->isGate()) {
             $orders['deposit'] = Order::where('status', 'created')->whereIn('destination', ['TokenSale', 'deposit'])->orderBy('id', 'DESC')->get();
             $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->get();
-            $orders['owned'] = Order::where('status', 'accepted')->where('gate', $user->uid)->orderBy('id', 'DESC')->get();
+            $orders['owned'] = Order::where('status', 'accepted')->where('gate', $this->user->uid)->orderBy('id', 'DESC')->get();
         }
         else {
             $orders = Order::where('user_uid', $this->user->uid)->orderBy('id', 'DESC')->take(10)->get();
@@ -170,7 +208,25 @@ class DashboardController extends Controller {
         foreach ($currency::all() as $item) {
             $this->user->getBalance($item->title);
         }
-        return view('dashboard.test', compact('orders', 'user', 'rates', 'currency', 'mode', 'visibleWallets'));
+        return view('dashboard.test', compact('orders', 'currency', 'visibleWallets'))->with(
+            array(
+                'user'      => $this->user,
+                'mode'      => $this->mode,
+                'currency'  => $this->currency,
+                'rates'     => $this->rates
+            )
+        );
 
+    }
+
+    /**
+     * Возвращает режим кошелька (Pro | Lite)
+     * @return mixed
+     */
+    public function getMode() {
+        return UserConfig::firstOrCreate(
+            ['user_uid' => $this->user->uid, 'meta' => 'mode'],
+            ['value' => 'lite']
+        )->value;
     }
 }
