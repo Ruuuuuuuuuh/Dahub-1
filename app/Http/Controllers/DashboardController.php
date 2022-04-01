@@ -51,7 +51,6 @@ class DashboardController extends Controller {
      */
     public function index()
     {
-        $user = $this->user;
         $rates = new Rate();
         $currency = new Currency();
         $mode = $this->getMode();
@@ -62,7 +61,7 @@ class DashboardController extends Controller {
         if ($mode == 'pro' && $this->user->isGate()) {
             $orders['deposit'] = Order::where('status', 'created')->whereIn('destination', ['TokenSale', 'deposit'])->orderBy('id', 'DESC')->get();
             $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->get();
-            $orders['owned'] = Order::where('status', 'accepted')->where('gate', $user->uid)->orderBy('id', 'DESC')->get();
+            $orders['owned'] = Order::where('status', 'accepted')->where('gate', $this->user->uid)->orderBy('id', 'DESC')->get();
         }
         else {
             $orders = Order::where('user_uid', $this->user->uid)->orderBy('id', 'DESC')->take(10)->get();
@@ -70,9 +69,10 @@ class DashboardController extends Controller {
         foreach ($currency::all() as $item) {
             $this->user->getBalance($item->title);
         }
-        return view('dashboard.index', compact('orders', 'user', 'rates', 'currency', 'mode', 'visibleWallets'));
+        return view('dashboard.index', compact('orders', 'rates', 'currency', 'mode', 'visibleWallets'))->with('user', $this->user);
 
     }
+
 
     public function settings()
     {
