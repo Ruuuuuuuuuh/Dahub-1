@@ -40,7 +40,7 @@ class CheckTonTransactionStatus implements ShouldQueue
      */
     public function retryUntil(): DateTime
     {
-        return now()->addMinutes(15);
+        return now()->addHours(24);
     }
 
     /**
@@ -57,9 +57,9 @@ class CheckTonTransactionStatus implements ShouldQueue
             $response = Http::retry(3, 15)->get('https://toncenter.com/api/v2/getTransactions?address='.$this->order->payment_details.'&limit=5');
             if ($response->json()["result"]) {
                 foreach ($response->json()["result"] as $result) {
-                    $amount = $result['in_msg']['value'] / 100000000;
+                    $amount = $result['in_msg']['value'] / 1000000000;
                     $utime = $result['utime'];
-                    if ($utime > $this->order->updated_at->timestamp) {
+                    if ($utime > $this->order->created_at->timestamp) {
                         if ($this->order->amount <= $amount) {
                             dispatch(new ConfirmOrder($this->order));
                         }
@@ -75,7 +75,7 @@ class CheckTonTransactionStatus implements ShouldQueue
             $error = true;
         }
 
-        if ($error) $this->release(15);
+        if ($error) $this->release(33);
 
 
     }

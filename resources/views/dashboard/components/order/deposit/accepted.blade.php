@@ -39,18 +39,7 @@
     </div>
     <div class="text-block">
         <p>Переведите {{$order->amount}} {{$order->currency}} по @if (App\Models\Payment::where('title', $order->payment)->firstOrFail()->crypto)адресу@elseномеру карты@endif:</p>
-        <a class="copy-link" data-toggle="popover" data-placement="bottom" data-content="Ссылка скопирована в буфер обмена." data-original-title="" title="">
-            <span>{{$order->payment_details}}</span>
-            <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M4.375 14C4.9 14 5.25 13.65 5.25 13.125C5.25 12.6 4.9 12.25 4.375 12.25H3.5C2.975 12.25 2.625 11.9 2.625 11.375V3.5C2.625 2.975 2.975 2.625 3.5 2.625H11.375C11.9 2.625 12.25 2.975 12.25 3.5V4.375C12.25 4.9 12.6 5.25 13.125 5.25C13.65 5.25 14 4.9 14 4.375V3.5C14 2.0125 12.8625 0.875 11.375 0.875H3.5C2.0125 0.875 0.875 2.0125 0.875 3.5V11.375C0.875 12.8625 2.0125 14 3.5 14H4.375ZM17.5 7H9.625C8.1375 7 7 8.1375 7 9.625V17.5C7 18.9875 8.1375 20.125 9.625 20.125H17.5C18.9875 20.125 20.125 18.9875 20.125 17.5V9.625C20.125 8.1375 18.9875 7 17.5 7ZM18.375 17.5C18.375 18.025 18.025 18.375 17.5 18.375H9.625C9.1 18.375 8.75 18.025 8.75 17.5V9.625C8.75 9.1 9.1 8.75 9.625 8.75H17.5C18.025 8.75 18.375 9.1 18.375 9.625V17.5Z" fill="black"/>
-                <mask id="mask0_525:2851" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="21" height="21">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M4.375 14C4.9 14 5.25 13.65 5.25 13.125C5.25 12.6 4.9 12.25 4.375 12.25H3.5C2.975 12.25 2.625 11.9 2.625 11.375V3.5C2.625 2.975 2.975 2.625 3.5 2.625H11.375C11.9 2.625 12.25 2.975 12.25 3.5V4.375C12.25 4.9 12.6 5.25 13.125 5.25C13.65 5.25 14 4.9 14 4.375V3.5C14 2.0125 12.8625 0.875 11.375 0.875H3.5C2.0125 0.875 0.875 2.0125 0.875 3.5V11.375C0.875 12.8625 2.0125 14 3.5 14H4.375ZM17.5 7H9.625C8.1375 7 7 8.1375 7 9.625V17.5C7 18.9875 8.1375 20.125 9.625 20.125H17.5C18.9875 20.125 20.125 18.9875 20.125 17.5V9.625C20.125 8.1375 18.9875 7 17.5 7ZM18.375 17.5C18.375 18.025 18.025 18.375 17.5 18.375H9.625C9.1 18.375 8.75 18.025 8.75 17.5V9.625C8.75 9.1 9.1 8.75 9.625 8.75H17.5C18.025 8.75 18.375 9.1 18.375 9.625V17.5Z" fill="white"/>
-                </mask>
-                <g mask="url(#mask0_525:2851)">
-                    <rect width="21" height="21" fill="#0D1F3C"/>
-                </g>
-            </svg>
-        </a>
+        <a style="font-size:16px; background-color:rgb(245 245 245); border-radius: 5px; padding:10px 20px; color:#000!important; margin-top:10px;display:block; word-break: break-all;" href="ton://transfer/{{$order->payment_details}}?amount={{$order->amount * 1000000000}}">💎&nbsp;{{$order->payment_details}}</a>
     </div>
     <div class="footer">
         <a class="button button-red" onclick="declineOrder()">Отменить заявку</a>
