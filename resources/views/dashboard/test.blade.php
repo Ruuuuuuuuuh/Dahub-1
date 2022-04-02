@@ -21,9 +21,9 @@
         window.user = {!! Auth::User()->toJson(JSON_PRETTY_PRINT) !!}
         window.mode = "{{$mode}}"
         window.gate = {!! Auth::user()->isGate() !!}
-        window.currency = ""
+        window.currency = {!! $user->getBalance('DHB') !!}
         window.orders = {!! json_encode($orders) !!}
-        window.payments = ""
+        window.payments = {!! \App\Models\Currency::with('payments')->get()->toJson(JSON_PRETTY_PRINT) !!}
         window.onload = function () {
             if (screen.width < 450) {
                 let mvp = document.getElementById('viewport');
@@ -35,7 +35,7 @@
 
 <body>
 <div  class="app" id="new-vue-app" data-mode="{{$mode}}" data-page="{{Route::current()->getName()}}">
-
+<app/>
 </div>
 <script src="{{ asset('js/app.js') }}"></script>
 

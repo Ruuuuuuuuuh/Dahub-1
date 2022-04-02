@@ -11,6 +11,7 @@ Vue.component('vue-draggable-resizable', VueDraggableResizable)
 Vue.component('payments-list', require('./components/PaymentsList.vue').default);
 Vue.component('createorderwithdraw', require('./components/CreateOrderWithdraw.vue').default);
 Vue.component('timeleft', require('./components/timeleft.vue').default);
+Vue.component('app', require('./components/App').default);
 
 Vue.use(VueRouter)
 Vue.use(Vue2TouchEvents)
@@ -22,7 +23,7 @@ const app = new Vue({
 });
 
 const newApp = new Vue({
-    render: h => h(appVue),
     router: routes,
-    store
-}).$mount("#new-vue-app")
+    store,
+    el: "#new-vue-app"
+})
