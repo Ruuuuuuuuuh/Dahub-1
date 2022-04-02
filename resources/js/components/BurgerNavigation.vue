@@ -12,8 +12,8 @@
                     </g>
                 </svg>
             </a>
-            <h2 class="username">userName</h2>
-            <p class="user-id">ID: uId</p>
+            <h2 class="username">{{this.$store.getters.getUser.name}}</h2>
+            <p class="user-id">ID: {{this.$store.getters.getUser.uid}}</p>
         </div>
         <div class="version-pro w-100 d-flex align-items-center justify-content-between">
             <h2>Da·Hub Pro</h2>

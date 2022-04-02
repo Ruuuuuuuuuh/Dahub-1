@@ -1,5 +1,5 @@
 <template>
-    <div class="app">
+    <div>
         <router-view/>
     </div>
 </template>
@@ -10,6 +10,9 @@ export default {
         return {
             title: "DA-HUB"
         };
+    },
+    mounted() {
+        this.$store.commit('getWindowUser', window.user)
     }
 };
 </script>
