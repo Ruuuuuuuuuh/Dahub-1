@@ -1,5 +1,5 @@
 <template>
-<transition appear mode="in-out"  name="slideUp">
+<transition appear mode="out-in"  name="slideUp">
     <section class="screen opened settings">
         <div class="section-header">
             <div class="top-nav">
@@ -48,12 +48,9 @@ export default {
 
     .slideUp-enter-active,
     .slideUp-leave-active {
-        transition: transform .8s cubic-bezier(0.76, 0, 0.24, 1);
+        transition: transform .4s cubic-bezier(0.76, 0, 0.24, 1);
     }
-    .slideUp-enter {
+    .slideUp-enter, .slideUp-leave-to {
         transform: translateY(100%);
-    }
-    .slideUp-leave-to {
-        transform: translateY(0%)
     }
 </style>
