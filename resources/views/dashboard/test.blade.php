@@ -21,7 +21,7 @@
         window.user = {!! Auth::User()->toJson(JSON_PRETTY_PRINT) !!}
         window.mode = "{{$mode}}"
         window.gate = {!! Auth::user()->isGate() !!}
-        window.currency = {!! $user->getBalance('DHB') !!}
+        window.currency = {!! $user->getBalances() !!}
         window.orders = {!! json_encode($orders) !!}
         window.payments = {!! \App\Models\Currency::with('payments')->get()->toJson(JSON_PRETTY_PRINT) !!}
         window.onload = function () {
