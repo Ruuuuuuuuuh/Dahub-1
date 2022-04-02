@@ -11,37 +11,33 @@
             </div>
         </div>
         <div class="balance-items">
-            <div class="balance-item d-flex justify-content-between w-100">
-                <div class="balance-item-currency d-flex align-items-center">
-                    <div class="balance-item-currency-icon">
-                        <div class="icon-wrapper">
-                            icon
-                        </div>
-                    </div>
-                    <div class="balance-item-currency-text">
-                        <div class="balance-item-currency-title">
-                            titleWallet(ETH)
-                        </div>
-                        <div class="balance-item-currency-description">
-                            Ethereum
-                        </div>
-                    </div>
-                </div>
-                <div class="balance-item-amount">
-                    <div class="balance-item-amount-title">
-                        balance
-                    </div>
-                    <div class="balance-item-amount-description">
-                        $ 00
-                    </div>
-                </div>
-            </div>
+            <balance-item
+                v-for="item in visibleBalancesMain"
+                :key="item.currency.id"
+                :title="item.currency.title"
+                :description="item.currency.subtitle"
+                :icon="item.currency.icon"
+                :balance="item.balance"
+            />
         </div>
     </section>
 </template>
 
 <script>
-export default {};
+import balanceItem from "./BalanceItem"
+import {mapGetters} from 'vuex'
+export default {
+    components: {
+        balanceItem
+    },
+    computed:{
+        ...mapGetters([
+            'visibleBalancesMain'
+            ])
+    },
+};
 </script>
 
-<style></style>
+<style scoped>
+
+</style>
