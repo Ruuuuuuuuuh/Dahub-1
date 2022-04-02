@@ -22,19 +22,6 @@
             <Balances></Balances>
         </header>
 
-
-    <!-- <main ref="resizable" id="main-screen" class="resizable" >
-        <div class="screen-rollover" @dragstart="swipeResize($event)" >
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="18" cy="18" r="18" fill="#347AF0"/>
-                <path d="M18.375 6.38571C18.125 6.12857 17.75 6 17.5 6C17.25 6 16.875 6.12857 16.625 6.38571L10.375 12.8143C9.875 13.3286 9.875 14.1 10.375 14.6143C10.875 15.1286 11.625 15.1286 12.125 14.6143L17.5 9.08571L22.875 14.6143C23.375 15.1286 24.125 15.1286 24.625 14.6143C25.125 14.1 25.125 13.3286 24.625 12.8143L18.375 6.38571Z" fill="white"/>
-                <path d="M16.625 28.6143C16.875 28.8714 17.25 29 17.5 29C17.75 29 18.125 28.8714 18.375 28.6143L24.625 22.1857C25.125 21.6714 25.125 20.9 24.625 20.3857C24.125 19.8714 23.375 19.8714 22.875 20.3857L17.5 25.9143L12.125 20.3857C11.625 19.8714 10.875 19.8714 10.375 20.3857C9.875 20.9 9.875 21.6714 10.375 22.1857L16.625 28.6143Z" fill="white"/>
-            </svg>
-        </div>
-        <Orders></Orders>
-    </main> -->
-
-
             <vue-draggable-resizable w="auto" :min-height="140" :max-height="stoperResize" class-name="ordersResize" :h="heightOrdersContainer" :draggable="false" @resizestop="resizestop"  :active="true" :prevent-deactivation="true" :handles="['tm']">
                     <div slot="tm">
                         <div class="screen-rollover">
@@ -107,7 +94,7 @@ export default {
     position: absolute;
     top: -19px;
     left: 0;
-    cursor: pointer;
+    cursor: grab;
     width: 100%;
     text-align: center;
     svg {
