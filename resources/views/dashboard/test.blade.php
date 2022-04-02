@@ -19,6 +19,11 @@
 
     <script>
         window.user = {!! Auth::User()->toJson(JSON_PRETTY_PRINT) !!}
+        window.mode = "{{$mode}}"
+        window.gate = {!! Auth::user()->isGate() !!}
+        window.currency = ""
+        window.orders = {!! json_encode($orders) !!}
+        window.payments = ""
         window.onload = function () {
             if (screen.width < 450) {
                 let mvp = document.getElementById('viewport');
