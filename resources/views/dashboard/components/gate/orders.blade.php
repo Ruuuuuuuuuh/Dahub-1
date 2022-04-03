@@ -1,8 +1,7 @@
 <div class="orders">
     <div class="orders-deposit">
-        @foreach ($orders['deposit'] as $order)
-            @foreach ($orders['owned'] as $order)
-                @if ($order->destination == 'deposit' || $order->destination == 'TokenSale')
+        @foreach ($orders['owned'] as $order)
+            @if ($order->destination == 'deposit' || $order->destination == 'TokenSale')
                 <a href="{{Route('getOrder', $order->id)}}" class="order-item @if ($order->destination == 'TokenSale') order-deposit @else order-{{$order->destination}} @endif order-{{$order->status}} gate-order d-flex justify-content-between align-items-center" data-id="{{$order->id}}">
                     <div class="d-flex align-items-start flex-column justify-content-center order-destination">
                         @if ($order->destination == 'deposit' || $order->destination == 'TokenSale')
@@ -43,8 +42,10 @@
                         </div>
                     </div>
                 </a>
-                @endif
-            @endforeach
+            @endif
+        @endforeach
+        @foreach ($orders['deposit'] as $order)
+
             @if ($order->amount <= $user->getBalanceFree($order->currency))
             <a href="{{Route('getOrder', $order->id)}}/accept" class="order-item @if ($order->destination == 'TokenSale') order-deposit @else order-{{$order->destination}} @endif order-{{$order->status}} gate-order d-flex justify-content-between align-items-center" data-id="{{$order->id}}" data-crypto="{{\App\Models\Currency::where('title', $order->currency)->first()->crypto}}">
                 <div class="d-flex align-items-start flex-column justify-content-center order-destination">
