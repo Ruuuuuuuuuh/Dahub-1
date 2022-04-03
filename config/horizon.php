@@ -185,8 +185,13 @@ return [
         ],
 
         'local' => [
-            'supervisor' => [
-                'maxProcesses' => 3,
+            'supervisor-1' => [
+                'connection' => 'redis',
+                'queue' => ['default'],
+                'balance' => 'simple',
+                'processes' => 10,
+                'tries' => 1,
+                'timeout' => 60
             ],
         ],
     ],
