@@ -1,6 +1,7 @@
 
 <CreateOrderWithdraw
     :currencies="{{ \App\Models\Currency::with('payments')->get()}}"
+    _token="{{ csrf_token() }}"
 ></CreateOrderWithdraw>
 
 {{-- <form class="form-withdraw form-create-order" action="index.html" method="post">
