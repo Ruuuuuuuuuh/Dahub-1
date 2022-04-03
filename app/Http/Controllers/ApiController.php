@@ -100,10 +100,10 @@ class ApiController extends Controller
                 return response($order->id, 200);
             }
             else {
-                return response(['error'=> true, 'error-msg' => 'У вас уже есть активная заявка'],409, $this->headers, JSON_UNESCAPED_UNICODE);
+                return response(['error'=> true, 'message' => 'У вас уже есть активная заявка'],409, $this->headers, JSON_UNESCAPED_UNICODE);
             }
         else {
-            return response(['error'=> true, 'error-msg' => 'Не достаточно токенов для получения'],403, $this->headers, JSON_UNESCAPED_UNICODE);
+            return response(['error'=> true, 'message' => 'Не достаточно токенов для получения'],403, $this->headers, JSON_UNESCAPED_UNICODE);
         }
 
     }
@@ -236,10 +236,10 @@ class ApiController extends Controller
 
 
                 return response($order->id, 200, $this->headers);
-            } else return response(['error' => true, 'error-msg' => $error], 404, $this->headers, JSON_UNESCAPED_UNICODE);
+            } else return response(['error' => true, 'message' => $error], 404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
         else {
-            return response(['error' => true, 'error-msg' => 'У вас уже есть активная заявка'], 403, $this->headers, JSON_UNESCAPED_UNICODE);
+            return response(['error' => true, 'message' => 'У вас уже есть активная заявка'], 403, $this->headers, JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -281,7 +281,7 @@ class ApiController extends Controller
             return response(
                 [
                     'error'     => true,
-                    'error-msg' => 'Вы пытаетесь подтвердить завершенную заявку'
+                    'message' => 'Вы пытаетесь подтвердить завершенную заявку'
                 ],
                 404,
                 $this->headers,
@@ -611,10 +611,10 @@ class ApiController extends Controller
                 sleep(5);
                 return $order->id;
             }
-            else response(['error' => true, 'error-msg' => 'У вас нет прав на выполнение этой заявки'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
+            else response(['error' => true, 'message' => 'У вас нет прав на выполнение этой заявки'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
 
         }
-        return response(['error'=>true, 'error-msg' => 'Заявка не может быть выполнена'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
+        return response(['error'=>true, 'message' => 'Заявка не может быть выполнена'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
     }
 
 
@@ -645,10 +645,10 @@ class ApiController extends Controller
 
                 return $order->id;
             }
-            else response(['error'=>true, 'error-msg' => 'Недостаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
+            else response(['error'=>true, 'message' => 'Недостаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
         else {
-            return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
+            return response(['error'=>true, 'message' => 'У вас нет прав на эту операцию'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
         }
     }
 
@@ -675,7 +675,7 @@ class ApiController extends Controller
             $order->forceDelete();
             return true;
         }
-        else return response(['error'=>true, 'error-msg' => 'У вас нет прав на эту операцию'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
+        else return response(['error'=>true, 'message' => 'У вас нет прав на эту операцию'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
 
     }
 
@@ -725,7 +725,7 @@ class ApiController extends Controller
             }
             return true;
         }
-        else return response(['error' => true, 'error-msg' => 'Не достаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
+        else return response(['error' => true, 'message' => 'Не достаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
     }
 
 
