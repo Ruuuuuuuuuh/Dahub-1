@@ -81,7 +81,7 @@ class DashboardController extends Controller {
         if ($this->mode == 'pro' && $this->user->isGate()) {
             $orders['deposit'] = Order::where('status', 'created')->whereIn('destination', ['TokenSale', 'deposit'])->orderBy('id', 'DESC')->get();
             $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->get();
-            $orders['owned'] = Order::where('status', 'accepted')->where('gate', $this->user->uid)->orderBy('id', 'DESC')->get();
+            $orders['owned'] = Order::where('status', 'accepted')->where('status', 'pending')->where('gate', $this->user->uid)->orderBy('id', 'DESC')->get();
         }
         else {
             $orders = Order::where('user_uid', $this->user->uid)->orderBy('id', 'DESC')->take(10)->get();
