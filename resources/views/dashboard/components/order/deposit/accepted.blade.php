@@ -57,6 +57,7 @@
         @endif
     </div>
     <div class="footer">
+        <a class="button button-blue" onclick="acceptSending('{{$order->id}}');">Переведено, далее</a>
         <a class="button button-red" onclick="declineOrder()">Отменить заявку</a>
     </div>
 </div>

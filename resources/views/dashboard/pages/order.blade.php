@@ -45,5 +45,28 @@
                 },
             });
         }
+
+        function acceptSending(id) {
+            let _token = '{{@csrf_token()}}';
+            let comment = prompt('Чтобы подтвердить отправление средств, ведите последние 4 цифры номера карты или счета, с которого были отправлены средства')
+            if (comment) {
+                $.ajax({
+                    url: "/api/orders/acceptSendingByUser",
+                    type:"POST",
+                    data:{
+                        _token: _token,
+                        id: id,
+                        comment: comment
+                    },
+                    error: function () {
+                        alert('При попытке подтвердить заявку произошла ошибка')
+                    },
+                    success:function(response){
+                        alert('Вы успешно подтвердили отправку средств')
+                        window.location.href = '/dashboard/orders/' + id
+                    },
+                });
+            }
+        }
     </script>
 @endsection
