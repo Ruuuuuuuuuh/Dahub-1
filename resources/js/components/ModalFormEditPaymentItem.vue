@@ -1,5 +1,5 @@
 <template>
-<transition name="modal">
+<transition appear name="modal">
 <div>
     <div class="modal" style="display:block;">
         <div class="modal-dialog modal-dialog-centered" role="document">

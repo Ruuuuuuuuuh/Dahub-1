@@ -10512,6 +10512,9 @@ footer .create-order-open span {
   margin-right: 10px;
   display: inline-block;
 }
+.balance-items .icon-wrapper svg ellipse {
+  fill: #fff;
+}
 
 section.screen .section-header {
   padding: 40px 25px 65px;

@@ -1,19 +1,32 @@
-import VueRouter, { RouteConfig } from "vue-router";
+import VueRouter from "vue-router";
+import Home from "./screens/Home"
+import CreateOrder from "./screens/CreateOrder"
+import CreateOrderDeposit from "./screens/CreateOrderDeposit"
+import Settings from "./screens/Settings"
 
-import Dashboard from './components/Dashboard.vue';
-
-const routes = [
-    {
-      path: "/dashboard",
-      name: "dashboard",
-      component: Dashboard
-    },
-
-];
-
-const Router = new VueRouter({
-    mode: "history",
-    routes
-  });
-
-export default Router;
+export default new VueRouter({
+    routes: [
+        {
+            path: '',
+            component: Home,
+            name: 'home'
+        },
+        {
+            path: '/create-order',
+            component: CreateOrder,
+            name: 'create-order',
+            children: [
+                {
+                    path: 'deposit',
+                    component: CreateOrderDeposit,
+                }
+            ]
+        },
+        {
+            path: '/settings',
+            component: Settings,
+            name: 'settings'
+        }
+    ],
+    // mode: 'history'
+})

@@ -33,7 +33,9 @@
         "flatpickr": "^4.6.9",
         "nouislider": "^14.7.0",
         "stripe": "^8.154.0",
+        "vue-draggable-resizable": "^2.3.0",
         "vue-router": "^3.5.1",
+        "vue2-touch-events": "^3.2.2",
         "vuetify": "^2.5.4",
         "yarn": "^1.22.10"
     }

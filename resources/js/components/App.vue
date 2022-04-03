@@ -1,17 +1,29 @@
 <template>
-  <div id="app">
-    <v-content>
-      <router-view></router-view>
-    </v-content>
-  </div>
+    <div>
+        <transition  name="slideUp">
+            <router-view >
+            </router-view>
+        </transition>
+    </div>
 </template>
 
 <script>
-  export default {
+export default {
     data() {
-      return {
-        title: 'DA-HUB'
-      }
+        return {
+            title: "DA-HUB"
+        };
+    },
+    mounted() {
+        this.$store.commit('getWindowUser', window.user)
+        this.$store.commit('getWindowBalances', window.currency)
+        this.$store.commit('getWindowOrders', window.orders)
+        this.$store.commit('getMainScreenbalances', window.visibleWallets)
+
     }
-  }
+};
 </script>
+
+<style scoped>
+
+</style>

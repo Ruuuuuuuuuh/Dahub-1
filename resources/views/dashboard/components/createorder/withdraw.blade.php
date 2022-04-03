@@ -1,4 +1,10 @@
-<form class="form-withdraw form-create-order" action="index.html" method="post">
+
+<CreateOrderWithdraw
+    :currencies="{{ \App\Models\Currency::with('payments')->get()}}"
+    _token="{{ csrf_token() }}"
+></CreateOrderWithdraw>
+
+{{-- <form class="form-withdraw form-create-order" action="index.html" method="post">
     <input type="hidden" name="destination" value="withdraw"/>
     <div class="form-control">
         <label for="currency">Валюта</label>
@@ -53,4 +59,4 @@
         </div>
     </div>
 </form>
-<a class="button button-blue create-order">Далее</a>
+<a class="button button-blue create-order">Далее</a> --}}
