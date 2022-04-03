@@ -77,6 +77,7 @@
     </section>
 </transition>
     </div>
+
 </form>
 <button ref="button" class="button button-blue " disabled @click="createOrder()">Далее</button>
 <transition appear name="modal">
