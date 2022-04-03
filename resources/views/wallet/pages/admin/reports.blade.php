@@ -53,9 +53,6 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-balances-tab" data-toggle="pill" href="#pills-balances" role="tab" aria-controls="pills-balances" aria-selected="false">Балансы системы</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="pills-gates-tab" data-toggle="pill" href="#pills-gates" role="tab" aria-controls="pills-gates" aria-selected="false">Балансы шлюзов</a>
-                            </li>
                             <li class="nav-item button-send" data-toggle="modal" data-target="#modal-send">
                                 <a class="nav-link btn btn-success">Перевести</a>
                             </li>
@@ -77,8 +74,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach ($system->getTransactions('deposit')->get() as $order)
-                                        @if ($wallet::where('id', $order->wallet_id)->first()->slug != 'TokenSale')
+                                    @foreach ($system->getTransactions('deposit')->whereNotIn('wallet_id', [1, 2])->limit(30)->orderBy('id', 'DESC')->get() as $order)
                                         <tr>
                                             <td>
                                                 {{ $order->meta['order_id'] ?? '--'  }}
@@ -91,10 +87,10 @@
                                             </td>
                                             <td>
 
-                                                {{ ($order->amount / 10 ** $wallet::where('id', $order->wallet_id)->first()->decimal_places)  }}
+                                                {{ floatval($order->getAmountFloatAttribute())  }}
                                             </td>
                                             <td>
-                                                {{ $wallet::where('id', $order->wallet_id)->first()->slug}}
+                                                {{ $order->wallet()->first()->slug }}
                                             </td>
                                             <td>
                                                 @if (isset($order->meta['destination']))
@@ -108,7 +104,6 @@
                                                 @endif
                                             </td>
                                         </tr>
-                                        @endif
                                     @endforeach
                                     </tbody>
                                 </table>
@@ -128,8 +123,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach ($system->getTransactions('withdraw')->get() as $order)
-                                        @if ($wallet::where('id', $order->wallet_id)->first()->slug != 'TokenSale')
+                                    @foreach ($system->getTransactions('withdraw')->whereNotIn('wallet_id', [1, 2])->limit(30)->orderBy('id', 'DESC')->get() as $order)
                                         <tr>
                                             <td>
                                                 {{ $order->meta['order_id'] ?? '--'  }}
@@ -141,11 +135,10 @@
                                                 {{$order->uuid}}
                                             </td>
                                             <td>
-
-                                                {{ abs(($order->amount / 10 ** $wallet::where('id', $order->wallet_id)->first()->decimal_places)) }}
+                                                {{ floatval($order->getAmountFloatAttribute()) }}
                                             </td>
                                             <td>
-                                                {{ $wallet::where('id', $order->wallet_id)->first()->slug}}
+                                                {{ $order->wallet()->first()->slug }}
                                             </td>
                                             <td>
                                                 @if (isset($order->meta['destination']))
@@ -161,42 +154,6 @@
                                             <td>
                                                 {{ $order->meta['comment'] ?? '' }}
                                             </td>
-                                        </tr>
-                                        @endif
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="tab-pane fade" id="pills-gates" role="tabpanel" aria-labelledby="pills-gates-tab">
-
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <td>Username</td>
-                                        <td>Имя</td>
-                                        @foreach (\App\Models\Currency::payableCurrencies()->get() as $currency)
-                                        <td>{{$currency->title}}</td>
-                                        @endforeach
-                                        <td>iUSDT</td>
-                                        <td>iUSDT_frozen</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach (\App\Models\User::getGates()->get() as $gate)
-                                        <tr>
-                                            <td>{{$gate->username}}</td>
-                                            <td>{{$gate->name}}</td>
-                                            @foreach (\App\Models\Currency::payableCurrencies()->get() as $currency)
-                                                <td>
-                                                    @if ($gate->hasWallet($currency->title.'_gate'))
-                                                    {{$gate->getWallet($currency->title.'_gate')->balanceFloat}}
-                                                    @else
-                                                        0
-                                                    @endif
-                                                </td>
-                                            @endforeach
-                                            <td>{{$gate->getBalanceInner()}}</td>
-                                            <td>{{$gate->getBalanceFrozen()}}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>

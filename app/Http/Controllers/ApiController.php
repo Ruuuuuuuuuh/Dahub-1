@@ -629,7 +629,7 @@ class ApiController extends Controller
         $gate = User::where('uid', $order->gate)->first();
 
         if ($order->user_uid == $this->user->uid) {
-            if (($gate->getBalanceFree($order->currency) > $order->amount)) {
+            if (($gate->getBalanceFree($order->currency) >= $order->amount)) {
                 $transaction = $this->user->getWallet($order->currency)->withdrawFloat($order->amount, array('destination' => 'withdraw from wallet'));
                 $this->user->getWallet($order->currency)->refreshBalance();
                 $gate->getWallet($order->currency.'_gate')->withdrawFloat($order->amount, array('destination' => 'withdraw from gate wallet'));

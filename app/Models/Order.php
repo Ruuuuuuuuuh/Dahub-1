@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static create(array $array)
  * @method static where(string $string, mixed $id)
  * @method static findOrFail($id)
+ * @method static orderBy(string $string, string $string1)
  * @property mixed $id
  * @property mixed $payment_details
  * @property mixed $user_uid
