@@ -141,7 +141,7 @@ class ApiController extends Controller
             $amount         = $request->input('amount');
             $currency       = $request->input('currency');
             $payment        = $request->input('payment');
-            $address        = $request->has('address') ? null : $request->input('address');
+            $address        = $request->has('address') ? $request->input('address') : null;
 
             if ($destination == 'TokenSale') {
                 $dhb_rate   = Rate::getRates('DHB');
