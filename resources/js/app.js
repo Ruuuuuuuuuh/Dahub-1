@@ -18,12 +18,19 @@ Vue.use(Vue2TouchEvents)
 
 window.Vue = require('vue');
 
+
+if(document.querySelector('#app-vue')) {
 const app = new Vue({
     el: '#app-vue'
 });
+}
 
+
+
+if(document.querySelector('#new-vue-app')) {
 const newApp = new Vue({
     router: routes,
     store,
     el: "#new-vue-app"
 })
+}
