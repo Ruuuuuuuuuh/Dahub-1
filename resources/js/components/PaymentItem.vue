@@ -1,10 +1,10 @@
 <template>
-    <a class="payment-item d-flex align-items-center justify-content-between" @click="$emit('click')">
-        <svg class="payment-details-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <a class="payment-item d-flex align-items-center justify-content-between" >
+        <svg class="payment-details-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" @click="$emit('click')">
             <circle cx="10" cy="10" r="10" fill="#EDF1F9"/>
             <circle class="payment-item-icon-inner" cx="10" cy="10" r="6" fill="#EDF1F9"/>
         </svg>
-        <div class="payment-details">
+        <div class="payment-details" @click="$emit('click')">
             <div class="name">{{checkCrypto ? title : holder}}</div>
             <span class="address">{{address}}</span>
         </div>

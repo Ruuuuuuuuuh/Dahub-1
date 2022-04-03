@@ -2366,11 +2366,10 @@ __webpack_require__.r(__webpack_exports__);
       };
       axios.post("/api/createOrderByUser", data).then(function (response) {
         console.log(response);
-        document.location.href = '/dashboard/orders/' + data;
+        document.location.href = '/dashboard/orders/' + response.data;
       })["catch"](function (error) {
         console.log(error.response.data); // this.messageError = error.response.data
-
-        document.location.href = '/dashboard/orders/' + data;
+        // document.location.href = '/dashboard/orders/' + data;
       });
     },
     checkAddress: function checkAddress(event) {
@@ -42288,12 +42287,7 @@ var render = function() {
     "a",
     {
       staticClass:
-        "payment-item d-flex align-items-center justify-content-between",
-      on: {
-        click: function($event) {
-          return _vm.$emit("click")
-        }
-      }
+        "payment-item d-flex align-items-center justify-content-between"
     },
     [
       _c(
@@ -42306,6 +42300,11 @@ var render = function() {
             viewBox: "0 0 20 20",
             fill: "none",
             xmlns: "http://www.w3.org/2000/svg"
+          },
+          on: {
+            click: function($event) {
+              return _vm.$emit("click")
+            }
           }
         },
         [
@@ -42320,13 +42319,24 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _c("div", { staticClass: "payment-details" }, [
-        _c("div", { staticClass: "name" }, [
-          _vm._v(_vm._s(_vm.checkCrypto ? _vm.title : _vm.holder))
-        ]),
-        _vm._v(" "),
-        _c("span", { staticClass: "address" }, [_vm._v(_vm._s(_vm.address))])
-      ]),
+      _c(
+        "div",
+        {
+          staticClass: "payment-details",
+          on: {
+            click: function($event) {
+              return _vm.$emit("click")
+            }
+          }
+        },
+        [
+          _c("div", { staticClass: "name" }, [
+            _vm._v(_vm._s(_vm.checkCrypto ? _vm.title : _vm.holder))
+          ]),
+          _vm._v(" "),
+          _c("span", { staticClass: "address" }, [_vm._v(_vm._s(_vm.address))])
+        ]
+      ),
       _vm._v(" "),
       _c("div", { staticClass: "action-btn" }, [
         _c(
