@@ -22,7 +22,7 @@
     <div class="form-control amount-wrapper">
         <label for="amount">Сумма</label>
         <div class="select-wrapper">
-            <input type="number" name="amount" class="input-amount" placeholder="0" min="0" />
+            <input type="number" name="amount" class="input-amount" placeholder="0" min="0" v-model="amount" @input="checkValidate()"/>
         </div>
     </div>
     <div class="form-control">
@@ -43,21 +43,47 @@
         </div>
     </div>
     <div class="form-control address">
-        <label for="address">Адрес</label>
-        <div class="select-wrapper" @click="showPaymentsDeatails()">
-            <input ref="input" type="button" name="address" class="input-address" value=""/>
+        <label for="address">{{ this.crypto ? 'Выберете кошелек' : 'Выберете карту'}}</label>
+        <div class="select-wrapper" @click="paymentsDeatails()">
+            <input type="button" name="address" class="input-address" value="" v-model="address" @change="checkValidate()"/>
         </div>
     </div>
     <div v-if="showPayments" >
-        <payments-list
-        :payment="selectedPayments"
-        :crypto="crypto"
-        @itemData="checkAddress($event)"
-        ></payments-list>
+<transition appear name="modal">
+    <section class="screen opened settings">
+        <div class="section-header">
+            <div class="top-nav">
+                <button @click="paymentsDeatails()" class="back-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 17.2929C16.0976 17.6834 16.0976 18.3166 15.7071 18.7071C15.3166 19.0976 14.6834 19.0976 14.2929 18.7071L8.29289 12.7071C7.90237 12.3166 7.90237 11.6834 8.29289 11.2929L14.2929 5.29289C14.6834 4.90237 15.3166 4.90237 15.7071 5.29289C16.0976 5.68342 16.0976 6.31658 15.7071 6.70711L10.4142 12L15.7071 17.2929Z" fill="#0D1F3C"></path>
+                        <mask id="back-link" mask-type="alpha" maskUnits="userSpaceOnUse" x="8" y="5" width="8" height="14">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.7071 17.2929C16.0976 17.6834 16.0976 18.3166 15.7071 18.7071C15.3166 19.0976 14.6834 19.0976 14.2929 18.7071L8.29289 12.7071C7.90237 12.3166 7.90237 11.6834 8.29289 11.2929L14.2929 5.29289C14.6834 4.90237 15.3166 4.90237 15.7071 5.29289C16.0976 5.68342 16.0976 6.31658 15.7071 6.70711L10.4142 12L15.7071 17.2929Z" fill="white"></path>
+                        </mask>
+                        <g mask="url(#back-link)">
+                            <rect width="24" height="24" fill="#0D1F3C"></rect>
+                        </g>
+                    </svg>
+                </button>
+                <h2>Список {{ this.crypto ? 'кошельков' : 'карт'}}</h2>
+            </div>
+        </div>
+        <div class="section-main">
+            <payments-list
+            :payment="selectedPayments"
+            :crypto="crypto"
+            @itemData="checkAddress($event)"
+            ></payments-list>
+        </div>
+    </section>
+</transition>
     </div>
 </form>
-<a class="button button-blue create-order">Далее</a>
-
+<button ref="button" class="button button-blue " disabled @click="createOrder()">Далее</button>
+<transition appear name="modal">
+<div class="message" v-if="messageError">
+    {{messageError}}
+</div>
+</transition>
     </div>
 </template>
 
@@ -69,47 +95,119 @@ export default {
 
     },
     props: {
-        currencies: Array
+        currencies: Array,
+        _token: String
     },
     data() {
         return {
             fillterCurrencies: this.currencies.filter((item) => item.visible == 1 ),
             currenciesPayment: true,
-            currency: 'BTC',
+            currency: 'USDT',
             payments: Array,
             selectedPayments: 'TRC20',
             crypto: Number,
-            showPayments: false
+            showPayments: false,
+            address: '',
+            amount: '',
+            messageError: ''
+
         }
     },
     methods: {
-        checkAddress(event) {
-            console.log('event ' , event.address)
-            this.$refs.input.value = event.address
+        createOrder() {
+            let data = {
+                "_token": this._token,
+                "currency": this.currency,
+                "amount": this.amount,
+                "payment": this.selectedPayments,
+                "address": this.address,
+                "destination": 'withdraw'
+            }
+            axios.post("/api/createOrderByUser", data)
+                .then(response => {
+                    console.log(response)
+                    document.location.href = '/dashboard/orders/' + data;
+                })
+                .catch((error) => {
+                    console.log(error.response.data);
+                    // this.messageError = error.response.data
+                    document.location.href = '/dashboard/orders/' + data;
+                });
         },
-        checkCurrency(event) {
+        checkAddress(event) {
+            this.address = event.address
+
+            this.checkValidate()
+            this.paymentsDeatails()
+        },
+        checkCurrency() {
             this.payments = this.fillterCurrencies.filter((item) => item.title == this.currency)[0].payments
             this.crypto = this.payments[0].crypto
             this.selectedPayments = this.payments[0].title
-            // this.$refs.input.value = ""
-
+            this.address = ''
         },
         checkPayment() {
             console.log(this.selectedPayments)
             this.crypto = this.payments[0].crypto
-            // this.$refs.input.value = ""
-            // console.log(this.crypto)
+            this.address = ''
+            this.checkValidate()
         },
-        showPaymentsDeatails() {
-            this.showPayments = true
+        paymentsDeatails() {
+            this.showPayments = !this.showPayments
+        },
+        checkValidate() {
+            if(this.address && this.amount) {
+                this.$refs.button.removeAttribute('disabled')
+            } else {
+                this.$refs.button.setAttribute('disabled', 'disabled')
+            }
         }
     },
     created() {
         this.checkCurrency()
+    },
+    watch: {
+        currency() {
+            this.checkValidate()
+        }
     }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 
+.modal-enter-active, .modal-leave-active {
+    transition: all .5s;
+}
+.modal-enter, .modal-leave-to {
+    transform: translateY(100%);
+}
+
+.button {
+    background: #347AF0;
+    border-radius: 23px;
+    width: 100%;
+    display: block;
+    text-align: center;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 46px;
+    color: #FFFFFF;
+    margin-top: 20px;
+}
+
+.button[disabled] {
+    opacity: .5;
+}
+
+.message {
+    text-align: center;
+    padding: 8px;
+    background: #fff;
+    border: 2px #E15063 solid;
+    border-radius: 50px;
+    color: #E15063;
+    margin-top: 12px;
+    font-weight: 600;
+}
 </style>
