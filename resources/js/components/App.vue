@@ -17,7 +17,9 @@ export default {
     mounted() {
         this.$store.commit('getWindowUser', window.user)
         this.$store.commit('getWindowBalances', window.currency)
+        this.$store.commit('getWindowOrders', window.orders)
         this.$store.commit('getMainScreenbalances', window.visibleWallets)
+
     }
 };
 </script>
