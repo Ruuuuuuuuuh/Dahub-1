@@ -222,9 +222,10 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
     {
         $balances = array();
         foreach (Currency::all() as $currency) {
-            $balances[$currency->title] = array(
-                'payments'  => $currency->payments()->get()->toArray(),
-                'balance'   => $this->getWallet($currency->title)->balanceFloat
+            $balances[] = array(
+                'currency'=> $currency,
+                'balance'   => $this->getWallet($currency->title)->balanceFloat,
+                'payments'  => $currency->payments()->get()->toArray()
             );
         }
         return json_encode($balances, JSON_UNESCAPED_UNICODE);
