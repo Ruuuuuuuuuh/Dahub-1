@@ -43,7 +43,7 @@
         </div>
     </div>
     <div class="form-control address">
-        <label for="address">{{ this.crypto ? 'Выберете кошелек' : 'Выберете карту'}}</label>
+        <label for="address">{{ this.crypto ? 'Выберите кошелек' : 'Выберите карту'}}</label>
         <div class="select-wrapper" @click="paymentsDeatails()">
             <input type="button" name="address" class="input-address" value="" v-model="address" @change="checkValidate()"/>
         </div>
@@ -131,7 +131,7 @@ export default {
                 })
                 .catch((error) => {
                     console.log(error.response.data);
-                    // this.messageError = error.response.data
+                    this.messageError = error.response.data.message
                     // document.location.href = '/dashboard/orders/' + data;
                 });
         },
