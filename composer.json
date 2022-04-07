@@ -23,8 +23,7 @@
         "predis/predis": "^1.1",
         "questocat/laravel-referral": "^1.0",
         "sentry/sentry-laravel": "^2.11.1",
-        "socialiteproviders/telegram": "^4.1.1",
-        "ralphjsmit/laravel-horizon-cron-supervisor" : "^1.0"
+        "socialiteproviders/telegram": "^4.1.1"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
