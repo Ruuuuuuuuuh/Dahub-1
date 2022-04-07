@@ -24,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        \Illuminate\Support\Facades\URL::forceScheme('https');
         Blade::directive('version', function ($expression) {
 
             $filename = public_path().$expression;
