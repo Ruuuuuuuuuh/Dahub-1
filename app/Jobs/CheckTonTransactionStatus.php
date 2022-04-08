@@ -52,28 +52,31 @@ class CheckTonTransactionStatus implements ShouldQueue
     {
         $error = false;
 
-        try {
-        // https://toncenter.com/api/v2/getTransactions?address=EQBiJUjSLIvFy0UAfxo0cWJvwT8XQcALpQjPCa6hJJMYltae&limit=30
-            $response = Http::retry(3, 15)->get('https://toncenter.com/api/v2/getTransactions?address='.$this->order->payment_details.'&limit=5');
-            if ($response->json()["result"]) {
-                foreach ($response->json()["result"] as $result) {
-                    $amount = $result['in_msg']['value'] / 1000000000;
-                    $utime = $result['utime'];
-                    if ($utime > $this->order->created_at->timestamp) {
-                        if ($this->order->amount <= $amount) {
-                            dispatch(new ConfirmOrder($this->order));
+        if ($this->order->status == 'accepted') {
+            try {
+                // https://toncenter.com/api/v2/getTransactions?address=EQBiJUjSLIvFy0UAfxo0cWJvwT8XQcALpQjPCa6hJJMYltae&limit=30
+                $response = Http::retry(3, 15)->get('https://toncenter.com/api/v2/getTransactions?address='.$this->order->payment_details.'&limit=5');
+                if ($response->json()["result"]) {
+                    foreach ($response->json()["result"] as $result) {
+                        $amount = $result['in_msg']['value'] / 1000000000;
+                        $utime = $result['utime'];
+                        if ($utime > $this->order->created_at->timestamp) {
+                            if ($this->order->amount <= $amount) {
+                                dispatch(new ConfirmOrder($this->order));
+                            }
+                            else $error = true;
                         }
                         else $error = true;
                     }
-                    else $error = true;
                 }
+                else $error = true;
             }
-            else $error = true;
+            catch (HttpResponseException $e) {
+                report ($e);
+                $error = true;
+            }
         }
-        catch (HttpResponseException $e) {
-            report ($e);
-            $error = true;
-        }
+
 
         if ($error) $this->release(33);
 

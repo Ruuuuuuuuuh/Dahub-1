@@ -36,7 +36,7 @@ class SendAcceptedNotifications implements ShouldQueue
     public function handle(OrderAccepted $event)
     {
         $owner = User::where('uid', $event->order->user_uid)->first();
-        if ($event->order->destination == 'deposit' || $event->order->destination == 'TokenSale') {
+        if (($event->order->destination == 'deposit' || $event->order->destination == 'TokenSale') && $event->order->status != 'completed') {
             try {
                 $owner->notify(new AcceptDepositOrder($event->order));
             } catch (CouldNotSendNotification $e) {
