@@ -77,6 +77,7 @@ class CheckTonTransactionStatus implements ShouldQueue
             }
         }
         if ($error) $this->release(33);
+        else return true;
 
     }
 }
