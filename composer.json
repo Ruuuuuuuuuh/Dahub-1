@@ -8,7 +8,7 @@
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.1",
+        "php": "^7.1",
         "bavix/laravel-wallet": "^5.3",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
@@ -24,7 +24,6 @@
         "questocat/laravel-referral": "^1.0",
         "sentry/sentry-laravel": "^2.11.1",
         "socialiteproviders/telegram": "^4.1.1",
-        "ralphjsmit/laravel-horizon-cron-supervisor": "^1.0.1"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
