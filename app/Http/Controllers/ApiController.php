@@ -520,7 +520,7 @@ class ApiController extends Controller
     {
         if ($this->user->isGate()) {
             $order = Order::where('id', $request->input('id'))->firstOrFail();
-            if ($order->status == 'created' && $this->user->getWallet($order->currency.'_gate') >= $order->amount) {
+            if ($order->status == 'created' && $this->user->getWallet($order->currency.'_gate')->balanceFloat >= $order->amount) {
 
                 if ($order->destination == 'deposit' || $order->destination == 'TokenSale') {
                     $order->payment_details = $request->input('payment_details');
