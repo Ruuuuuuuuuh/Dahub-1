@@ -35,7 +35,16 @@
         <p><small>Размер вознаграждения:</small></p>
         <p>{{round($order->amount * Rate::getRates($order->currency) / 200 / Rate::getRates('DHB'))}} DHB</p>
     </div>
+    @if (Auth::user()->getWallet($order->currency.'_gate')->balanceFloat >= $order->amount)
     <div class="footer">
         <a class="button button-blue" onclick="acceptOrder()">Принять заявку</a>
     </div>
+    @else
+    <div class="text-block">
+        <p>У вас нет средств для принятия этой заявки.</p>
+    </div>
+    <div class="footer">
+    <a href="/dashboard" class="button button-red">Вернуться на главную</a>
+    </div>
+    @endif
 </div>
