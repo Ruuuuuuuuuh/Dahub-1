@@ -51,7 +51,7 @@
         </p>
         <p class="our_balance"><strong>Ваш баланс</strong></p>
         <p>{{ number_format(Auth::User()->getWallet('DHB')->balanceFloat, 2, ',',' ') }} DHB = {{ number_format((Auth::User()->getWallet('DHB')->balanceFloat * Rate::getRates('DHB')), 2, ',' , ' ')}} USD</p>
-        <a @if (Auth::user()->hasActiveOrder()) href="/wallet/orders/{{Auth::user()->orders()->where('status', '!=', 'completed')->first()->id}}" @else onclick="$('#deposit-tab').click()" @endif style="margin-top:40px;" class="button button-orange">Получить DHB</a>
+        <a @if (Auth::user()->hasActiveOrder()) href="/dashboard/orders/{{Auth::user()->orders()->where('status', '!=', 'completed')->first()->id}}" @else onclick="$('#deposit-tab').click()" @endif style="margin-top:40px;" class="button button-orange">Получить DHB</a>
 
 
 

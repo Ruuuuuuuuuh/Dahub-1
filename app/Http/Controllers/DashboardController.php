@@ -151,7 +151,7 @@ class DashboardController extends Controller {
             }
         }
         else {
-            return redirect('dashboard');
+            return redirect('wallet');
         }
     }
 

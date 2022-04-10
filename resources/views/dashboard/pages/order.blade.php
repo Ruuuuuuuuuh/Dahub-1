@@ -24,7 +24,7 @@
                         id: id,
                     },
                     success: function (response) {
-                        window.location.href = "{{Route('dashboard')}}"
+                        window.location.href = "{{Route('wallet')}}"
                     },
                 });
             }
@@ -63,7 +63,7 @@
                     },
                     success:function(response){
                         alert('Вы успешно подтвердили отправку средств')
-                        window.location.href = '/dashboard/orders/' + id
+                        window.location.href = '/wallet/orders/' + id
                     },
                 });
             }

@@ -127,12 +127,12 @@ export default {
             axios.post("/api/createOrderByUser", data)
                 .then(response => {
                     console.log(response)
-                    document.location.href = '/dashboard/orders/' + response.data;
+                    document.location.href = '/wallet/orders/' + response.data;
                 })
                 .catch((error) => {
                     console.log(error.response.data);
                     this.messageError = error.response.data.message
-                    // document.location.href = '/dashboard/orders/' + data;
+                    // document.location.href = '/wallet/orders/' + data;
                 });
         },
         checkAddress(event) {

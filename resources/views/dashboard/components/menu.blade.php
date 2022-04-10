@@ -27,7 +27,7 @@
     @endif
     <ul class="nav flex-column">
         <li class="nav-item">
-            <a href="{{Route('dashboard')}}" class="nav-link">
+            <a href="{{Route('wallet')}}" class="nav-link">
                 <span class="svg-wrapper">
                     <svg width="23" height="23" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#wallet-icon)">

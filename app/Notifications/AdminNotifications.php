@@ -39,7 +39,7 @@ class AdminNotifications extends Notification
 
     public function toTelegram($notifiable)
     {
-        $url = url('/wallet/orders');
+        $url = url('/dashboard/orders');
         return TelegramMessage::create()
             ->to($notifiable->uid)
             ->content($this->message)

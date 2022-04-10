@@ -38,7 +38,7 @@ class OrderAssignee extends Notification
 
     public function toTelegram($notifiable)
     {
-        $url = url('/wallet/');
+        $url = url('/dashboard/');
 
         return TelegramMessage::create()
             ->to($notifiable->uid)

@@ -30,8 +30,8 @@ Route::get('/auth/{token}', [App\Http\Controllers\AuthController::class, 'authUs
 
 
 // DASHBOARD ROUTES
-Route::group(['prefix' => 'dashboard'], function () {
-    Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+Route::group(['prefix' => 'wallet'], function () {
+    Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('wallet');
     Route::get('/orders/{id}', [App\Http\Controllers\DashboardController::class, 'getOrder'])->name('getOrder');
     Route::get('/orders/{id}/accept', [App\Http\Controllers\DashboardController::class, 'acceptOrderPage']);
     Route::get('/settings/', [App\Http\Controllers\DashboardController::class, 'settings'])->name('settings');
@@ -39,26 +39,31 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/test/', [App\Http\Controllers\DashboardController::class, 'testPage'])->name('testPage')->middleware('admin');
 });
 
-Route::get('/wallet', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
-Route::get('/wallet/profile', [App\Http\Controllers\WalletController::class, 'profile'])->name('wallet.profile');
-Route::get('/wallet/explorer', [App\Http\Controllers\WalletController::class, 'explorer'])->name('wallet.explorer');
-Route::get('/wallet/orders/{id}', [App\Http\Controllers\WalletController::class, 'order'])->name('wallet.pages.order');
-Route::get('/wallet/transfer', [App\Http\Controllers\WalletController::class, 'transfer'])->name('wallet.transfer');
+Route::group(['prefix' => 'dashboard'], function () {
+    Route::get('/', [App\Http\Controllers\WalletController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [App\Http\Controllers\WalletController::class, 'profile'])->name('wallet.profile');
+    Route::get('/explorer', [App\Http\Controllers\WalletController::class, 'explorer'])->name('wallet.explorer');
+    Route::get('/orders/{id}', [App\Http\Controllers\WalletController::class, 'order'])->name('wallet.pages.order');
+    Route::get('/transfer', [App\Http\Controllers\WalletController::class, 'transfer'])->name('wallet.transfer');
 
-// ADMIN PAGES
-Route::get('/wallet/orders/', [App\Http\Controllers\WalletController::class, 'orders'])->middleware('gate_manager')->name('wallet.orders');
-Route::get('/wallet/stages/', [App\Http\Controllers\WalletController::class, 'stages'])->middleware('admin')->name('wallet.stages');
-Route::get('/wallet/reports/', [App\Http\Controllers\WalletController::class, 'reports'])->middleware('admin')->name('wallet.reports');
-Route::get('/wallet/hft/', [App\Http\Controllers\WalletController::class, 'hft'])->middleware('admin')->name('wallet.hft');
-Route::get('/wallet/currencies/', [App\Http\Controllers\WalletController::class, 'currencies'])->middleware('admin')->name('wallet.currencies');
-Route::get('/wallet/currencies/{slug}', [App\Http\Controllers\WalletController::class, 'currency'])->middleware('admin')->name('wallet.currency');
-Route::post('/wallet/currencies/{slug}', [App\Http\Controllers\WalletController::class, 'updateCurrency'])->middleware('admin');
-Route::get('/wallet/payments/', [App\Http\Controllers\WalletController::class, 'payments'])->middleware('admin')->name('wallet.payments');
-Route::get('/wallet/users', [App\Http\Controllers\WalletController::class, 'getUsers'])->name('wallet.users')->middleware('gate_manager');
-Route::get('/wallet/gates', [App\Http\Controllers\WalletController::class, 'gates'])->name('wallet.gates')->middleware('gate_manager');
-Route::get('/wallet/tags', [App\Http\Controllers\WalletController::class, 'tags'])->name('wallet.tags')->middleware('admin');
-Route::get('/wallet/telegram', [App\Http\Controllers\WalletController::class, 'telegram'])->name('wallet.telegram')->middleware('admin');
-Route::get('/wallet/settings', [App\Http\Controllers\WalletController::class, 'settings'])->name('wallet.settings')->middleware('admin');
+    // ADMIN PAGES
+    Route::post('/currencies/{slug}', [App\Http\Controllers\WalletController::class, 'updateCurrency'])->middleware('admin');
+    Route::get('/orders/', [App\Http\Controllers\WalletController::class, 'orders'])->middleware('gate_manager')->name('wallet.orders');
+    Route::get('/stages/', [App\Http\Controllers\WalletController::class, 'stages'])->middleware('admin')->name('wallet.stages');
+    Route::get('/reports/', [App\Http\Controllers\WalletController::class, 'reports'])->middleware('admin')->name('wallet.reports');
+    Route::get('/hft/', [App\Http\Controllers\WalletController::class, 'hft'])->middleware('admin')->name('wallet.hft');
+    Route::get('/currencies/', [App\Http\Controllers\WalletController::class, 'currencies'])->middleware('admin')->name('wallet.currencies');
+    Route::get('/currencies/{slug}', [App\Http\Controllers\WalletController::class, 'currency'])->middleware('admin')->name('wallet.currency');
+    Route::get('/payments/', [App\Http\Controllers\WalletController::class, 'payments'])->middleware('admin')->name('wallet.payments');
+    Route::get('/users', [App\Http\Controllers\WalletController::class, 'getUsers'])->name('wallet.users')->middleware('gate_manager');
+    Route::get('/gates', [App\Http\Controllers\WalletController::class, 'gates'])->name('wallet.gates')->middleware('gate_manager');
+    Route::get('/tags', [App\Http\Controllers\WalletController::class, 'tags'])->name('wallet.tags')->middleware('admin');
+    Route::get('/telegram', [App\Http\Controllers\WalletController::class, 'telegram'])->name('wallet.telegram')->middleware('admin');
+    Route::get('/settings', [App\Http\Controllers\WalletController::class, 'settings'])->name('wallet.settings')->middleware('admin');
+});
+
+
+
 
 // ADMIN ROUTES
 Route::post('/api/tags/', [App\Http\Controllers\SystemApiController::class, 'getTags'])->middleware('admin')->name('api.tags');
@@ -86,6 +91,7 @@ Route::post('/api/telegram/send_message', [App\Http\Controllers\SystemApiControl
 Route::post('/api/system/settings/update', [App\Http\Controllers\SystemApiController::class, 'updateSystemSettings'])->middleware('admin');
 
 // API ROUTES
+Route::get('/api/payment_details/get', [App\Http\Controllers\ApiController::class, 'getPaymentDetails']);
 Route::post('/api/deposit', [App\Http\Controllers\ApiController::class, 'deposit']);
 Route::post('/api/orders/create', [App\Http\Controllers\ApiController::class, 'createOrder']);
 Route::post('/api/orders/assigneeOrder', [App\Http\Controllers\ApiController::class, 'assigneeOrderByUser']);
@@ -97,7 +103,6 @@ Route::post('/api/saveUserConfig', [App\Http\Controllers\ApiController::class, '
 Route::post('/api/payment_details/add', [App\Http\Controllers\ApiController::class, 'addPaymentDetails']);
 Route::post('/api/payment_details/edit', [App\Http\Controllers\ApiController::class, 'editPaymentDetails']);
 Route::post('/api/payment_details/remove', [App\Http\Controllers\ApiController::class, 'removePaymentDetails']);
-Route::get('/api/payment_details/get', [App\Http\Controllers\ApiController::class, 'getPaymentDetails']);
 Route::post('/api/orders/acceptOrderByGate', [App\Http\Controllers\ApiController::class, 'acceptOrderByGate']);
 Route::post('/api/orders/confirmOrderByGate', [App\Http\Controllers\ApiController::class, 'confirmOrderByGate']);
 Route::post('/api/orders/confirmOrderByUser', [App\Http\Controllers\ApiController::class, 'confirmOrderByUser']);

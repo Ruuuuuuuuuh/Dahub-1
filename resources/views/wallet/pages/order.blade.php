@@ -14,7 +14,7 @@
                             <p class="inline-block mb-0">Заявка #{{$order->id}}</p>
                             @if ($order->status != 'completed')
                             <div class="d-flex justify-content-end">
-                                <a class="btn btn-primary" href="/wallet/" >Вернуться назад</a>
+                                <a class="btn btn-primary" href="/dashboard/" >Вернуться назад</a>
                             </div>
                             @endif
                         </div>
@@ -120,7 +120,7 @@
                                     <strong>Хеш транзакции:</strong> {{ $order->orderSystemTransaction()->uuid}}<br />
                                 </p>
 
-                                <a href="/wallet" style="margin-top:40px;" class="button button-orange">Вернуться на главную</a>
+                                <a href="/dashboard" style="margin-top:40px;" class="button button-orange">Вернуться на главную</a>
                             </div>
                         @endif
                         </div>
@@ -145,11 +145,11 @@
                     },
                     error: function () {
                         alert('При попытке отменить заявку произошла ошибка')
-                        window.location.href = '/wallet/orders/' + id
+                        window.location.href = '/dashboard/orders/' + id
                     },
                     success:function(response){
                         alert('Заявка успешно отменена')
-                        window.location.href = '/wallet/'
+                        window.location.href = '/dashboard/'
                     },
                 });
             }
@@ -172,7 +172,7 @@
                     },
                     success:function(response){
                         alert('Вы успешно подтвердили отправку средств')
-                        window.location.href = '/wallet/orders/' + id
+                        window.location.href = '/dashboard/orders/' + id
                     },
                 });
             }

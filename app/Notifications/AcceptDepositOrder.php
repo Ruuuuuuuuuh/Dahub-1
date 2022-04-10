@@ -39,13 +39,24 @@ class AcceptDepositOrder extends Notification
 
     public function toTelegram($notifiable)
     {
-        $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/wallet/orders/'.$this->order->id);
         $crypto = Payment::where('title', $this->order->payment)->firstOrFail()->crypto ? ' на адрес:' : ' по номеру карты:';
+        $content = '';
+        $url = '';
+        if ($this->order->destination == 'TokenSale') {
+            $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/dashboard/orders/'.$this->order->id);
+            $content = "Заявка №" . $this->order->id . " на " . $this->order->dhb_amount . " DHB принята кипером. \nПереведите " . $this->order->amount . " " . $this->order->currency . " в " . $this->order->payment . $crypto . " \n" . $this->order->payment_details . "\nКак только заявка будет выполнена, вы получите уведомление.";
+        }
+        elseif ($this->order->destination == 'deposit') {
+            $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/wallet/orders/'.$this->order->id);
+            $content = "Заявка №" . $this->order->id . " на получение " . $this->order->amount . " " . $this->order->currency . " принята кипером. \nПереведите " . $this->order->amount . " " . $this->order->currency . " в " . $this->order->payment . $crypto . " \n" . $this->order->payment_details . "\nКак только заявка будет выполнена, вы получите уведомление.";
+        }
+
+
         return TelegramMessage::create()
             // Optional recipient user id.
             ->to($notifiable->uid)
             // Markdown supported.
-            ->content("Заявка №" . $this->order->id . " на " . $this->order->dhb_amount . " DHB принята кипером. \nПереведите " . $this->order->amount . " " . $this->order->currency . " в " . $this->order->payment . $crypto . " \n" . $this->order->payment_details . "\nКак только заявка будет выполнена, вы получите уведомление.")
+            ->content($content)
 
 
             // (Optional) Blade template for the content.

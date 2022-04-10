@@ -200,7 +200,7 @@ class ApiController extends Controller
                     $destination_message = ($destination == 'deposit' || $destination == 'TokenSale') ? '⬇️ Получение' : '⬆️ Отправление';
                     $inline_button = array(
                         "text" => "Принять заявку",
-                        "url" => env('APP_URL') . '/dashboard/orders/' . $order->id . '/accept'
+                        "url" => env('APP_URL') . '/wallet/orders/' . $order->id . '/accept'
                     );
                     $inline_keyboard = [[$inline_button]];
                     $keyboard = array("inline_keyboard" => $inline_keyboard);

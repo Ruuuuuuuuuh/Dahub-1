@@ -17,7 +17,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link btn btn-outline-secondary" id="deposit-tab" @if (Auth::user()->hasActiveOrder()) href="/wallet/orders/{{Auth::user()->orders()->where('status', '!=', 'completed')->first()->id}}" @else data-toggle="tab" href="#deposit-area" role="tab" aria-controls="deposit-area" aria-selected="false" @endif>
+                                    <a class="nav-link btn btn-outline-secondary" id="deposit-tab" @if (Auth::user()->hasActiveOrder()) href="/dashboard/orders/{{Auth::user()->orders()->where('status', '!=', 'completed')->first()->id}}" @else data-toggle="tab" href="#deposit-area" role="tab" aria-controls="deposit-area" aria-selected="false" @endif>
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M9.00011 9.96508C4.99278 9.96508 1.6489 8.50562 0.856695 6.56348C0.738086 6.84953 0.675293 7.14574 0.675293 7.44892C0.675293 9.81793 4.40164 11.7391 9.00011 11.7391C13.5967 11.7391 17.3243 9.81856 17.3243 7.44892C17.3243 7.1451 17.2583 6.84953 17.1435 6.56348C16.3488 8.50562 13.0049 9.96508 9.00011 9.96508Z" fill="white"/>
                                             <path d="M9.00011 13.0465C4.99278 13.0465 1.6489 11.5864 0.856695 9.64551C0.738086 9.93156 0.675293 10.2278 0.675293 10.5322C0.675293 12.9 4.40164 14.8212 9.00011 14.8212C13.5967 14.8212 17.3243 12.9006 17.3243 10.5322C17.3243 10.2278 17.2583 9.93156 17.1435 9.64551C16.3488 11.587 13.0049 13.0465 9.00011 13.0465Z" fill="white"/>
@@ -179,7 +179,7 @@
                     dhb_amount:     dhb_amount
                 },
                 success:function(response){
-                    window.location.href = '/wallet/orders/' + response
+                    window.location.href = '/dashboard/orders/' + response
                 },
             });
         }

@@ -38,7 +38,7 @@ class ConfirmOrder extends Notification
 
     public function toTelegram($notifiable)
     {
-        $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/wallet/');
+        $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/dashboard/');
 
         return TelegramMessage::create()
             // Optional recipient user id.

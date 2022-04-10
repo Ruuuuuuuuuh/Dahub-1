@@ -38,15 +38,26 @@ class OrderCreate extends Notification
 
     public function toTelegram($notifiable)
     {
-        $url = url('/wallet/orders/'.$this->order->id);
-        if ($this->order->destination == 'withdraw') $destination = 'на отправление';
-        else $destination = 'на получение';
+        $url = '';
+        $content = '';
+        if ($this->order->destination == 'TokenSale') {
+            $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/dashboard/orders/'.$this->order->id);
+            $content = "Заявка №" . $this->order->id . " на получение " . $this->order->dhb_amount . " DHB успешно создана.\nОжидайте назначения кипера.";
+        }
+        elseif ($this->order->destination == 'deposit') {
+            $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/wallet/orders/'.$this->order->id);
+            $content = "Заявка №" . $this->order->id . " на получение " . $this->order->amount . " " . $this->order->currency . " успешно создана.\nОжидайте назначения кипера.";
+        }
+        elseif ($this->order->destination == 'withdraw') {
+            $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/wallet/orders/'.$this->order->id);
+            $content = "Заявка №" . $this->order->id . " на отправление " . $this->order->amount . " " . $this->order->currency . " успешно создана.\nОжидайте назначения кипера.";
+        }
 
         return TelegramMessage::create()
             // Optional recipient user id.
             ->to($notifiable->uid)
             // Markdown supported.
-            ->content("Заявка №" . $this->order->id . " " . $destination . " " . $this->order->dhb_amount . " DHB успешно создана.\nОжидайте назначения кипера.")
+            ->content($content)
 
             // (Optional) Blade template for the content.
             // ->view('notification', ['url' => $url])

@@ -49,7 +49,7 @@
                     id: id,
                 },
                 success:function(response) {
-                    window.location.href = '/dashboard/orders/' + id;
+                    window.location.href = '/wallet/orders/' + id;
                 },
             });
         }
@@ -98,7 +98,7 @@
                         data: data,
                         success: function (data) {
                             resolve(data)
-                            window.location.href = '/dashboard/orders/' + data;
+                            window.location.href = '/wallet/orders/' + data;
                         },
                         error: function (err) {
                             reject(err)
@@ -136,7 +136,7 @@
                         id: id,
                     },
                     success:function(response){
-                        window.location.href = "{{Route('dashboard')}}"
+                        window.location.href = "{{Route('wallet')}}"
                     },
                 });
             }

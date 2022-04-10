@@ -142,7 +142,7 @@
         function infinteLoadMore() {
             page++;
             $.ajax({
-                url: ENDPOINT + "/wallet/explorer?page=" + page,
+                url: ENDPOINT + "/dashboard/explorer?page=" + page,
                 datatype: "html",
                 type: "get",
                 data: {

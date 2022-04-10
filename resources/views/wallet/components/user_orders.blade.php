@@ -7,7 +7,7 @@
             if ($order->currency == 'USDT') $dec = 0; else $dec = 5;
             @endphp
             <div class="row">
-                <a href="/wallet/orders/{{$order->id}}" class="col-lg-9 col-12 order-wrapper" style="color:#333">
+                <a href="/dashboard/orders/{{$order->id}}" class="col-lg-9 col-12 order-wrapper" style="color:#333">
                     <div class="row">
                         <div class="col-3 col-lg-1">
                             <p>#{{$order->id}}</p>

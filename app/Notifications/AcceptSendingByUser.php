@@ -38,7 +38,7 @@ class AcceptSendingByUser extends Notification
 
     public function toTelegram($notifiable)
     {
-        $url = url('/auth/'.$this->order->gate()->first()->auth_token.'/?url=/dashboard/orders/'.$this->order->id);
+        $url = url('/auth/'.$this->order->gate()->first()->auth_token.'/?url=/wallet/orders/'.$this->order->id);
 
         return TelegramMessage::create()
             // Optional recipient user id.

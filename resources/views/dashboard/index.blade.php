@@ -313,7 +313,7 @@
                 let amount = parseFloat(order.amount)
                 if (order.destination == 'TokenSale') order.destination = 'deposit'
 
-                a += '<a href="/dashboard/orders/' + order.id + '" class="order-item d-flex justify-content-between align-items-center">' +
+                a += '<a href="/wallet/orders/' + order.id + '" class="order-item d-flex justify-content-between align-items-center">' +
                     '<div class="d-flex align-items-start flex-column justify-content-center">' +
                         '<div class="destination ' + order.destination + '">'
                 if (order.destination == 'deposit') a += 'Ввод'

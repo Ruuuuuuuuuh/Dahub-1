@@ -22,7 +22,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <p class="inline-block mb-0">Заявки</p>
                             <div class="d-flex justify-content-end">
-                                <a class="btn btn-primary" href="/wallet/" >Вернуться назад</a>
+                                <a class="btn btn-primary" href="/dashboard/" >Вернуться назад</a>
                             </div>
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                         },
                         success: function (response) {
                             alert('Заявка отменена')
-                            window.location.href = '/wallet/orders/';
+                            window.location.href = '/dashboard/orders/';
                         },
                     });
                 }

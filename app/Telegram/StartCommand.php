@@ -46,11 +46,11 @@ class StartCommand extends Command
         $inline_button = array(
             [
                 "text" => "Токенсейл🔥",
-                "url" => $message['linkWallet']
+                "url" => $message['linkDashboard']
             ],
             [
                 "text" => "Кошелёк",
-                "url" => $message['linkDashboard']
+                "url" => $message['linkWallet']
             ]
         );
         $inline_keyboard = [$inline_button];

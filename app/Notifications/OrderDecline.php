@@ -40,7 +40,10 @@ class OrderDecline extends Notification
     {
         $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/wallet/');
 
-        if ($this->order->destination == 'TokenSale') $content = "Заявка №" . $this->order->id . " на получение " . $this->order->dhb_amount . " DHB отменена.";
+        if ($this->order->destination == 'TokenSale') {
+            $content = "Заявка №" . $this->order->id . " на получение " . $this->order->dhb_amount . " DHB отменена.";
+            $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/dashboard/');
+        }
         else {
             if ($this->order->destination == 'deposit') {
                 $content = "Заявка №" . $this->order->id . " на получение " . $this->order->amount . " " . $this->order->currency . " отменена.";
