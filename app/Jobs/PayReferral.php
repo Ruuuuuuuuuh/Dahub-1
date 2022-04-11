@@ -43,13 +43,13 @@ class PayReferral implements ShouldQueue
     {
         $tax = 9; // Процент на первом уровне
         while ($this->user->referred_by && $tax > 0) {
-            $user = User::where('affiliate_id', $this->user->referred_by)->first();
+            $this->user = User::where('affiliate_id', $this->user->referred_by)->first();
             $refAmount = ($this->amount * $tax ) / 100;
-            $user->getWallet($this->currency)->depositFloat($refAmount, array('destination' => 'referral'));
-            $user->getWallet($this->currency)->refreshBalance();
+            $this->user->getWallet($this->currency)->depositFloat($refAmount, array('destination' => 'referral'));
+            $this->user->getWallet($this->currency)->refreshBalance();
 
             try {
-                $user->notify(new ReferralBonusPay(array('amount' => $refAmount, 'currency' => $this->currency)));
+                $this->user->notify(new ReferralBonusPay(array('amount' => $refAmount, 'currency' => $this->currency)));
             } catch (CouldNotSendNotification $e) {
                 report ($e);
             }

@@ -23,7 +23,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <p class="inline-block mb-0">{{$currency->title}} – редактирование валюты</p>
                             <div class="d-flex justify-content-end">
-                                <a class="btn btn-primary" href="{{Route('wallet.currencies')}}" >Вернуться назад</a>
+                                <a class="btn btn-primary" href="{{Route('dashboard.currencies')}}" >Вернуться назад</a>
                             </div>
                         </div>
                     </div>

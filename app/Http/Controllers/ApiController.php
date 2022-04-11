@@ -134,7 +134,7 @@ class ApiController extends Controller
             ]
         );
 
-        if (!$this->user->hasActiveOrder()) {
+        if (!($this->user->hasActiveOrder() && $request->input('destination') != 'TokenSale') || !($this->user->hasActiveTokenSaleOrder() && $request->input('destination') == 'TokenSale')) {
             $error = false;
 
             $destination    = $request->input('destination');

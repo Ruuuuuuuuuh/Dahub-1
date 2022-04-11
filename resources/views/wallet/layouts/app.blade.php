@@ -34,7 +34,7 @@
 <div class="app">
     <nav class="navbar navbar-dark">
         <div class="container-fluid header-top">
-            <a class="navbar-brand" href="{{Route('wallet')}}">
+            <a class="navbar-brand" href="{{Route('dashboard')}}">
                 <svg height="34" viewBox="0 0 124 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path opacity="0.9" d="M10.9424 11.6964C-5.00206 10.1964 0.586711 4.3571 4.75089 2.91067C21.5172 -2.98219 38.4479 3.49996 30.3387 17.9642C29.6264 19.1964 28.5853 18.6071 27.6539 17.6964C24.9691 15.125 20.0378 12.5535 10.9424 11.6964Z" fill="white"/>
                     <g opacity="0.9">
@@ -72,7 +72,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('wallet.explorer') }}" class="nav-link">
+                        <a href="{{ route('dashboard.explorer') }}" class="nav-link">
                             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M16.5422 19.6494L19.6497 16.542L25 21.8927L21.8929 24.9997L16.5422 19.6494Z" fill="white"/>
                                 <path d="M9.52142 5.85938C11.6071 5.85938 13.6384 8.2283 14.5095 9.5171C13.8265 10.5164 11.7902 13.1836 9.52142 13.1836C7.43574 13.1836 5.40441 10.8147 4.53333 9.52587C5.21635 8.52661 7.25263 5.85938 9.52142 5.85938ZM9.52142 11.7188C10.733 11.7188 11.7187 10.733 11.7187 9.52148C11.7187 8.30994 10.733 7.32422 9.52142 7.32422C8.30988 7.32422 7.32416 8.30994 7.32416 9.52148C7.32416 10.733 8.30988 11.7188 9.52142 11.7188Z" fill="white"/>
@@ -150,45 +150,45 @@
 
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
-                                <a class="dropdown-item" href="{{Route('wallet.profile')}}" >
+                                <a class="dropdown-item" href="{{Route('dashboard.profile')}}" >
                                     Профиль
                                 </a>
                                 @if (\Auth::user()->isAdmin())
                                     <hr class="dropdown-divider">
-                                    <a class="dropdown-item" href="{{Route('wallet.reports')}}" >
+                                    <a class="dropdown-item" href="{{Route('dashboard.reports')}}" >
                                         Бухгалтерия
                                     </a>
-                                    <a class="dropdown-item" href="{{Route('wallet.stages')}}" >
+                                    <a class="dropdown-item" href="{{Route('dashboard.stages')}}" >
                                         Токенсейл
                                     </a>
-                                    <a class="dropdown-item" href="{{Route('wallet.hft')}}" >
+                                    <a class="dropdown-item" href="{{Route('dashboard.hft')}}" >
                                         HFT
                                     </a>
-                                    <a class="dropdown-item" href="{{Route('wallet.currencies')}}" >
+                                    <a class="dropdown-item" href="{{Route('dashboard.currencies')}}" >
                                         Валюты
                                     </a>
-                                    <a class="dropdown-item" href="{{Route('wallet.payments')}}" >
+                                    <a class="dropdown-item" href="{{Route('dashboard.payments')}}" >
                                         Платежные системы / сети
                                     </a>
-                                    <a class="dropdown-item" href="{{Route('wallet.tags')}}" >
+                                    <a class="dropdown-item" href="{{Route('dashboard.tags')}}" >
                                         Редактор тегов
                                     </a>
-                                    <a class="dropdown-item" href="{{Route('wallet.transfer')}}" >
+                                    <a class="dropdown-item" href="{{Route('dashboard.transfer')}}" >
                                         Перевод средств
                                     </a>
-                                    <a class="dropdown-item" href="{{Route('wallet.settings')}}" >
+                                    <a class="dropdown-item" href="{{Route('dashboard.settings')}}" >
                                         Настройки системы
                                     </a>
                                 @endif
                                 <hr class="dropdown-divider">
                                 @if (\Auth::user()->isGateManager())
-                                    <a class="dropdown-item" href="{{Route('wallet.users')}}" >
+                                    <a class="dropdown-item" href="{{Route('dashboard.users')}}" >
                                         Пользователи
                                     </a>
-                                    <a class="dropdown-item" href="{{Route('wallet.orders')}}" >
+                                    <a class="dropdown-item" href="{{Route('dashboard.orders')}}" >
                                         Заявки
                                     </a>
-                                    <a class="dropdown-item" href="{{Route('wallet.gates')}}" >
+                                    <a class="dropdown-item" href="{{Route('dashboard.gates')}}" >
                                         Шлюзы
                                     </a>
                                 @endif
