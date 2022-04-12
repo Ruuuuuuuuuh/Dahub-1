@@ -520,8 +520,10 @@ class ApiController extends Controller
     {
         if ($this->user->isGate()) {
             $order = Order::where('id', $request->input('id'))->firstOrFail();
-            if ($order->status == 'created' && $this->user->getWallet($order->currency.'_gate')->balanceFloat >= $order->amount) {
-
+            $error = false;
+            if ($order->destination == 'withdraw' && $this->user->getWallet($order->currency.'_gate')->balanceFloat < $order->amount) $error = true;
+            if ($order->status != 'created') $error = true;
+            if (!$error) {
                 if ($order->destination == 'deposit' || $order->destination == 'TokenSale') {
                     $order->payment_details = $request->input('payment_details');
                 }
@@ -538,8 +540,9 @@ class ApiController extends Controller
                 OrderAccepted::dispatch($order);
                 return $order->id;
             }
+            else return response('У вас нет прав для этого действия', 404);
         }
-        else abort(404);
+        else return response('У вас нет прав для этого действия', 404);
     }
 
 
