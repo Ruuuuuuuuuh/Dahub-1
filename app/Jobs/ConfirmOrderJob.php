@@ -10,9 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
-use NotificationChannels\Telegram\Exceptions\CouldNotSendNotification;
-use Telegram\Bot\Api;
 
 class ConfirmOrderJob implements ShouldQueue
 {
@@ -68,21 +65,8 @@ class ConfirmOrderJob implements ShouldQueue
                 // ConfirmedNotificationsJob
                 dispatch(new ConfirmedNotificationsJob($this->order));
 
-                $systemWallet = System::findOrFail(1);
-                try {
-
-                    $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
-                    $systemWallet->getWallet('TokenSale')->refreshBalance();
-                    $transaction = $systemWallet->transactions()->where('meta', 'like', '%"order_id": ' . $this->order->id . '%')->first();
-
-                    $telegram->sendMessage([
-                        'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
-                        'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>↗️ Sent: </b>' . $this->order->amount . ' ' . $this->order->currency .PHP_EOL.'<b>↙️ Recieved: </b>' . $this->order->dhb_amount . ' DHB' .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid. PHP_EOL.PHP_EOL.'<b>🔥 TokenSale: </b>'. number_format($systemWallet->getWallet('TokenSale')->balanceFloat, 0, '.', ' ') . ' DHB left until the end of stage 1',
-                        'parse_mode' => 'html'
-                    ]);
-                } catch (CouldNotSendNotification $e) {
-                    report ($e);
-                }
+                // ConfirmedNotificationsJob
+                dispatch(new ExplorerMessageJob($this->order));
 
                 // Бонус за успешное выполнение задания
                 $systemWallet->getWallet('DHBFundWallet')->transferFloat( $gate->getWallet('DHB'), $this->order->dhb_amount / 200, array('destination' => 'Бонус за успешное выполнение заявки', 'order_id' => $this->order->id));
