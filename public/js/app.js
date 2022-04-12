@@ -40435,7 +40435,7 @@ var render = function() {
     _vm._v(" "),
     _c("ul", { staticClass: "nav flex-column" }, [
       _c("li", { staticClass: "nav-item" }, [
-        _c("a", { staticClass: "nav-link", attrs: { href: "/" } }, [
+        _c("a", { staticClass: "nav-link", attrs: { href: "/wallet" } }, [
           _c("span", { staticClass: "svg-wrapper" }, [
             _c(
               "svg",
@@ -40658,7 +40658,7 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("li", { staticClass: "nav-item" }, [
-        _c("a", { staticClass: "nav-link", attrs: { href: "/wallet/" } }, [
+        _c("a", { staticClass: "nav-link", attrs: { href: "/dashboard/" } }, [
           _c("span", { staticClass: "svg-wrapper" }, [
             _c(
               "svg",
