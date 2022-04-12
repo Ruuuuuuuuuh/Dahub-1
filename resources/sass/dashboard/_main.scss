@@ -460,6 +460,22 @@ footer {
         }
     }
 }
+
+.balance {
+    .swiper-pagination {
+        bottom: 0px !important;
+    }
+    .swiper-pagination-bullet {
+        background: rgba(255, 255, 255, 0.5);
+    }
+    swiper-pagination-bullet-active {
+        background: rgba(255, 255, 255, 0.7);
+    }
+    .swiper-slide {
+        height: 110px;
+    }
+}
+
 .balance-items {
     max-height: calc(100vh - 400px);
     overflow: auto;

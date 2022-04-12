@@ -106,7 +106,10 @@
                 // Optional parameters
                 direction: 'horizontal',
                 loop: true,
-
+                pagination: {
+                    el: ".swiper-pagination",
+                    dynamicBullets: true,
+                },
                 // And if we need scrollbar
                 scrollbar: {
                     el: '.swiper-scrollbar',
