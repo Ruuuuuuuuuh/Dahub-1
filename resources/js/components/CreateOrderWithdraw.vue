@@ -178,7 +178,7 @@ export default {
 <style lang="scss" scoped>
 
 .modal-enter-active, .modal-leave-active {
-    transition: all .5s;
+    transition: all .2s;
 }
 .modal-enter, .modal-leave-to {
     transform: translateY(100%);

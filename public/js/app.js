@@ -7808,7 +7808,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".modal-enter-active[data-v-cd0f3e7e], .modal-leave-active[data-v-cd0f3e7e] {\n  transition: all 0.5s;\n}\n.modal-enter[data-v-cd0f3e7e], .modal-leave-to[data-v-cd0f3e7e] {\n  transform: translateY(100%);\n}\n.button[data-v-cd0f3e7e] {\n  background: #347AF0;\n  border-radius: 23px;\n  width: 100%;\n  display: block;\n  text-align: center;\n  font-weight: 500;\n  font-size: 18px;\n  line-height: 46px;\n  color: #FFFFFF;\n  margin-top: 20px;\n}\n.button[disabled][data-v-cd0f3e7e] {\n  opacity: 0.5;\n}\n.message[data-v-cd0f3e7e] {\n  text-align: center;\n  padding: 8px;\n  background: #fff;\n  border: 2px #E15063 solid;\n  border-radius: 50px;\n  color: #E15063;\n  margin-top: 12px;\n  font-weight: 600;\n}", ""]);
+exports.push([module.i, ".modal-enter-active[data-v-cd0f3e7e], .modal-leave-active[data-v-cd0f3e7e] {\n  transition: all 0.2s;\n}\n.modal-enter[data-v-cd0f3e7e], .modal-leave-to[data-v-cd0f3e7e] {\n  transform: translateY(100%);\n}\n.button[data-v-cd0f3e7e] {\n  background: #347AF0;\n  border-radius: 23px;\n  width: 100%;\n  display: block;\n  text-align: center;\n  font-weight: 500;\n  font-size: 18px;\n  line-height: 46px;\n  color: #FFFFFF;\n  margin-top: 20px;\n}\n.button[disabled][data-v-cd0f3e7e] {\n  opacity: 0.5;\n}\n.message[data-v-cd0f3e7e] {\n  text-align: center;\n  padding: 8px;\n  background: #fff;\n  border: 2px #E15063 solid;\n  border-radius: 50px;\n  color: #E15063;\n  margin-top: 12px;\n  font-weight: 600;\n}", ""]);
 
 // exports
 
