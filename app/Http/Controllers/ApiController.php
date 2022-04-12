@@ -569,7 +569,7 @@ class ApiController extends Controller
                 }
             }
         }
-        else abort(404);
+        else return response('У вас нет прав для этого действия', 404);
     }
 
 
@@ -595,7 +595,7 @@ class ApiController extends Controller
                 return $order->id;
             }
         }
-        else abort(404);
+        else return response('У вас нет прав для этого действия', 404);
     }
 
     /**
