@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed $currency
  * @property mixed|string $status
  * @property mixed $payment
+ * @property mixed $comment
  */
 class Order extends Model
 {
