@@ -97,7 +97,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @if ($order->status == 'created')
+                                        @if ($order->status != 'completed')
                                             <a data-id="{{$order->id}}" class="btn btn-danger order-decline">Отменить заявку</a>
                                         @endif
                                     </td>
