@@ -7903,7 +7903,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.modal-enter-active[data-v-4a4a0da4], .modal-leave-active[data-v-4a4a0da4] {\r\n    transition: opacity .5s;\n}\n.modal-enter[data-v-4a4a0da4], .modal-leave-to[data-v-4a4a0da4] {\r\n    opacity: 0;\n}\r\n", ""]);
+exports.push([module.i, "\n.modal-enter-active[data-v-4a4a0da4], .modal-leave-active[data-v-4a4a0da4] {\n    transition: opacity .5s;\n}\n.modal-enter[data-v-4a4a0da4], .modal-leave-to[data-v-4a4a0da4] {\n    opacity: 0;\n}\n", ""]);
 
 // exports
 
@@ -7922,7 +7922,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.modal-enter-active[data-v-4f24962e], .modal-leave-active[data-v-4f24962e] {\r\n    transition: opacity .5s;\n}\n.modal-enter[data-v-4f24962e], .modal-leave-to[data-v-4f24962e] {\r\n    opacity: 0;\n}\r\n", ""]);
+exports.push([module.i, "\n.modal-enter-active[data-v-4f24962e], .modal-leave-active[data-v-4f24962e] {\n    transition: opacity .5s;\n}\n.modal-enter[data-v-4f24962e], .modal-leave-to[data-v-4f24962e] {\n    opacity: 0;\n}\n", ""]);
 
 // exports
 
@@ -40190,17 +40190,17 @@ var render = function() {
             _c("div", { staticClass: "balance-item-currency-text" }, [
               _c("div", { staticClass: "balance-item-currency-title" }, [
                 _vm._v(
-                  "\r\n                        " +
+                  "\n                        " +
                     _vm._s(_vm.title) +
-                    "\r\n                    "
+                    "\n                    "
                 )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "balance-item-currency-description" }, [
                 _vm._v(
-                  "\r\n                        " +
+                  "\n                        " +
                     _vm._s(_vm.description) +
-                    "\r\n                    "
+                    "\n                    "
                 )
               ])
             ])
@@ -40210,14 +40210,14 @@ var render = function() {
         _c("div", { staticClass: "balance-item-amount" }, [
           _c("div", { staticClass: "balance-item-amount-title" }, [
             _vm._v(
-              "\r\n                    " +
+              "\n                    " +
                 _vm._s(_vm.balance) +
-                "\r\n                "
+                "\n                "
             )
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "balance-item-amount-description" }, [
-            _vm._v("\r\n                    $ 00\r\n                ")
+            _vm._v("\n                    $ 00\n                ")
           ])
         ])
       ]
@@ -61912,9 +61912,9 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/www-root/data/dahub_test/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /var/www/www-root/data/dahub_test/resources/sass/app.scss */"./resources/sass/app.scss");
-module.exports = __webpack_require__(/*! /var/www/www-root/data/dahub_test/resources/sass/dashboard.scss */"./resources/sass/dashboard.scss");
+__webpack_require__(/*! /Users/al/project-web/Dahub/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /Users/al/project-web/Dahub/resources/sass/app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! /Users/al/project-web/Dahub/resources/sass/dashboard.scss */"./resources/sass/dashboard.scss");
 
 
 /***/ })
