@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Http;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
-class CheckTonTransactionStatus implements ShouldQueue
+class CheckTonTransactionStatusJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -62,7 +62,7 @@ class CheckTonTransactionStatus implements ShouldQueue
                         $utime = $result['utime'];
                         if ($utime > $this->order->created_at->timestamp) {
                             if ($this->order->amount <= $amount && $this->order->status != 'completed') {
-                                dispatch(new ConfirmOrder($this->order));
+                                dispatch(new ConfirmOrderJob($this->order));
                             }
                             else $error = true;
                         }

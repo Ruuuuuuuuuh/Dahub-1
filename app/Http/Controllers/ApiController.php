@@ -5,23 +5,18 @@ namespace App\Http\Controllers;
 use App\Events\OrderAccepted;
 use App\Events\OrderConfirmed;
 use App\Helpers\Rate;
-use App\Jobs\CheckTonTransactionStatus;
+use App\Jobs\CheckTonTransactionStatusJob;
 use App\Models\Currency;
 use App\Models\Message;
 use App\Models\Payment;
 use App\Models\PaymentDetail;
 use App\Models\System;
 use App\Models\UserConfig;
-use App\Notifications\AcceptDepositOrder;
 use App\Notifications\AcceptSendingByGate;
 use App\Notifications\AcceptSendingByUser;
-use App\Notifications\AcceptWithdrawOrder;
-use App\Notifications\AdminNotifications;
-use App\Notifications\ConfirmOrder;
 use App\Notifications\OrderAssignee;
 use App\Notifications\OrderCreate;
 use App\Notifications\OrderDecline;
-use App\Notifications\ReferralBonusPay;
 use Bavix\Wallet\Models\Transaction;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -33,7 +28,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
-use Telegram\Bot\FileUpload\InputFile;
 
 class ApiController extends Controller
 {
@@ -134,7 +128,7 @@ class ApiController extends Controller
             ]
         );
 
-        if (!($this->user->hasActiveOrder() && $request->input('destination') != 'TokenSale') || !($this->user->hasActiveTokenSaleOrder() && $request->input('destination') == 'TokenSale')) {
+        if (!($this->user->hasActiveOrder() && $request->input('destination') != 'TokenSale') && !($this->user->hasActiveTokenSaleOrder() && $request->input('destination') == 'TokenSale')) {
             $error = false;
 
             $destination    = $request->input('destination');
@@ -533,7 +527,7 @@ class ApiController extends Controller
 
                 if ($order->currency == 'TON') {
                     // Вызов задания CheckTonTransactionStatus
-                    dispatch(new CheckTonTransactionStatus($order));
+                    dispatch(new CheckTonTransactionStatusJob($order));
                 }
 
                 // Вызов события OrderAccepted
@@ -610,7 +604,7 @@ class ApiController extends Controller
 
             if ($order->gate == $this->user->uid) {
                 OrderConfirmed::dispatch($order);
-                sleep(5);
+                sleep(2);
                 return $order->id;
             }
             else response(['error' => true, 'message' => 'У вас нет прав на выполнение этой заявки'], 404, $this->headers, JSON_UNESCAPED_UNICODE);

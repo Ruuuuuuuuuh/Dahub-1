@@ -11,7 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use NotificationChannels\Telegram\Exceptions\CouldNotSendNotification;
 
-class PayReferral implements ShouldQueue
+class PayReferralJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

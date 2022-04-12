@@ -2,15 +2,11 @@
 
 namespace App\Providers;
 
-use App\Notifications\ConfirmOrder;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 use App\Events\OrderAccepted;
 use App\Events\OrderConfirmed;
-use App\Listeners\SendAcceptedNotifications;
+use App\Listeners\AcceptedNotificationsListener;
 use App\Listeners\ConfirmOrderListener;
-use App\Listeners\SendConfirmedNotifications;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -25,11 +21,10 @@ class EventServiceProvider extends ServiceProvider
             'SocialiteProviders\\Telegram\\TelegramExtendSocialite@handle',
         ],
         OrderAccepted::class => [
-            SendAcceptedNotifications::class,
+            AcceptedNotificationsListener::class,
         ],
         OrderConfirmed::class => [
             ConfirmOrderListener::class,
-            SendConfirmedNotifications::class
         ],
     ];
 

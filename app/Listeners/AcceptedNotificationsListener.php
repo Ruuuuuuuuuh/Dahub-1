@@ -12,7 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
-class SendAcceptedNotifications implements ShouldQueue
+class AcceptedNotificationsListener implements ShouldQueue
 {
     use InteractsWithQueue;
 

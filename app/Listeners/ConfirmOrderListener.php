@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\OrderConfirmed;
-use App\Jobs\ConfirmOrder;
+use App\Jobs\ConfirmOrderJob;
 
 class ConfirmOrderListener
 {
@@ -25,6 +25,6 @@ class ConfirmOrderListener
      */
     public function handle(OrderConfirmed $event)
     {
-        dispatch(new ConfirmOrder($event->order));
+        dispatch(new ConfirmOrderJob($event->order));
     }
 }
