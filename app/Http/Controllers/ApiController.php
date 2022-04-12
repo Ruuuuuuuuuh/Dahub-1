@@ -525,13 +525,13 @@ class ApiController extends Controller
                 $order->status = 'accepted';
                 $order->save();
 
+                // Вызов события OrderAccepted
+                OrderAccepted::dispatch($order);
+
                 if ($order->currency == 'TON') {
                     // Вызов задания CheckTonTransactionStatus
                     dispatch(new CheckTonTransactionStatusJob($order));
                 }
-
-                // Вызов события OrderAccepted
-                OrderAccepted::dispatch($order);
                 return $order->id;
             }
             else return response('У вас нет прав для этого действия', 404);
