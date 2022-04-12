@@ -584,7 +584,6 @@ class ApiController extends Controller
         if ($this->user->uid == $order->user_uid) {
             if ($order->status == 'accepted') {
                 $order->status = 'pending';
-                $order->comment = $request->input('comment');
                 $gate = $order->gate()->first();
                 $order->save();
                 try {

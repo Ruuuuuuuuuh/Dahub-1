@@ -73,7 +73,6 @@
                                     <a onclick="acceptSending('{{$order->id}}');" class="button button-blue button-accept">Переведено, далее...</a>
                                     <a onclick="decline('{{$order->id}}');" style="" class="button button-danger">Отменить заявку</a>
                                 </div>
-                                <p class="mt-3">* для подтверждения отправки средств приготовьте последние 4 цифры счета / номера карты</p>
 
                             </div>
                             @elseif ($order->status == 'pending')
@@ -157,25 +156,21 @@
 
         function acceptSending(id) {
             let _token = $('meta[name="csrf-token"]').attr('content');
-            let comment = prompt('Чтобы подтвердить отправление средств, ведите последние 4 цифры номера карты или счета, с которого были отправлены средства')
-            if (comment) {
-                $.ajax({
-                    url: "/api/orders/acceptSendingByUser",
-                    type:"POST",
-                    data:{
-                        _token: _token,
-                        id: id,
-                        comment: comment
-                    },
-                    error: function () {
-                        alert('При попытке подтвердить заявку произошла ошибка')
-                    },
-                    success:function(response){
-                        alert('Вы успешно подтвердили отправку средств')
-                        window.location.href = '/dashboard/orders/' + id
-                    },
-                });
-            }
+            $.ajax({
+                url: "/api/orders/acceptSendingByUser",
+                type:"POST",
+                data:{
+                    _token: _token,
+                    id: id,
+                },
+                error: function () {
+                    alert('При попытке подтвердить заявку произошла ошибка')
+                },
+                success:function(response){
+                    alert('Вы успешно подтвердили отправку средств')
+                    window.location.href = '/dashboard/orders/' + id
+                },
+            });
         }
 
         $(document).ready(function(){
