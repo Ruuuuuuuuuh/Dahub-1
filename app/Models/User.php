@@ -28,6 +28,7 @@ use App\Models\Currency as Currency;
  * @property mixed $roles
  * @method static findOrFail($id)
  * @method static where(string $string, string $string1)
+ * @method static create(array $array)
  */
 
 class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
