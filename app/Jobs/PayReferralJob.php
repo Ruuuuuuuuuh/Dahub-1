@@ -49,7 +49,7 @@ class PayReferralJob implements ShouldQueue
             $this->user->getWallet($this->currency)->refreshBalance();
 
             try {
-                $this->user->notify(new ReferralBonusPay(array('amount' => $refAmount, 'currency' => $this->currency)));
+                $this->user->notify(new \App\Notifications\ReferralBonusPay(array('amount' => $refAmount, 'currency' => $this->currency)));
             } catch (CouldNotSendNotification $e) {
                 report ($e);
             }

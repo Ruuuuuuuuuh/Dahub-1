@@ -57,7 +57,7 @@ class ConfirmedNotificationsJob implements ShouldQueue
         if ($this->order->status == 'completed') {
 
             try {
-                $owner->notify(new ConfirmOrder($this->order));
+                $owner->notify(new \App\Notifications\ConfirmOrder($this->order));
             } catch (CouldNotSendNotification $e) {
                 report ($e);
             }
@@ -69,7 +69,7 @@ class ConfirmedNotificationsJob implements ShouldQueue
                         $telegram = new Api(env('TELEGRAM_BOT_TOKEN'));
                         $telegram->sendPhoto([
                             'chat_id' => $owner->uid,
-                            'photo' => InputFile::create("https://test.dahub.app/img/welcome.png"),
+                            'photo' => InputFile::create(env('APP_URL')."/img/welcome.png"),
                             'caption' =>
                                 '<b>На связи команда проекта DaHub!</b>'
                                 . PHP_EOL .
