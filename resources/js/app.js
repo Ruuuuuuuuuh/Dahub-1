@@ -10,8 +10,6 @@ import VueDraggableResizable from 'vue-draggable-resizable'
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
 Vue.component('payments-list', require('./components/PaymentsList.vue').default);
 Vue.component('payments-screen', require('./screens/PaymentsScreen.vue').default);
-Vue.component('the-footer', require('./components/TheFooter.vue').default);
-Vue.component('payment-button', require('./components/PaymentButton.vue').default);
 Vue.component('createorderwithdraw', require('./components/CreateOrderWithdraw.vue').default);
 Vue.component('timeleft', require('./components/timeleft.vue').default);
 Vue.component('app', require('./components/App').default);

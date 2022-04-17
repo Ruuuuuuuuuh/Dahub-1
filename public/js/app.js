@@ -60862,8 +60862,6 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('vue-draggable-resizable', vue_draggable_resizable__WEBPACK_IMPORTED_MODULE_6___default.a);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('payments-list', __webpack_require__(/*! ./components/PaymentsList.vue */ "./resources/js/components/PaymentsList.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('payments-screen', __webpack_require__(/*! ./screens/PaymentsScreen.vue */ "./resources/js/screens/PaymentsScreen.vue")["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('the-footer', __webpack_require__(/*! ./components/TheFooter.vue */ "./resources/js/components/TheFooter.vue")["default"]);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('payment-button', __webpack_require__(/*! ./components/PaymentButton.vue */ "./resources/js/components/PaymentButton.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('createorderwithdraw', __webpack_require__(/*! ./components/CreateOrderWithdraw.vue */ "./resources/js/components/CreateOrderWithdraw.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('timeleft', __webpack_require__(/*! ./components/timeleft.vue */ "./resources/js/components/timeleft.vue")["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.component('app', __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue")["default"]);
@@ -61748,17 +61746,6 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./resources/js/components/PaymentButton.vue":
-/*!***************************************************!*\
-  !*** ./resources/js/components/PaymentButton.vue ***!
-  \***************************************************/
-/*! exports provided: default */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed (from ./node_modules/vue-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/Users/al/project-web/Dahub/resources/js/components/PaymentButton.vue'");
-
-/***/ }),
-
 /***/ "./resources/js/components/PaymentItem.vue":
 /*!*************************************************!*\
   !*** ./resources/js/components/PaymentItem.vue ***!
@@ -62068,17 +62055,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_PaymentsList_vue_vue_type_template_id_19cd9bd6_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
-
-/***/ }),
-
-/***/ "./resources/js/components/TheFooter.vue":
-/*!***********************************************!*\
-  !*** ./resources/js/components/TheFooter.vue ***!
-  \***********************************************/
-/*! exports provided: default */
-/***/ (function(module, exports) {
-
-throw new Error("Module build failed (from ./node_modules/vue-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/Users/al/project-web/Dahub/resources/js/components/TheFooter.vue'");
 
 /***/ }),
 
