@@ -48,7 +48,7 @@ export default {
 
     .slideUp-enter-active,
     .slideUp-leave-active {
-        transition: transform .4s cubic-bezier(0.76, 0, 0.24, 1);
+        transition: transform .2s cubic-bezier(0.76, 0, 0.24, 1);
     }
     .slideUp-enter, .slideUp-leave-to {
         transform: translateY(100%);
