@@ -244,7 +244,7 @@ input[type='number']::-webkit-inner-spin-button {
 }
 a.button {
     background: #EDF1F9;
-    border-radius: 23px;
+    border-radius: 15px;
     width: 100%;
     display: block;
     text-align: center;
@@ -255,7 +255,7 @@ a.button {
     margin-top: 20px;
 }
 a.button-blue {
-    background: #347AF0;
+    background: linear-gradient(87.76deg, #85F362 -53.4%, #02AAFF 67.87%);
     color: #FFFFFF!important;
 }
 a.button-red {
@@ -814,15 +814,14 @@ input[type="button"] {
         line-height: 44px;
         text-align: center;
         color: #fff;
-        background: #347AF0;
+        background: linear-gradient(87.76deg, #85F362 -53.4%, #02AAFF 67.87%);
+        border: none;
         display: block;
-        border: 1px solid #347AF0;
         box-sizing: border-box;
-        border-radius: 23px;
+        border-radius: 15px;
         transition: .2s ease-in-out all;
         &.disabled {
-            color:#B5BBC9;
-            border-color:#B5BBC9;
+            opacity: 0.5;
         }
     }
 }
