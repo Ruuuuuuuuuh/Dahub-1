@@ -1,43 +1,73 @@
 <template>
-<transition appear name="modal">
-<div>
-    <div class="modal" style="display:block;">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content ">
-                <div class="modal-body">
-                    <button type="button" class="close" @click="$emit('close')" aria-label="Close">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="2.82812" width="40" height="4" rx="2" transform="rotate(45 2.82812 0)" fill="white"/>
-                            <rect width="40" height="4" rx="2" transform="matrix(-0.707107 0.707107 0.707107 0.707107 28.2842 0)" fill="white"/>
-                        </svg>
-                    </button>
-                    <h4>Редактировать {{checkCrypto ? 'кошелек': 'карту'}}</h4>
-                    <form class="payment-details-form" @submit.prevent="updateFieldValue">
+    <transition appear name="modal-slide">
+        <div class="blur">
+            <div class="modal-slide">
+                <div class="modal-slide__header">
+                    <a href="#" class="cancel" @click.prevent="$emit('close')"
+                        >Отменить</a
+                    >
+                    <a href="#" ref="save" class="save" @click.prevent="updateFieldValue"
+                        >Сохранить</a
+                    >
+                </div>
+                <div class="modal-slide__content">
+                    <h2 class="modal-slide__title">
+                        Редактировать {{ checkCrypto ? "кошелек" : "карту" }}
+                    </h2>
+                    <form
+                        class="payment-details-form"
+                        @submit.prevent="updateFieldValue"
+                    >
                         <div v-if="!checkCrypto">
-                            <small class="form-text text-muted">Держатель карты</small>
                             <div class="form-group">
-                                <input type="text" autocomplete="off" class="form-control" name="holder" v-model="holder" @input="checkLenghtInput" placeholder="Держатель карты">
+                                <input
+                                    type="text"
+                                    autocomplete="off"
+                                    class="form-control"
+                                    name="holder"
+                                    v-model="holder"
+                                    @input="checkLenghtInput"
+                                    placeholder="Держатель карты"
+                                />
                             </div>
                         </div>
                         <div v-if="checkCrypto">
-                            <small class="form-text text-muted"> Название кошелька</small>
                             <div class="form-group">
-                                <input type="text" autocomplete="off" class="form-control" name="title" @input="checkLenghtInput" v-model="title" :placeholder="checkCrypto ? 'Название кошелька': 'Название карты'">
+                                <input
+                                    type="text"
+                                    autocomplete="off"
+                                    class="form-control"
+                                    name="title"
+                                    @input="checkLenghtInput"
+                                    v-model="title"
+                                    :placeholder="
+                                        checkCrypto
+                                            ? 'Название кошелька'
+                                            : 'Название карты'
+                                    "
+                                />
                             </div>
                         </div>
-                        <small class="form-text text-muted"> {{checkCrypto ? 'Введите адрес кошелька': 'Введите номер карты'}}</small>
                         <div class="form-group">
-                            <input type="text" autocomplete="off" class="form-control" v-model="address" @input="checkLenghtInput"  name="address" :placeholder="checkCrypto ? 'Адрес кошелька*': 'Номер карты*'">
+                            <input
+                                type="text"
+                                autocomplete="off"
+                                class="form-control"
+                                v-model="address"
+                                @input="checkLenghtInput"
+                                name="address"
+                                :placeholder="
+                                    checkCrypto
+                                        ? 'Адрес кошелька*'
+                                        : 'Номер карты*'
+                                "
+                            />
                         </div>
-                        <button ref="button" class="btn btn-primary confirm-modal"  >Изменить</button>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal-backdrop fade show" @click="$emit('close')"></div>
-</div>
-</transition>
+    </transition>
 </template>
 
 <script>
@@ -46,40 +76,105 @@ export default {
         vTitle: String,
         vAddress: String,
         vHolder: String,
-        checkCrypto : Number,
+        checkCrypto: Number
     },
     data() {
         return {
             title: this.vTitle,
             address: this.vAddress,
             holder: this.vHolder
-        }
+        };
     },
     methods: {
         updateFieldValue() {
-            this.$emit('send', {
+            this.$emit("send", {
                 title: this.title,
                 address: this.address,
                 holder: this.holder
-                })
+            });
         },
         checkLenghtInput(e) {
-            if(this.address && this.title && this.checkCrypto || this.address && this.holder && !this.checkCrypto) {
-                this.$refs.button.removeAttribute('disabled')
+            if (
+                (this.address && this.title && this.checkCrypto) ||
+                (this.address && this.holder && !this.checkCrypto)
+            ) {
+                this.$refs.save.style.display = "block";
             } else {
-                this.$refs.button.setAttribute('disabled', 'disabled')
+                this.$refs.save.style.display = "none";
             }
         }
-    },
-}
-
+    }
+};
 </script>
 
-<style scoped>
-.modal-enter-active, .modal-leave-active {
-    transition: opacity .5s;
+<style>
+.modal-slide form {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
 }
-.modal-enter, .modal-leave-to {
-    opacity: 0;
+
+.modal-slide input {
+    background: #ffffff;
+    border-radius: 15px;
+    border: none;
+    box-shadow: none;
+    margin-bottom: 0;
+}
+.blur {
+
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    right: 0;
+    display: flex;
+    flex-direction: column-reverse;
+}
+.modal-slide {
+    height: 85%;
+    background: #f2f4fa;
+    border-radius: 20px 20px 0px 0px;
+
+    padding: 24px;
+}
+.modal-slide__header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-slide__title {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 24px;
+}
+.modal-slide .save,
+.modal-slide .cancel {
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+
+    opacity: 0.9;
+}
+.modal-slide__content .cancel {
+    background: linear-gradient(90.88deg, #ffae34 -29.19%, #ff3998 94.23%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.modal-slide__content .save {
+    background: linear-gradient(85.24deg, #85f362 -116.44%, #02aaff 68.46%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.modal-slide-enter-active,
+.modal-slide-leave-active {
+    transition: transform 0.2s ease-in-out;
+}
+.modal-slide-enter, .modal-slide-leave-to {
+    transform: translateY(100%);
 }
 </style>

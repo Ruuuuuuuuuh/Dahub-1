@@ -10011,6 +10011,10 @@ body {
   touch-action: pan-x pan-y;
 }
 
+*::-webkit-scrollbar {
+  width: 0;
+}
+
 .app {
   max-width: 480px;
   width: 100%;
@@ -10673,13 +10677,13 @@ section.screen .action-btn {
   display: flex;
 }
 section.screen .action-btn .icon {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   border-radius: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 4px;
+  margin-right: 12px;
 }
 section.screen .action-btn .icon:last-of-type {
   margin-right: 0px;
@@ -10961,7 +10965,7 @@ header.header .balance .total-amount .total-currency {
   margin: 0;
 }
 header.header .balance .balance-items {
-  margin-top: 30px;
+  margin-top: 12px;
 }
 header.header .balance .balance-items .balance-item {
   margin: 15px 0;
