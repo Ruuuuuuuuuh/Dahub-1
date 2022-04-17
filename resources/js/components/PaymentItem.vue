@@ -21,9 +21,9 @@
 
 
         <div class="payment-details" @click="$emit('click')">
-            <div class="payment">{{payment}}</div>
+            <div v-if="!checkCrypto" class="payment">{{payment}}</div>
+            <span class="address" :class="checkCrypto ? 'crypto-adress' : 'card-adress'">{{address}}</span>
             <div class="name">{{checkCrypto ? title : holder}}</div>
-            <span class="address">{{address}}</span>
         </div>
         <transition appear name="fade">
             <div v-if="editShow" class="action-btn">
@@ -86,11 +86,22 @@ export default {
     .payment-details-icon {
         flex-shrink: 0;
     }
-    .payment-details .payment {
-        font-size: 9px;
-        padding: 1px;
+    .payment-details .payment ,.payment-details .name  {
+        font-weight: 400 !important;
+        font-size: 12px;
+        color: #485068;
     }
-
+    .payment-details  .card-adress {
+        font-weight: 600;
+        font-size: 16px !important;
+        color: #0D1F3C;
+        margin: 3px 0px;
+    }
+    .payment-details .crypto-adress {
+        font-weight: 600;
+        font-size: 10px;
+        color: #0D1F3C;
+    }
     .payment-item svg {
         fill: #858EA6;
     }
