@@ -33,6 +33,7 @@
     </main>
     @include('dashboard.components.footer')
     @include('dashboard.components.createorder')
+    @include('dashboard.components.gate.payments-screen')
     @if ($mode == 'pro')
         @include('dashboard.components.gate.accept_order')
     @else
@@ -45,6 +46,10 @@
 
         function createOrderScreenOpen() {
             $('#create-order').toggleClass('opened');
+        }
+
+        function PaymentsScreenOpen() {
+            $('#payments-screen').toggleClass('opened');
         }
         $(function() {
             window.currencies = {
