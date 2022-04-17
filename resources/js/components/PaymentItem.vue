@@ -2,13 +2,13 @@
     <a class="payment-item d-flex align-items-center justify-content-between" >
 
         <svg v-if="checkCrypto" class="payment-details-icon" width="26" height="17" viewBox="0 0 26 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="21" height="17" rx="3" fill="#858EA6"/>
-            <path d="M26 4C26 2.34315 24.6569 1 23 1V16C24.6569 16 26 14.6569 26 13V4Z" fill="#858EA6"/>
+            <rect width="21" height="17" rx="3" />
+            <path d="M26 4C26 2.34315 24.6569 1 23 1V16C24.6569 16 26 14.6569 26 13V4Z" />
             <circle cx="16.5" cy="8.5" r="1.5" fill="white"/>
         </svg>
 
         <svg v-else-if="!checkCrypto"  class="payment-details-icon" width="26" height="17" viewBox="0 0 26 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="26" height="17" rx="3" fill="#858EA6"/>
+        <rect width="26" height="17" rx="3"/>
         <rect y="10" width="26" height="3" fill="white"/>
         </svg>
 
@@ -91,6 +91,12 @@ export default {
         padding: 1px;
     }
 
+    .payment-item svg {
+        fill: #858EA6;
+    }
+    .payment-item.active svg{
+        fill: #02AAFF;
+    }
     .fade-enter-active,
     .fade-leave-active {
     transition: opacity 0.2s ease;
