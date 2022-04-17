@@ -261,11 +261,11 @@
         max-width: 75vw;
     }
     .wallet-link span {
-        white-space: nowrap;
+        white-space: pre-wrap;
         overflow: hidden;
         text-overflow: ellipsis;
         max-width: 94%;
-        line-height: 14px;
+        line-height: 18px;
     }
     .deposit-section .nav-item a {
         font-size: 10px;
