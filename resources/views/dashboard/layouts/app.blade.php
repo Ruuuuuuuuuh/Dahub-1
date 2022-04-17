@@ -19,6 +19,7 @@
 
     <script>
         window.user = {!! Auth::User()->toJson(JSON_PRETTY_PRINT) !!}
+        window.payments = {!! \App\Models\Payment::all()->toJson(JSON_PRETTY_PRINT) !!}
         window.onload = function () {
             if (screen.width < 450) {
                 let mvp = document.getElementById('viewport');
@@ -37,7 +38,6 @@
 
 <body>
 <div  class="app" id="app-vue" data-mode="{{$mode}}" data-page="{{Route::current()->getName()}}">
-
     @include('dashboard.components.header')
     @include('dashboard.components.menu')
     @yield('content')
