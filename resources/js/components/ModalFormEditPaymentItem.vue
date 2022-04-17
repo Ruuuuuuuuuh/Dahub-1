@@ -120,7 +120,16 @@ export default {
     border: none;
     box-shadow: none;
     margin-bottom: 0;
+    font-size: 14px;
 }
+.modal-slide select {
+    font-size: 14px;
+}
+
+.modal-slide input::placeholder {
+    font-size: 14px;
+}
+
 .blur {
 
     position: absolute;
@@ -148,6 +157,7 @@ export default {
     text-align: center;
     margin-top: 50px;
     margin-bottom: 24px;
+    font-size: 18px;
 }
 .modal-slide .save,
 .modal-slide .cancel {

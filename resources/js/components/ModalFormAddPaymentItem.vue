@@ -91,6 +91,7 @@ button {
     font-weight: 600;
     font-size: 18px;
     margin-top: 1rem;
+    line-height: 1;
 }
 .form-select {
     width: 100%;
@@ -100,7 +101,7 @@ button {
     border: none;
     box-shadow: none;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 14px;
     line-height: 24px;
     color: #0D1F3C;
     padding: 0 25px;
