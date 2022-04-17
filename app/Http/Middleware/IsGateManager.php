@@ -16,10 +16,12 @@ class IsGateManager
      */
     public function handle(Request $request, Closure $next)
     {
-        if (\Auth::user()->roles == 'admin' || \Auth::user()->roles == 'gate_manager') {
-            return $next($request);
+        if (\Auth::check()) {
+            if (\Auth::user()->roles == 'admin' || \Auth::user()->roles == 'gate_manager') {
+                return $next($request);
+            }
         }
 
-        return redirect('home');
+        return redirect('/');
     }
 }

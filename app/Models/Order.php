@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static findOrFail($id)
  * @method static orderBy(string $string, string $string1)
  * @method static firstOrFail($id)
+ * @method static find(\Illuminate\Routing\Route|object|string|null $route)
  * @property mixed $id
  * @property mixed $payment_details
  * @property mixed $user_uid
