@@ -13,6 +13,10 @@ html {
 body {
     touch-action: pan-x pan-y;
 }
+
+*::-webkit-scrollbar {
+    width: 0;
+}
 .app {
     max-width:480px;
     width:100%;
@@ -650,13 +654,13 @@ section.screen {
     .action-btn {
         display: flex;
         .icon {
-            width: 30px;
-            height: 30px;
+            width: 34px;
+            height: 34px;
             border-radius: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-right: 4px;
+            margin-right: 12px;
             &:last-of-type {
                 margin-right: 0px;
             }
