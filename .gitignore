@@ -15,4 +15,4 @@ composer.lock
 /.idea/
 /public/js/card-info-master/
 /resources/.vscode/
-horizon.log
+*.log
