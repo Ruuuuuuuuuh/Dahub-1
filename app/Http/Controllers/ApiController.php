@@ -315,6 +315,22 @@ class ApiController extends Controller
                     report ($e);
                 }
 
+                $message = Message::where('order_id', $order->id)->first();
+                if ($message) {
+                    try {
+                        $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                        $telegram->editMessageText([
+                            'chat_id' => $message->chat_id,
+                            'message_id' => $message->message_id,
+                            'text' => $message->message . PHP_EOL . '❌ <b>Заявка отменена пользователем</b>',
+                            'parse_mode' => 'html',
+                            'reply_markup' => NULL
+                        ]);
+                    } catch (TelegramSDKException $e) {
+                        report ($e);
+                    }
+                }
+
                 $order->forceDelete();
                 return $order->id;
             }
@@ -671,6 +687,22 @@ class ApiController extends Controller
                 $owner->notify(new OrderDecline($order));
             } catch (CouldNotSendNotification $e) {
                 report ($e);
+            }
+
+            $message = Message::where('order_id', $order->id)->first();
+            if ($message) {
+                try {
+                    $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                    $telegram->editMessageText([
+                        'chat_id' => $message->chat_id,
+                        'message_id' => $message->message_id,
+                        'text' => $message->message . PHP_EOL . '❌ <b>Заявка отменена шлюзом</b>',
+                        'parse_mode' => 'html',
+                        'reply_markup' => NULL
+                    ]);
+                } catch (TelegramSDKException $e) {
+                    report ($e);
+                }
             }
 
             $order->forceDelete();

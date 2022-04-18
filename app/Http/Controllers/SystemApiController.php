@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Rate;
 use App\Models\Currency;
+use App\Models\Message;
 use App\Models\Payment;
 use App\Models\System;
 use App\Models\Tag;
@@ -360,13 +361,28 @@ class SystemApiController extends Controller
         $user = User::where('uid', $order->user_uid)->first();
 
         // Send message via telegram
-        if (config('notifications'))
+        try {
+            $user->notify(new OrderDecline($order));
+        }
+        catch (CouldNotSendNotification $e) {
+            report ($e);
+        }
+
+        $message = Message::where('order_id', $order->id)->first();
+        if ($message) {
             try {
-                $user->notify(new OrderDecline($order));
-            }
-            catch (CouldNotSendNotification $e) {
+                $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                $telegram->editMessageText([
+                    'chat_id' => $message->chat_id,
+                    'message_id' => $message->message_id,
+                    'text' => $message->message . PHP_EOL . '❌ <b>Заявка отменена менеджером шлюзов</b>',
+                    'parse_mode' => 'html',
+                    'reply_markup' => NULL
+                ]);
+            } catch (TelegramSDKException $e) {
                 report ($e);
             }
+        }
 
         $order->forceDelete();
         return $order->id;
