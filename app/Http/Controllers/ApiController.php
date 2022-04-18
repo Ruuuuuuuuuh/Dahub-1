@@ -18,6 +18,7 @@ use App\Notifications\OrderAssignee;
 use App\Notifications\OrderCreate;
 use App\Notifications\OrderDecline;
 use Bavix\Wallet\Models\Transaction;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
@@ -509,6 +510,7 @@ class ApiController extends Controller
      * Подтверждение заявки шлюзом
      * @param Request $request
      * @return void | integer $order->id
+     * @throws Exception
      */
     public function acceptOrderByGate(Request $request)
     {
@@ -522,6 +524,9 @@ class ApiController extends Controller
                     $order->payment_details = $request->input('payment_details');
                 }
                 $order->gate = $this->user->uid;
+                if ($order->currency == 'TON') {
+                    $order->comment = $this->generateUniqueCode();
+                }
                 $order->status = 'accepted';
                 $order->save();
 
@@ -724,13 +729,25 @@ class ApiController extends Controller
         else return response(['error' => true, 'message' => 'Не достаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
     }
 
-
-
-
     public function getVisibleWallets() {
         return json_decode(UserConfig::firstOrCreate(
             ['user_uid' => Auth::user()->uid, 'meta' => 'visible_wallets'],
             ['value' => json_encode(['DHB', 'BTC', 'ETH'])]
         )->value, true);
+    }
+
+    /**
+     * Write code on Method
+     *
+     * @return integer
+     * @throws Exception
+     */
+    public function generateUniqueCode(): int
+    {
+        do {
+            $code = random_int(100000, 999999);
+        } while (Order::where("status", "!=", 'completed')->where('comment', '=', $code)->first());
+
+        return $code;
     }
 }
