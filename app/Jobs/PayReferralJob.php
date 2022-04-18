@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\System;
 use App\Models\User;
 use App\Notifications\ReferralBonusPay;
 use Illuminate\Bus\Queueable;
@@ -42,10 +43,12 @@ class PayReferralJob implements ShouldQueue
     public function handle()
     {
         $tax = 9; // Процент на первом уровне
+        $system = \App\Models\System::first();
         while ($this->user->referred_by && $tax > 0) {
             $this->user = User::where('affiliate_id', $this->user->referred_by)->first();
             $refAmount = ($this->amount * $tax ) / 100;
-            $this->user->getWallet($this->currency)->depositFloat($refAmount, array('destination' => 'referral'));
+            $system->getWallet($this->currency)->transferFloat($this->user->getWallet($this->currency), $refAmount, array('destination' => 'referral'));
+            $system->getWallet($this->currency)->refreshBalance();
             $this->user->getWallet($this->currency)->refreshBalance();
 
             try {
