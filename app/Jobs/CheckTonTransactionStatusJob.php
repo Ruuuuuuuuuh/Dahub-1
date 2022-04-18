@@ -56,9 +56,10 @@ class CheckTonTransactionStatusJob implements ShouldQueue
                 if ($response->json()["result"]) {
                     foreach ($response->json()["result"] as $result) {
                         $amount = $result['in_msg']['value'] / 1000000000;
+                        $text = $result['in_msg']['message'];
                         $utime = $result['utime'];
                         if ($utime > $this->order->created_at->timestamp) {
-                            if ($this->order->amount <= $amount && $this->order->status != 'completed') {
+                            if ($this->order->amount <= $amount && $this->order->status != 'completed' && $this->order->comment == $text) {
                                 dispatch(new ConfirmOrderJob($this->order));
                             }
                             else $error = true;

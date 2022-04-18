@@ -62,6 +62,22 @@ class ConfirmedNotificationsJob implements ShouldQueue
                 report ($e);
             }
 
+            $message = \App\Models\Message::where('order_id', $this->order->id)->first();
+            if ($message) {
+                try {
+                    $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                    $telegram->editMessageText([
+                        'chat_id' => $message->chat_id,
+                        'message_id' => $message->message_id,
+                        'text' => $message->message . PHP_EOL . '🏁 <b>Заявка выполнена</b>',
+                        'parse_mode' => 'html',
+                        'reply_markup' => NULL
+                    ]);
+                } catch (TelegramSDKException $e) {
+                    report ($e);
+                }
+            }
+
             if ($this->order->destination == 'TokenSale') {
                 // Отправка сообщения, если пользователь впервые купил токены
                 if ($owner->orders()->where('status', 'completed')->where('destination', 'TokenSale')->get()->count() == 1) {
