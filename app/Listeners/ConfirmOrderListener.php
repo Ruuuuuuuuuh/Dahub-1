@@ -25,6 +25,6 @@ class ConfirmOrderListener
      */
     public function handle(OrderConfirmed $event)
     {
-        dispatch(new ConfirmOrderJob($event->order));
+        dispatch(new \App\Jobs\ConfirmOrderJob($event->order));
     }
 }

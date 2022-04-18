@@ -23,7 +23,7 @@ class ConfirmOrderJob implements ShouldQueue
      * @param  Order $order
      * @return void
      */
-    public function __construct(Order $order)
+    public function __construct(\App\Models\Order $order)
     {
         $this->order = $order;
     }
@@ -35,8 +35,8 @@ class ConfirmOrderJob implements ShouldQueue
      */
     public function handle()
     {
-        $owner = User::where('uid', $this->order->user_uid)->first();
-        $gate  = User::where('uid', $this->order->gate)->first();
+        $owner = \App\Models\User::where('uid', $this->order->user_uid)->first();
+        $gate  = \App\Models\User::where('uid', $this->order->gate)->first();
         if ($this->order != 'completed') {
             if ($this->order->destination == 'deposit') {
                 $transaction = $owner->getWallet($this->order->currency)->depositFloat($this->order->amount, array('destination' => 'deposit to wallet'));
@@ -44,9 +44,10 @@ class ConfirmOrderJob implements ShouldQueue
                 $this->order->status = 'completed';
                 $this->order->transaction()->attach($transaction->id);
                 $this->order->save();
+
             }
             if ($this->order->destination == 'TokenSale') {
-                $systemWallet = System::findOrFail(1);
+                $systemWallet = \App\Models\System::findOrFail(1);
                 $transaction = $systemWallet->getWallet('TokenSale')->transferFloat( $owner->getWallet('DHB'), $this->order->dhb_amount, array('destination' => 'TokenSale', 'order_id' => $this->order->id));
 
                 $owner->getWallet('DHB')->refreshBalance();
@@ -60,13 +61,10 @@ class ConfirmOrderJob implements ShouldQueue
                 $this->order->save();
 
                 // pay Referral
-                dispatch(new PayReferralJob($owner, $this->order->currency, $this->order->amount));
+                dispatch(new \App\Jobs\PayReferralJob($owner, $this->order->currency, $this->order->amount));
 
                 // ConfirmedNotificationsJob
-                dispatch(new ConfirmedNotificationsJob($this->order));
-
-                // ConfirmedNotificationsJob
-                dispatch(new ExplorerMessageJob($this->order));
+                dispatch(new \App\Jobs\ExplorerMessageJob($this->order));
 
                 // Бонус за успешное выполнение задания
                 $systemWallet->getWallet('DHBFundWallet')->transferFloat( $gate->getWallet('DHB'), $this->order->dhb_amount / 200, array('destination' => 'Бонус за успешное выполнение заявки', 'order_id' => $this->order->id));
@@ -74,6 +72,9 @@ class ConfirmOrderJob implements ShouldQueue
                 $gate->getWallet('DHB')->refreshBalance();
 
             }
+
+            // ConfirmedNotificationsJob
+            dispatch(new \App\Jobs\ConfirmedNotificationsJob($this->order));
 
             $gate->getBalance($this->order->currency.'_gate');
             $gate->getWallet($this->order->currency.'_gate')->depositFloat($this->order->amount, array('destination' => 'deposit to wallet', 'order_id' => $this->order->id));
