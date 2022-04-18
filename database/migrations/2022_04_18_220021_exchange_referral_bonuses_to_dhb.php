@@ -25,12 +25,14 @@ class ExchangeReferralBonusesToDhb extends Migration
             $user = \App\Models\User::where('id', $transaction->payable_id)->first();
             $currency = Wallet::where('id', $transaction->wallet_id)->first()->slug;
             $wallet = $user->getWallet($currency);
-            if ($wallet->balance >= abs($transaction->amount)) {
-                $wallet->withdraw(abs($transaction->amount),  array('destination' => 'convert referral to DHB'));
-                $transaction->meta = '{"destination": "convert referral to DHB"}';
-                $transaction->save();
-                $wallet->refreshBalance();
-                $system->getWallet('DHBFundWallet')->transferFloat($user->getWallet('DHB'), abs($transaction->amountFloat) * \App\Helpers\Rate::getRatesDHB($currency),  array('destination' => 'referral'));
+            if (!($user->id == 3 && $currency == 'USDT')) {
+                if ($wallet->balance >= abs($transaction->amount)) {
+                    $wallet->withdraw(abs($transaction->amount),  array('destination' => 'convert referral to DHB'));
+                    $transaction->meta = array('destination' => 'convert referral to DHB');
+                    $transaction->save();
+                    $wallet->refreshBalance();
+                    $system->getWallet('DHBFundWallet')->transferFloat($user->getWallet('DHB'), abs($transaction->amountFloat) * \App\Helpers\Rate::getRatesDHB($currency),  array('destination' => 'referral'));
+                }
             }
         }
     }
