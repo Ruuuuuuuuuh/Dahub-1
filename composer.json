@@ -16,7 +16,7 @@
         "irazasyed/telegram-bot-sdk": "^3.4.1",
         "laravel-notification-channels/telegram": "^0.5.0",
         "laravel/framework": "^8.0",
-        "laravel/horizon": "^v5.9.6",
+        "laravel/horizon": "^v5.9.3",
         "laravel/socialite": "^5.0",
         "laravel/tinker": "^v2.7.1",
         "laravel/ui": "^3.4.5",

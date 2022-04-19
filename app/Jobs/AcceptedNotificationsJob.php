@@ -20,14 +20,14 @@ class AcceptedNotificationsJob implements ShouldQueue
      *
      * @var int
      */
-    public $tries = 5;
+    public int $tries = 5;
 
     /**
      * Модель текущей заявки
      *
      * @var Order
      */
-    protected $order;
+    protected Order $order;
 
     /**
      * Create a new job instance.

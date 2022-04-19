@@ -16,7 +16,7 @@ class OrderAccepted
      *
      * @var Order
      */
-    public $order;
+    public Order $order;
 
     /**
      * Создать новый экземпляр события.
