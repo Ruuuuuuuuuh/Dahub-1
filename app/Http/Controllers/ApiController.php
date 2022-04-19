@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\OrderAccepted;
 use App\Events\OrderConfirmed;
+use App\Helpers\ConfirmOrder;
 use App\Helpers\Rate;
 use App\Jobs\CheckTonTransactionStatusJob;
 use App\Models\Currency;
@@ -546,8 +547,8 @@ class ApiController extends Controller
                 $order->status = 'accepted';
                 $order->save();
 
-                // Вызов события OrderAccepted
-                OrderAccepted::dispatch($order);
+                // Вызов хелпера OrderAccepted
+                new \App\Helpers\AcceptOrder($order);
 
                 if ($order->currency == 'TON') {
                     // Вызов задания CheckTonTransactionStatus
@@ -624,9 +625,7 @@ class ApiController extends Controller
         if ($order->status == 'accepted' || $order->status == 'pending') {
 
             if ($order->gate == $this->user->uid) {
-                OrderConfirmed::dispatch($order);
-                sleep(2);
-                return $order->id;
+                return new ConfirmOrder($order);
             }
             else response(['error' => true, 'message' => 'У вас нет прав на выполнение этой заявки'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
 
@@ -718,7 +717,7 @@ class ApiController extends Controller
      * @param Request $request
      * @return mixed \App\Models\Order
      */
-    public function getOrdersByFilter(Request $request)
+    public function getOrdersByFilter(Request $request): mixed
     {
         $filter = $request->input('filter');
         switch ($filter) {

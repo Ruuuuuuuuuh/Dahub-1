@@ -20,12 +20,6 @@ class EventServiceProvider extends ServiceProvider
             // ... other providers
             'SocialiteProviders\\Telegram\\TelegramExtendSocialite@handle',
         ],
-        OrderAccepted::class => [
-            AcceptedNotificationsListener::class,
-        ],
-        OrderConfirmed::class => [
-            ConfirmOrderListener::class,
-        ],
     ];
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Helpers\ConfirmOrder;
 use App\Models\Order;
 use App\Models\User;
 use DateTime;
@@ -12,12 +13,13 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class CheckTonTransactionStatusJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $order;
+    protected Order $order;
 
     /**
      * Create a new job instance.
@@ -44,6 +46,7 @@ class CheckTonTransactionStatusJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws TelegramSDKException
      */
     public function handle()
     {
@@ -60,7 +63,7 @@ class CheckTonTransactionStatusJob implements ShouldQueue
                         $utime = $result['utime'];
                         if ($utime > $this->order->created_at->timestamp) {
                             if ($this->order->amount <= $amount && $this->order->status != 'completed' && $this->order->comment == $text) {
-                                dispatch(new ConfirmOrderJob($this->order));
+                                new ConfirmOrder($this->order);
                             }
                             else $error = true;
                         }
