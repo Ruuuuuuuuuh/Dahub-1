@@ -188,9 +188,10 @@ main {
 }
 .accept_buttons {
     .button {
-        padding: 0px 50px;
+        padding: 0px 35px;
         width: 100%;
         text-align: center;
+        font-size:18px;
     }
     .button-accept {
         margin-right:15px;
@@ -346,6 +347,21 @@ a.copy-link {
     svg {
         min-width: 33px;
         margin-left: 15px;
+    }
+}
+a.copy-link-small {
+    line-height: 28px;
+    margin-left: 15px;
+    padding: 5px 10px;
+    background-color: #f9f9f9;
+    width: auto !important;
+    span {
+        line-height: 28px;
+        margin-left:15px;
+    }
+    svg {
+        max-width:18px;
+        max-height:18px;
     }
 }
 .wallet-link-section .tab-content {

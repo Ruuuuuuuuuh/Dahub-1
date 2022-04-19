@@ -1,7 +1,18 @@
 @media screen and (max-width:1023px) {
+    a.copy-link-small {
+        line-height: 28px;
+        margin-left: 15px;
+        padding: 5px 10px;
+        background-color: #f9f9f9;
+        width: auto !important;
+        margin: 10px 0!important;
+        height: auto!important;
+        font-size: 12px!important;
+    }
     .accept_buttons {
         .button {
-            padding: 10px 50px;
+            padding: 8px 35px;
+            font-size: 16px;
         }
     }
     .header-top {
@@ -482,8 +493,15 @@
     }
 }
 @media screen and (max-width:480px) {
-    .explorer {
-
+    a.copy-link-small {
+        line-height: 28px;
+        margin-left: 15px;
+        padding: 5px 10px;
+        background-color: #f9f9f9;
+        width: auto !important;
+        margin: 10px 0!important;
+        height: auto!important;
+        font-size: 12px!important;
     }
 }
 @media screen and (max-width:360px) {

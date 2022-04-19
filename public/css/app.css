@@ -10217,9 +10217,10 @@ main {
 }
 
 .accept_buttons .button {
-  padding: 0px 50px;
+  padding: 0px 35px;
   width: 100%;
   text-align: center;
+  font-size: 18px;
 }
 .accept_buttons .button-accept {
   margin-right: 15px;
@@ -10392,6 +10393,22 @@ a.copy-link {
 a.copy-link svg {
   min-width: 33px;
   margin-left: 15px;
+}
+
+a.copy-link-small {
+  line-height: 28px;
+  margin-left: 15px;
+  padding: 5px 10px;
+  background-color: #f9f9f9;
+  width: auto !important;
+}
+a.copy-link-small span {
+  line-height: 28px;
+  margin-left: 15px;
+}
+a.copy-link-small svg {
+  max-width: 18px;
+  max-height: 18px;
 }
 
 .wallet-link-section .tab-content {
@@ -10945,8 +10962,20 @@ strong {
 }
 
 @media screen and (max-width: 1023px) {
+  a.copy-link-small {
+    line-height: 28px;
+    margin-left: 15px;
+    padding: 5px 10px;
+    background-color: #f9f9f9;
+    width: auto !important;
+    margin: 10px 0 !important;
+    height: auto !important;
+    font-size: 12px !important;
+  }
+
   .accept_buttons .button {
-    padding: 10px 50px;
+    padding: 8px 35px;
+    font-size: 16px;
   }
 
   .header-top {
@@ -11488,6 +11517,18 @@ strong {
   }
   .accept_buttons .button-accept {
     margin-right: 0px;
+  }
+}
+@media screen and (max-width: 480px) {
+  a.copy-link-small {
+    line-height: 28px;
+    margin-left: 15px;
+    padding: 5px 10px;
+    background-color: #f9f9f9;
+    width: auto !important;
+    margin: 10px 0 !important;
+    height: auto !important;
+    font-size: 12px !important;
   }
 }
 @media screen and (max-width: 360px) {
