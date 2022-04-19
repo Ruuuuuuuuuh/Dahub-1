@@ -10225,6 +10225,9 @@ main {
 .accept_buttons .button-accept {
   margin-right: 15px;
 }
+.accept_buttons .button-danger {
+  margin-left: 15px;
+}
 
 .progress {
   background: linear-gradient(100.13deg, #2691E2 -25.88%, #1A2453 53.71%);
@@ -11510,13 +11513,16 @@ strong {
     flex-wrap: wrap;
   }
   .accept_buttons .button {
-    padding: 10px 50px;
+    padding: 10px 35px;
     width: 100%;
     text-align: center;
     margin-top: 15px;
   }
   .accept_buttons .button-accept {
     margin-right: 0px;
+  }
+  .accept_buttons .button-danger {
+    margin-left: 0;
   }
 }
 @media screen and (max-width: 480px) {

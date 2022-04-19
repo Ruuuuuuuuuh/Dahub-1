@@ -482,13 +482,16 @@
     .accept_buttons {
         flex-wrap: wrap;
         .button {
-            padding: 10px 50px;
+            padding: 10px 35px;
             width: 100%;
             text-align: center;
             margin-top:15px;
         }
         .button-accept {
             margin-right:0px;
+        }
+        .button-danger {
+            margin-left:0;
         }
     }
 }
