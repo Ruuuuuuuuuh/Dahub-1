@@ -125,8 +125,6 @@ class ConfirmOrder
             $gate->getWallet($this->order->currency.'_gate')->depositFloat($this->order->amount, array('destination' => 'deposit to wallet', 'order_id' => $this->order->id));
             $gate->getWallet($this->order->currency.'_gate')->refreshBalance();
         }
-
-        return $this->order->id;
     }
 
     /**

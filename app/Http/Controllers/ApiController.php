@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\OrderAccepted;
-use App\Events\OrderConfirmed;
 use App\Helpers\ConfirmOrder;
 use App\Helpers\Rate;
 use App\Jobs\CheckTonTransactionStatusJob;
@@ -625,7 +623,8 @@ class ApiController extends Controller
         if ($order->status == 'accepted' || $order->status == 'pending') {
 
             if ($order->gate == $this->user->uid) {
-                return new ConfirmOrder($order);
+                new ConfirmOrder($order);
+                return $order->id;
             }
             else response(['error' => true, 'message' => 'У вас нет прав на выполнение этой заявки'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
 
