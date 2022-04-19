@@ -21,10 +21,10 @@ class EventServiceProvider extends ServiceProvider
             'SocialiteProviders\\Telegram\\TelegramExtendSocialite@handle',
         ],
         OrderAccepted::class => [
-            \App\Listeners\AcceptedNotificationsListener::class,
+            AcceptedNotificationsListener::class,
         ],
         OrderConfirmed::class => [
-            \App\Listeners\ConfirmOrderListener::class,
+            ConfirmOrderListener::class,
         ],
     ];
 

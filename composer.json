@@ -47,7 +47,17 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Listeners/AcceptedNotificationsListener.php",
+            "app/Listeners/ConfirmOrderListener.php",
+            "app/Jobs/AcceptedNotificationsJob.php",
+            "app/Jobs/CheckTonTransactionStatusJob.php",
+            "app/Jobs/ConfirmedNotificationsJob.php",
+            "app/Jobs/ConfirmOrderJob.php",
+            "app/Jobs/ExplorerMessageJob.php",
+            "app/Jobs/PayReferralJob.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
