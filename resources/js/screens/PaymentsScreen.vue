@@ -40,6 +40,7 @@ export default {
     justify-content: space-between;
     position: relative;
     list-style: none;
+    margin-bottom: 25px;
 }
 
 .tab-list__item-active::after {
@@ -64,9 +65,21 @@ export default {
 
 .tab-list__item {
     text-align: center;
-    padding-bottom: 12px;
+    padding-bottom: 5px;
+
     flex-grow: 1;
     position: relative;
+    font-weight: 400;
 }
+
+.tab-list__item a {
+    color: #78839C;
+    line-height: 24px;
+    font-weight: 500;
+}
+.tab-list__item-active a {
+    color: #112340;
+}
+
 
 </style>

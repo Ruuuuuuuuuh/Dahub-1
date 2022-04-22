@@ -184,6 +184,7 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding: 15px 0px;
     }
     .edit-btn {
         font-size: 16px;

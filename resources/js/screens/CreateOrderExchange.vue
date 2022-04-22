@@ -41,6 +41,7 @@
         <div class="select-wrapper">
             <input type="number" name="amount" class="input-amount" placeholder="0" min="0" v-model="amount" @input="checkValidate()"/>
         </div>
+        <label for="amount">Доступно 1 809,98 USDT</label>
     </div>
 
     <div class="d-flex justify-content-center icon">
@@ -236,7 +237,8 @@ export default {
     watch: {
         currency() {
             this.checkValidate()
-        }
+        },
+
     }
 }
 </script>

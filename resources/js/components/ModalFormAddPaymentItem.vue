@@ -84,7 +84,7 @@ export default {
 
 <style scoped>
 button {
-    background: linear-gradient(87.76deg, #85F362 -53.4%, #02AAFF 67.87%);
+    color: #fff;
     border-radius: 15px;
     height: 46px;
     border: none;
@@ -92,7 +92,10 @@ button {
     font-size: 18px;
     margin-top: 1rem;
     line-height: 1;
+    background: linear-gradient(85.24deg, #85F362 -116.44%, #02AAFF 68.46%);
+    position: relative;
 }
+
 .form-select {
     width: 100%;
     height: 46px;

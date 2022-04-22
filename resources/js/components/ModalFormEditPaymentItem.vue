@@ -6,7 +6,11 @@
                     <a href="#" class="cancel" @click.prevent="$emit('close')"
                         >Отменить</a
                     >
-                    <a href="#" ref="save" class="save" @click.prevent="updateFieldValue"
+                    <a
+                        href="#"
+                        ref="save"
+                        class="save"
+                        @click.prevent="updateFieldValue"
                         >Сохранить</a
                     >
                 </div>
@@ -131,7 +135,6 @@ export default {
 }
 
 .blur {
-
     position: absolute;
     width: 100%;
     bottom: 0;
@@ -145,7 +148,6 @@ export default {
     height: 85%;
     background: #f2f4fa;
     border-radius: 20px 20px 0px 0px;
-
     padding: 24px;
 }
 .modal-slide__header {
@@ -164,17 +166,16 @@ export default {
     font-weight: 600;
     font-size: 14px;
     line-height: 24px;
-
     opacity: 0.9;
 }
-.modal-slide__content .cancel {
+.modal-slide .cancel {
     background: linear-gradient(90.88deg, #ffae34 -29.19%, #ff3998 94.23%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
-.modal-slide__content .save {
+.modal-slide .save {
     background: linear-gradient(85.24deg, #85f362 -116.44%, #02aaff 68.46%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -184,7 +185,8 @@ export default {
 .modal-slide-leave-active {
     transition: transform 0.2s ease-in-out;
 }
-.modal-slide-enter, .modal-slide-leave-to {
+.modal-slide-enter,
+.modal-slide-leave-to {
     transform: translateY(100%);
 }
 </style>
