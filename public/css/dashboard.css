@@ -10018,11 +10018,18 @@ body {
 .app {
   max-width: 480px;
   width: 100%;
-  background: linear-gradient(173.19deg, rgba(0, 104, 156, 0.9) -39.84%, rgba(13, 31, 60, 0.9) 32.52%);
   height: 100vh;
   height: -webkit-fill-available;
   position: relative;
   overflow: hidden;
+}
+
+.app[data-mode=pro] {
+  background: linear-gradient(173.19deg, rgba(0, 104, 156, 0.9) -39.84%, rgba(13, 31, 60, 0.9) 32.52%);
+}
+
+.app[data-mode=lite] {
+  background: linear-gradient(173.19deg, rgba(0, 209, 255, 0.9) -39.84%, rgba(14, 43, 92, 0.9) 32.52%);
 }
 
 h1, h2 {
@@ -10270,7 +10277,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 a.button {
   background: #EDF1F9;
-  border-radius: 23px;
+  border-radius: 15px;
   width: 100%;
   display: block;
   text-align: center;
@@ -10282,7 +10289,7 @@ a.button {
 }
 
 a.button-blue {
-  background: #347AF0;
+  background: linear-gradient(87.76deg, #85F362 -53.4%, #02AAFF 67.87%);
   color: #FFFFFF !important;
 }
 
@@ -10560,9 +10567,20 @@ section.screen .section-header .top-nav h2 {
   color: #0D1F3C;
   margin-bottom: 0px;
 }
+section.screen .section-header__icon {
+  padding-left: inherit;
+  padding-right: inherit;
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  bottom: -69px;
+}
 section.screen .section-main {
   border-radius: 20px;
-  padding: 30px 25px;
+  padding: 36px 24px;
   margin-top: -20px;
   background: #fff;
 }
@@ -10588,11 +10606,12 @@ section.screen .payment-items {
 }
 section.screen .payment-items .payment-item {
   border-bottom: 2px solid #EDF1F9;
-  padding: 20px 0 20px;
+  padding: 14px 0px;
   position: relative;
   overflow: hidden;
   display: block;
   transition: transform 0.3s ease-in-out;
+  min-height: 74px;
 }
 section.screen .payment-items .payment-item .payment-item_content {
   transition: transform 0.3s ease-in;
@@ -10601,7 +10620,7 @@ section.screen .payment-items .payment-item .payment-item_content.swipe {
   transform: translateX(-55%);
 }
 section.screen .payment-items .payment-item .payment-details-icon {
-  margin-right: 10px;
+  margin-right: 15px;
 }
 section.screen .payment-items .payment-item .payment-details-icon .payment-item-icon-inner {
   fill: #EDF1F9;
@@ -10838,16 +10857,15 @@ input[type=button] {
   line-height: 44px;
   text-align: center;
   color: #fff;
-  background: #347AF0;
+  background: linear-gradient(87.76deg, #85F362 -53.4%, #02AAFF 67.87%);
+  border: none;
   display: block;
-  border: 1px solid #347AF0;
   box-sizing: border-box;
-  border-radius: 23px;
+  border-radius: 15px;
   transition: 0.2s ease-in-out all;
 }
 #accept-order a.order-accept.disabled, #payment-details-list a.order-accept.disabled {
-  color: #B5BBC9;
-  border-color: #B5BBC9;
+  opacity: 0.5;
 }
 
 .order-page .copy-link {
