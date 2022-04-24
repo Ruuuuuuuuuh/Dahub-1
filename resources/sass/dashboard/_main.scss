@@ -20,11 +20,18 @@ body {
 .app {
     max-width:480px;
     width:100%;
-    background: linear-gradient(173.19deg, rgba(0, 104, 156, 0.9) -39.84%, rgba(13, 31, 60, 0.9) 32.52%);
     height:100vh;
     height: -webkit-fill-available;
     position:relative;
     overflow: hidden;
+}
+
+.app[data-mode="pro"] {
+    background: linear-gradient(173.19deg, rgba(0, 104, 156, 0.9) -39.84%, rgba(13, 31, 60, 0.9) 32.52%);
+}
+
+.app[data-mode="lite"] {
+    background: linear-gradient(173.19deg, rgba(0, 209, 255, 0.9) -39.84%, rgba(14, 43, 92, 0.9) 32.52%);
 }
 h1, h2 {
     font-weight:700;
