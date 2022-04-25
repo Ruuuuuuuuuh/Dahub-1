@@ -43,23 +43,40 @@ class StartCommand extends Command
         );
         $auth = new AuthController;
         $message = $auth->findOrCreateUser($user);
-        $inline_button = array(
-            [
-                "text" => "Токенсейл🔥",
-                "url" => $message['linkDashboard']
-            ],
-            [
-                "text" => "Кошелёк",
-                "url" => $message['linkWallet']
-            ]
-        );
-        $inline_keyboard = [$inline_button];
-        $keyboard = array("inline_keyboard" => $inline_keyboard);
-        $replyMarkup = json_encode($keyboard);
-        $this->replyWithMessage([
-            'text' => $message['text'],
-            'parse_mode' => 'html',
-            'reply_markup' => $replyMarkup
-        ]);
+        if ($message) {
+            $inline_button = array(
+                [
+                    "text" => "Токенсейл🔥",
+                    "url" => $message['linkDashboard']
+                ],
+                [
+                    "text" => "Кошелёк",
+                    "url" => $message['linkWallet']
+                ]
+            );
+            $inline_keyboard = [$inline_button];
+            $keyboard = array("inline_keyboard" => $inline_keyboard);
+            $replyMarkup = json_encode($keyboard);
+            $this->replyWithMessage([
+                'text' => $message['text'],
+                'parse_mode' => 'html',
+                'reply_markup' => $replyMarkup
+            ]);
+        }
+        else {
+            $text = 'Приветствуем вас, '.$first_name.'!'.PHP_EOL.PHP_EOL
+                .'К сожалению, мы не можем вас зарегистрировать в нашей системе. '.PHP_EOL
+                .'Возможные причины:'.PHP_EOL.PHP_EOL
+                .'– У вас нет ссылки на приглашение'.PHP_EOL
+                .'– Ссылка на приглашение не действительна'.PHP_EOL
+                .'– Пригласивший вас участник не является держателем DHB'.PHP_EOL.PHP_EOL
+                .'По всем вопросам вы можете обратиться в @DaHubSupportBot';
+            $this->replyWithMessage([
+                'text' => $text,
+                'parse_mode' => 'html',
+                'reply_markup' => false
+            ]);
+        }
+
     }
 }

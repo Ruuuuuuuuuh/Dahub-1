@@ -32,7 +32,7 @@
                         <ul class="nav flex-column currencies">
                             @foreach ($currencies as $currency)
                                 <li class="nav-item d-flex justify-content-between align-items-center" data-crypto="{{$currency->crypto}}">
-                                    <a href="{{Route('wallet.currencies')}}/{{$currency->title}}">{{$currency->title}}</a>
+                                    <a href="{{Route('dashboard.currencies')}}/{{$currency->title}}">{{$currency->title}}</a>
                                 </li>
                             @endforeach
                         </ul>

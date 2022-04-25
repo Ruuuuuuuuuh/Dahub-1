@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Rate;
 use App\Models\Currency;
+use App\Models\Message;
 use App\Models\Payment;
 use App\Models\System;
 use App\Models\Tag;
@@ -22,6 +23,7 @@ use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramResponseException;
+use Telegram\Bot\Exceptions\TelegramSDKException;
 
 class SystemApiController extends Controller
 {
@@ -149,31 +151,51 @@ class SystemApiController extends Controller
                 $systemWallet->getWallet($currency)->transferFloat($user->getWallet($currency), $amount, array('destination' => $destination, 'comment' => $message));
                 $systemWallet->getWallet($currency)->refreshBalance();
                 if ($currency == 'HFT') {
-                    $telegram = new Api(env('TELEGRAM_BOT_HARVEST_TOKEN'));
-                    $transaction = $user->getWallet('HFT')->transactions()->orderBy('id', 'desc')->first();
-                    $response = $telegram->sendMessage([
-                        'chat_id' => env('TELEGRAM_HARVEST_CHAT_ID'),
-                        'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' HFT '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL.PHP_EOL.'There is still ' .$systemWallet->getWallet('HFT')->balanceFloat. ' HFT in the main wallet.',
-                        'parse_mode' => 'html'
-                    ]);
+                    try {
+                        $telegram = new Api(env('TELEGRAM_BOT_HARVEST_TOKEN'));
+                        $transaction = $user->getWallet('HFT')->transactions()->orderBy('id', 'desc')->first();
+                        $telegram->sendMessage([
+                            'chat_id' => env('TELEGRAM_HARVEST_CHAT_ID'),
+                            'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' HFT '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL.PHP_EOL.'There is still ' .$systemWallet->getWallet('HFT')->balanceFloat. ' HFT in the main wallet.',
+                            'parse_mode' => 'html'
+                        ]);
+                    } catch (TelegramSDKException $e) {
+                        report($e);
+                    }
+
                 }
             }
 
             if ($currency != 'HFT') {
-                if (env('APP_URL') != 'https://test.dahub.app') {
-                    if (env('TELEGRAM_BOT_REVARDS_TOKEN')) {
+                if (env('APP_ENV') == 'production') {
+                    try {
                         $telegram = new Api(env('TELEGRAM_BOT_REVARDS_TOKEN'));
                         $transaction = $user->getWallet($currency)->transactions()->orderBy('id', 'desc')->first();
-                        $response = $telegram->sendMessage([
+                        $telegram->sendMessage([
                             'chat_id' => env('TELEGRAM_ORDA_CHAT_ID'),
                             'text' => '<b>🆕 Новая транзакция в бухгалтерии</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' ' . $currency . ' '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL . '🏷 Назначение: ' . $destination.PHP_EOL . '💬 Комментарий: ' . $message,
                             'parse_mode' => 'html'
                         ]);
-                        $response = $telegram->sendMessage([
+                        $telegram->sendMessage([
                             'chat_id' => env('TELEGRAM_DAHUB_RESPONSE_CHAT_ID'),
                             'text' => '<b>🆕 Новая транзакция в бухгалтерии</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' ' . $currency . ' '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL . '🏷 Назначение: ' . $destination.PHP_EOL . '💬 Комментарий: ' . $message,
                             'parse_mode' => 'html'
                         ]);
+                    } catch (TelegramSDKException $e) {
+                        report($e);
+                    }
+                }
+                else {
+                    try {
+                        $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                        $transaction = $user->getWallet($currency)->transactions()->orderBy('id', 'desc')->first();
+                        $telegram->sendMessage([
+                            'chat_id' => env('TELEGRAM_GATE_ORDERS_CHAT_ID'),
+                            'text' => '<b>🆕 Новая транзакция в бухгалтерии</b> ' . $transaction->created_at->format('d.m.Y H:i') .PHP_EOL.'<b>➡️ Transfer: </b>' . $amount . ' ' . $currency . ' '  .PHP_EOL.'<b>#️⃣ Hash: </b>' . $transaction->uuid.PHP_EOL . '🏷 Назначение: ' . $destination.PHP_EOL . '💬 Комментарий: ' . $message,
+                            'parse_mode' => 'html'
+                        ]);
+                    } catch (TelegramSDKException $e) {
+                        report($e);
                     }
                 }
             }
@@ -339,13 +361,28 @@ class SystemApiController extends Controller
         $user = User::where('uid', $order->user_uid)->first();
 
         // Send message via telegram
-        if (config('notifications'))
+        try {
+            $user->notify(new OrderDecline($order));
+        }
+        catch (CouldNotSendNotification $e) {
+            report ($e);
+        }
+
+        $message = Message::where('order_id', $order->id)->first();
+        if ($message) {
             try {
-                $user->notify(new OrderDecline($order));
-            }
-            catch (CouldNotSendNotification $e) {
+                $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                $telegram->editMessageText([
+                    'chat_id' => $message->chat_id,
+                    'message_id' => $message->message_id,
+                    'text' => $message->message . PHP_EOL . '❌ <b>Заявка отменена менеджером шлюзов</b>',
+                    'parse_mode' => 'html',
+                    'reply_markup' => NULL
+                ]);
+            } catch (TelegramSDKException $e) {
                 report ($e);
             }
+        }
 
         $order->forceDelete();
         return $order->id;

@@ -38,10 +38,21 @@
         <p style="color:#347AF0">Заявка принята.</p>
     </div>
     <div class="text-block">
-        <p>Переведите {{$order->amount}} {{$order->currency}} по @if (App\Models\Payment::where('title', $order->payment)->firstOrFail()->crypto)адресу@elseномеру карты@endif:</p>
         @if ($order->currency == 'TON')
-        <a style="font-size:16px; background-color:rgb(245 245 245); border-radius: 5px; padding:10px 20px; color:#000!important; margin-top:10px;display:block; word-break: break-all;" href="ton://transfer/{{$order->payment_details}}?amount={{$order->amount * 1000000000}}">💎&nbsp;{{$order->payment_details}}</a>
+           <p>Заявка принята кипером. Переведите {{$order->amount}} TON по следующим реквизитам:</p>
+            <p class="w-100 mt-2">Адрес: <a class="wallet-link copy-link copy-link-small" data-toggle="popover" data-placement="bottom" data-content="Ссылка скопирована в буфер обмена." data-original-title="" title="">
+                    <span>💎&nbsp;{{$order->payment_details}}</span>
+                </a></p>
+            <p class="w-100 mt-2">Примечание (мемо): <a class="wallet-link copy-link copy-link-small" data-toggle="popover" data-placement="bottom" data-content="Ссылка скопирована в буфер обмена." data-original-title="" title="">
+                    <span>{{$order->comment}}</span>
+                </a></p>
+            <p class="mt-3">При отправке средств укажите примечание (мемо).<br />
+                <b>ДЕПОЗИТ НЕ БУДЕТ ЗАЧИСЛЕН БЕЗ ПРИМЕЧАНИЯ! </b></p>
+            <p class="mt-3">Как только средства будут зачислены, вы получите уведомление. Среднее время зачисления средств – одна минута.</p>
+
         @else
+            <p>Переведите {{$order->amount}} {{$order->currency}} по @if (App\Models\Payment::where('title', $order->payment)->firstOrFail()->crypto)адресу@elseномеру карты@endif:</p>
+
         <a class="copy-link" data-toggle="popover" data-placement="bottom" data-content="Ссылка скопирована в буфер обмена." data-original-title="" title="">
             <span>{{$order->payment_details}}</span>
             <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -57,7 +68,11 @@
         @endif
     </div>
     <div class="footer">
-        <a class="button button-blue" onclick="acceptSending('{{$order->id}}');">Переведено, далее</a>
+        @if ($order->currency == 'TON')
+            <a href="{{ "ton://transfer/" . $order->payment_details . "?amount=" . ($order->amount * 1000000000) . "&text=" . $order->comment}}" class="button button-blue button-accept">Открыть Toncoin Кошелек</a>
+        @else
+            <a class="button button-blue" onclick="acceptSending('{{$order->id}}');">Переведено, далее</a>
+        @endif
         <a class="button button-red" onclick="declineOrder()">Отменить заявку</a>
     </div>
 </div>

@@ -2,27 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\OrderAccepted;
-use App\Events\OrderConfirmed;
+use App\Helpers\ConfirmOrder;
 use App\Helpers\Rate;
-use App\Jobs\CheckTonTransactionStatus;
+use App\Jobs\CheckTonTransactionStatusJob;
 use App\Models\Currency;
 use App\Models\Message;
 use App\Models\Payment;
 use App\Models\PaymentDetail;
 use App\Models\System;
 use App\Models\UserConfig;
-use App\Notifications\AcceptDepositOrder;
 use App\Notifications\AcceptSendingByGate;
 use App\Notifications\AcceptSendingByUser;
-use App\Notifications\AcceptWithdrawOrder;
-use App\Notifications\AdminNotifications;
-use App\Notifications\ConfirmOrder;
 use App\Notifications\OrderAssignee;
 use App\Notifications\OrderCreate;
 use App\Notifications\OrderDecline;
-use App\Notifications\ReferralBonusPay;
 use Bavix\Wallet\Models\Transaction;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
@@ -33,7 +28,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
-use Telegram\Bot\FileUpload\InputFile;
 
 class ApiController extends Controller
 {
@@ -134,7 +128,7 @@ class ApiController extends Controller
             ]
         );
 
-        if (!$this->user->hasActiveOrder()) {
+        if (!($this->user->hasActiveOrder() && $request->input('destination') != 'TokenSale') && !($this->user->hasActiveTokenSaleOrder() && $request->input('destination') == 'TokenSale')) {
             $error = false;
 
             $destination    = $request->input('destination');
@@ -318,6 +312,22 @@ class ApiController extends Controller
                     $this->user->notify(new OrderDecline($order));
                 } catch (CouldNotSendNotification $e) {
                     report ($e);
+                }
+
+                $message = Message::where('order_id', $order->id)->first();
+                if ($message) {
+                    try {
+                        $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                        $telegram->editMessageText([
+                            'chat_id' => $message->chat_id,
+                            'message_id' => $message->message_id,
+                            'text' => $message->message . PHP_EOL . '❌ <b>Заявка отменена пользователем</b>',
+                            'parse_mode' => 'html',
+                            'reply_markup' => NULL
+                        ]);
+                    } catch (TelegramSDKException $e) {
+                        report ($e);
+                    }
                 }
 
                 $order->forceDelete();
@@ -515,31 +525,38 @@ class ApiController extends Controller
      * Подтверждение заявки шлюзом
      * @param Request $request
      * @return void | integer $order->id
+     * @throws Exception
      */
     public function acceptOrderByGate(Request $request)
     {
         if ($this->user->isGate()) {
             $order = Order::where('id', $request->input('id'))->firstOrFail();
-            if ($order->status == 'created' && $this->user->getWallet($order->currency.'_gate')->balanceFloat >= $order->amount) {
-
+            $error = false;
+            if ($order->destination == 'withdraw' && $this->user->getWallet($order->currency.'_gate')->balanceFloat < $order->amount) $error = true;
+            if ($order->status != 'created') $error = true;
+            if (!$error) {
                 if ($order->destination == 'deposit' || $order->destination == 'TokenSale') {
                     $order->payment_details = $request->input('payment_details');
                 }
                 $order->gate = $this->user->uid;
+                if ($order->currency == 'TON') {
+                    $order->comment = $this->generateUniqueCode();
+                }
                 $order->status = 'accepted';
                 $order->save();
 
+                // Вызов хелпера OrderAccepted
+                new \App\Helpers\AcceptOrder($order);
+
                 if ($order->currency == 'TON') {
                     // Вызов задания CheckTonTransactionStatus
-                    dispatch(new CheckTonTransactionStatus($order));
+                    dispatch(new CheckTonTransactionStatusJob($order));
                 }
-
-                // Вызов события OrderAccepted
-                OrderAccepted::dispatch($order);
                 return $order->id;
             }
+            else return response('У вас нет прав для этого действия', 404);
         }
-        else abort(404);
+        else return response('У вас нет прав для этого действия', 404);
     }
 
 
@@ -566,7 +583,7 @@ class ApiController extends Controller
                 }
             }
         }
-        else abort(404);
+        else return response('У вас нет прав для этого действия', 404);
     }
 
 
@@ -581,7 +598,6 @@ class ApiController extends Controller
         if ($this->user->uid == $order->user_uid) {
             if ($order->status == 'accepted') {
                 $order->status = 'pending';
-                $order->comment = $request->input('comment');
                 $gate = $order->gate()->first();
                 $order->save();
                 try {
@@ -592,7 +608,7 @@ class ApiController extends Controller
                 return $order->id;
             }
         }
-        else abort(404);
+        else return response('У вас нет прав для этого действия', 404);
     }
 
     /**
@@ -607,8 +623,7 @@ class ApiController extends Controller
         if ($order->status == 'accepted' || $order->status == 'pending') {
 
             if ($order->gate == $this->user->uid) {
-                OrderConfirmed::dispatch($order);
-                sleep(5);
+                new ConfirmOrder($order);
                 return $order->id;
             }
             else response(['error' => true, 'message' => 'У вас нет прав на выполнение этой заявки'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
@@ -672,6 +687,22 @@ class ApiController extends Controller
                 report ($e);
             }
 
+            $message = Message::where('order_id', $order->id)->first();
+            if ($message) {
+                try {
+                    $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                    $telegram->editMessageText([
+                        'chat_id' => $message->chat_id,
+                        'message_id' => $message->message_id,
+                        'text' => $message->message . PHP_EOL . '❌ <b>Заявка отменена шлюзом</b>',
+                        'parse_mode' => 'html',
+                        'reply_markup' => NULL
+                    ]);
+                } catch (TelegramSDKException $e) {
+                    report ($e);
+                }
+            }
+
             $order->forceDelete();
             return true;
         }
@@ -685,7 +716,7 @@ class ApiController extends Controller
      * @param Request $request
      * @return mixed \App\Models\Order
      */
-    public function getOrdersByFilter(Request $request)
+    public function getOrdersByFilter(Request $request): mixed
     {
         $filter = $request->input('filter');
         switch ($filter) {
@@ -728,13 +759,25 @@ class ApiController extends Controller
         else return response(['error' => true, 'message' => 'Не достаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
     }
 
-
-
-
     public function getVisibleWallets() {
         return json_decode(UserConfig::firstOrCreate(
             ['user_uid' => Auth::user()->uid, 'meta' => 'visible_wallets'],
             ['value' => json_encode(['DHB', 'BTC', 'ETH'])]
         )->value, true);
+    }
+
+    /**
+     * Write code on Method
+     *
+     * @return integer
+     * @throws Exception
+     */
+    public function generateUniqueCode(): int
+    {
+        do {
+            $code = random_int(100000, 999999);
+        } while (Order::where("status", "!=", 'completed')->where('comment', '=', $code)->first());
+
+        return $code;
     }
 }

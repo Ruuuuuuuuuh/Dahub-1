@@ -10196,14 +10196,18 @@ input:-webkit-autofill {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 37px;
-  background: rgba(196, 196, 196, 0.23);
+  background: rgba(233, 233, 233, 0.23);
   border-radius: 7px;
-  padding: 0 14px;
+  padding: 3px 14px;
   font-weight: 600;
   font-size: 12px;
   line-height: 24px;
   color: #0D1F3C;
+  word-break: break-all;
+}
+.copy-link svg {
+  width: 18px;
+  height: 18px;
 }
 
 section.screen {
@@ -10869,7 +10873,7 @@ input[type=button] {
 }
 
 .order-page .copy-link {
-  margin: 10px -15px;
+  margin: 10px 0;
 }
 
 #payment-details-list .crypto-title, #add-payment-details .crypto-title {
@@ -10950,6 +10954,11 @@ input[type=button] {
   display: none;
 }
 
+@media screen and (max-width: 480px) {
+  .text-block p {
+    font-size: 16px;
+  }
+}
 header.header {
   color: #fff;
   padding: 35px 25px 50px;

@@ -36,7 +36,7 @@ class AuthController extends Controller
 
     /**
      * Callback with User's data
-     * @param  string $provider Returns either twitter or github
+     * @param string $provider Returns either twitter or github
      * @return array User's data
      */
     public function getUser()
@@ -79,53 +79,66 @@ class AuthController extends Controller
             ];
         }
         else {
-
-            //generate unique token
-            do
-            {
-                $token = Str::random(40);
-                $auth_token = User::where('auth_token', $token)->get();
+            $error = true;
+            if (!empty($user['referred_by'])) {
+                if (User::where('affiliate_id', $user['referred_by'])->exists()) {
+                    $partner = User::where('affiliate_id', $user['referred_by'])->first();
+                    $partner->getWallet('DHB')->refreshBalance();
+                    if ($partner->getWallet('DHB')->balanceFloat > 0) {
+                        $error = false;
+                    }
+                }
             }
-            while(empty($auth_token));
+            if (!$error) {
+                //generate unique token
+                do
+                {
+                    $token = Str::random(40);
+                    $auth_token = User::where('auth_token', $token)->get();
+                }
+                while(empty($auth_token));
 
-            $newUser = User::create([
-                'uid'           => $user['user_id'],
-                'name'          => $user['first_name'],
-                'username'      => $user['username'],
-                'referred_by'   => $user['referred_by'],
-                'auth_token' => $token
-            ]);
+                $newUser = User::create([
+                    'uid'           => $user['user_id'],
+                    'name'          => $user['first_name'],
+                    'username'      => $user['username'],
+                    'referred_by'   => $user['referred_by'],
+                    'auth_token' => $token
+                ]);
 
-            $newUser->createWallet(
-                [
-                    'name' => 'USDT',
-                    'slug' => 'USDT',
-                ]
-            );
-            $newUser->createWallet(
-                [
-                    'name' => 'BTC',
-                    'slug' => 'BTC',
-                    'decimal_places' => '8'
-                ]
-            );
-            $newUser->createWallet(
-                [
-                    'name' => 'ETH',
-                    'slug' => 'ETH',
-                    'decimal_places' => '6'
-                ]
-            );
+                $newUser->createWallet(
+                    [
+                        'name' => 'USDT',
+                        'slug' => 'USDT',
+                    ]
+                );
+                $newUser->createWallet(
+                    [
+                        'name' => 'BTC',
+                        'slug' => 'BTC',
+                        'decimal_places' => '8'
+                    ]
+                );
+                $newUser->createWallet(
+                    [
+                        'name' => 'ETH',
+                        'slug' => 'ETH',
+                        'decimal_places' => '6'
+                    ]
+                );
 
-            $newUser->createWallet(
-                [
-                    'name' => 'DHB',
-                    'slug' => 'DHB',
-                ]
-            );
+                $newUser->createWallet(
+                    [
+                        'name' => 'DHB',
+                        'slug' => 'DHB',
+                    ]
+                );
 
 
-            return 'Вы успешно зарегистрированы в системе. Ваша сылка для авторизации в системе: ' . env('APP_URL').'/auth/'.$newUser->auth_token;
+                return 'Вы успешно зарегистрированы в системе. Ваша сылка для авторизации в системе: ' . env('APP_URL').'/auth/'.$newUser->auth_token;
+            }
+            else return false;
+
         }
 
 

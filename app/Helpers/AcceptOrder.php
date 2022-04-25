@@ -1,57 +1,63 @@
 <?php
 
-namespace App\Listeners;
-
-use App\Events\OrderAccepted;
+namespace App\Helpers;
 use App\Models\Message;
+use App\Models\Order;
 use App\Models\User;
 use App\Notifications\AcceptDepositOrder;
 use App\Notifications\AcceptWithdrawOrder;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use NotificationChannels\Telegram\Exceptions\CouldNotSendNotification;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
-class SendAcceptedNotifications implements ShouldQueue
+
+class AcceptOrder
 {
-    use InteractsWithQueue;
-
     /**
-     * Create the event listener.
+     * Модель текущей заявки
      *
-     * @return void
+     * @var Order
      */
-    public function __construct()
-    {
-        //
-    }
+    protected Order $order;
 
     /**
-     * Handle the event.
+     * Create a new job instance.
      *
-     * @param OrderAccepted $event
+     * @param Order $order
      * @return void
      * @throws TelegramSDKException
      */
-    public function handle(OrderAccepted $event)
+    public function __construct(Order $order)
     {
-        $owner = User::where('uid', $event->order->user_uid)->first();
-        if (($event->order->destination == 'deposit' || $event->order->destination == 'TokenSale') && $event->order->status != 'completed') {
+        $this->order = $order;
+        if ($this->order->status != 'completed') {
+            $this->notify();
+        }
+    }
+
+    /**
+     * Notifications Method
+     * @throws TelegramSDKException
+     */
+    public function notify() {
+
+        $owner = User::where('uid', $this->order->user_uid)->first();
+        if ($this->order->destination == 'deposit' || $this->order->destination == 'TokenSale') {
             try {
-                $owner->notify(new AcceptDepositOrder($event->order));
+                $owner->notify(new AcceptDepositOrder($this->order));
             } catch (CouldNotSendNotification $e) {
                 report ($e);
             }
         }
-        else {
+        elseif ($this->order->destination == 'withdraw' && $this->order->status != 'completed') {
             try {
-                $owner->notify(new AcceptWithdrawOrder($event->order));
+                $owner->notify(new AcceptWithdrawOrder($this->order));
             } catch (CouldNotSendNotification $e) {
                 report ($e);
             }
         }
 
-        $message = Message::where('order_id', $event->order->id)->first();
+        $message = Message::where('order_id', $this->order->id)->first();
         if ($message) {
             $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
             try {
@@ -66,5 +72,6 @@ class SendAcceptedNotifications implements ShouldQueue
                 report ($e);
             }
         }
+
     }
 }

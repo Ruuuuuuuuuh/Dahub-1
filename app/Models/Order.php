@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static where(string $string, mixed $id)
  * @method static findOrFail($id)
  * @method static orderBy(string $string, string $string1)
+ * @method static firstOrFail($id)
+ * @method static find(\Illuminate\Routing\Route|object|string|null $route)
  * @property mixed $id
  * @property mixed $payment_details
  * @property mixed $user_uid
@@ -23,6 +25,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed $currency
  * @property mixed|string $status
  * @property mixed $payment
+ * @property mixed $comment
  */
 class Order extends Model
 {
@@ -44,7 +47,8 @@ class Order extends Model
         'payment_details',
         'tax',
         'dhb_rate',
-        'dhb_amount'
+        'dhb_amount',
+        'comment'
     ];
 
     /**
@@ -75,7 +79,7 @@ class Order extends Model
 
     public function transactions()
     {
-        return \Bavix\Wallet\Models\Transaction::where('type', 'deposit')->where('meta', 'like', '%"order_id": ' . $this->getKey() . '%')->get();
+        return \Bavix\Wallet\Models\Transaction::where('meta', 'like', '%"order_id": ' . $this->getKey() . '%')->where('meta', 'like', '%TokenSale%')->get();
     }
 
     public function orderSystemTransaction()
@@ -85,7 +89,7 @@ class Order extends Model
 
     public function transaction(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsToMany(\App\Models\Transaction::class, 'order_transaction', 'order_id', 'transaction_id');
+        return $this->belongsToMany(\Bavix\Wallet\Models\Transaction::class, 'order_transaction', 'order_id', 'transaction_id');
     }
 
     public function scopeNotCompleted($query)

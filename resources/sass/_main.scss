@@ -1,4 +1,4 @@
-.main-screen {
+    .main-screen {
     p {
         margin-bottom:15px;
         font-size:16px;
@@ -188,12 +188,16 @@ main {
 }
 .accept_buttons {
     .button {
-        padding: 0px 50px;
+        padding: 0px 35px;
         width: 100%;
         text-align: center;
+        font-size:18px;
     }
     .button-accept {
         margin-right:15px;
+    }
+    .button-danger {
+        margin-left:15px;
     }
 }
 .progress {
@@ -240,7 +244,7 @@ main {
         z-index:7;
         border:2px solid #FF9134!important;
         .progress-bar {
-            background: #FFC700!important;
+            background: #f9975e !important;
         }
     }
     .bg-red {
@@ -257,7 +261,7 @@ main {
         height: 26px;
         top:-5px;
         z-index: 100;
-        background-image:url('/img/icon-coin.png');
+        background-image:url('/img/icon_coin_tokensale.svg');
         background-size:contain;
         background-position: center;
         background-repeat: no-repeat;
@@ -346,6 +350,21 @@ a.copy-link {
     svg {
         min-width: 33px;
         margin-left: 15px;
+    }
+}
+a.copy-link-small {
+    line-height: 28px;
+    margin-left: 15px;
+    padding: 5px 10px;
+    background-color: #f9f9f9;
+    width: auto !important;
+    span {
+        line-height: 28px;
+        margin-left:15px;
+    }
+    svg {
+        max-width:18px;
+        max-height:18px;
     }
 }
 .wallet-link-section .tab-content {

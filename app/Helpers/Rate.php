@@ -55,6 +55,15 @@ class Rate
 
 
     /**
+     * Метод для получения курса валют к DHB
+     * @param $currency
+     * @return float|int
+     */
+    public static function getRatesDHB($currency) {
+        return static::getRates($currency) / static::getRates('DHB');
+    }
+
+    /**
      * @param $name
      * @param $value
      * @param $limit

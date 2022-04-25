@@ -44,7 +44,7 @@ class AcceptSendingByUser extends Notification
             // Optional recipient user id.
             ->to($notifiable->uid)
             // Markdown supported.
-            ->content("Заявка #" . $this->order->id ."\nПользователь подтвердил отправление ".  $this->order->amount . " " . $this->order->currency .".\nПоследние цифры карты/счета " . $this->order->comment . ".\nПодтвердите получение средств.")
+            ->content("Заявка #" . $this->order->id ."\nПользователь подтвердил отправление ".  $this->order->amount . " " . $this->order->currency .".\nПодтвердите получение средств.")
 
             // (Optional) Blade template for the content.
             // ->view('notification', ['url' => $url])
