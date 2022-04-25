@@ -16,7 +16,7 @@
         </div>
     </div>
     <div class="section-main">
-        <ul class="nav nav-pills mb-3 justify-content-between" id="create-order-tab" role="tablist">
+        <ul class="nav nav-pills justify-content-between" id="create-order-tab" role="tablist">
             <li class="nav-item">
                 <button class="nav-link active" id="pills-deposit-tab"  data-toggle="pill" data-target="#pills-deposit" type="button" role="tab" aria-controls="pills-deposit" aria-selected="true">Пополнить</button>
             </li>
