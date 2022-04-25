@@ -13,10 +13,10 @@
         }
         .nav-item {
             flex-grow: 1;
+            flex-basis: 33%;
             .nav-link {
                 mix-blend-mode: normal;
                 background: #fff;
-                padding: 0 22px;
                 font-weight: 500;
                 font-size: 13px;
                 line-height: 46px;
