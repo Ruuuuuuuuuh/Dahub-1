@@ -1,11 +1,5 @@
 {
-<<<<<<< HEAD
-    "/js/app.js": "/js/app.js?id=21c87f1c06f166653851",
+    "/js/app.js": "/js/app.js?id=8e53bfc69c6507494131",
     "/css/app.css": "/css/app.css?id=aea706efa776e4596fc9",
-    "/css/dashboard.css": "/css/dashboard.css?id=9cd4e0a8689b43298861"
-=======
-    "/js/app.js": "/js/app.js?id=f8b72f3cec9c4b4e956c",
-    "/css/app.css": "/css/app.css?id=a8d4cbf29ecde28967b5",
     "/css/dashboard.css": "/css/dashboard.css?id=394810ad65c0deb13149"
->>>>>>> origin/master
 }
