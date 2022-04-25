@@ -24,6 +24,7 @@
         <div class="select-wrapper">
             <input type="number" name="amount" class="input-amount" placeholder="0" min="0" v-model="amount" @input="checkValidate()"/>
         </div>
+        <label >Доступно {{filterBalance}} {{currency}}</label>
     </div>
     <div class="form-control">
         <label for="payment-network">Платёжная система</label>
@@ -128,7 +129,9 @@ export default {
             showPayments: false,
             address: '',
             amount: '',
-            messageError: ''
+            messageError: '',
+            balance: Array,
+            filterBalance: ''
 
         }
     },
@@ -164,6 +167,10 @@ export default {
             this.crypto = this.payments[0].crypto
             this.selectedPayments = this.payments[0].title
             this.address = ''
+
+        },
+        checkBalance() {
+            this.filterBalance = this.balance.filter((item) => item.currency.title == this.currency)[0].balance
         },
         checkPayment() {
             console.log(this.selectedPayments)
@@ -188,8 +195,13 @@ export default {
     watch: {
         currency() {
             this.checkValidate()
+            this.checkBalance()
         }
-    }
+    },
+    mounted() {
+        this.balance = window.currency
+        this.checkBalance()
+    },
 }
 </script>
 
@@ -219,6 +231,12 @@ export default {
     opacity: .5;
 }
 
+label {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #485068;
+}
 .message {
     text-align: center;
     padding: 8px;

@@ -19,6 +19,7 @@
 
     <script>
         window.user = {!! Auth::User()->toJson(JSON_PRETTY_PRINT) !!}
+        window.currency = {!! $user->getBalances() !!}
         window.payments = {!! \App\Models\Payment::all()->toJson(JSON_PRETTY_PRINT) !!}
         window.onload = function () {
             if (screen.width < 450) {
