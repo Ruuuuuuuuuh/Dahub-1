@@ -143,9 +143,18 @@ export default {
     right: 0;
     display: flex;
     flex-direction: column-reverse;
+    overflow: hidden;
+    background: rgb(143 148 243 / 0%);
+    padding-top: 20%;
+}
+
+@media screen and (max-width: 460px) {
+    .blur {
+        position: fixed;
+    }
 }
 .modal-slide {
-    height: 85%;
+    height: 100%;
     background: #f2f4fa;
     border-radius: 20px 20px 0px 0px;
     padding: 24px;

@@ -198,7 +198,7 @@ section.screen {
     height:100%;
     left: 0;
     background-color: #fff;
-    padding-bottom: 25px;
+    // padding-bottom: 25px;
     bottom: -200vh;
     transition: .2s ease-in-out all;
     overflow: scroll;
@@ -716,6 +716,19 @@ section.screen {
         transition: 0.2s ease-in-out all;
     }
 }
+
+#payments-screen {
+    .section-header {
+        background: linear-gradient(166.88deg, rgba(0, 104, 156, 0.9) -18.7%, rgba(13, 31, 60, 0.9) 21.18%);
+        h2 {
+            color: #fff;
+        }
+        svg {
+            fill: #fff;
+        }
+    }
+}
+
 #add-payment-details {
     &.crypto {
         .holder-name {

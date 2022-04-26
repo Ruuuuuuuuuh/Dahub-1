@@ -1,26 +1,5 @@
 <template>
-    <div>
-        <!-- <div class="edit-header">
-            <a href="#" class="edit-btn" :class="editShow ? 'edit-btn_gradient' : '' " @click.prevent="checkShowEdit">Править</a>
-            <a href="#" @click.prevent="modalShow">
-                <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M17 34C26.3888 34 34 26.3888 34 17C34 7.61116 26.3888 0 17 0C7.61116 0 0 7.61116 0 17C0 26.3888 7.61116 34 17 34Z" fill="url(#paint0_linear_1227_1058)"/>
-                    <path d="M24.3332 17C24.3332 17.55 23.9665 17.9167 23.4165 17.9167H17.9165V23.4167C17.9165 23.9667 17.5498 24.3334 16.9998 24.3334C16.4498 24.3334 16.0832 23.9667 16.0832 23.4167V17.9167H10.5832C10.0332 17.9167 9.6665 17.55 9.6665 17C9.6665 16.45 10.0332 16.0834 10.5832 16.0834H16.0832V10.5834C16.0832 10.0334 16.4498 9.66669 16.9998 9.66669C17.5498 9.66669 17.9165 10.0334 17.9165 10.5834V16.0834H23.4165C23.9665 16.0834 24.3332 16.45 24.3332 17Z" fill="black"/>
-                    <mask id="mask0_1227_1058" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="9" y="9" width="16" height="16">
-                    <path d="M24.3332 17C24.3332 17.55 23.9665 17.9167 23.4165 17.9167H17.9165V23.4167C17.9165 23.9667 17.5498 24.3334 16.9998 24.3334C16.4498 24.3334 16.0832 23.9667 16.0832 23.4167V17.9167H10.5832C10.0332 17.9167 9.6665 17.55 9.6665 17C9.6665 16.45 10.0332 16.0834 10.5832 16.0834H16.0832V10.5834C16.0832 10.0334 16.4498 9.66669 16.9998 9.66669C17.5498 9.66669 17.9165 10.0334 17.9165 10.5834V16.0834H23.4165C23.9665 16.0834 24.3332 16.45 24.3332 17Z" fill="white"/>
-                    </mask>
-                    <g mask="url(#mask0_1227_1058)">
-                    <rect x="6" y="6" width="22" height="22" fill="white"/>
-                    </g>
-                    <defs>
-                    <linearGradient id="paint0_linear_1227_1058" x1="-43.7143" y1="24.0833" x2="23.9205" y2="18.446" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#85F362"/>
-                    <stop offset="1" stop-color="#02AAFF"/>
-                    </linearGradient>
-                    </defs>
-                </svg>
-            </a>
-        </div> -->
+    <div class="payment-list">
         <div class="payment-items">
             <PaymentItem
                 v-for="item in items"
@@ -41,9 +20,12 @@
                 @edit="showModalEdiPaymentItem(item.id, item.title, item.address, item.holder)"
             />
         </div>
-        <a @click="modalShow" href="#" class="add d-flex align-items-cente justify-content-center">
+        <div class="fixed-wrapper">
+            <a @click="modalShow" href="#" class="add d-flex align-items-cente justify-content-center">
             Добавить {{checkCrypto ? 'кошелек' : 'карту'}}
-        </a>
+            </a>
+        </div>
+
         <ModalFormAddPaymentItem v-if="showModal" @close="showModal = false" @send="addPaymentItem" :checkCrypto="checkCrypto" :checkPayment="payment ? true : false"/>
         <ModalFormEditPaymentItem v-if="showModalEdit" @close="showModalEdit = false" @send="editPaymentItem" :checkCrypto="checkCrypto" :vTitle="item.title" :vAddress="item.address" :vHolder="item.holder"/>
     </div>
@@ -167,6 +149,13 @@ export default {
                     console.log(error);
                 });
             }
+        },
+        copyAddress(address) {
+            navigator.clipboard.writeText(address).then(function() {
+                console.log('1')
+            }, function() {
+                console.log('2')
+            });
         }
     },
     mounted() {
@@ -183,8 +172,21 @@ export default {
 };
 </script>
 
+
 <style scoped>
-    .edit-header {
+
+.payment-list {
+    min-height: calc(100vh - 250px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.fixed-wrapper {
+    position: sticky;
+    bottom: 0px;
+    background: linear-gradient(360deg, #FFFFFF 0%, rgba(255, 255, 255, 0.675214) 52.14%, rgba(255, 255, 255, 0) 89.74%);
+}
+.edit-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -213,5 +215,7 @@ export default {
         height: 46px;
         border: 2px solid #00aaff;
         align-items: center;
+        margin-bottom: 32px;
+        background: #fff;
     }
 </style>
