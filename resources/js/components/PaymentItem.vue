@@ -22,7 +22,7 @@
 
         <div class="payment-details" @click="$emit('click')">
             <div v-if="!checkCrypto" class="payment">{{payment}}</div>
-            <div v-if="checkCrypto" class="name">{{ title}}</div>
+            <div v-if="checkCrypto" class="name">{{ title ? title + ' / ' : '' }}{{payment}}</div>
             <span class="address" :class="checkCrypto ? 'crypto-adress' : 'card-adress'">{{address}}</span>
             <div v-if="!checkCrypto" class="name">{{ holder}}</div>
         </div>
