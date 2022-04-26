@@ -24,7 +24,7 @@
     <div class="form-control amount-wrapper">
         <label for="amount">Сумма</label>
         <div class="select-wrapper">
-            <input type="number" name="amount" class="input-amount" placeholder="0" min="0" />
+            <input type="number" name="amount" class="input-amount" placeholder="0" min="0" autocomplete="off" />
         </div>
     </div>
     <div class="form-control">

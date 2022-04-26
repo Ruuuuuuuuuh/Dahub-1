@@ -22,7 +22,7 @@
     <div class="form-control amount-wrapper">
         <label for="amount">Сумма</label>
         <div class="select-wrapper">
-            <input type="number" name="amount" class="input-amount" ref="inputAmount" placeholder="0" min="0" v-model="amount" @input="checkValidate()"/>
+            <input type="number" name="amount" class="input-amount" autocomplete="off" ref="inputAmount" placeholder="0" min="0" v-model="amount" @input="checkValidate()"/>
         </div>
         <label >Доступно {{filterBalance}} {{currency}}</label>
     </div>
