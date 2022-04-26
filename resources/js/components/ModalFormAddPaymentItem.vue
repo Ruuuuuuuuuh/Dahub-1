@@ -32,7 +32,7 @@
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="select-angle"><path d="M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z" fill="black"></path> <mask id="angle-down" maskUnits="userSpaceOnUse" x="5" y="8" width="14" height="8" style="mask-type: alpha;"><path d="M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z" fill="white"></path></mask> <g mask="url(#angle-down)"><rect width="24" height="24" fill="#0D1F3C"></rect></g></svg>
                         </div>
 
-                        <button ref="button" class="btn btn-primary confirm-modal" disabled >Добавить</button>
+                        <button ref="button" class="confirm-modal" disabled >Добавить</button>
                     </form>
                 </div>
             </div>
@@ -84,16 +84,23 @@ export default {
 
 <style scoped>
 button {
-    color: #fff;
+    color: #0D1F3C;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1;
     border-radius: 15px;
     height: 46px;
-    border: none;
-    font-weight: 600;
-    font-size: 18px;
-    margin-top: 1rem;
+    border: 2px solid #00aaff;
+    align-items: center;
+    margin-top: 50px;
     line-height: 1;
-    background: linear-gradient(85.24deg, #85F362 -116.44%, #02AAFF 68.46%);
+    background: transparent;
     position: relative;
+}
+
+button[disabled] {
+    color: #858EA6;
+    border: 2px solid #858EA6;
 }
 
 .form-select {
