@@ -3137,6 +3137,237 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -3144,7 +3375,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   props: {
     currencies: Array,
-    _token: String
+    _token: String,
+    soon: Boolean
   },
   data: function data() {
     return {
@@ -3152,14 +3384,14 @@ __webpack_require__.r(__webpack_exports__);
         return item.visible == 1;
       }),
       currenciesPayment: true,
-      currency: 'USDT',
+      currency: "USDT",
       payments: Array,
-      selectedPayments: 'TRC20',
+      selectedPayments: "TRC20",
       crypto: Number,
       showPayments: false,
-      address: '',
-      amount: '',
-      messageError: ''
+      address: "",
+      amount: "",
+      messageError: ""
     };
   },
   methods: {
@@ -3167,16 +3399,16 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       var data = {
-        "_token": this._token,
-        "currency": this.currency,
-        "amount": this.amount,
-        "payment": this.selectedPayments,
-        "address": this.address,
-        "destination": 'withdraw'
+        _token: this._token,
+        currency: this.currency,
+        amount: this.amount,
+        payment: this.selectedPayments,
+        address: this.address,
+        destination: "withdraw"
       };
       axios.post("/api/createOrderByUser", data).then(function (response) {
         console.log(response);
-        document.location.href = '/wallet/orders/' + response.data;
+        document.location.href = "/wallet/orders/" + response.data;
       })["catch"](function (error) {
         console.log(error.response.data);
         _this.messageError = error.response.data.message; // document.location.href = '/wallet/orders/' + data;
@@ -3195,12 +3427,12 @@ __webpack_require__.r(__webpack_exports__);
       })[0].payments;
       this.crypto = this.payments[0].crypto;
       this.selectedPayments = this.payments[0].title;
-      this.address = '';
+      this.address = "";
     },
     checkPayment: function checkPayment() {
       console.log(this.selectedPayments);
       this.crypto = this.payments[0].crypto;
-      this.address = '';
+      this.address = "";
       this.checkValidate();
     },
     paymentsDeatails: function paymentsDeatails() {
@@ -3208,9 +3440,9 @@ __webpack_require__.r(__webpack_exports__);
     },
     checkValidate: function checkValidate() {
       if (this.address && this.amount) {
-        this.$refs.button.removeAttribute('disabled');
+        this.$refs.button.removeAttribute("disabled");
       } else {
-        this.$refs.button.setAttribute('disabled', 'disabled');
+        this.$refs.button.setAttribute("disabled", "disabled");
       }
     }
   },
@@ -7750,7 +7982,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".modal-enter-active[data-v-7eb631bf], .modal-leave-active[data-v-7eb631bf] {\n  transition: all 0.2s;\n}\n.modal-enter[data-v-7eb631bf], .modal-leave-to[data-v-7eb631bf] {\n  transform: translateY(100%);\n}\n.button[data-v-7eb631bf] {\n  background: #347AF0;\n  border-radius: 23px;\n  width: 100%;\n  display: block;\n  text-align: center;\n  font-weight: 500;\n  font-size: 18px;\n  line-height: 46px;\n  color: #FFFFFF;\n  margin-top: 20px;\n}\n.button[disabled][data-v-7eb631bf] {\n  opacity: 0.5;\n}\n.icon[data-v-7eb631bf] {\n  margin-bottom: 24px;\n}\n.message[data-v-7eb631bf] {\n  text-align: center;\n  padding: 8px;\n  background: #fff;\n  border: 2px #E15063 solid;\n  border-radius: 50px;\n  color: #E15063;\n  margin-top: 12px;\n  font-weight: 600;\n}", ""]);
+exports.push([module.i, "h1[data-v-7eb631bf] {\n  text-align: center;\n  background: linear-gradient(87.76deg, #85F362 -53.4%, #02AAFF 67.87%);\n  -webkit-background-clip: text;\n  -webkit-text-fill-color: transparent;\n  background-clip: text;\n}\n.modal-enter-active[data-v-7eb631bf],\n.modal-leave-active[data-v-7eb631bf] {\n  transition: all 0.2s;\n}\n.modal-enter[data-v-7eb631bf],\n.modal-leave-to[data-v-7eb631bf] {\n  transform: translateY(100%);\n}\n.button[data-v-7eb631bf] {\n  background: #347af0;\n  border-radius: 23px;\n  width: 100%;\n  display: block;\n  text-align: center;\n  font-weight: 500;\n  font-size: 18px;\n  line-height: 46px;\n  color: #ffffff;\n  margin-top: 20px;\n}\n.button[disabled][data-v-7eb631bf] {\n  opacity: 0.5;\n}\n.icon[data-v-7eb631bf] {\n  margin-bottom: 24px;\n}\n.message[data-v-7eb631bf] {\n  text-align: center;\n  padding: 8px;\n  background: #fff;\n  border: 2px #e15063 solid;\n  border-radius: 50px;\n  color: #e15063;\n  margin-top: 12px;\n  font-weight: 600;\n}", ""]);
 
 // exports
 
@@ -40105,6 +40337,7 @@ var render = function() {
                 attrs: {
                   type: "number",
                   name: "amount",
+                  autocomplete: "off",
                   placeholder: "0",
                   min: "0"
                 },
@@ -41613,823 +41846,895 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    [
-      _c(
-        "form",
-        {
-          staticClass: "form-withdraw form-create-order",
-          attrs: { action: "index.html", method: "post" }
-        },
-        [
-          _c("input", {
-            attrs: { type: "hidden", name: "destination", value: "withdraw" }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-control" }, [
-            _c("label", { attrs: { for: "currency" } }, [_vm._v("Валюта")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "select-wrapper" }, [
-              _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.currency,
-                      expression: "currency"
-                    }
-                  ],
-                  staticClass: "form-select",
-                  attrs: { name: "currency" },
-                  on: {
-                    change: [
-                      function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.currency = $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      },
-                      function($event) {
-                        return _vm.checkCurrency($event)
-                      }
-                    ]
-                  }
-                },
-                _vm._l(_vm.fillterCurrencies, function(currency) {
-                  return _c(
-                    "option",
-                    {
-                      key: currency.id,
-                      attrs: { "data-crypto": currency.crypto },
-                      domProps: { value: currency.title }
-                    },
-                    [_vm._v(_vm._s(currency.title))]
-                  )
-                }),
-                0
-              ),
-              _vm._v(" "),
-              _c(
-                "svg",
-                {
-                  staticClass: "select-angle",
-                  attrs: {
-                    width: "24",
-                    height: "24",
-                    viewBox: "0 0 24 24",
-                    fill: "none",
-                    xmlns: "http://www.w3.org/2000/svg"
-                  }
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      d:
-                        "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
-                      fill: "black"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "mask",
-                    {
-                      staticStyle: { "mask-type": "alpha" },
-                      attrs: {
-                        id: "angle-down2",
-                        maskUnits: "userSpaceOnUse",
-                        x: "5",
-                        y: "8",
-                        width: "14",
-                        height: "8"
-                      }
-                    },
-                    [
-                      _c("path", {
-                        attrs: {
-                          d:
-                            "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
-                          fill: "white"
-                        }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("g", { attrs: { mask: "url(#angle-down2)" } }, [
-                    _c("rect", {
-                      attrs: { width: "24", height: "24", fill: "#0D1F3C" }
-                    })
-                  ])
-                ]
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-control" }, [
-            _c("label", { attrs: { for: "payment-network" } }, [
-              _vm._v("Платёжная система")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "select-wrapper" }, [
-              _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.selectedPayments,
-                      expression: "selectedPayments"
-                    }
-                  ],
-                  staticClass: "form-select select-payment",
-                  attrs: { name: "payment-network" },
-                  on: {
-                    change: [
-                      function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.selectedPayments = $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      },
-                      function($event) {
-                        return _vm.checkPayment()
-                      }
-                    ]
-                  }
-                },
-                _vm._l(_vm.payments, function(item) {
-                  return _c(
-                    "option",
-                    { key: item.id, domProps: { value: item.title } },
-                    [_vm._v(_vm._s(item.title))]
-                  )
-                }),
-                0
-              ),
-              _vm._v(" "),
-              _c(
-                "svg",
-                {
-                  staticClass: "select-angle",
-                  attrs: {
-                    width: "24",
-                    height: "24",
-                    viewBox: "0 0 24 24",
-                    fill: "none",
-                    xmlns: "http://www.w3.org/2000/svg"
-                  }
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      d:
-                        "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
-                      fill: "black"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "mask",
-                    {
-                      staticStyle: { "mask-type": "alpha" },
-                      attrs: {
-                        id: "angle-down1",
-                        maskUnits: "userSpaceOnUse",
-                        x: "5",
-                        y: "8",
-                        width: "14",
-                        height: "8"
-                      }
-                    },
-                    [
-                      _c("path", {
-                        attrs: {
-                          d:
-                            "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
-                          fill: "white"
-                        }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("g", { attrs: { mask: "url(#angle-down1)" } }, [
-                    _c("rect", {
-                      attrs: { width: "24", height: "24", fill: "#0D1F3C" }
-                    })
-                  ])
-                ]
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-control amount-wrapper" }, [
-            _c("label", { attrs: { for: "amount" } }, [_vm._v("Сумма")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "select-wrapper" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.amount,
-                    expression: "amount"
-                  }
-                ],
-                staticClass: "input-amount",
-                attrs: {
-                  type: "number",
-                  name: "amount",
-                  placeholder: "0",
-                  min: "0"
-                },
-                domProps: { value: _vm.amount },
-                on: {
-                  input: [
-                    function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.amount = $event.target.value
-                    },
-                    function($event) {
-                      return _vm.checkValidate()
-                    }
-                  ]
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("label", { attrs: { for: "amount" } }, [
-              _vm._v("Доступно 1 809,98 USDT")
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "d-flex justify-content-center icon" }, [
+  return _c("div", [
+    _vm.soon ? _c("h1", [_vm._v("Скоро")]) : _vm._e(),
+    _vm._v(" "),
+    !_vm.soon
+      ? _c(
+          "div",
+          [
             _c(
-              "svg",
+              "form",
               {
-                attrs: {
-                  width: "24",
-                  height: "24",
-                  viewBox: "0 0 24 24",
-                  fill: "none",
-                  xmlns: "http://www.w3.org/2000/svg"
-                }
-              },
-              [
-                _c("g", { attrs: { "clip-path": "url(#clip0_1336_3694)" } }, [
-                  _c("path", {
-                    attrs: {
-                      d:
-                        "M18.5459 22.9082L18.5459 3.72364L22.1382 7.31586C22.5642 7.7419 23.2549 7.7419 23.681 7.31586C24.107 6.8899 24.107 6.19913 23.681 5.7731L18.2264 0.318551C17.8005 -0.107486 17.1097 -0.107486 16.6837 0.318551L11.2291 5.7731C11.0161 5.98611 10.9096 6.26532 10.9096 6.54452C10.9096 6.82372 11.0161 7.10292 11.2291 7.31586C11.6551 7.7419 12.3458 7.7419 12.7719 7.31586L16.3641 3.72364L16.3641 22.9082C16.3641 23.5106 16.8525 23.9991 17.455 23.9991C18.0575 23.9991 18.5459 23.5106 18.5459 22.9082Z",
-                      fill: "url(#paint0_linear_1336_3694)"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c("path", {
-                    attrs: {
-                      d:
-                        "M12.7713 18.2259C13.1973 17.7999 13.1973 17.1092 12.7713 16.6831C12.3454 16.2571 11.6546 16.2571 11.2286 16.6831L7.63629 20.2754L7.63629 1.09091C7.63629 0.488436 7.14785 7.08692e-08 6.54538 7.80536e-08C5.94291 8.5238e-08 5.45447 0.488436 5.45447 1.09091L5.45447 20.2754L1.86218 16.6832C1.43621 16.2572 0.745449 16.2572 0.319412 16.6832C0.106467 16.8961 -7.89502e-05 17.1753 -7.89468e-05 17.4545C-7.89435e-05 17.7337 0.106467 18.0129 0.319486 18.2259L5.77403 23.6804C6.2 24.1065 6.89076 24.1065 7.3168 23.6804L12.7713 18.2259Z",
-                      fill: "url(#paint1_linear_1336_3694)"
-                    }
-                  })
-                ]),
-                _vm._v(" "),
-                _c(
-                  "defs",
-                  [
-                    _c(
-                      "linearGradient",
-                      {
-                        attrs: {
-                          id: "paint0_linear_1336_3694",
-                          x1: "14.7277",
-                          y1: "-30.8582",
-                          x2: "21.9061",
-                          y2: "16.1189",
-                          gradientUnits: "userSpaceOnUse"
-                        }
-                      },
-                      [
-                        _c("stop", { attrs: { "stop-color": "#85F362" } }),
-                        _vm._v(" "),
-                        _c("stop", {
-                          attrs: { offset: "1", "stop-color": "#02AAFF" }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "linearGradient",
-                      {
-                        attrs: {
-                          id: "paint1_linear_1336_3694",
-                          x1: "3.8181",
-                          y1: "-15.6522",
-                          x2: "4.76569",
-                          y2: "24.0763",
-                          gradientUnits: "userSpaceOnUse"
-                        }
-                      },
-                      [
-                        _c("stop", { attrs: { "stop-color": "#FF9134" } }),
-                        _vm._v(" "),
-                        _c("stop", {
-                          attrs: { offset: "1", "stop-color": "#E72269" }
-                        })
-                      ],
-                      1
-                    ),
-                    _vm._v(" "),
-                    _c("clipPath", { attrs: { id: "clip0_1336_3694" } }, [
-                      _c("rect", {
-                        attrs: {
-                          width: "24",
-                          height: "24",
-                          fill: "white",
-                          transform: "translate(24) rotate(90)"
-                        }
-                      })
-                    ])
-                  ],
-                  1
-                )
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-control" }, [
-            _c("label", { attrs: { for: "currency" } }, [_vm._v("Валюта")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "select-wrapper" }, [
-              _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.currency,
-                      expression: "currency"
-                    }
-                  ],
-                  staticClass: "form-select",
-                  attrs: { name: "currency" },
-                  on: {
-                    change: [
-                      function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.currency = $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      },
-                      function($event) {
-                        return _vm.checkCurrency($event)
-                      }
-                    ]
-                  }
-                },
-                _vm._l(_vm.fillterCurrencies, function(currency) {
-                  return _c(
-                    "option",
-                    {
-                      key: currency.id,
-                      attrs: { "data-crypto": currency.crypto },
-                      domProps: { value: currency.title }
-                    },
-                    [_vm._v(_vm._s(currency.title))]
-                  )
-                }),
-                0
-              ),
-              _vm._v(" "),
-              _c(
-                "svg",
-                {
-                  staticClass: "select-angle",
-                  attrs: {
-                    width: "24",
-                    height: "24",
-                    viewBox: "0 0 24 24",
-                    fill: "none",
-                    xmlns: "http://www.w3.org/2000/svg"
-                  }
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      d:
-                        "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
-                      fill: "black"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "mask",
-                    {
-                      staticStyle: { "mask-type": "alpha" },
-                      attrs: {
-                        id: "angle-down2",
-                        maskUnits: "userSpaceOnUse",
-                        x: "5",
-                        y: "8",
-                        width: "14",
-                        height: "8"
-                      }
-                    },
-                    [
-                      _c("path", {
-                        attrs: {
-                          d:
-                            "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
-                          fill: "white"
-                        }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("g", { attrs: { mask: "url(#angle-down2)" } }, [
-                    _c("rect", {
-                      attrs: { width: "24", height: "24", fill: "#0D1F3C" }
-                    })
-                  ])
-                ]
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-control amount-wrapper" }, [
-            _c("label", { attrs: { for: "amount" } }, [
-              _vm._v("Сумма к получению")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "select-wrapper" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.amount,
-                    expression: "amount"
-                  }
-                ],
-                staticClass: "input-amount",
-                attrs: {
-                  type: "number",
-                  readonly: "",
-                  name: "amount",
-                  placeholder: "0",
-                  min: "0"
-                },
-                domProps: { value: _vm.amount },
-                on: {
-                  input: [
-                    function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.amount = $event.target.value
-                    },
-                    function($event) {
-                      return _vm.checkValidate()
-                    }
-                  ]
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c(
-              "label",
-              {
-                staticStyle: { "text-align": "center" },
-                attrs: { for: "amount" }
-              },
-              [_vm._v("*по лучшему курсу, за вычетом комиссии")]
-            )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-control" }, [
-            _c("label", { attrs: { for: "payment-network" } }, [
-              _vm._v("Платёжная система")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "select-wrapper" }, [
-              _c(
-                "select",
-                {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.selectedPayments,
-                      expression: "selectedPayments"
-                    }
-                  ],
-                  staticClass: "form-select select-payment",
-                  attrs: { name: "payment-network" },
-                  on: {
-                    change: [
-                      function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.selectedPayments = $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      },
-                      function($event) {
-                        return _vm.checkPayment()
-                      }
-                    ]
-                  }
-                },
-                _vm._l(_vm.payments, function(item) {
-                  return _c(
-                    "option",
-                    { key: item.id, domProps: { value: item.title } },
-                    [_vm._v(_vm._s(item.title))]
-                  )
-                }),
-                0
-              ),
-              _vm._v(" "),
-              _c(
-                "svg",
-                {
-                  staticClass: "select-angle",
-                  attrs: {
-                    width: "24",
-                    height: "24",
-                    viewBox: "0 0 24 24",
-                    fill: "none",
-                    xmlns: "http://www.w3.org/2000/svg"
-                  }
-                },
-                [
-                  _c("path", {
-                    attrs: {
-                      d:
-                        "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
-                      fill: "black"
-                    }
-                  }),
-                  _vm._v(" "),
-                  _c(
-                    "mask",
-                    {
-                      staticStyle: { "mask-type": "alpha" },
-                      attrs: {
-                        id: "angle-down1",
-                        maskUnits: "userSpaceOnUse",
-                        x: "5",
-                        y: "8",
-                        width: "14",
-                        height: "8"
-                      }
-                    },
-                    [
-                      _c("path", {
-                        attrs: {
-                          d:
-                            "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
-                          fill: "white"
-                        }
-                      })
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c("g", { attrs: { mask: "url(#angle-down1)" } }, [
-                    _c("rect", {
-                      attrs: { width: "24", height: "24", fill: "#0D1F3C" }
-                    })
-                  ])
-                ]
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-control address" }, [
-            _c("label", { attrs: { for: "address" } }, [
-              _vm._v(
-                _vm._s(this.crypto ? "Выберите кошелек" : "Выберите карту")
-              )
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "select-wrapper",
-                on: {
-                  click: function($event) {
-                    return _vm.paymentsDeatails()
-                  }
-                }
+                staticClass: "form-withdraw form-create-order",
+                attrs: { action: "index.html", method: "post" }
               },
               [
                 _c("input", {
-                  directives: [
-                    {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.address,
-                      expression: "address"
-                    }
-                  ],
-                  staticClass: "input-address",
-                  attrs: { type: "button", name: "address", value: "" },
-                  domProps: { value: _vm.address },
-                  on: {
-                    change: function($event) {
-                      return _vm.checkValidate()
-                    },
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
-                      }
-                      _vm.address = $event.target.value
-                    }
+                  attrs: {
+                    type: "hidden",
+                    name: "destination",
+                    value: "withdraw"
                   }
-                })
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _vm.showPayments
-            ? _c(
-                "div",
-                [
-                  _c("transition", { attrs: { appear: "", name: "modal" } }, [
-                    _c("section", { staticClass: "screen opened settings" }, [
-                      _c("div", { staticClass: "section-header" }, [
-                        _c("div", { staticClass: "top-nav" }, [
-                          _c(
-                            "button",
-                            {
-                              staticClass: "back-link",
-                              on: {
-                                click: function($event) {
-                                  return _vm.paymentsDeatails()
-                                }
-                              }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-control" }, [
+                  _c("label", { attrs: { for: "currency" } }, [
+                    _vm._v("Валюта")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "select-wrapper" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.currency,
+                            expression: "currency"
+                          }
+                        ],
+                        staticClass: "form-select",
+                        attrs: { name: "currency" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.currency = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
                             },
-                            [
-                              _c(
-                                "svg",
-                                {
+                            function($event) {
+                              return _vm.checkCurrency($event)
+                            }
+                          ]
+                        }
+                      },
+                      _vm._l(_vm.fillterCurrencies, function(currency) {
+                        return _c(
+                          "option",
+                          {
+                            key: currency.id,
+                            attrs: { "data-crypto": currency.crypto },
+                            domProps: { value: currency.title }
+                          },
+                          [_vm._v(_vm._s(currency.title))]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "svg",
+                      {
+                        staticClass: "select-angle",
+                        attrs: {
+                          width: "24",
+                          height: "24",
+                          viewBox: "0 0 24 24",
+                          fill: "none",
+                          xmlns: "http://www.w3.org/2000/svg"
+                        }
+                      },
+                      [
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
+                            fill: "black"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "mask",
+                          {
+                            staticStyle: { "mask-type": "alpha" },
+                            attrs: {
+                              id: "angle-down2",
+                              maskUnits: "userSpaceOnUse",
+                              x: "5",
+                              y: "8",
+                              width: "14",
+                              height: "8"
+                            }
+                          },
+                          [
+                            _c("path", {
+                              attrs: {
+                                d:
+                                  "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
+                                fill: "white"
+                              }
+                            })
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("g", { attrs: { mask: "url(#angle-down2)" } }, [
+                          _c("rect", {
+                            attrs: {
+                              width: "24",
+                              height: "24",
+                              fill: "#0D1F3C"
+                            }
+                          })
+                        ])
+                      ]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-control" }, [
+                  _c("label", { attrs: { for: "payment-network" } }, [
+                    _vm._v("Платёжная система")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "select-wrapper" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.selectedPayments,
+                            expression: "selectedPayments"
+                          }
+                        ],
+                        staticClass: "form-select select-payment",
+                        attrs: { name: "payment-network" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.selectedPayments = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            function($event) {
+                              return _vm.checkPayment()
+                            }
+                          ]
+                        }
+                      },
+                      _vm._l(_vm.payments, function(item) {
+                        return _c(
+                          "option",
+                          { key: item.id, domProps: { value: item.title } },
+                          [_vm._v(_vm._s(item.title))]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "svg",
+                      {
+                        staticClass: "select-angle",
+                        attrs: {
+                          width: "24",
+                          height: "24",
+                          viewBox: "0 0 24 24",
+                          fill: "none",
+                          xmlns: "http://www.w3.org/2000/svg"
+                        }
+                      },
+                      [
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
+                            fill: "black"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "mask",
+                          {
+                            staticStyle: { "mask-type": "alpha" },
+                            attrs: {
+                              id: "angle-down1",
+                              maskUnits: "userSpaceOnUse",
+                              x: "5",
+                              y: "8",
+                              width: "14",
+                              height: "8"
+                            }
+                          },
+                          [
+                            _c("path", {
+                              attrs: {
+                                d:
+                                  "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
+                                fill: "white"
+                              }
+                            })
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("g", { attrs: { mask: "url(#angle-down1)" } }, [
+                          _c("rect", {
+                            attrs: {
+                              width: "24",
+                              height: "24",
+                              fill: "#0D1F3C"
+                            }
+                          })
+                        ])
+                      ]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-control amount-wrapper" }, [
+                  _c("label", { attrs: { for: "amount" } }, [_vm._v("Сумма")]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "select-wrapper" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.amount,
+                          expression: "amount"
+                        }
+                      ],
+                      staticClass: "input-amount",
+                      attrs: {
+                        type: "number",
+                        name: "amount",
+                        placeholder: "0",
+                        min: "0"
+                      },
+                      domProps: { value: _vm.amount },
+                      on: {
+                        input: [
+                          function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.amount = $event.target.value
+                          },
+                          function($event) {
+                            return _vm.checkValidate()
+                          }
+                        ]
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("label", { attrs: { for: "amount" } }, [
+                    _vm._v("Доступно 1 809,98 USDT")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "d-flex justify-content-center icon" },
+                  [
+                    _c(
+                      "svg",
+                      {
+                        attrs: {
+                          width: "24",
+                          height: "24",
+                          viewBox: "0 0 24 24",
+                          fill: "none",
+                          xmlns: "http://www.w3.org/2000/svg"
+                        }
+                      },
+                      [
+                        _c(
+                          "g",
+                          { attrs: { "clip-path": "url(#clip0_1336_3694)" } },
+                          [
+                            _c("path", {
+                              attrs: {
+                                d:
+                                  "M18.5459 22.9082L18.5459 3.72364L22.1382 7.31586C22.5642 7.7419 23.2549 7.7419 23.681 7.31586C24.107 6.8899 24.107 6.19913 23.681 5.7731L18.2264 0.318551C17.8005 -0.107486 17.1097 -0.107486 16.6837 0.318551L11.2291 5.7731C11.0161 5.98611 10.9096 6.26532 10.9096 6.54452C10.9096 6.82372 11.0161 7.10292 11.2291 7.31586C11.6551 7.7419 12.3458 7.7419 12.7719 7.31586L16.3641 3.72364L16.3641 22.9082C16.3641 23.5106 16.8525 23.9991 17.455 23.9991C18.0575 23.9991 18.5459 23.5106 18.5459 22.9082Z",
+                                fill: "url(#paint0_linear_1336_3694)"
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("path", {
+                              attrs: {
+                                d:
+                                  "M12.7713 18.2259C13.1973 17.7999 13.1973 17.1092 12.7713 16.6831C12.3454 16.2571 11.6546 16.2571 11.2286 16.6831L7.63629 20.2754L7.63629 1.09091C7.63629 0.488436 7.14785 7.08692e-08 6.54538 7.80536e-08C5.94291 8.5238e-08 5.45447 0.488436 5.45447 1.09091L5.45447 20.2754L1.86218 16.6832C1.43621 16.2572 0.745449 16.2572 0.319412 16.6832C0.106467 16.8961 -7.89502e-05 17.1753 -7.89468e-05 17.4545C-7.89435e-05 17.7337 0.106467 18.0129 0.319486 18.2259L5.77403 23.6804C6.2 24.1065 6.89076 24.1065 7.3168 23.6804L12.7713 18.2259Z",
+                                fill: "url(#paint1_linear_1336_3694)"
+                              }
+                            })
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "defs",
+                          [
+                            _c(
+                              "linearGradient",
+                              {
+                                attrs: {
+                                  id: "paint0_linear_1336_3694",
+                                  x1: "14.7277",
+                                  y1: "-30.8582",
+                                  x2: "21.9061",
+                                  y2: "16.1189",
+                                  gradientUnits: "userSpaceOnUse"
+                                }
+                              },
+                              [
+                                _c("stop", {
+                                  attrs: { "stop-color": "#85F362" }
+                                }),
+                                _vm._v(" "),
+                                _c("stop", {
+                                  attrs: {
+                                    offset: "1",
+                                    "stop-color": "#02AAFF"
+                                  }
+                                })
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "linearGradient",
+                              {
+                                attrs: {
+                                  id: "paint1_linear_1336_3694",
+                                  x1: "3.8181",
+                                  y1: "-15.6522",
+                                  x2: "4.76569",
+                                  y2: "24.0763",
+                                  gradientUnits: "userSpaceOnUse"
+                                }
+                              },
+                              [
+                                _c("stop", {
+                                  attrs: { "stop-color": "#FF9134" }
+                                }),
+                                _vm._v(" "),
+                                _c("stop", {
+                                  attrs: {
+                                    offset: "1",
+                                    "stop-color": "#E72269"
+                                  }
+                                })
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "clipPath",
+                              { attrs: { id: "clip0_1336_3694" } },
+                              [
+                                _c("rect", {
                                   attrs: {
                                     width: "24",
                                     height: "24",
-                                    viewBox: "0 0 24 24",
-                                    fill: "none",
-                                    xmlns: "http://www.w3.org/2000/svg"
+                                    fill: "white",
+                                    transform: "translate(24) rotate(90)"
                                   }
-                                },
-                                [
-                                  _c("path", {
-                                    attrs: {
-                                      "fill-rule": "evenodd",
-                                      "clip-rule": "evenodd",
-                                      d:
-                                        "M15.7071 17.2929C16.0976 17.6834 16.0976 18.3166 15.7071 18.7071C15.3166 19.0976 14.6834 19.0976 14.2929 18.7071L8.29289 12.7071C7.90237 12.3166 7.90237 11.6834 8.29289 11.2929L14.2929 5.29289C14.6834 4.90237 15.3166 4.90237 15.7071 5.29289C16.0976 5.68342 16.0976 6.31658 15.7071 6.70711L10.4142 12L15.7071 17.2929Z",
-                                      fill: "#0D1F3C"
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c(
-                                    "mask",
-                                    {
-                                      attrs: {
-                                        id: "back-link",
-                                        "mask-type": "alpha",
-                                        maskUnits: "userSpaceOnUse",
-                                        x: "8",
-                                        y: "5",
-                                        width: "8",
-                                        height: "14"
-                                      }
-                                    },
-                                    [
-                                      _c("path", {
-                                        attrs: {
-                                          "fill-rule": "evenodd",
-                                          "clip-rule": "evenodd",
-                                          d:
-                                            "M15.7071 17.2929C16.0976 17.6834 16.0976 18.3166 15.7071 18.7071C15.3166 19.0976 14.6834 19.0976 14.2929 18.7071L8.29289 12.7071C7.90237 12.3166 7.90237 11.6834 8.29289 11.2929L14.2929 5.29289C14.6834 4.90237 15.3166 4.90237 15.7071 5.29289C16.0976 5.68342 16.0976 6.31658 15.7071 6.70711L10.4142 12L15.7071 17.2929Z",
-                                          fill: "white"
-                                        }
-                                      })
-                                    ]
-                                  ),
-                                  _vm._v(" "),
-                                  _c(
-                                    "g",
-                                    { attrs: { mask: "url(#back-link)" } },
-                                    [
-                                      _c("rect", {
-                                        attrs: {
-                                          width: "24",
-                                          height: "24",
-                                          fill: "#0D1F3C"
-                                        }
-                                      })
-                                    ]
-                                  )
-                                ]
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c("h2", [
-                            _vm._v(
-                              "Список " +
-                                _vm._s(this.crypto ? "кошельков" : "карт")
+                                })
+                              ]
                             )
-                          ])
-                        ])
-                      ]),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        { staticClass: "section-main" },
-                        [
-                          _c("payments-list", {
-                            attrs: {
-                              payment: _vm.selectedPayments,
-                              crypto: _vm.crypto
+                          ],
+                          1
+                        )
+                      ]
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-control" }, [
+                  _c("label", { attrs: { for: "currency" } }, [
+                    _vm._v("Валюта")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "select-wrapper" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.currency,
+                            expression: "currency"
+                          }
+                        ],
+                        staticClass: "form-select",
+                        attrs: { name: "currency" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.currency = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
                             },
-                            on: {
-                              itemData: function($event) {
-                                return _vm.checkAddress($event)
+                            function($event) {
+                              return _vm.checkCurrency($event)
+                            }
+                          ]
+                        }
+                      },
+                      _vm._l(_vm.fillterCurrencies, function(currency) {
+                        return _c(
+                          "option",
+                          {
+                            key: currency.id,
+                            attrs: { "data-crypto": currency.crypto },
+                            domProps: { value: currency.title }
+                          },
+                          [_vm._v(_vm._s(currency.title))]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "svg",
+                      {
+                        staticClass: "select-angle",
+                        attrs: {
+                          width: "24",
+                          height: "24",
+                          viewBox: "0 0 24 24",
+                          fill: "none",
+                          xmlns: "http://www.w3.org/2000/svg"
+                        }
+                      },
+                      [
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
+                            fill: "black"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "mask",
+                          {
+                            staticStyle: { "mask-type": "alpha" },
+                            attrs: {
+                              id: "angle-down2",
+                              maskUnits: "userSpaceOnUse",
+                              x: "5",
+                              y: "8",
+                              width: "14",
+                              height: "8"
+                            }
+                          },
+                          [
+                            _c("path", {
+                              attrs: {
+                                d:
+                                  "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
+                                fill: "white"
                               }
+                            })
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("g", { attrs: { mask: "url(#angle-down2)" } }, [
+                          _c("rect", {
+                            attrs: {
+                              width: "24",
+                              height: "24",
+                              fill: "#0D1F3C"
                             }
                           })
-                        ],
-                        1
-                      )
-                    ])
+                        ])
+                      ]
+                    )
                   ])
-                ],
-                1
-              )
-            : _vm._e()
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          ref: "button",
-          staticClass: "button button-blue ",
-          attrs: { disabled: "" },
-          on: {
-            click: function($event) {
-              return _vm.createOrder()
-            }
-          }
-        },
-        [_vm._v("Далее")]
-      ),
-      _vm._v(" "),
-      _c("transition", { attrs: { appear: "", name: "modal" } }, [
-        _vm.messageError
-          ? _c("div", { staticClass: "message" }, [
-              _vm._v("\n    " + _vm._s(_vm.messageError) + "\n")
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-control amount-wrapper" }, [
+                  _c("label", { attrs: { for: "amount" } }, [
+                    _vm._v("Сумма к получению")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "select-wrapper" }, [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.amount,
+                          expression: "amount"
+                        }
+                      ],
+                      staticClass: "input-amount",
+                      attrs: {
+                        type: "number",
+                        readonly: "",
+                        name: "amount",
+                        placeholder: "0",
+                        min: "0"
+                      },
+                      domProps: { value: _vm.amount },
+                      on: {
+                        input: [
+                          function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.amount = $event.target.value
+                          },
+                          function($event) {
+                            return _vm.checkValidate()
+                          }
+                        ]
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "label",
+                    {
+                      staticStyle: { "text-align": "center" },
+                      attrs: { for: "amount" }
+                    },
+                    [_vm._v("*по лучшему курсу, за вычетом комиссии")]
+                  )
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-control" }, [
+                  _c("label", { attrs: { for: "payment-network" } }, [
+                    _vm._v("Платёжная система")
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "select-wrapper" }, [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.selectedPayments,
+                            expression: "selectedPayments"
+                          }
+                        ],
+                        staticClass: "form-select select-payment",
+                        attrs: { name: "payment-network" },
+                        on: {
+                          change: [
+                            function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.selectedPayments = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            },
+                            function($event) {
+                              return _vm.checkPayment()
+                            }
+                          ]
+                        }
+                      },
+                      _vm._l(_vm.payments, function(item) {
+                        return _c(
+                          "option",
+                          { key: item.id, domProps: { value: item.title } },
+                          [_vm._v(_vm._s(item.title))]
+                        )
+                      }),
+                      0
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "svg",
+                      {
+                        staticClass: "select-angle",
+                        attrs: {
+                          width: "24",
+                          height: "24",
+                          viewBox: "0 0 24 24",
+                          fill: "none",
+                          xmlns: "http://www.w3.org/2000/svg"
+                        }
+                      },
+                      [
+                        _c("path", {
+                          attrs: {
+                            d:
+                              "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
+                            fill: "black"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "mask",
+                          {
+                            staticStyle: { "mask-type": "alpha" },
+                            attrs: {
+                              id: "angle-down1",
+                              maskUnits: "userSpaceOnUse",
+                              x: "5",
+                              y: "8",
+                              width: "14",
+                              height: "8"
+                            }
+                          },
+                          [
+                            _c("path", {
+                              attrs: {
+                                d:
+                                  "M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z",
+                                fill: "white"
+                              }
+                            })
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("g", { attrs: { mask: "url(#angle-down1)" } }, [
+                          _c("rect", {
+                            attrs: {
+                              width: "24",
+                              height: "24",
+                              fill: "#0D1F3C"
+                            }
+                          })
+                        ])
+                      ]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-control address" }, [
+                  _c("label", { attrs: { for: "address" } }, [
+                    _vm._v(
+                      _vm._s(
+                        this.crypto ? "Выберите кошелек" : "Выберите карту"
+                      )
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "select-wrapper",
+                      on: {
+                        click: function($event) {
+                          return _vm.paymentsDeatails()
+                        }
+                      }
+                    },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.address,
+                            expression: "address"
+                          }
+                        ],
+                        staticClass: "input-address",
+                        attrs: { type: "button", name: "address", value: "" },
+                        domProps: { value: _vm.address },
+                        on: {
+                          change: function($event) {
+                            return _vm.checkValidate()
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.address = $event.target.value
+                          }
+                        }
+                      })
+                    ]
+                  )
+                ]),
+                _vm._v(" "),
+                _vm.showPayments
+                  ? _c(
+                      "div",
+                      [
+                        _c(
+                          "transition",
+                          { attrs: { appear: "", name: "modal" } },
+                          [
+                            _c(
+                              "section",
+                              { staticClass: "screen opened settings" },
+                              [
+                                _c("div", { staticClass: "section-header" }, [
+                                  _c("div", { staticClass: "top-nav" }, [
+                                    _c(
+                                      "button",
+                                      {
+                                        staticClass: "back-link",
+                                        on: {
+                                          click: function($event) {
+                                            return _vm.paymentsDeatails()
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "svg",
+                                          {
+                                            attrs: {
+                                              width: "24",
+                                              height: "24",
+                                              viewBox: "0 0 24 24",
+                                              fill: "none",
+                                              xmlns:
+                                                "http://www.w3.org/2000/svg"
+                                            }
+                                          },
+                                          [
+                                            _c("path", {
+                                              attrs: {
+                                                "fill-rule": "evenodd",
+                                                "clip-rule": "evenodd",
+                                                d:
+                                                  "M15.7071 17.2929C16.0976 17.6834 16.0976 18.3166 15.7071 18.7071C15.3166 19.0976 14.6834 19.0976 14.2929 18.7071L8.29289 12.7071C7.90237 12.3166 7.90237 11.6834 8.29289 11.2929L14.2929 5.29289C14.6834 4.90237 15.3166 4.90237 15.7071 5.29289C16.0976 5.68342 16.0976 6.31658 15.7071 6.70711L10.4142 12L15.7071 17.2929Z",
+                                                fill: "#0D1F3C"
+                                              }
+                                            }),
+                                            _vm._v(" "),
+                                            _c(
+                                              "mask",
+                                              {
+                                                attrs: {
+                                                  id: "back-link",
+                                                  "mask-type": "alpha",
+                                                  maskUnits: "userSpaceOnUse",
+                                                  x: "8",
+                                                  y: "5",
+                                                  width: "8",
+                                                  height: "14"
+                                                }
+                                              },
+                                              [
+                                                _c("path", {
+                                                  attrs: {
+                                                    "fill-rule": "evenodd",
+                                                    "clip-rule": "evenodd",
+                                                    d:
+                                                      "M15.7071 17.2929C16.0976 17.6834 16.0976 18.3166 15.7071 18.7071C15.3166 19.0976 14.6834 19.0976 14.2929 18.7071L8.29289 12.7071C7.90237 12.3166 7.90237 11.6834 8.29289 11.2929L14.2929 5.29289C14.6834 4.90237 15.3166 4.90237 15.7071 5.29289C16.0976 5.68342 16.0976 6.31658 15.7071 6.70711L10.4142 12L15.7071 17.2929Z",
+                                                    fill: "white"
+                                                  }
+                                                })
+                                              ]
+                                            ),
+                                            _vm._v(" "),
+                                            _c(
+                                              "g",
+                                              {
+                                                attrs: {
+                                                  mask: "url(#back-link)"
+                                                }
+                                              },
+                                              [
+                                                _c("rect", {
+                                                  attrs: {
+                                                    width: "24",
+                                                    height: "24",
+                                                    fill: "#0D1F3C"
+                                                  }
+                                                })
+                                              ]
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c("h2", [
+                                      _vm._v(
+                                        "\n                                Список\n                                " +
+                                          _vm._s(
+                                            this.crypto ? "кошельков" : "карт"
+                                          ) +
+                                          "\n                            "
+                                      )
+                                    ])
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "section-main" },
+                                  [
+                                    _c("payments-list", {
+                                      attrs: {
+                                        payment: _vm.selectedPayments,
+                                        crypto: _vm.crypto
+                                      },
+                                      on: {
+                                        itemData: function($event) {
+                                          return _vm.checkAddress($event)
+                                        }
+                                      }
+                                    })
+                                  ],
+                                  1
+                                )
+                              ]
+                            )
+                          ]
+                        )
+                      ],
+                      1
+                    )
+                  : _vm._e()
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                ref: "button",
+                staticClass: "button button-blue ",
+                attrs: { disabled: "" },
+                on: {
+                  click: function($event) {
+                    return _vm.createOrder()
+                  }
+                }
+              },
+              [_vm._v("\n        Далее\n    ")]
+            ),
+            _vm._v(" "),
+            _c("transition", { attrs: { appear: "", name: "modal" } }, [
+              _vm.messageError
+                ? _c("div", { staticClass: "message" }, [
+                    _vm._v(
+                      "\n            " + _vm._s(_vm.messageError) + "\n        "
+                    )
+                  ])
+                : _vm._e()
             ])
-          : _vm._e()
-      ])
-    ],
-    1
-  )
+          ],
+          1
+        )
+      : _vm._e()
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
