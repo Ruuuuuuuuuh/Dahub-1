@@ -35,6 +35,7 @@
                 :checkCrypto="checkCrypto"
                 :editShow="editShow"
                 @action="checkAction"
+                @copy="copyAddress(item.address)"
                 @click="clickPaymentItem(item.id, item.address)"
                 @remove="deletePaymentItem(item.id)"
                 @edit="showModalEdiPaymentItem(item.id, item.title, item.address, item.holder)"
