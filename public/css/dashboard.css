@@ -10013,6 +10013,7 @@ body {
 
 *::-webkit-scrollbar {
   width: 0;
+  display: none;
 }
 
 .app {
@@ -10314,14 +10315,17 @@ form {
 .form-create-order .form-select {
   width: 100%;
   height: 46px;
-  background: #EDF1F9;
-  box-shadow: 0px 1px 1px rgba(207, 210, 216, 0.5);
-  border-radius: 30px;
+  background: #F2F4FA;
+  border-radius: 15px;
   font-weight: 600;
   font-size: 18px;
   line-height: 24px;
   color: #0D1F3C;
   padding: 0 25px;
+}
+
+.form-create-order {
+  padding: 0;
 }
 
 .select-wrapper {
@@ -10605,14 +10609,12 @@ section.screen .footer-relative {
   margin-top: 45px;
 }
 section.screen .payment-items {
-  overflow: hidden;
   transition: all 0.3s ease-in;
 }
 section.screen .payment-items .payment-item {
   border-bottom: 2px solid #EDF1F9;
   padding: 14px 0px;
   position: relative;
-  overflow: hidden;
   display: block;
   transition: transform 0.3s ease-in-out;
   min-height: 74px;
@@ -11040,27 +11042,52 @@ header.header .balance .balance-items .balance-item .balance-item-amount-descrip
   text-align: right;
 }
 
+.section-main #create-order-tab {
+  position: relative;
+  margin-bottom: 30px;
+}
+.section-main #create-order-tab::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #E6EBF8;
+}
+.section-main #create-order-tab .nav-item {
+  flex-grow: 1;
+  flex-basis: 33%;
+}
 .section-main #create-order-tab .nav-item .nav-link {
-  opacity: 0.4;
   mix-blend-mode: normal;
-  background: #EDF1F9;
-  border-radius: 30px;
-  padding: 0 22px;
-  font-weight: 600;
+  background: #fff;
+  font-weight: 500;
   font-size: 13px;
   line-height: 46px;
   text-align: center;
-  color: #21314C;
   border: none;
   cursor: pointer;
   transition: 0.3s ease-in-out all;
+  width: 100%;
+  color: #78839C;
 }
 .section-main #create-order-tab .nav-item .nav-link:hover {
-  opacity: 1;
+  color: #112340;
 }
 .section-main #create-order-tab .nav-item .nav-link.active {
   opacity: 1;
-  color: #347AF0;
+  color: #112340;
+  position: relative;
+}
+.section-main #create-order-tab .nav-item .nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(87.76deg, #85F362 -53.4%, #02AAFF 67.87%);
 }
 
 #menu-swipe {

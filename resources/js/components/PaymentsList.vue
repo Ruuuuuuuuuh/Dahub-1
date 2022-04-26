@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="edit-header">
+        <!-- <div class="edit-header">
             <a href="#" class="edit-btn" :class="editShow ? 'edit-btn_gradient' : '' " @click.prevent="checkShowEdit">Править</a>
             <a href="#" @click.prevent="modalShow">
                 <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +20,7 @@
                     </defs>
                 </svg>
             </a>
-        </div>
+        </div> -->
         <div class="payment-items">
             <PaymentItem
                 v-for="item in items"
@@ -34,14 +34,15 @@
                 :key="item.id"
                 :checkCrypto="checkCrypto"
                 :editShow="editShow"
+                @action="checkAction"
                 @click="clickPaymentItem(item.id, item.address)"
                 @remove="deletePaymentItem(item.id)"
                 @edit="showModalEdiPaymentItem(item.id, item.title, item.address, item.holder)"
             />
         </div>
-        <!-- <a @click="modalShow" href="#" class="add-payment_item d-flex align-items-cente justify-content-center">
-            <span> Добавить {{checkCrypto ? 'кошелек' : 'карту'}}</span>
-        </a> -->
+        <a @click="modalShow" href="#" class="add d-flex align-items-cente justify-content-center">
+            Добавить {{checkCrypto ? 'кошелек' : 'карту'}}
+        </a>
         <ModalFormAddPaymentItem v-if="showModal" @close="showModal = false" @send="addPaymentItem" :checkCrypto="checkCrypto" :checkPayment="payment ? true : false"/>
         <ModalFormEditPaymentItem v-if="showModalEdit" @close="showModalEdit = false" @send="editPaymentItem" :checkCrypto="checkCrypto" :vTitle="item.title" :vAddress="item.address" :vHolder="item.holder"/>
     </div>
@@ -80,8 +81,10 @@ export default {
         }
     },
     methods: {
-        checkShowEdit() {
-            this.editShow = !this.editShow
+        checkAction(data) {
+            // this.editShow = false
+            // this.editShow = data.action
+
         },
         modalShow(e) {
             this.showModal = true
@@ -197,5 +200,17 @@ export default {
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+    }
+
+    .add {
+        margin-top: 32px;
+        color: #0D1F3C;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 1;
+        border-radius: 15px;
+        height: 46px;
+        border: 2px solid #00aaff;
+        align-items: center;
     }
 </style>

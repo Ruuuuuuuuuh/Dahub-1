@@ -585,13 +585,13 @@ section.screen {
         margin-top:45px;
     }
     .payment-items {
-        overflow: hidden;
+        // overflow: hidden;
         transition: all .3s ease-in;
         .payment-item {
             border-bottom: 2px solid #EDF1F9;
             padding: 14px 0px ;
             position: relative;
-            overflow: hidden;
+            // overflow: hidden;
             display: block;
             transition: transform .3s ease-in-out;
             min-height: 74px;
