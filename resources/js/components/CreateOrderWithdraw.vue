@@ -224,7 +224,6 @@ export default {
     font-size: 18px;
     line-height: 46px;
     color: #FFFFFF;
-    margin-top: 20px;
 }
 
 .button[disabled] {
@@ -232,7 +231,7 @@ export default {
 }
 
 label {
-    font-weight: 400;
+    font-weight: 300;
     font-size: 14px;
     line-height: 24px;
     color: #485068;
@@ -249,7 +248,7 @@ label {
 }
 
 .address {
-    margin-bottom: 0;
+    margin-bottom: 30px;
 }
 
 .addres-btn {
