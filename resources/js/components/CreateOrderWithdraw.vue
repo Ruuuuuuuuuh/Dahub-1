@@ -22,7 +22,7 @@
     <div class="form-control amount-wrapper">
         <label for="amount">Сумма</label>
         <div class="select-wrapper">
-            <input type="number" name="amount" class="input-amount" placeholder="0" min="0" v-model="amount" @input="checkValidate()"/>
+            <input type="number" name="amount" class="input-amount" ref="inputAmount" placeholder="0" min="0" v-model="amount" @input="checkValidate()"/>
         </div>
         <label >Доступно {{filterBalance}} {{currency}}</label>
     </div>
@@ -196,6 +196,14 @@ export default {
         currency() {
             this.checkValidate()
             this.checkBalance()
+        },
+        amount() {
+            let balanceFloat = parseFloat(this.filterBalance)
+            if(this.amount > balanceFloat) {
+                this.$refs.inputAmount.classList.add('error')
+            } else {
+                this.$refs.inputAmount.classList.remove('error')
+            }
         }
     },
     mounted() {
@@ -294,5 +302,9 @@ label {
     @media screen and (max-width: 375px) {
         font-size: 10px;
     }
+}
+
+.error {
+    color: #E15063 !important;
 }
 </style>
