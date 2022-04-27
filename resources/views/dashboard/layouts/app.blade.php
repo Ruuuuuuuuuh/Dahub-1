@@ -86,33 +86,33 @@
         $('.navbar-open').click(function () {
             $('#menu-swipe').addClass('opened');
         })
-        if (screenWidth < 1024) {
-            $('body').swipe({
-                swipeStatus: function (event, phase, direction, distance, duration, fingerCount, fingerData, currentDirection) {
-                    if (phase == "start") {
-                        // сработает в начале swipe
-                    }
-                    if (phase == "end") {
-                        //сработает через 20 пикселей то число которое выбрали в threshold
-                        if (direction == 'left') {
-                            jQuery('#menu-swipe').removeClass('opened');
-                        }
-                        if (direction == 'right') {
-                            jQuery('#menu-swipe').addClass('opened');
-                        }
-                        if (direction == 'up') {
-                            //сработает при движении вверх
-                        }
-                        if (direction == 'down') {
-                            //сработает при движении вниз
-                        }
-                    }
-                },
-                triggerOnTouchEnd: true,
-                threshold: 100,
-                excludedElements: '.balance, .payment-item',
-            });
-        }
+        // if (screenWidth < 1024) {
+        //     $('body').swipe({
+        //         swipeStatus: function (event, phase, direction, distance, duration, fingerCount, fingerData, currentDirection) {
+        //             if (phase == "start") {
+        //                 // сработает в начале swipe
+        //             }
+        //             if (phase == "end") {
+        //                 //сработает через 20 пикселей то число которое выбрали в threshold
+        //                 if (direction == 'left') {
+        //                     jQuery('#menu-swipe').removeClass('opened');
+        //                 }
+        //                 if (direction == 'right') {
+        //                     jQuery('#menu-swipe').addClass('opened');
+        //                 }
+        //                 if (direction == 'up') {
+        //                     //сработает при движении вверх
+        //                 }
+        //                 if (direction == 'down') {
+        //                     //сработает при движении вниз
+        //                 }
+        //             }
+        //         },
+        //         triggerOnTouchEnd: true,
+        //         threshold: 100,
+        //         excludedElements: '.balance, .payment-item',
+        //     });
+        // }
         $('.menu-close').click(function (){
             $('#menu-swipe').removeClass('opened');
         })
