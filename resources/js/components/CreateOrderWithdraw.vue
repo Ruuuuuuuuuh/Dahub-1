@@ -209,6 +209,11 @@ export default {
 
 <style lang="scss" scoped>
 
+
+.fixed {
+    position: fixed;
+}
+
 .modal-enter-active, .modal-leave-active {
     transition: all .2s;
 }
