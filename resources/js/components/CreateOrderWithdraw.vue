@@ -69,7 +69,7 @@
     </div>
     <div v-if="showPayments" >
 <transition appear name="modal">
-    <section class="screen opened settings">
+    <section class="screen opened paymentWithdraw">
         <div class="section-header">
             <div class="top-nav">
                 <a href="" @click.prevent="paymentsDeatails()" class="back-link">
@@ -212,6 +212,13 @@ export default {
 
 .fixed {
     position: fixed;
+}
+
+.paymentWithdraw {
+    position: absolute;
+    @media screen and (max-width: 475px) {
+        position: fixed;
+    }
 }
 
 .modal-enter-active, .modal-leave-active {
