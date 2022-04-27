@@ -69,7 +69,7 @@
     </div>
     <div v-if="showPayments" >
 <transition appear name="modal">
-    <section class="screen opened settings fixed">
+    <section class="screen opened settings">
         <div class="section-header">
             <div class="top-nav">
                 <a href="" @click.prevent="paymentsDeatails()" class="back-link">
