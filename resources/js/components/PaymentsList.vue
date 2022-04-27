@@ -1,5 +1,6 @@
 <template>
     <div class="payment-list">
+
         <div class="payment-items">
             <PaymentItem
                 v-for="item in items"
@@ -21,6 +22,9 @@
             />
         </div>
         <div class="fixed-wrapper">
+            <transition appear name="fade">
+            <div v-if="showMessage" class="message-copy">{{message}}</div>
+            </transition>
             <a @click="modalShow" href="#" class="add d-flex align-items-cente justify-content-center">
             Добавить {{checkCrypto ? 'кошелек' : 'карту'}}
             </a>
@@ -60,7 +64,9 @@ export default {
                 address: '',
                 holder: '',
                 payment: ''
-            }
+            },
+            showMessage: false,
+            message: ''
         }
     },
     methods: {
@@ -151,10 +157,20 @@ export default {
             }
         },
         copyAddress(address) {
-            navigator.clipboard.writeText(address).then(function() {
-                console.log('1')
-            }, function() {
-                console.log('2')
+            navigator.clipboard.writeText(address)
+            .then(() => {
+                this.showMessage = true
+                this.message = 'Адрес скопирован';
+                setTimeout(() => {
+                    this.showMessage = false;
+                }, 1000);
+            })
+            .catch(e => {
+                console.error(e);
+                this.message = 'Что-то пошло не так :( '
+                setTimeout(() => {
+                    this.showMessage = false;
+                }, 1000);
             });
         }
     },
@@ -174,6 +190,18 @@ export default {
 
 
 <style scoped>
+
+.message-copy {
+    text-align: center;
+    padding: 12px;
+    background: #F2F4FA;
+    border-radius: 15px;
+    position: absolute;
+    top: -40px;
+    width: 300px;
+    left: calc(50% - 150px);
+    right: calc(50% - 150px);
+}
 
 .payment-list {
     min-height: calc(100vh - 250px);
@@ -206,7 +234,7 @@ export default {
     }
 
     .add {
-        margin-top: 32px;
+        margin-top: 12px;
         color: #0D1F3C;
         font-weight: 600;
         font-size: 16px;
