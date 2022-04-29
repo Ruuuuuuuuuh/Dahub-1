@@ -35,6 +35,7 @@ Route::group(['prefix' => 'wallet'], function () {
     Route::get('/orders/{id}', [App\Http\Controllers\DashboardController::class, 'getOrder'])->name('getOrder');
     Route::get('/orders/{id}/accept', [App\Http\Controllers\DashboardController::class, 'acceptOrderPage']);
     Route::get('/settings/', [App\Http\Controllers\DashboardController::class, 'settings'])->name('settings');
+    Route::get('/history/', [App\Http\Controllers\DashboardController::class, 'history'])->name('history');
     Route::get('/system/', [App\Http\Controllers\DashboardController::class, 'systemConfigPage'])->name('systemConfigPage')->middleware('admin');
     Route::get('/test/', [App\Http\Controllers\DashboardController::class, 'testPage'])->name('testPage')->middleware('admin');
 });

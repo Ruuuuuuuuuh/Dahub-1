@@ -120,6 +120,20 @@ class DashboardController extends Controller {
     }
 
 
+    public function history()
+    {
+        return view('dashboard.pages.history')->with(
+            array(
+                'user'      => $this->user,
+                'mode'      => $this->mode,
+                'currency'  => $this->currency,
+                'rates'     => $this->rates
+            )
+        );
+
+    }
+
+
     public function systemConfigPage()
     {
 
