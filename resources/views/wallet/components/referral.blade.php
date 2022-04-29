@@ -3,13 +3,12 @@
 <p><strong>1-й уровень</strong> – 9 процентов вознаграждения</p>
 <p><strong>2-й уровень</strong> – 6 процентов вознаграждения</p>
 <p><strong>3-й уровень</strong> – 3 процента вознаграждения</p>
-<p style="margin-top:35px;">Ваш баланс</p>
-@if (Auth::User()->getWallet('USDT')->balanceFloat > 0) <p class="balance-amount">{{ number_format((Auth::User()->getWallet('USDT')->balanceFloat), 2, ',' , ' ')}} USDT</p>@endif
-@if (Auth::User()->getWallet('BTC')->balanceFloat > 0) <p class="balance-amount">{{ number_format((Auth::User()->getWallet('BTC')->balanceFloat), 7, ',' , ' ')}} BTC</p>@endif
-@if (Auth::User()->getWallet('ETH')->balanceFloat > 0) <p class="balance-amount">{{ number_format((Auth::User()->getWallet('ETH')->balanceFloat), 5, ',' , ' ')}} ETH</p>@endif
+<p style="margin-top:35px;">Реферальные бонусы начисляются в валюте, за которую ваш реферал купил DHB. <br />Вознаграждения вы можете вывести в
+    <a href="{{Route('wallet')}}">кошельке</a> в любое время.</p>
+<a href="{{Route('history')}}" class="button button-blue" style="margin-top:35px;">Посмотреть историю начислений</a>
 <hr />
 <h3>Реферальная ссылка</h3>
-<a class="ref-link copy-link" data-toggle="popover" data-placement="right" data-content="Ссылка скопирована в буфер обмена.">
+<a class="ref-link copy-link" data-toggle="popover" data-placement="right" data-content="Ссылка скопирована в буфер обмена." style="margin-top:35px;">
     <span>{{ Auth::user()->getReferralLink() }}</span>
     <svg width="33" height="36" viewBox="0 0 33 36" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g opacity="0.9">
