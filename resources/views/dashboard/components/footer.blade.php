@@ -58,5 +58,26 @@
 
         <span>Создать заявку</span>
     </a>
+
+    @else
+    <a class="create-order-open d-flex justify-content-center align-items-center flex-column" onclick="PaymentsScreenOpen();">
+        <svg width="65" height="65" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M29 58C45.0163 58 58 45.0163 58 29C58 12.9837 45.0163 0 29 0C12.9837 0 0 12.9837 0 29C0 45.0163 12.9837 58 29 58Z" fill="url(#paint0_linear_1227_818)"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M38 22C38.6 22 39 22.4 39 23C39 23.6 38.6 24 38 24H20C19.4 24 19 23.6 19 23C19 22.4 19.4 22 20 22H38ZM20 28H34C34.6 28 35 27.6 35 27C35 26.4 34.6 26 34 26H20C19.4 26 19 26.4 19 27C19 27.6 19.4 28 20 28ZM39 31C39 30.4 38.6 30 38 30H20C19.4 30 19 30.4 19 31C19 31.6 19.4 32 20 32H38C38.6 32 39 31.6 39 31ZM34 34C34.6 34 35 34.4 35 35C35 35.6 34.6 36 34 36H20C19.4 36 19 35.6 19 35C19 34.4 19.4 34 20 34H34Z"/>
+            <mask id="mask0_1227_818" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="19" y="22" width="20" height="14">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M38 22C38.6 22 39 22.4 39 23C39 23.6 38.6 24 38 24H20C19.4 24 19 23.6 19 23C19 22.4 19.4 22 20 22H38ZM20 28H34C34.6 28 35 27.6 35 27C35 26.4 34.6 26 34 26H20C19.4 26 19 26.4 19 27C19 27.6 19.4 28 20 28ZM39 31C39 30.4 38.6 30 38 30H20C19.4 30 19 30.4 19 31C19 31.6 19.4 32 20 32H38C38.6 32 39 31.6 39 31ZM34 34C34.6 34 35 34.4 35 35C35 35.6 34.6 36 34 36H20C19.4 36 19 35.6 19 35C19 34.4 19.4 34 20 34H34Z" fill="white"/>
+            </mask>
+            <g mask="url(#mask0_1227_818)">
+            <rect x="17" y="17" width="24" height="24" fill="white"/>
+            </g>
+            <defs>
+            <linearGradient id="paint0_linear_1227_818" x1="-74.5714" y1="41.0833" x2="40.8056" y2="31.4668" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#85F362"/>
+            <stop offset="1" stop-color="#02AAFF"/>
+            </linearGradient>
+            </defs>
+            </svg>
+        <span style="margin-top:8px;">Реквизиты</span>
+    </a>
     @endif
 </footer>
