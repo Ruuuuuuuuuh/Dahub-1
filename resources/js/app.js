@@ -5,6 +5,7 @@ import Vue2TouchEvents from 'vue2-touch-events'
 import VueDraggableResizable from 'vue-draggable-resizable'
 
 Vue.component('vue-draggable-resizable', VueDraggableResizable)
+Vue.component('transaction-list', require('./components/TransactionList.vue').default);
 Vue.component('payments-list', require('./components/PaymentsList.vue').default);
 Vue.component('payments-screen', require('./screens/PaymentsScreen.vue').default);
 Vue.component('createorderexchange', require('./screens/CreateOrderExchange.vue').default);
