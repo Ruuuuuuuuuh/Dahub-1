@@ -1,6 +1,6 @@
 <footer>
     <div class="footer-nav w-100 d-flex justify-content-between">
-        <a href="{{ Route('wallet') }}">
+        <a href="{{ Route('wallet') }}" class="footer-link @if (\Request::route()->getName() == 'wallet') active @endif ">
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#wallet)">
                     <path d="M21.7336 6.07273C21.6096 4.47281 20.2691 3.20865 18.638 3.20865H4.10599C2.39334 3.20865 1 4.60199 1 6.31464V20.6853C1 22.398 2.39334 23.7913 4.10599 23.7913H20.8941C22.6067 23.7913 24 22.398 24 20.6853V9.06246C24 7.64078 23.0395 6.44001 21.7336 6.07273ZM4.10599 4.65962H18.638C19.4276 4.65962 20.0894 5.21557 20.2535 5.95652H4.10599C3.49789 5.95652 2.93052 6.13286 2.45097 6.43611V6.31464C2.45097 5.40207 3.19342 4.65962 4.10599 4.65962ZM20.894 22.3404H4.10599C3.19342 22.3404 2.45097 21.5979 2.45097 20.6853V9.06246C2.45097 8.14989 3.19342 7.40745 4.10599 7.40745H20.8941C21.8066 7.40745 22.5491 8.14989 22.5491 9.06246V11.5943H17.9229C16.0897 11.5943 14.5983 13.0858 14.5983 14.919C14.5983 16.7522 16.0898 18.2437 17.9229 18.2437H22.549V20.6853C22.549 21.5979 21.8066 22.3404 20.894 22.3404ZM22.549 16.7927H17.9229C16.8898 16.7927 16.0493 15.9522 16.0493 14.919C16.0493 13.8858 16.8898 13.0453 17.9229 13.0453H22.549V16.7927Z" fill="#B5BBC9" stroke="#B5BBC9" stroke-width="0.3"/>
@@ -15,7 +15,7 @@
 
             <span>Кошелек</span>
         </a>
-        <a href="#">
+        <a href="{{ Route('history') }}" class="footer-link @if (\Request::route()->getName() == 'history') active @endif ">
             <svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <mask id="orders1" mask-type="alpha" maskUnits="userSpaceOnUse" x="3" y="1" width="18" height="22">
                     <path fill-rule="evenodd" clip-rule="evenodd" d="M20 1H6.5C4.6 1 3 2.6 3 4.5V19.5C3 21.4 4.6 23 6.5 23H20C20.6 23 21 22.6 21 22V2C21 1.4 20.6 1 20 1ZM6.5 3H19V16H6.5C6 16 5.5 16.1 5 16.4V4.5C5 3.7 5.7 3 6.5 3ZM5 19.5C5 20.3 5.7 21 6.5 21H19V18H6.5C5.7 18 5 18.7 5 19.5Z" fill="white"/>
@@ -25,7 +25,7 @@
                 </g>
             </svg>
 
-            <span>Заявки</span>
+            <span>История</span>
         </a>
     </div>
     @if ($mode == 'lite')
@@ -54,14 +54,12 @@
                 </filter>
             </defs>
         </svg>
-
-
         <span>Создать заявку</span>
     </a>
 
     @else
-    <a class="create-order-open d-flex justify-content-center align-items-center flex-column" onclick="PaymentsScreenOpen();">
-        <svg width="65" height="65" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <a class="create-order-open d-flex justify-content-center align-items-center flex-column" onclick="PaymentsScreenOpen();" style="top:-23px;">
+        <svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M29 58C45.0163 58 58 45.0163 58 29C58 12.9837 45.0163 0 29 0C12.9837 0 0 12.9837 0 29C0 45.0163 12.9837 58 29 58Z" fill="url(#paint0_linear_1227_818)"/>
             <path fill-rule="evenodd" clip-rule="evenodd" d="M38 22C38.6 22 39 22.4 39 23C39 23.6 38.6 24 38 24H20C19.4 24 19 23.6 19 23C19 22.4 19.4 22 20 22H38ZM20 28H34C34.6 28 35 27.6 35 27C35 26.4 34.6 26 34 26H20C19.4 26 19 26.4 19 27C19 27.6 19.4 28 20 28ZM39 31C39 30.4 38.6 30 38 30H20C19.4 30 19 30.4 19 31C19 31.6 19.4 32 20 32H38C38.6 32 39 31.6 39 31ZM34 34C34.6 34 35 34.4 35 35C35 35.6 34.6 36 34 36H20C19.4 36 19 35.6 19 35C19 34.4 19.4 34 20 34H34Z"/>
             <mask id="mask0_1227_818" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="19" y="22" width="20" height="14">

@@ -443,6 +443,7 @@ footer {
     justify-content: center;
     max-width: 480px;
     z-index:2;
+
     .footer-nav {
         a {
             display: flex;
@@ -457,6 +458,22 @@ footer {
                 line-height: 24px;
                 text-align: center;
                 color: #78839C;
+            }
+        }
+        .footer-link {
+            &.active {
+                span {
+                    color: #112340;
+                    font-weight: 500;
+                }
+                svg {
+                    g rect {
+                        fill:#02AAFF
+                    }
+                    path {
+                        fill:#02AAFF
+                    }
+                }
             }
         }
     }
