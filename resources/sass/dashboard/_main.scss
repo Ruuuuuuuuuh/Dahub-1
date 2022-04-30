@@ -541,6 +541,10 @@ section.screen {
                 left: 0;
                 position: absolute;
             }
+            .back-link-no-js {
+                left: 0;
+                position: absolute;
+            }
             h2 {
                 font-weight: 600;
                 font-size: 24px;
@@ -733,6 +737,22 @@ section.screen {
     &.crypto {
         .holder-name {
             display:none;
+        }
+    }
+}
+
+#history-page {
+    z-index: 1 !important;
+    .section-main {
+        overflow: hidden;
+    }
+    .section-header {
+        background: linear-gradient(166.88deg, rgba(0, 104, 156, 0.9) -18.7%, rgba(13, 31, 60, 0.9) 21.18%);
+        h2 {
+            color: #fff;
+        }
+        svg {
+            fill: #fff;
         }
     }
 }
