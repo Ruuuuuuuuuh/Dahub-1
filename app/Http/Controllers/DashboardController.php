@@ -144,6 +144,7 @@ class DashboardController extends Controller {
                         if ($meta['destination'] == 'referral') $type = 'Реферальные начисления';
                         if ($meta['destination'] == 'convert referral to DHB') $type = 'Конвертация рефок в DHB';
                         if ($meta['destination'] == 'deposit to wallet') $type = 'Пополнение кошелька';
+                        if ($meta['destination'] == 'withdraw from wallet') $type = 'Вывод средств из кошелька';
                     }
                     else $type = 'Бонусы';
                     $data[] = array(

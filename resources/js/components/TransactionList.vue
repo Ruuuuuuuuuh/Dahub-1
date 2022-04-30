@@ -63,5 +63,7 @@ export default {
 </script>
 
 <style>
-
+ .transactionList {
+     margin-top:15px;
+ }
 </style>
