@@ -1,7 +1,7 @@
 <template>
     <div class="transactionCell">
         <div class="transactionCell__top">
-            <div class="transactionCell__number">#{{number}}</div>
+            <div class="transactionCell__number">{{ destination == 'deposit' ? 'Получение' : 'Отправление' }}</div>
             <div class="transactionCell__type">{{type}}</div>
         </div>
         <div class="transactionCell__bottom">
@@ -9,7 +9,6 @@
                 <div class="transactionCell__icon">
                     <span v-if="destination == 'deposit'">+</span>
                     <span v-if="destination == 'withdraw'" > – </span>
-                    <span v-if="destination == 'transfer'" > – </span>
                 </div>
 
                 <span>{{sum}} {{currency}}</span>
@@ -22,7 +21,7 @@
 <script>
 export default {
 
-    props: ['number', 'type','sum', 'currency', 'date', 'destination'],
+    props: ['type','sum', 'currency', 'date', 'destination'],
     computed: {
         sumClassName: function() {
             let className = 'transactionCell__sum_gray'
@@ -30,9 +29,6 @@ export default {
                 className = 'transactionCell__sum_gradient'
             }
             if(this.destination == 'withdraw') {
-                className = 'transactionCell__sum_red'
-            }
-            if(this.destination == 'transfer') {
                 className = 'transactionCell__sum_red'
             }
             return className

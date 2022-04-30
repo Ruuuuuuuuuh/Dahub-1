@@ -26,11 +26,11 @@
                 </linearGradient>
                 </defs>
                 </svg>
-        </div>
+            </div>
         </div>
     </div>
     <div class="section-main">
-        <transaction-list></transaction-list>
+        <transaction-list :transactions='@json($transactions)'></transaction-list>
     </div>
 </section>
 @include('dashboard.components.footer')

@@ -12,6 +12,9 @@ use App\Models\UserConfig;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\WalletService;
 use Carbon\Carbon;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -120,14 +123,49 @@ class DashboardController extends Controller {
     }
 
 
+    /**
+     * @return Application|Factory|View
+     * @var array $data
+     */
     public function history()
     {
+        $transactions = $this->user->transactions()->limit(150)->orderBy('id', 'desc')->get();
+        $data = [];
+        foreach ($transactions as $transaction) {
+            $wallet = \App\Models\Wallet::where('id', $transaction->wallet_id)->first();
+            $meta = $transaction->meta;
+            $exclude = array('iUSDT', 'iUSDT_frozen');
+            if (!in_array($wallet->slug, $exclude)) {
+                if (!strpos($wallet->slug,'_gate')) {
+                    if (is_array($meta)) {
+                        $type = $meta['destination'];
+                        if ($meta['destination'] == 'Transfer from user') $type = 'Перевод';
+                        if ($meta['destination'] == 'TokenSale' || $meta['destination'] == 'tokenSale') $type = 'Токенсейл';
+                        if ($meta['destination'] == 'referral') $type = 'Реферальные начисления';
+                        if ($meta['destination'] == 'convert referral to DHB') $type = 'Конвертация рефок в DHB';
+                        if ($meta['destination'] == 'deposit to wallet') $type = 'Пополнение кошелька';
+                    }
+                    else $type = 'Бонусы';
+                    $data[] = array(
+                        "id"            => $transaction->id,
+                        "number"        => $transaction->number,
+                        "destination"   => $transaction->type,
+                        "type"          => array( "title" => $type, "value" => "order" ),
+                        "sum"           => abs($transaction->amount / (10 ** $wallet->decimal_places)),
+                        "currency"      => $wallet->slug,
+                        "date"          => $transaction->created_at->format('d.m.Y H:i')
+                    );
+                }
+            }
+        }
+
         return view('dashboard.pages.history')->with(
             array(
-                'user'      => $this->user,
-                'mode'      => $this->mode,
-                'currency'  => $this->currency,
-                'rates'     => $this->rates
+                'user'          => $this->user,
+                'mode'          => $this->mode,
+                'currency'      => $this->currency,
+                'rates'         => $this->rates,
+                'transactions'  => $data
             )
         );
 
