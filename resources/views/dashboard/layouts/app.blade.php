@@ -43,6 +43,8 @@
     @include('dashboard.components.menu')
     @yield('content')
 
+    @include('dashboard.components.createorder')
+    @include('dashboard.components.gate.payments-screen')
 </div>
 <script src="{{ mix('js/app.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -52,9 +54,51 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.19/jquery.touchSwipe.min.js" type="text/javascript"></script>
 
 <script>
+    function createOrderScreenOpen() {
+        $('#create-order').toggleClass('opened');
+    }
+
+    function PaymentsScreenOpen() {
+        $('#payments-screen').toggleClass('opened');
+    }
 
 
     $(function() {
+
+        $('.create-order').click(function() {
+                let form = $('#create-order .tab-pane.active form')
+                let currency = form.find('select[name="currency"]').val()
+                let amount = form.find('input[name="amount"]').val()
+                let payment = form.find('select[name="payment-network"]').val()
+                let address = form.find('input[name="address"]').val()
+                let destination = form.find('input[name="destination"]').val()
+                let data = {
+                    "_token": "{{ csrf_token() }}",
+                    "currency": currency,
+                    "amount": amount,
+                    "payment": payment,
+                    "address": address,
+                    "destination": destination
+                }
+                createOrder(data)
+        })
+
+        function createOrder(data) {
+            return new Promise(function (resolve, reject) {
+                $.ajax({
+                    url: "/api/createOrderByUser",
+                    type: "POST",
+                    data: data,
+                    success: function (data) {
+                        resolve(data)
+                        window.location.href = '/wallet/orders/' + data;
+                    },
+                    error: function (err) {
+                        reject(err)
+                    }
+                })
+            })
+        }
 
         $('.screen .back-link').click(function(e) {
             $(this).closest('.screen').not('.order-page').removeClass('opened');
