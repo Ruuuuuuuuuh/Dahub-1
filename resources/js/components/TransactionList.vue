@@ -34,7 +34,6 @@ export default {
     props: ['transactions'],
     data() {
         return {
-        transactions: this.transactions,
         filterItem: ''
         }
     },

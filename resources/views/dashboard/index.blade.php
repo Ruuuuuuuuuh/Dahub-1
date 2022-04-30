@@ -32,8 +32,6 @@
         </div>
     </main>
     @include('dashboard.components.footer')
-    @include('dashboard.components.createorder')
-    @include('dashboard.components.gate.payments-screen')
     @if ($mode == 'pro')
         @include('dashboard.components.gate.accept_order')
     @else
@@ -43,14 +41,6 @@
 @section('scripts')
     <script src="/js/swiper-bundle.min.js"></script>
     <script>
-
-        function createOrderScreenOpen() {
-            $('#create-order').toggleClass('opened');
-        }
-
-        function PaymentsScreenOpen() {
-            $('#payments-screen').toggleClass('opened');
-        }
         $(function() {
             window.currencies = {
                 @foreach (\App\Models\Currency::all() as $currency)
@@ -90,23 +80,6 @@
                 if (crypto) $('.form-withdraw .input-address').addClass('crypto')
             })
 
-            $('.create-order').click(function() {
-                let form = $('#create-order .tab-pane.active form')
-                let currency = form.find('select[name="currency"]').val()
-                let amount = form.find('input[name="amount"]').val()
-                let payment = form.find('select[name="payment-network"]').val()
-                let address = form.find('input[name="address"]').val()
-                let destination = form.find('input[name="destination"]').val()
-                let data = {
-                    "_token": "{{ csrf_token() }}",
-                    "currency": currency,
-                    "amount": amount,
-                    "payment": payment,
-                    "address": address,
-                    "destination": destination
-                }
-                createOrder(data)
-            })
             const swiper = new Swiper('.swiper', {
                 // Optional parameters
                 direction: 'horizontal',
@@ -178,22 +151,7 @@
                 })
             })
         }
-        function createOrder(data) {
-            return new Promise(function (resolve, reject) {
-                $.ajax({
-                    url: "/api/createOrderByUser",
-                    type: "POST",
-                    data: data,
-                    success: function (data) {
-                        resolve(data)
-                        window.location.href = '{{Request::url()}}/orders/' + data;
-                    },
-                    error: function (err) {
-                        reject(err)
-                    }
-                })
-            })
-        }
+
         $('.gate-controls .gate-action').click(function(e){
             let action = $(this).data('action')
             $('.orders .orders-deposit, .orders .orders-withdraw').hide()
