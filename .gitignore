@@ -16,3 +16,4 @@ composer.lock
 /public/js/card-info-master/
 /resources/.vscode/
 *.log
+horizon.log*
