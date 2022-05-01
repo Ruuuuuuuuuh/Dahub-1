@@ -113,7 +113,7 @@ class ApiController extends Controller
         $request->validate (
             [
                 'destination'           => 'required',
-                'currency'              => 'required',
+                'currency'              => 'required|max:10',
                 'payment'               => 'required',
                 'amount'                => 'required|min:0|numeric|not_in:0',
             ],
@@ -124,6 +124,7 @@ class ApiController extends Controller
                 'amount.numeric'        => 'Введите корректную сумму',
                 'destination.required'  => 'При создании заявки возникла ошибка',
                 'currency.required'     => 'При создании заявки возникла ошибка',
+                'currency.max'          => 'Не корректное значение (валюта)',
                 'payment.required'      => 'При создании заявки возникла ошибка',
             ]
         );
@@ -719,17 +720,12 @@ class ApiController extends Controller
     public function getOrdersByFilter(Request $request): mixed
     {
         $filter = $request->input('filter');
-        switch ($filter) {
-            case'deposit':
-                return $this->user->orders()->OrdersDeposit()->limit(10)->orderBy('id', 'DESC')->get();
-                break;
-            case'withdraw':
-                return $this->user->orders()->OrdersWithdraw()->limit(10)->orderBy('id', 'DESC')->get();
-                break;
-            case'all':
-                return $this->user->orders()->limit(10)->orderBy('id', 'DESC')->get();
-                break;
-        }
+        return match ($filter) {
+            'deposit' => $this->user->orders()->OrdersDeposit()->limit(10)->orderBy('id', 'DESC')->get(),
+            'withdraw' => $this->user->orders()->OrdersWithdraw()->limit(10)->orderBy('id', 'DESC')->get(),
+            'all' => $this->user->orders()->limit(10)->orderBy('id', 'DESC')->get(),
+            default => null,
+        };
     }
 
 
