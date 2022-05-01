@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Helpers\Rate;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\HasWalletFloat;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -29,6 +30,7 @@ use App\Models\Currency as Currency;
  * @method static findOrFail($id)
  * @method static where(string $string, string $string1)
  * @method static create(array $array)
+ * @mixin Builder
  */
 
 class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
