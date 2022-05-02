@@ -18,13 +18,13 @@
     <div class="section-main">
         <ul class="nav nav-pills justify-content-between" id="create-order-tab" role="tablist">
             <li class="nav-item">
-                <button class="nav-link active" id="pills-deposit-tab"  data-toggle="pill" data-target="#pills-deposit" type="button" role="tab" aria-controls="pills-deposit" aria-selected="true">Пополнить</button>
+                <button class="nav-link active" id="pills-deposit-tab"  data-toggle="pill" data-target="#pills-deposit" type="button" role="tab" aria-controls="pills-deposit" aria-selected="true">Получить</button>
             </li>
             <li class="nav-item">
                 <button class="nav-link" id="pills-exchange-tab"  data-toggle="pill" data-target="#pills-exchange" type="button" role="tab" aria-controls="pills-exchange" aria-selected="false">Обмен</button>
             </li>
             <li class="nav-item">
-                <button class="nav-link" id="pills-withdraw-tab"  data-toggle="pill" data-target="#pills-withdraw" type="button" role="tab" aria-controls="pills-withdraw" aria-selected="false">Вывести</button>
+                <button class="nav-link" id="pills-withdraw-tab"  data-toggle="pill" data-target="#pills-withdraw" type="button" role="tab" aria-controls="pills-withdraw" aria-selected="false">Отправить</button>
             </li>
         </ul>
         <div class="tab-content" id="pills-tabContent">
