@@ -21,8 +21,11 @@
             payment="{{$order->payment}}"
             _token="{{csrf_token()}}"
             crypto= "{{ \App\Models\Currency::where('title', $order->currency)->first()->crypto }}">
+            <template v-slot:fixed>
+                <a href="#" class="btn btn-primary order-accept disabled">Принять заявку</a>
+            </template>
         </payments-list>
 
-        <a href="#" class="btn btn-primary order-accept disabled">Принять заявку</a>
+
     </div>
 </section>

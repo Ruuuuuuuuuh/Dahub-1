@@ -254,6 +254,10 @@ export default {
     .payment-item.active  .payment-details-icon {
         fill: #02AAFF;
     }
+
+    .payment-item.active-accept-order  .payment-details-icon {
+        fill: #02AAFF;
+    }
     .fade-enter-active,
     .fade-leave-active {
     transition: opacity 0.2s ease;
