@@ -28,6 +28,7 @@
             <a @click="modalShow" href="#" class="add d-flex align-items-cente justify-content-center">
             Добавить {{checkCrypto ? 'кошелек' : 'карту'}}
             </a>
+            <slot name="fixed"></slot>
         </div>
 
         <ModalFormAddPaymentItem v-if="showModal" @close="showModal = false" @send="addPaymentItem" :checkCrypto="checkCrypto" :checkPayment="payment ? true : false"/>
@@ -213,6 +214,7 @@ export default {
     position: sticky;
     bottom: 0px;
     background: linear-gradient(360deg, #FFFFFF 0%, rgba(255, 255, 255, 0.675214) 52.14%, rgba(255, 255, 255, 0) 89.74%);
+    padding-bottom: 12px;;
 }
 .edit-header {
         display: flex;
@@ -243,7 +245,7 @@ export default {
         height: 46px;
         border: 2px solid #00aaff;
         align-items: center;
-        margin-bottom: 32px;
+        margin-bottom: 20px;
         background: #fff;
     }
 </style>

@@ -62,8 +62,8 @@
 
 
         $('#accept-order .payment-items').on('click', '.payment-item', function(e) {
-            $('.payment-item').removeClass('active')
-            $(this).addClass('active')
+            $('.payment-item').removeClass('active-accept-order')
+            $(this).addClass('active-accept-order')
             $('.order-accept').removeClass('disabled').attr('data-address', $(this).attr('data-address'))
         })
 
