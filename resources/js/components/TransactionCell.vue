@@ -96,7 +96,7 @@ export default {
     opacity: .9;
 }
 
-.transactionCell__sum_red {
+.transactionCell__sum_red span {
     background:linear-gradient(90.79deg, #FFAE34 0.52%, #FF3998 94.29%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
