@@ -454,7 +454,7 @@ class ApiController extends Controller
 
         $title = $request->has('title') ? $request->input('title') : NULL;
         $payment = $request->input('payment');
-        $holder = Payment::where('title', $payment)->firstOrFail()->currencies()->firstOrFail()->crypto ? null : $request->input('holder_name');
+        $holder = Payment::where('title', $payment)->firstOrFail()->crypto ? null : $request->input('holder_name');
 
         $address = $request->input('address');
         $payment_details = PaymentDetail::create(
