@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Rate;
 use App\Models\Currency;
+use App\Models\Gate;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\System;
-use App\Models\Tag;
+use App\Models\UserConfig;
 use Bavix\Wallet\Models\Wallet;
 use Bavix\Wallet\Services\WalletService;
 use Carbon\Carbon;
@@ -20,8 +21,36 @@ use Illuminate\Support\Facades\Auth;
 use Telegram\Bot\Api;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
-class WalletController extends Controller
-{
+class WalletController extends Controller {
+
+    /**
+     *
+     * Экземпляр класса авторизованного пользователь
+     * @var Auth::user()
+     */
+    protected $user;
+
+    /**
+     *
+     * Экземпляр класса курса валют
+     * @var Rate
+     */
+    protected $rates;
+
+    /**
+     *
+     * Экземпляр класса валют
+     * @var Currency
+     */
+    protected $currency;
+
+
+    /**
+     * Режим кошелька (Pro | Lite)
+     * @var string
+     */
+    protected $mode;
+
     /**
      * Create a new controller instance.
      *
@@ -30,239 +59,229 @@ class WalletController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        $this->middleware(function ($request, $next) {
+
+            $this->user = Auth::user();
+            $this->rates = new Rate();
+            $this->currency = new Currency();
+            $this->mode = $this->getMode();
+            return $next($request);
+
+        });
+    }
+
+    /**
+     * Show the application wallet.
+     *
+     */
+    public function index()
+    {
+        $visibleWallets = $this->getVisibleWallets();
+        if ($this->mode == 'pro' && !$this->user->isGate()) {
+            $this->user->switchMode('lite');
+        }
+        $orders = [];
+        $orders['owned'] = [];
+        if ($this->mode == 'pro' && $this->user->isGate()) {
+            $orders['deposit'] = Order::where('status', 'created')->whereIn('destination', ['TokenSale', 'deposit'])->orderBy('id', 'DESC')->get();
+            $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->get();
+            $orders['owned'] = Order::where('gate', $this->user->uid)->where('status', '!=', 'completed')->orderBy('id', 'DESC')->get();
+        }
+        else {
+            $orders = Order::where('user_uid', $this->user->uid)->orderBy('id', 'DESC')->take(10)->get();
+        }
+        foreach ($this->currency::all() as $item) {
+            $this->user->getBalance($item->title);
+        }
+        return view('wallet.index', compact('orders', 'visibleWallets'))->with(
+            array(
+                'user'      => $this->user,
+                'mode'      => $this->mode,
+                'currency'  => $this->currency,
+                'rates'     => $this->rates
+            )
+        );
+
+    }
+
+
+    public function settings()
+    {
+        $currency = new Currency();
+        $visibleWallets = $this->getVisibleWallets();
+
+        return view('wallet.pages.settings', compact('currency', 'visibleWallets'))->with(
+            array(
+                'user'      => $this->user,
+                'mode'      => $this->mode,
+                'currency'  => $this->currency,
+                'rates'     => $this->rates
+            )
+        );
+
     }
 
 
     /**
      * @return Application|Factory|View
+     * @var array $data
      */
-    public function index()
+    public function history()
     {
-        $user = Auth::user();
-        $system = System::find(1);
-        $system->getWallet('TokenSale')->refreshBalance();
-        $user->getWallet('DHB')->refreshBalance();
-        $currencies = Currency::payableCurrencies();
-
-        /**
-         * Сколько токенов продано
-         * @var float $balances
-         */
-        $balances = array();
-        $balances['sold'] = $system->getSoldTokens();
-        $balances['frozen'] = $system->getFrozenTokens();
-
-        /**
-         * Доступный баланс токен сейла
-         * @var float $available
-         */
-        $available = $system->getWallet('TokenSale')->balanceFloat - $system->getFrozenTokens();
-
-        /**
-         * Баланс пользователя
-         * @var float $userBalance
-         */
-        $userBalance = $user->getWallet('DHB')->balanceFloat;
-
-
-        /**
-         * Максимальное допустимое количество токенов для покупки
-         * @var float $max
-         */
-        $max = 0;
-
-        if ($system->amount_per_user != 0) {
-            if ($system->amount_per_user > $userBalance) $max = $system->amount_per_user - $userBalance;
-            else $max = 0;
-        }
-        else $max = $available;
-
-        if ($max > 0) {
-            if ($system->amount_per_order != 0) $max = min($system->amount_per_order, $max, $available);
-            else $max = min($max, $available);
+        $transactions = $this->user->transactions()->limit(150)->orderBy('id', 'desc')->get();
+        $data = [];
+        foreach ($transactions as $transaction) {
+            $wallet = \App\Models\Wallet::where('id', $transaction->wallet_id)->first();
+            $meta = $transaction->meta;
+            $exclude = array('iUSDT', 'iUSDT_frozen');
+            if (!in_array($wallet->slug, $exclude)) {
+                if (!strpos($wallet->slug,'_gate')) {
+                    if (is_array($meta)) {
+                        $type = $meta['destination'];
+                        if ($meta['destination'] == 'Transfer from user') $type = 'Перевод';
+                        if ($meta['destination'] == 'TokenSale' || $meta['destination'] == 'tokenSale') $type = 'Токенсейл';
+                        if ($meta['destination'] == 'referral') $type = 'Реферальные начисления';
+                        if ($meta['destination'] == 'convert referral to DHB') $type = 'Конвертация рефок в DHB';
+                        if ($meta['destination'] == 'deposit to wallet') $type = 'Пополнение кошелька';
+                        if ($meta['destination'] == 'withdraw from wallet') $type = 'Вывод средств из кошелька';
+                    }
+                    else $type = 'Бонусы';
+                    $data[] = array(
+                        "id"            => $transaction->id,
+                        "number"        => $transaction->number,
+                        "destination"   => $transaction->type,
+                        "type"          => array( "title" => $type, "value" => "order" ),
+                        "sum"           => abs($transaction->amount / (10 ** $wallet->decimal_places)),
+                        "currency"      => $wallet->slug,
+                        "date"          => $transaction->created_at->format('d.m.Y H:i')
+                    );
+                }
+            }
         }
 
-        $startTokenSale = Carbon::parse($system->start_token_sale_date);
-        $timeNow = Carbon::now();
-        $stage = 1;
-        switch ($balances['sold']) {
-            case ($balances['sold'] <= 1000000):
-                $stage = 1;
-                break;
+        return view('wallet.pages.history')->with(
+            array(
+                'user'          => $this->user,
+                'mode'          => $this->mode,
+                'currency'      => $this->currency,
+                'rates'         => $this->rates,
+                'transactions'  => $data
+            )
+        );
 
-            case ($balances['sold'] <= 1200000):
-                $stage = 2;
-                break;
-
-            case ($balances['sold'] <= 1400000):
-                $stage = 3;
-                break;
-
-            case ($balances['sold'] <= 1600000):
-                $stage = 4;
-                break;
-
-            case ($balances['sold'] <= 1800000):
-                $stage = 5;
-                break;
-
-            case ($balances['sold'] <= 2000000):
-                $stage = 6;
-                break;
-        }
-        return view('wallet.index', compact('balances', 'system', 'max', 'startTokenSale', 'timeNow', 'currencies', 'stage'));
     }
 
-    public function profile()
+
+    public function systemConfigPage()
     {
-        $system = System::find(1);
-        $system->getWallet('TokenSale')->refreshBalance();
-        $balances = $system->getSoldTokens() + $system->getFrozenTokens();
-        return view('wallet.pages.profile', compact('balances', 'system'));
+
     }
 
-    public function orders()
-    {
-        $orders = Order::orderBy('id', 'DESC')->get();
-        return view('wallet.pages.admin.orders', compact('orders'));
-    }
-
-    // Этапы токен сейла
-    public function stages()
-    {
-        $system = System::findOrFail(1);
-        $system->getWallet('DHBFundWallet')->refreshBalance();
-        return view('wallet.pages.admin.stages', compact('system'));
-    }
-
-    // Пополнить HFT
-    public function hft()
-    {
-        $system = System::findOrFail(1);
-        if (!$system->getWallet('HFT')) {
-            $system->createWallet(
-                [
-                    'name' => 'HFT',
-                    'slug' => 'HFT',
-                ]
-            );
+    public function getOrder($id) {
+        $order = Order::findOrFail($id);
+        $ordersTimer = System::findOrFail(1)->orders_timer;
+        if ($order->user_uid == $this->user->uid || $order->gate == $this->user->uid) {
+            $dt = Carbon::now();
+            $seconds_left = $dt->diffInSeconds($order->created_at);
+            if ($this->mode == 'lite') {
+                return view('wallet.pages.order', compact('order','seconds_left', 'ordersTimer'))->with(
+                    array(
+                        'user'      => $this->user,
+                        'mode'      => $this->mode,
+                        'currency'  => $this->currency,
+                        'rates'     => $this->rates
+                    )
+                );
+            }
+            else {
+                return view('wallet.pages.gate.order', compact('order', 'seconds_left', 'ordersTimer'))->with(
+                    array(
+                        'user'      => $this->user,
+                        'mode'      => $this->mode,
+                        'currency'  => $this->currency,
+                        'rates'     => $this->rates
+                    )
+                );
+            }
         }
-        $system->getWallet('HFT')->refreshBalance();
-        return view('wallet.pages.admin.hft', compact('system'));
-    }
-
-    // Бухгалтерия
-    public function reports()
-    {
-        $system = System::findOrFail(1);
-        $system->getWallet('DHBFundWallet')->refreshBalance();
-        $system->getWallet('TokenSale')->refreshBalance();
-        $system->getWallet('USDT')->refreshBalance();
-        $system->getWallet('BTC')->refreshBalance();
-        $system->getWallet('ETH')->refreshBalance();
-        if (!$system->getWallet('HFT')) {
-            $system->createWallet(
-                [
-                    'name' => 'HFT',
-                    'slug' => 'HFT',
-                ]
-            );
+        else {
+            return redirect('wallet');
         }
-        $system->getWallet('HFT')->refreshBalance();
-        $orders = Order::orderBy('id', 'DESC')->get();
-        $wallet = new Wallet;
-        $users = User::all();
-        $tags = Tag::all();
-        return view('wallet.pages.admin.reports', compact('system', 'orders', 'wallet', 'users', 'tags'));
     }
 
-    public function explorer(Request $request)
-    {
-        $orders = Order::where('status', 'completed')->where('destination', 'TokenSale')->orderBy('id', 'DESC')->paginate(4);
-        $ordersList = array();
-        $i = 0;
-        foreach ($orders as $order) {
-            $ordersList[$i]['currency'] = $order->currency;
-            $ordersList[$i]['amount'] = $order->amount;
-            $ordersList[$i]['amount_dhb'] = $order->dhb_amount;
-            $transaction = $order->orderSystemTransaction();
-            $ordersList[$i]['date'] = $transaction->created_at->diffForHumans() . ', ' . $transaction->created_at->Format('H:s');
-            $ordersList[$i]['uuid'] = $transaction->uuid;
-            $i++;
+    public function acceptOrderPage($id) {
+        $order = Order::findOrFail($id);
+        $ordersTimer = System::findOrFail(1)->orders_timer;
+        if ($this->user->isGate()) {
+            if ($order->status == 'created') {
+                $this->user->getBalance($order->currency);
+                $this->user->switchMode('pro');
+                $dt = Carbon::now();
+                $seconds_left = $dt->diffInSeconds($order->created_at);
+                $order = Order::findOrFail($id);
+                return view('wallet.pages.gate.order', compact('order', 'seconds_left', 'ordersTimer'))->with(
+                    array(
+                        'user'      => $this->user,
+                        'mode'      => $this->mode,
+                        'currency'  => $this->currency,
+                        'rates'     => $this->rates
+                    )
+                );
+            }
+            else abort(404);
         }
-        if ($request->ajax()) {
-            return json_encode($ordersList, JSON_FORCE_OBJECT | JSON_NUMERIC_CHECK);
-        }
-        return view('wallet.pages.explorer')->with('transactions', $ordersList);
-    }
-
-    public function currencies() {
-        $currencies = Currency::all();
-        return view('wallet.pages.admin.currencies')->with('currencies', $currencies);
-    }
-
-    public function currency($slug) {
-        $currency = Currency::where('title', $slug)->first();
-        $system = System::firstOrFail();
-        if (!$system->hasWallet($slug)) {
-            $system->createWallet(
-                [
-                    'name' => $currency->subtitle,
-                    'slug' => $slug,
-                    'decimal_places' => $currency->decimal_places
-                ]
-            );
-        }
-        return view('wallet.pages.admin.currency')->with('currency', $currency);
-    }
-
-    public function updateCurrency($slug, Request $request) {
-        $currency = Currency::where('title', $slug)->first();
-        $currency->title = $request->input('title');
-        $currency->subtitle = $request->input('subtitle');
-        $currency->icon = $request->input('icon');
-        $currency->decimal_places = $request->input('decimal_places');
-        $currency->visible = $request->input('visible');
-        $currency->save();
-        return true;
-    }
-
-    public function payments() {
-        $payments = Payment::all();
-        return view('wallet.pages.admin.payments')->with('payments', $payments);
-    }
-
-    public function getUsers() {
-        $users = User::all();
-        return view('wallet.pages.admin.users')->with('users', $users);
-    }
-
-    public function transfer() {
-        return view('wallet.pages.transfer');
-    }
-
-    public function order($id) {
-        $order = Order::where('id', $id)->firstOrFail();
-        if (Auth::user()->uid == $order->user_uid) return view('wallet.pages.order')->with('order', $order);
         else abort(404);
     }
 
-    public function gates() {
-        $gates = User::getGates()->get();
-        return view('wallet.pages.admin.gates')->with('gates', $gates);
+    public function getVisibleWallets() {
+        return json_decode(UserConfig::firstOrCreate(
+            ['user_uid' => $this->user->uid, 'meta' => 'visible_wallets'],
+            ['value' => json_encode(['DHB', 'BTC', 'ETH'])]
+        )->value, true);
     }
 
-    public function tags() {
-        $tags = Tag::all();
-        return view('wallet.pages.admin.tags')->with('tags', $tags);
+    /**
+     * Show the test application wallet.
+     *
+     */
+    public function testPage()
+    {
+        $currency = new Currency();
+        $visibleWallets = $this->getVisibleWallets();
+        if ($this->mode == 'pro' && !$this->user->isGate()) {
+            $this->user->switchMode('lite');
+        }
+        if ($this->mode == 'pro' && $this->user->isGate()) {
+            $orders['deposit'] = Order::where('status', 'created')->whereIn('destination', ['TokenSale', 'deposit'])->orderBy('id', 'DESC')->get();
+            $orders['withdraw'] = Order::where('status', 'created')->where('destination', 'withdraw')->orderBy('id', 'DESC')->get();
+            $orders['owned'] = Order::where('status', 'accepted')->where('gate', $this->user->uid)->orderBy('id', 'DESC')->get();
+        }
+        else {
+            $orders = Order::where('user_uid', $this->user->uid)->orderBy('id', 'DESC')->take(10)->get();
+        }
+        foreach ($currency::all() as $item) {
+            $this->user->getBalance($item->title);
+        }
+        return view('wallet.test', compact('orders', 'currency', 'visibleWallets'))->with(
+            array(
+                'user'      => $this->user,
+                'mode'      => $this->mode,
+                'currency'  => $this->currency,
+                'rates'     => $this->rates
+            )
+        );
+
     }
 
-    public function telegram() {
-        return view('wallet.pages.admin.telegram');
-    }
-
-    public function settings() {
-        $system = System::firstOrFail();
-        return view('wallet.pages.admin.settings')->with('system', $system);;
+    /**
+     * Возвращает режим кошелька (Pro | Lite)
+     * @return mixed
+     */
+    public function getMode() {
+        return UserConfig::firstOrCreate(
+            ['user_uid' => $this->user->uid, 'meta' => 'mode'],
+            ['value' => 'lite']
+        )->value;
     }
 }

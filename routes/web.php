@@ -29,38 +29,38 @@ Route::get('/auth/{token}', [App\Http\Controllers\AuthController::class, 'authUs
 
 
 
-// DASHBOARD ROUTES
+// WALLET ROUTES
 Route::group(['prefix' => 'wallet'], function () {
-    Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('wallet');
-    Route::get('/orders/{id}', [App\Http\Controllers\DashboardController::class, 'getOrder'])->name('getOrder');
-    Route::get('/orders/{id}/accept', [App\Http\Controllers\DashboardController::class, 'acceptOrderPage']);
-    Route::get('/settings/', [App\Http\Controllers\DashboardController::class, 'settings'])->name('settings');
-    Route::get('/history/', [App\Http\Controllers\DashboardController::class, 'history'])->name('history');
-    Route::get('/system/', [App\Http\Controllers\DashboardController::class, 'systemConfigPage'])->name('systemConfigPage')->middleware('admin');
-    Route::get('/test/', [App\Http\Controllers\DashboardController::class, 'testPage'])->name('testPage')->middleware('admin');
+    Route::get('/', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet');
+    Route::get('/orders/{id}', [App\Http\Controllers\WalletController::class, 'getOrder'])->name('getOrder');
+    Route::get('/orders/{id}/accept', [App\Http\Controllers\WalletController::class, 'acceptOrderPage']);
+    Route::get('/settings/', [App\Http\Controllers\WalletController::class, 'settings'])->name('settings');
+    Route::get('/history/', [App\Http\Controllers\WalletController::class, 'history'])->name('history');
+    Route::get('/system/', [App\Http\Controllers\WalletController::class, 'systemConfigPage'])->name('systemConfigPage')->middleware('admin');
+    Route::get('/test/', [App\Http\Controllers\WalletController::class, 'testPage'])->name('testPage')->middleware('admin');
 });
 
 Route::group(['prefix' => 'dashboard'], function () {
-    Route::get('/', [App\Http\Controllers\WalletController::class, 'index'])->name('dashboard');
-    Route::get('/profile', [App\Http\Controllers\WalletController::class, 'profile'])->name('dashboard.profile');
-    Route::get('/explorer', [App\Http\Controllers\WalletController::class, 'explorer'])->name('dashboard.explorer');
-    Route::get('/orders/{id}', [App\Http\Controllers\WalletController::class, 'order'])->name('dashboard.pages.order');
-    Route::get('/transfer', [App\Http\Controllers\WalletController::class, 'transfer'])->name('dashboard.transfer');
+    Route::get('/', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile', [App\Http\Controllers\DashboardController::class, 'profile'])->name('dashboard.profile');
+    Route::get('/explorer', [App\Http\Controllers\DashboardController::class, 'explorer'])->name('dashboard.explorer');
+    Route::get('/orders/{id}', [App\Http\Controllers\DashboardController::class, 'order'])->name('dashboard.pages.order');
+    Route::get('/transfer', [App\Http\Controllers\DashboardController::class, 'transfer'])->name('dashboard.transfer');
 
     // ADMIN PAGES
-    Route::post('/currencies/{slug}', [App\Http\Controllers\WalletController::class, 'updateCurrency'])->middleware('admin');
-    Route::get('/orders/', [App\Http\Controllers\WalletController::class, 'orders'])->middleware('gate_manager')->name('dashboard.orders');
-    Route::get('/stages/', [App\Http\Controllers\WalletController::class, 'stages'])->middleware('admin')->name('dashboard.stages');
-    Route::get('/reports/', [App\Http\Controllers\WalletController::class, 'reports'])->middleware('admin')->name('dashboard.reports');
-    Route::get('/hft/', [App\Http\Controllers\WalletController::class, 'hft'])->middleware('admin')->name('dashboard.hft');
-    Route::get('/currencies/', [App\Http\Controllers\WalletController::class, 'currencies'])->middleware('admin')->name('dashboard.currencies');
-    Route::get('/currencies/{slug}', [App\Http\Controllers\WalletController::class, 'currency'])->middleware('admin')->name('dashboard.currency');
-    Route::get('/payments/', [App\Http\Controllers\WalletController::class, 'payments'])->middleware('admin')->name('dashboard.payments');
-    Route::get('/users', [App\Http\Controllers\WalletController::class, 'getUsers'])->name('dashboard.users')->middleware('gate_manager');
-    Route::get('/gates', [App\Http\Controllers\WalletController::class, 'gates'])->name('dashboard.gates')->middleware('gate_manager');
-    Route::get('/tags', [App\Http\Controllers\WalletController::class, 'tags'])->name('dashboard.tags')->middleware('admin');
-    Route::get('/telegram', [App\Http\Controllers\WalletController::class, 'telegram'])->name('dashboard.telegram')->middleware('admin');
-    Route::get('/settings', [App\Http\Controllers\WalletController::class, 'settings'])->name('dashboard.settings')->middleware('admin');
+    Route::post('/currencies/{slug}', [App\Http\Controllers\DashboardController::class, 'updateCurrency'])->middleware('admin');
+    Route::get('/orders/', [App\Http\Controllers\DashboardController::class, 'orders'])->middleware('gate_manager')->name('dashboard.orders');
+    Route::get('/stages/', [App\Http\Controllers\DashboardController::class, 'stages'])->middleware('admin')->name('dashboard.stages');
+    Route::get('/reports/', [App\Http\Controllers\DashboardController::class, 'reports'])->middleware('admin')->name('dashboard.reports');
+    Route::get('/hft/', [App\Http\Controllers\DashboardController::class, 'hft'])->middleware('admin')->name('dashboard.hft');
+    Route::get('/currencies/', [App\Http\Controllers\DashboardController::class, 'currencies'])->middleware('admin')->name('dashboard.currencies');
+    Route::get('/currencies/{slug}', [App\Http\Controllers\DashboardController::class, 'currency'])->middleware('admin')->name('dashboard.currency');
+    Route::get('/payments/', [App\Http\Controllers\DashboardController::class, 'payments'])->middleware('admin')->name('dashboard.payments');
+    Route::get('/users', [App\Http\Controllers\DashboardController::class, 'getUsers'])->name('dashboard.users')->middleware('gate_manager');
+    Route::get('/gates', [App\Http\Controllers\DashboardController::class, 'gates'])->name('dashboard.gates')->middleware('gate_manager');
+    Route::get('/tags', [App\Http\Controllers\DashboardController::class, 'tags'])->name('dashboard.tags')->middleware('admin');
+    Route::get('/telegram', [App\Http\Controllers\DashboardController::class, 'telegram'])->name('dashboard.telegram')->middleware('admin');
+    Route::get('/settings', [App\Http\Controllers\DashboardController::class, 'settings'])->name('dashboard.settings')->middleware('admin');
 });
 
 

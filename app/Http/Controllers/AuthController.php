@@ -45,7 +45,7 @@ class AuthController extends Controller
 
         $authUser = $this->findOrCreateUser($user);
 
-        return redirect('dashboard');
+        return redirect('wallet');
     }
 
 
@@ -75,7 +75,7 @@ class AuthController extends Controller
             return [
                 'text' => "Добро пожаловать в DaHub, децентрализованную платформу-кошелёк! ",
                 'linkWallet' => env('APP_URL').'/auth/'.$authUser->auth_token.'?url=/wallet/',
-                'linkDashboard' => env('APP_URL').'/auth/'.$authUser->auth_token.'?url=/dashboard/',
+                'linkDashboard' => env('APP_URL').'/auth/'.$authUser->auth_token.'?url=/wallet/',
             ];
         }
         else {

@@ -1,206 +1,145 @@
 @extends('wallet.layouts.app')
 
-@section('content')
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="card main-screen frontpage">
-                    <div class="card-header">
-                        <div class="d-flex align-items-center justify-content-start">
-                            <ul class="nav nav-pills" id="balance-tabs" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link btn btn-outline-secondary active" id="dashboard-tab" data-toggle="tab" href="#dashboard-area" role="tab" aria-controls="dashboard-area" aria-selected="true">
-                                        <svg width="26" height="20" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M17.16 1.56257C8.19 -1.29743 0 5.33257 0 13.9126C0 15.0826 0.13 17.2926 0.52 18.5926C0.52 18.8526 0.78 19.1126 1.04 19.1126H24.83C25.09 19.1126 25.35 18.8526 25.48 18.5926C25.74 17.2926 26 15.0826 26 13.9126C26 8.32257 22.49 3.25257 17.16 1.56257ZM13 3.51257C13.78 3.51257 14.3 4.03257 14.3 4.81257C14.3 5.59257 13.78 6.11257 13 6.11257C12.22 6.11257 11.7 5.59257 11.7 4.81257C11.7 4.03257 12.22 3.51257 13 3.51257ZM3.9 15.2126C3.12 15.2126 2.6 14.6926 2.6 13.9126C2.6 13.1326 3.12 12.6126 3.9 12.6126C4.68 12.6126 5.2 13.1326 5.2 13.9126C5.2 14.6926 4.68 15.2126 3.9 15.2126ZM7.54 8.45257C7.02 8.97257 6.24 8.97257 5.72 8.45257C5.2 7.93257 5.2 7.02257 5.59 6.50257C6.11 5.98257 6.89 5.98257 7.41 6.50257C7.93 7.02257 7.93 7.93257 7.54 8.45257ZM13 16.5126C11.57 16.5126 10.27 15.2126 10.66 13.9126C11.05 12.6126 13 8.71257 13 8.71257C13 8.71257 14.95 12.6126 15.34 13.9126C15.73 15.2126 14.43 16.5126 13 16.5126ZM20.41 8.45257C19.89 8.97257 19.11 8.97257 18.59 8.45257C18.07 7.93257 18.07 7.15257 18.59 6.63257C19.11 6.11257 19.89 6.11257 20.41 6.63257C20.8 7.02257 20.8 7.93257 20.41 8.45257ZM22.1 15.2126C21.32 15.2126 20.8 14.6926 20.8 13.9126C20.8 13.1326 21.32 12.6126 22.1 12.6126C22.88 12.6126 23.4 13.1326 23.4 13.9126C23.4 14.6926 22.88 15.2126 22.1 15.2126Z" fill="#DDFFE9"/>
-                                        </svg>
-                                        <span>Dashboard</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link btn btn-outline-secondary" id="deposit-tab" @if (Auth::user()->hasActiveTokenSaleOrder()) href="/dashboard/orders/{{Auth::user()->orders()->where('status', '!=', 'completed')->first()->id}}" @else data-toggle="tab" href="#deposit-area" role="tab" aria-controls="deposit-area" aria-selected="false" @endif>
-                                        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M9.00011 9.96508C4.99278 9.96508 1.6489 8.50562 0.856695 6.56348C0.738086 6.84953 0.675293 7.14574 0.675293 7.44892C0.675293 9.81793 4.40164 11.7391 9.00011 11.7391C13.5967 11.7391 17.3243 9.81856 17.3243 7.44892C17.3243 7.1451 17.2583 6.84953 17.1435 6.56348C16.3488 8.50562 13.0049 9.96508 9.00011 9.96508Z" fill="white"/>
-                                            <path d="M9.00011 13.0465C4.99278 13.0465 1.6489 11.5864 0.856695 9.64551C0.738086 9.93156 0.675293 10.2278 0.675293 10.5322C0.675293 12.9 4.40164 14.8212 9.00011 14.8212C13.5967 14.8212 17.3243 12.9006 17.3243 10.5322C17.3243 10.2278 17.2583 9.93156 17.1435 9.64551C16.3488 11.587 13.0049 13.0465 9.00011 13.0465Z" fill="white"/>
-                                            <path d="M9.00011 16.2258C4.99278 16.2258 1.6489 14.7676 0.856695 12.8242C0.738086 13.1103 0.675293 13.4071 0.675293 13.7109C0.675293 16.0799 4.40164 17.9999 9.00011 17.9999C13.5967 17.9999 17.3243 16.0806 17.3243 13.7109C17.3243 13.4071 17.2583 13.1103 17.1435 12.8242C16.3488 14.7676 13.0049 16.2258 9.00011 16.2258Z" fill="white"/>
-                                            <path d="M9.00045 8.57789C13.5978 8.57789 17.3246 6.65767 17.3246 4.28895C17.3246 1.92023 13.5978 0 9.00045 0C4.40313 0 0.67627 1.92023 0.67627 4.28895C0.67627 6.65767 4.40313 8.57789 9.00045 8.57789Z" fill="white"/>
-                                        </svg>
-                                        <span>Получить DHB</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link btn btn-outline-secondary" id="orders-tab" data-toggle="tab" href="#orders-area" role="tab" aria-controls="orders-area" aria-selected="false">
-                                        <svg width="19" height="23" viewBox="0 0 19 23" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M18.3281 22.0892L17.5127 6.33913C17.49 5.90091 17.128 5.55724 16.6893 5.55724H14.2828V4.78327C14.2828 2.14575 12.1369 0 9.49933 0C6.86181 0 4.71618 2.14575 4.71618 4.78327V5.55724H2.30972C1.87089 5.55724 1.50888 5.90091 1.48616 6.33913L0.668575 22.1328C0.656941 22.3585 0.738444 22.5793 0.89414 22.7432C1.04977 22.9071 1.26596 23 1.49207 23H17.507C17.5074 23.0001 17.5077 23.0001 17.5081 23C17.9635 23 18.3326 22.6308 18.3326 22.1755C18.3325 22.1462 18.3311 22.1175 18.3281 22.0892ZM5.89085 8.89471C5.40311 8.89471 5.0076 8.4992 5.0076 8.01146C5.0076 7.52372 5.40311 7.12821 5.89085 7.12821C6.37858 7.12821 6.7741 7.52372 6.7741 8.01146C6.7741 8.4992 6.37858 8.89471 5.89085 8.89471ZM11.8297 5.55724H7.16919V4.78327C7.16919 3.49829 8.21447 2.453 9.49933 2.453C10.7844 2.453 11.8297 3.49829 11.8297 4.78327V5.55724ZM13.1091 8.89471C12.6214 8.89471 12.2259 8.4992 12.2259 8.01146C12.2259 7.52372 12.6214 7.12821 13.1091 7.12821C13.5969 7.12821 13.9924 7.52372 13.9924 8.01146C13.9924 8.4992 13.5969 8.89471 13.1091 8.89471Z" fill="#DDFFE9"/>
-                                        </svg>
-                                        <span>Мои заявки</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link btn btn-outline-secondary" id="ref-tab" data-toggle="tab" href="#ref-area" role="tab" aria-controls="ref-area" aria-selected="false">
-                                        <svg width="22" height="19" viewBox="0 0 22 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M8.24141 10.5688C10.7759 10.5688 12.8305 8.20286 12.8305 5.28438C12.8305 2.3659 10.7759 0 8.24141 0C5.70694 0 3.65234 2.3659 3.65234 5.28438C3.65234 8.20286 5.70694 10.5688 8.24141 10.5688Z" fill="#DDFFE9"/>
-                                            <path d="M16.4785 17.9607C16.4785 15.175 15.443 12.6565 13.7629 10.9198C13.3762 10.519 12.7918 10.5042 12.4008 10.895C10.0031 13.2502 6.48398 13.2552 4.08633 10.895C3.69102 10.5091 3.10664 10.519 2.72422 10.9198C1.05273 12.6565 0 15.1651 0 17.9557C0 18.5297 0.403906 18.9997 0.902344 18.9997H15.5762C16.0746 18.9997 16.4785 18.5346 16.4785 17.9607Z" fill="#DDFFE9"/>
-                                            <path d="M20.2813 12.5033C19.7828 12.9734 19.1942 13.3197 18.5496 13.5127C18.0598 13.6562 17.7676 14.2401 17.9051 14.8041C18.3348 16.5458 18.2875 18.0104 18.2875 17.9609C18.2875 18.5348 18.6914 19 19.1899 19H21.0891C21.5875 19 21.9914 18.5348 21.9914 17.9609C21.9914 14.72 22.0774 14.0916 21.695 12.9239C21.4758 12.2609 20.7582 12.058 20.2813 12.5033Z" fill="#DDFFE9"/>
-                                            <path d="M17.4193 11.6225C18.9405 11.6225 20.1736 10.2026 20.1736 8.45092C20.1736 6.69928 18.9405 5.2793 17.4193 5.2793C15.8982 5.2793 14.665 6.69928 14.665 8.45092C14.665 10.2026 15.8982 11.6225 17.4193 11.6225Z" fill="#DDFFE9"/>
-                                        </svg>
-                                        <span>Партнерская программа</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
-                        <div class="tab-content pb-3" id="balance-tabs-content">
-                            <div class="tab-pane fade show active" id="dashboard-area" role="tabpanel" aria-labelledby="dashboard-tab">
-                                @include('wallet.components.main')
-                            </div>
-                            <div class="tab-pane fade" id="deposit-area" role="tabpanel" aria-labelledby="deposit-tab">
-                                @include('wallet.components.deposit')
-                            </div>
-                            <div class="tab-pane fade" id="orders-area" role="tabpanel" aria-labelledby="orders-tab">
-                                @include('wallet.components.user_orders')
-                            </div>
-                            <div class="tab-pane fade" id="ref-area" role="tabpanel" aria-labelledby="ref-tab">
-                                @include('wallet.components.referral')
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+@section('css')
+    <link rel="stylesheet" href="/css/swiper-bundle.min.css">
 @endsection
 
-@section('script')
+@section('balances')
+    <section class="balance">
 
+        @if ($mode=='pro' && $user->isGate())
+            @include('wallet.components.gate.gate_balances')
+        @else
+            @include('wallet.components.balance_items')
+        @endif
+    </section>
+@endsection
+
+@section('content')
+    <main id="main-screen" class="resizable">
+        <div class="screen-rollover ui-resizable-handle ui-resizable-n">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="18" cy="18" r="18" fill="#347AF0"/>
+                <path
+                    d="M18.375 6.38571C18.125 6.12857 17.75 6 17.5 6C17.25 6 16.875 6.12857 16.625 6.38571L10.375 12.8143C9.875 13.3286 9.875 14.1 10.375 14.6143C10.875 15.1286 11.625 15.1286 12.125 14.6143L17.5 9.08571L22.875 14.6143C23.375 15.1286 24.125 15.1286 24.625 14.6143C25.125 14.1 25.125 13.3286 24.625 12.8143L18.375 6.38571Z"
+                    fill="white"/>
+                <path
+                    d="M16.625 28.6143C16.875 28.8714 17.25 29 17.5 29C17.75 29 18.125 28.8714 18.375 28.6143L24.625 22.1857C25.125 21.6714 25.125 20.9 24.625 20.3857C24.125 19.8714 23.375 19.8714 22.875 20.3857L17.5 25.9143L12.125 20.3857C11.625 19.8714 10.875 19.8714 10.375 20.3857C9.875 20.9 9.875 21.6714 10.375 22.1857L16.625 28.6143Z"
+                    fill="white"/>
+            </svg>
+        </div>
+        <div class="main-screen-wrapper">
+            @if ($mode == 'lite')
+                @include('wallet.components.filter')
+                @include('wallet.components.orders')
+            @else
+                @include('wallet.components.gate.filter')
+                @include('wallet.components.gate.orders')
+            @endif
+        </div>
+    </main>
+    @include('wallet.components.footer')
+    @if ($mode == 'pro')
+        @include('wallet.components.gate.accept_order')
+    @else
+        @include('wallet.components.payment-details-list')
+    @endif
+@endsection
+@section('scripts')
+    <script src="/js/swiper-bundle.min.js"></script>
     <script>
-        window.user = {!! Auth::User()->toJson(JSON_PRETTY_PRINT) !!}
-        window.currencies = {};
-            @foreach (\App\Models\Currency::all() as $currency)
-            window.currencies.{{$currency->title}} = {}
-            window.currencies.{{$currency->title}}.decimalPlaces = {{$currency->decimal_places}}
-            @endforeach
-
-
-        $('[data-toggle="popover"]').popover()
-        $('.copy-link, .copy-link *').click(function(e){
-            e.preventDefault()
-            let l = $(this).find('span').html()
-            let i = document.createElement('input')
-            i.setAttribute('value', l)
-            document.body.appendChild(i)
-            i.select()
-            let r = document.execCommand('copy')
-            document.body.removeChild(i)
-        })
-
-        $('body').on('click', function (e) {
-            //did not click a popover toggle or popover
-            if ($(e.target).data('toggle') !== 'popover'
-                && $(e.target).parents('.popover.in').length === 0
-                && $(e.target).parent().data('toggle') !== 'popover') {
-                $('[data-toggle="popover"]').popover('hide');
-            }
-        });
-        $('.deposit-block input, .deposit-block select').on('change', function(e) {
-            changeInputValues(e)
-        })
-
-
-        $('select[name="deposit-currency').on('change', function(e) {
-            let currency = $(this).val()
-            getPayments(currency).then(function(data) {
-                // Run this when your request was successful
-                let payments = '';
-                $.each(data, function(key, item) {
-                    payments += "<option value='" + item.title + "'>" + item.title + "</option>";
-                    // $(this).closest('form').find('.select-payment').html(payments)
-                })
-                $('select[name="deposit-payment"]').html(payments)
-            }).catch(function(err) {
-                // Run this when promise was rejected via reject()
-                console.log(err)
-            })
-        })
-
-        function changeInputValues(e) {
-            let balance = {{ Auth::User()->getBalance('DHB') }}
-            let amount = $('input[name="deposit-amount"]')
-            let currency = $('select[name="deposit-currency"]')
-            let depositRecieve = $('.deposit-receive')
-            let subtotal = $('.subtotal-amount span').html() + 0
-            let rate = {
-                DHB : '{!! Rate::getRates('DHB') !!}',
-                @foreach (\App\Models\Currency::payableCurrencies()->get() as $currency)
-                {{$currency->title}} : '{!! Rate::getRates($currency->title) !!}',
+        $(function () {
+            window.currencies = {
+                @foreach (\App\Models\Currency::all() as $currency)
+                    {{$currency->title}}: {
+                    decimal_places: {{ $currency->decimal_places }},
+                    visible: {{ $currency->visible }},
+                    crypto: {{ $currency->crypto }}
+                },
                 @endforeach
             }
-
-            let min = parseInt($('.deposit-block input[name="deposit-amount"]').data('min'));
-            let max = parseInt($('.deposit-block input[name="deposit-amount"]').data('max'));
-
-            if ($(e.target).is(depositRecieve)) {
-                let amountTotal = rate[currency.val()] * depositRecieve.val() / rate['DHB']
-                amount.val(amountTotal.toFixed(window.currencies[currency.val()]['decimalPlaces']))
+            const balances = {
+                @foreach ($visibleWallets as $visibleWallet)
+                    {{$visibleWallet}}: {
+                    amountFree: {{$user->getBalanceFree($visibleWallet)}},
+                    amountFrozen: {{$user->getBalanceFrozen($visibleWallet)}},
+                    rate: {{$rates::getRates($visibleWallet)}},
+                },
+                @endforeach
             }
-            if (amount.val() > max) amount.val(max)
-            if (amount.val() < min) amount.val(min)
-            let amountTotal = rate['DHB'] * amount.val() / rate[currency.val()]
-            depositRecieve.val(amountTotal.toFixed(window.currencies[currency.val()]['decimalPlaces']))
+            $('.select-currency').on('change', function (e) {
+                let crypto = $(this).children('option:selected').data('crypto') == 1
+                let currency = $(this).val()
+                let form = $(this).closest('form')
+                getPayments(currency).then(function (data) {
+                    // Run this when your request was successful
+                    let payments = '';
+                    $.each(data, function (key, item) {
+                        payments += "<option value='" + item.title + "'>" + item.title + "</option>";
+                        // $(this).closest('form').find('.select-payment').html(payments)
+                    })
+                    form.find('select[name="payment-network"]').html(payments)
+                }).catch(function (err) {
+                    // Run this when promise was rejected via reject()
+                    console.log(err)
+                })
+                $('.form-withdraw .input-address').val('')
+                if (crypto) $('.form-withdraw .input-address').addClass('crypto')
+            })
 
-            subtotal = parseFloat(balance) + parseFloat(amount.val())
-            $('.subtotal-amount span').html( new Intl.NumberFormat('ru-RU').format(subtotal) + ',00' )
-            amount.val(parseInt(amount.val()))
-
-
-        }
-        function deposit() {
-            let _token = $('meta[name="csrf-token"]').attr('content');
-            let amount = $('input[name="deposit-receive"]').val()
-            let currency = $('select[name="deposit-currency"]').val()
-            let payment = $('select[name="deposit-payment"]').val()
-            let dhb_amount = $('input[name="deposit-amount"]').val()
-            $.ajax({
-                url: "/api/createOrderByUser",
-                type:"POST",
-                data:{
-                    _token: _token,
-                    destination:    'TokenSale',
-                    currency:       currency,
-                    amount:         amount,
-                    payment:        payment,
-                    dhb_amount:     dhb_amount
+            const swiper = new Swiper('.swiper', {
+                // Optional parameters
+                direction: 'horizontal',
+                loop: true,
+                pagination: {
+                    el: ".swiper-pagination",
+                    dynamicBullets: true,
                 },
-                success:function(response){
-                    window.location.href = '/dashboard/orders/' + response
-                },
-            });
-        }
-
-        function assignee() {
-            let _token = $('meta[name="csrf-token"]').attr('content');
-            let id = $('.deposit-section').data('id')
-            $.ajax({
-                url: "/api/orders/assigneeOrder",
-                type:"POST",
-                data:{
-                    _token: _token,
-                    id: id
-                },
-                success:function(response){
-                    $('.deposit-section').removeClass('created').addClass('assignee');
-                    $('.assignee-section h2').text('Заявка #' + id)
+                // And if we need scrollbar
+                scrollbar: {
+                    el: '.swiper-scrollbar',
                 },
             });
-        }
-
+            @if ($mode == 'lite')
+            $('.filter-items .filter-item').click(function () {
+                let filter = $(this).data('filter')
+                let d = $(this)
+                return new Promise(function (resolve, reject) {
+                    $.ajax({
+                        url: "/api/getOrdersByFilter",
+                        type: "POST",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            "filter": filter,
+                        },
+                        success: function (data) {
+                            resolve(data)
+                            let orders = getOrders(data)
+                            $('.orders').html(orders)
+                            $('.filter-items .filter-item').removeClass('active')
+                            d.addClass('active')
+                        },
+                        error: function (err) {
+                            reject(err)
+                        }
+                    })
+                })
+            })
+            @endif
+            @if ($mode == 'pro')
+            /*swiper.on('transitionEnd', function () {
+                let activeCurrency = $('.swiper-slide.swiper-slide-active .total-amount-title span').html()
+                console.log(activeCurrency)
+                $('.balance-item.balance-available .balance-amount span').html(balances[activeCurrency]['amountFree'] * balances[activeCurrency]['rate'])
+                $('.balance-item.balance-frozen .balance-amount span').html(balances[activeCurrency]['amountFrozen'] * balances[activeCurrency]['rate'])
+                let progressBarWidth;
+                if (balances[activeCurrency]['amountFrozen'] != 0) progressBarWidth = 100 * balances[activeCurrency]['amountFree'] / balances[activeCurrency]['amountFrozen']
+                else progressBarWidth = 100
+                console.log(progressBarWidth)
+                $('.progress-bar').css('width', progressBarWidth + '%')
+            });*/
+            @endif
+        });
 
         function getPayments(currency) {
             return new Promise(function (resolve, reject) {
@@ -221,6 +160,162 @@
             })
         }
 
+        $('.gate-controls .gate-action').click(function (e) {
+            let action = $(this).data('action')
+            $('.orders .orders-deposit, .orders .orders-withdraw').hide()
+            $('.orders-' + action).show()
+            $('.gate-controls .gate-action').removeClass('active')
+            $(this).addClass('active')
+        })
+        // $('.form-withdraw .input-address').click(function(e){
+        //     e.preventDefault();
+        //     let payment =  $('.form-withdraw .select-payment').val();
+        //     if ($(this).hasClass('crypto'))
+        //     {
+        //         $('#payment-details-list').addClass('crypto')
+        //         $('#add-payment-details').addClass('crypto')
+        //         $('#add-payment-details input[name="address"]').attr('placeholder', 'Номер кошелька')
+        //     }
+        //     else {
+        //         $('#payment-details-list').removeClass('crypto')
+        //         $('#add-payment-details').removeClass('crypto')
+        //         $('#add-payment-details input[name="address"]').attr('placeholder', 'Номер карты')
+        //     }
+        //     $('#payment-details-list').addClass('opened')
+        //     $('#payment-details-list .payment-items .payment-item').removeClass('d-flex').addClass('d-none')
+        //     $('#payment-details-list .payment-item[data-payment="' + payment + '"]').removeClass('d-none').addClass('d-flex')
+        //     $('#payment-details-list .add-payment_item').attr('data-payment', payment)
+        // })
+        // $('.add-payment_item').click(function() {
+        //     $('#add-payment-details').modal()
+        //     if ($('#accept-order').data('payment')) $('input[name="payment"]').val($('#accept-order').data('payment'))
+        //     else $('input[name="payment"]').val($(this).data('payment'))
+        // })
 
+        $('.payment-details-form input').on('change keyup', function () {
+            let filledtextboxes = 1;
+            if ($('.payment-details-form input[name="address"]').val().length == 0) filledtextboxes = 0;
+            if (filledtextboxes != 0) $('.payment-details-form .confirm-modal').removeClass('disabled')
+            else $('.payment-details-form .confirm-modal').addClass('disabled')
+        })
+        $('.payment-details-form .confirm-modal').click(function (e) {
+            e.preventDefault()
+            if (!$(this).hasClass('disabled')) {
+                return new Promise(function (resolve, reject) {
+                    let form = $('.payment-details-form');
+                    let data = {
+                        "_token": "{{ csrf_token() }}",
+                        "address": form.find('input[name="address"]').val(),
+                        "payment": form.find('input[name="payment"]').val(),
+                        "holder_name": form.find('input[name="holder_name"]').val(),
+                    }
+                    $.ajax({
+                        url: "/api/payment_details/add",
+                        type: "POST",
+                        data: data,
+                        success: function (data) {
+                            resolve(data)
+                            console.log(data)
+                            $('.payment-items').append('<a class="payment-item d-flex align-items-center justify-content-start" data-address="' + data[0].address + '" data-payment="' + data[0].payment + '">' +
+                                '<svg class="payment-details-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+                                '<circle cx="10" cy="10" r="10" fill="#EDF1F9"/>' +
+                                '<circle class="payment-item-icon-inner" cx="10" cy="10" r="6" fill="#EDF1F9"/>' +
+                                '</svg>' +
+                                '<div class="payment-details">' +
+                                '<span class="address">' + data[0].address + '</span>' +
+                                '</div></a>');
+                            $('#add-payment-details').modal('hide')
+                        },
+                        error: function (err) {
+                            reject(err)
+                        }
+                    })
+                })
+            }
+        })
+        $('#accept-order .payment-items').on('click', '.payment-item', function () {
+            $('.payment-item').removeClass('active')
+            $(this).addClass('active')
+            $('.order-accept').removeClass('disabled').attr('data-address', $(this).data('address'))
+        })
+        $('#payment-details-list .payment-items').on('click', '.payment-item', function () {
+            $('.payment-item').removeClass('active')
+            $(this).addClass('active')
+            let address = $(this).find('.address').text();
+            $('#payment-details-list').removeClass('opened')
+            $('.input-address').val(address)
+        })
+        $('.order-accept').click(function () {
+            if (!$(this).hasClass('disabled')) {
+                let data = {
+                    "_token": "{{ csrf_token() }}",
+                    "id": $(this).data('id'),
+                    "payment_details": $(this).data('address'),
+                }
+                return new Promise(function (resolve, reject) {
+                    $.ajax({
+                        url: "/api/orders/acceptOrderByGate",
+                        type: "POST",
+                        data: data,
+                        success: function (data) {
+                            resolve(data)
+                            window.location.href = '{{Request::url()}}/orders/' + data;
+                        },
+                        error: function (err) {
+                            reject(err)
+                        }
+                    })
+                })
+            }
+        })
+
+        function getOrders(orders) {
+            let a = '';
+            orders.forEach(function (order, i, arr) {
+                console.log(order)
+                let options = {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric',
+                    hour12: false,
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    timezone: 'UTC'
+                };
+                let date = new Date(order.created_at).toLocaleString("ru", options).replace(',', '')
+                let currency = order.currency
+                let decimal = window.currencies[currency]['decimal_places']
+                let amount = parseFloat(order.amount)
+                if (order.destination == 'TokenSale') order.destination = 'deposit'
+
+                a += '<a href="/wallet/orders/' + order.id + '" class="order-item d-flex justify-content-between align-items-center">' +
+                    '<div class="d-flex align-items-start flex-column justify-content-center">' +
+                    '<div class="destination ' + order.destination + '">'
+                if (order.destination == 'deposit') a += 'Ввод'
+                if (order.destination == 'withdraw') a += 'Вывод'
+                a += '</div>' +
+                    '<div class="currency">' + order.currency + '</div>' +
+                    '</div>' +
+                    '<div class="d-flex align-items-end flex-column justify-content-center">' +
+                    '<div class="d-flex align-items-center">' +
+                    '<div class="datetime">' +
+                    date +
+                    '</div>' +
+                    '<div class="order-id">' +
+                    '#' + order.id +
+                    '</div>' +
+                    '<div class="order-status">'
+                if (order.status == 'completed') a += '<svg width="14" height="10" viewBox="0 0 14 10" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_534:288)"><path d="M1.58575 3.47816C1.74321 3.4771 1.86381 3.48137 1.98106 3.50918C2.20217 3.56158 2.40876 3.64606 2.5919 3.7776C2.75493 3.89416 2.89117 4.03853 3.03411 4.17542C3.36353 4.48875 3.69072 4.80316 4.01792 5.11649C4.30714 5.39347 4.59748 5.67044 4.8867 5.94849C4.99056 6.04901 5.11563 6.09072 5.25856 6.06933C5.32556 6.05971 5.38922 6.03083 5.44393 5.98592C5.53327 5.9132 5.61256 5.82979 5.69631 5.75065C6.01345 5.44801 6.32947 5.1443 6.64662 4.84059C6.99614 4.50586 7.34455 4.17114 7.69408 3.83642C8.06147 3.48458 8.43109 3.13382 8.79849 2.78091C9.14019 2.45368 9.47967 2.12537 9.82138 1.7992C10.1363 1.49763 10.4534 1.19606 10.7683 0.894484C10.9124 0.756531 11.0564 0.617508 11.2016 0.478485C11.3356 0.351226 11.483 0.240008 11.6528 0.160872C11.7622 0.109541 11.8772 0.0699729 11.9978 0.0443072C12.1564 0.0100863 12.3161 -0.0123712 12.478 0.00260043C12.6287 0.0165027 12.7773 0.0432378 12.9224 0.0934998C13.0911 0.151248 13.2429 0.231453 13.3825 0.337324C13.5779 0.485971 13.7309 0.66777 13.8392 0.88379C13.8794 0.965065 13.9129 1.04848 13.9386 1.13296C13.9576 1.19606 13.9677 1.26236 13.9811 1.32759C14.0034 1.44309 14.0034 1.55645 13.9956 1.67087C13.9911 1.75108 13.9766 1.83128 13.9543 1.91042C13.9364 1.97244 13.9185 2.0334 13.8973 2.09436C13.8649 2.18526 13.8191 2.26974 13.7689 2.35208C13.6695 2.51677 13.5322 2.65045 13.3937 2.78412C13.1257 3.04078 12.8588 3.29744 12.5919 3.55302C12.3306 3.80326 12.0682 4.05244 11.8069 4.30268C11.4104 4.68231 11.0151 5.06195 10.6187 5.44159C10.2468 5.7977 9.87498 6.15275 9.50424 6.50886C9.11116 6.88529 8.71808 7.26279 8.32501 7.63922C7.95315 7.99533 7.58129 8.35144 7.20943 8.70755C6.92579 8.97918 6.64438 9.25188 6.35962 9.52244C6.22674 9.64863 6.07933 9.75878 5.9096 9.83471C5.80016 9.8839 5.68626 9.92667 5.56454 9.94913C5.4618 9.96838 5.36018 9.98656 5.25633 9.99512C5.12903 10.0058 5.00172 9.98977 4.87889 9.96624C4.5718 9.90529 4.29821 9.7791 4.07263 9.56415C3.85041 9.35134 3.62596 9.13959 3.40373 8.92785C3.03187 8.57174 2.66001 8.21563 2.28816 7.85952C1.99893 7.58254 1.70971 7.3045 1.42048 7.02752C1.10781 6.72809 0.796251 6.42758 0.48246 6.12922C0.325006 5.98057 0.205519 5.8084 0.121767 5.61377C0.0737494 5.50255 0.0413652 5.38598 0.0234981 5.26514C0.00786437 5.16248 -0.00441927 5.06088 0.0033976 4.95929C0.0156812 4.79888 0.0447153 4.64168 0.105017 4.48982C0.149685 4.37967 0.203286 4.27594 0.269171 4.17649C0.405408 3.97223 0.586312 3.81182 0.801834 3.68777C0.898987 3.63216 1.00172 3.58831 1.11116 3.55623C1.40597 3.47175 1.41713 3.48458 1.58575 3.47816Z" fill="#75BF72"></path></g><defs><clipPath id="clip0_534:288"><rect width="14" height="10" fill="white"></rect></clipPath></defs></svg>'
+                else a += '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.0055 0H7.99695C5.85947 0 3.84894 0.833625 2.33647 2.34709C0.82644 3.85689 -0.0036501 5.86345 1.20659e-05 7.9945C0.00367423 10.316 0.874048 12.2981 2.58916 13.8848C4.10041 15.2835 5.91807 15.9951 7.99329 16H8.01282C10.1357 16 12.1364 15.1712 13.6452 13.6675C15.1626 12.1553 15.9988 10.1463 16 8.00793C16.0024 3.59692 12.416 0.00488214 8.0055 0ZM3.96369 12.0394C2.85284 10.8884 2.29131 9.52871 2.29253 7.99572C2.29375 6.46639 2.8565 5.11038 3.96247 3.9643C4.53255 3.41506 5.15634 2.99641 5.81553 2.72057C6.48814 2.43985 7.22302 2.29705 8.00184 2.29705C9.55948 2.29705 10.9169 2.86093 12.0363 3.97162C13.1203 5.04691 13.7148 6.4786 13.7087 8.0006C13.6953 9.54946 13.1301 10.9104 12.0375 12.0357C10.8876 13.1439 9.52896 13.7066 7.99207 13.7066C6.46373 13.7054 5.10873 13.1439 3.96369 12.0394Z" fill="#FFA500"></path><path d="M11.0308 8.89528C10.9307 8.81228 10.8306 8.73905 10.733 8.66582L10.3655 8.39242C10.2813 8.33017 10.1971 8.26792 10.1141 8.20446C10.0518 8.15808 9.98955 8.11047 9.92851 8.06287L9.9041 8.04457C9.84306 7.99819 9.78203 7.9518 9.72099 7.90542C9.63432 7.84074 9.54765 7.77605 9.4622 7.71258L9.20463 7.51974C9.18509 7.50509 9.16678 7.49044 9.14725 7.4758C9.14969 6.64217 9.14847 5.79878 9.14847 4.98102V4.63927C9.14847 4.34268 9.05326 4.07295 8.87381 3.85813C8.70291 3.65308 8.47341 3.5176 8.20852 3.46878C8.0071 3.43094 7.81056 3.44559 7.62623 3.51394C7.42481 3.58717 7.2649 3.69458 7.13672 3.84226C6.94873 4.0583 6.84863 4.33414 6.84863 4.63805C6.84863 4.99933 6.84863 5.36183 6.84863 5.72311V6.31019V6.79718C6.84863 7.19263 6.84863 7.60273 6.84985 8.00551C6.85107 8.42171 7.03907 8.78055 7.37965 9.01611C7.45167 9.06615 7.52735 9.12108 7.61158 9.18699C7.79591 9.32857 7.98512 9.46893 8.16823 9.60563L8.19753 9.62638C8.3135 9.71182 8.42947 9.80092 8.54299 9.88757C8.63943 9.96081 8.73465 10.034 8.83108 10.106C8.94827 10.1939 9.06546 10.2806 9.18265 10.3672L9.20096 10.3807C9.33158 10.4771 9.4622 10.5735 9.59159 10.6712C9.81132 10.8359 10.0481 10.9189 10.296 10.9189C10.4046 10.9189 10.5145 10.9031 10.6219 10.8701C11.0443 10.7432 11.336 10.4246 11.4227 9.99498C11.5069 9.5739 11.3641 9.17234 11.0308 8.89528Z" fill="#FFA500"></path></svg>'
+
+                a += '</div>' +
+                    '</div>' +
+                    '<div class="amount">' + amount.toFixed(decimal).replace(/\d(?=(\d{3})+\.)/g, '$& ') + '</div>' +
+                    '</div>' +
+                    '</a>'
+            });
+            return a
+        }
     </script>
+
 @endsection
