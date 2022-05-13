@@ -84,32 +84,15 @@ class DashboardController extends Controller
 
         $startTokenSale = Carbon::parse($system->start_token_sale_date);
         $timeNow = Carbon::now();
-        $stage = 1;
-        switch ($balances['sold']) {
-            case ($balances['sold'] <= 1000000):
-                $stage = 1;
-                break;
-
-            case ($balances['sold'] <= 1200000):
-                $stage = 2;
-                break;
-
-            case ($balances['sold'] <= 1400000):
-                $stage = 3;
-                break;
-
-            case ($balances['sold'] <= 1600000):
-                $stage = 4;
-                break;
-
-            case ($balances['sold'] <= 1800000):
-                $stage = 5;
-                break;
-
-            case ($balances['sold'] <= 2000000):
-                $stage = 6;
-                break;
-        }
+        $stage = match (true) {
+            $balances['sold'] <= 1000000 => 1,
+            $balances['sold'] <= 1200000 => 2,
+            $balances['sold'] <= 1400000 => 3,
+            $balances['sold'] <= 1600000 => 4,
+            $balances['sold'] <= 1800000 => 5,
+            $balances['sold'] <= 2000000 => 6,
+            default => 1,
+        };
         return view('dashboard.index', compact('balances', 'system', 'max', 'startTokenSale', 'timeNow', 'currencies', 'stage'));
     }
 
