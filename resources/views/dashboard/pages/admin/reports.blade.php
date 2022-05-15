@@ -14,7 +14,15 @@
             vertical-align: baseline;
             border-radius: .25em;
         }
-
+        select option {
+            line-height: 24px!important;
+            min-height: 24px;
+            max-height: 24px;
+            padding: 8px 0;
+        }
+        select {
+            padding-top:4px;
+        }
         .label-info {
             background-color: #5bc0de;
         }
@@ -169,13 +177,13 @@
                                  aria-labelledby="pills-balances-tab">
                                 <hr>
                                 <h3 class="mb-3">Балансы системного кошелька</h3>
-                                <h4>{{$system->getWallet('TokenSale')->balanceFloat}} DHB (Токен Сейл)</h4>
-                                <h4>{{$system->getWallet('DHBFundWallet')->balanceFloat}} DHB (Резервы Фонда)</h4>
-                                <h4>{{$system->getWallet('USDT')->balanceFloat}} USDT</h4>
-                                <h4>{{$system->getWallet('BTC')->balanceFloat}} BTC</h4>
-                                <h4>{{$system->getWallet('ETH')->balanceFloat}} ETH</h4>
-                                <h4>{{$system->getWallet('TON')->balanceFloat}} TON</h4>
-                                <h4>{{$system->getWallet('RUB')->balanceFloat}} RUB</h4>
+                                <h4>{{ $system->getBalance('TokenSale') }} DHB (Токен Сейл)</h4>
+                                <h4>{{ $system->getBalance('DHBFundWallet') }} DHB (Резервы Фонда)</h4>
+                                @foreach (\App\Models\Currency::all() as $currency)
+                                    @if (!in_array($currency->title, array('DHB', 'USD')) && $system->getBalance($currency->title) > 0)
+                                    <h4>{{ $system->getBalance($currency->title) }} {{ $currency->title }}</h4>
+                                    @endif
+                                @endforeach
                             </div>
                         </div>
 
@@ -203,14 +211,14 @@
                         <div class="form-group">
                             <label for="currency">Валюта</label>
                             <select class="form-control" name="currency">
-                                <option value="USDT">{{$system->getWallet('USDT')->balanceFloat}} USDT</option>
-                                <option value="DHBFundWallet">{{$system->getWallet('DHBFundWallet')->balanceFloat}} DHB
+                                <option value="DHBFundWallet">{{$system->getBalance('DHBFundWallet')}} DHB
                                     (Резерв Фонда)
                                 </option>
-                                <option value="BTC">{{$system->getWallet('BTC')->balanceFloat}} BTC</option>
-                                <option value="ETH">{{$system->getWallet('ETH')->balanceFloat}} ETH</option>
-                                <option value="TON">{{$system->getWallet('TON')->balanceFloat}} TON</option>
-                                <option value="RUB">{{$system->getWallet('RUB')->balanceFloat}} RUB</option>
+                                @foreach (\App\Models\Currency::all() as $currency)
+                                    @if (!in_array($currency->title, array('DHB', 'USD')) && $system->getBalance($currency->title) > 0)
+                                    <option value="{{ $currency->title }}">{{ $system->getBalance($currency->title) }} {{ $currency->title }}</option>
+                                    @endif
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
@@ -255,15 +263,12 @@
                         <div class="form-group">
                             <label for="currency">Валюта</label>
                             <select class="form-control" name="currency">
-                                <option value="USDT">{{$system->getWallet('USDT')->balanceFloat}} USDT</option>
-                                <option value="DHBFundWallet">{{$system->getWallet('DHBFundWallet')->balanceFloat}} DHB
-                                    (Резерв Фонда)
-                                </option>
-                                <option value="BTC">{{$system->getWallet('BTC')->balanceFloat}} BTC</option>
-                                <option value="ETH">{{$system->getWallet('ETH')->balanceFloat}} ETH</option>
-                                <option value="HFT">{{$system->getWallet('HFT')->balanceFloat}} HFT</option>
-                                <option value="TON">{{$system->getWallet('TON')->balanceFloat}} TON</option>
-                                <option value="RUB">{{$system->getWallet('RUB')->balanceFloat}} RUB</option>
+                                <option value="DHBFundWallet">{{$system->getBalance('DHBFundWallet')}} DHB (Резерв Фонда)</option>
+                                @foreach (\App\Models\Currency::all() as $currency)
+                                    @if (!in_array($currency->title, array('DHB', 'USD')) && $system->getBalance($currency->title) > 0)
+                                        <option value="{{ $currency->title }}">{{ $system->getBalance($currency->title) }} {{ $currency->title }}</option>
+                                    @endif
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">

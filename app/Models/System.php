@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\GetBalance;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\HasWalletFloat;
@@ -22,7 +23,7 @@ use Questocat\Referral\Traits\UserReferral;
  */
 class System extends Model implements Wallet, WalletFloat
 {
-    use HasFactory, Notifiable, HasWallets, UserReferral, HasWalletFloat;
+    use HasFactory, Notifiable, HasWallets, UserReferral, HasWalletFloat, GetBalance;
 
     /**
      * @return float

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helpers\Rate;
+use App\Traits\GetBalance;
 use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\HasWalletFloat;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,7 +36,7 @@ use App\Models\Currency as Currency;
 
 class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
 {
-    use HasFactory, Notifiable, HasWallets, UserReferral, CanConfirm, Notifiable, HasWalletFloat;
+    use HasFactory, Notifiable, HasWallets, UserReferral, CanConfirm, Notifiable, HasWalletFloat, GetBalance;
 
     /**
      * The attributes that are mass assignable.
@@ -171,21 +172,6 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         return $this->hasMany('App\Models\PaymentDetail', 'user_uid', 'uid');
     }
 
-
-    public function getBalance($currency): float
-    {
-        if (!$this->hasWallet($currency)) {
-            $this->createWallet(
-                [
-                    'name' => $currency,
-                    'slug' => $currency,
-                    'decimal_places' => Currency::where('title', str_replace('_gate', '', $currency))->first()->decimal_places
-                ]
-            );
-        }
-        $this->getWallet($currency)->refreshBalance();
-        return $this->getWallet($currency)->balanceFloat;
-    }
 
     /**
      * Получить общий баланс DHB / USDT

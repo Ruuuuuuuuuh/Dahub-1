@@ -135,23 +135,13 @@ class DashboardController extends Controller
     }
 
     // Бухгалтерия
-    public function reports()
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function reports(): View|Factory|Application
     {
         $system = System::findOrFail(1);
-        $system->getWallet('DHBFundWallet')->refreshBalance();
-        $system->getWallet('TokenSale')->refreshBalance();
-        $system->getWallet('USDT')->refreshBalance();
-        $system->getWallet('BTC')->refreshBalance();
-        $system->getWallet('ETH')->refreshBalance();
-        if (!$system->getWallet('HFT')) {
-            $system->createWallet(
-                [
-                    'name' => 'HFT',
-                    'slug' => 'HFT',
-                ]
-            );
-        }
-        $system->getWallet('HFT')->refreshBalance();
         $orders = Order::orderBy('id', 'DESC')->get();
         $wallet = new Wallet;
         $users = User::all();
