@@ -94,7 +94,7 @@
                     },
                     success: function (response) {
                         alert('Таймер старта токенсейла успешно установлен')
-                        window.location.href = '/wallet/stages/';
+                        window.location.href = '{{Route('dashboard.stages')}}';
                     },
                 });
             })
@@ -112,7 +112,7 @@
                     },
                     success: function (response) {
                         alert('Таймер токенсейла успешно сброшен')
-                        window.location.href = '/wallet/stages/';
+                        window.location.href = '{{Route('dashboard.stages')}}';
                     },
                 });
             })
