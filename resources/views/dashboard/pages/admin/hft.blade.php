@@ -37,7 +37,7 @@
                     })
                         .done(function (data) {
                             alert('HFT успешно пополнены')
-                            window.location.href = '/wallet/hft/';
+                            window.location.href = '{{Route('dashboard.hft')}}';
                         });
                 }
             })
