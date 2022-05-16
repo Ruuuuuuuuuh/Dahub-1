@@ -258,11 +258,11 @@
                     },
                     error: function () {
                         alert('При попытке отменить заявку произошла ошибка')
-                        window.location.href = '/wallet/orders/' + id
+                        window.location.href = '{{Route('dashboard.orders')}}/' + id
                     },
                     success: function (response) {
                         alert('Заявка успешно отменена')
-                        window.location.href = '/wallet/'
+                        window.location.href = '{{Route('dashboard')}}'
                     },
                 });
             }
@@ -282,7 +282,7 @@
                 },
                 success: function (response) {
                     alert('Вы успешно подтвердили отправку средств')
-                    window.location.href = '/wallet/orders/' + id
+                    window.location.href = '{{Route('dashboard.orders')}}/' + id
                 },
             });
         }
