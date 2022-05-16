@@ -213,7 +213,7 @@
                     dhb_amount: dhb_amount
                 },
                 success: function (response) {
-                    window.location.href = '/wallet/orders/' + response
+                    window.location.href = '{{Route('dashboard.orders')}}/' + response
                 },
             });
         }
