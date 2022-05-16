@@ -349,7 +349,7 @@
                 },
                 success: function (response) {
                     alert('Вывод средств успешно совершен')
-                    window.location.href = '/wallet/reports/';
+                    window.location.href = '{{Route('dashboard.reports')}}';
                 },
             });
         }
