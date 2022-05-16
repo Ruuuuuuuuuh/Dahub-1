@@ -135,7 +135,7 @@
                         },
                         success: function (response) {
                             alert('Заявка отменена')
-                            window.location.href = '/wallet/orders/';
+                            window.location.href = '{{Route('dashboard.orders')}}';
                         },
                     });
                 }
