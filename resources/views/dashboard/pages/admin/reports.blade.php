@@ -374,7 +374,7 @@
                 },
                 success: function (response) {
                     alert(response)
-                    window.location.href = '/wallet/reports/';
+                    window.location.href = '{{Route('dashboard.reports')}}';
                 },
             });
         }
