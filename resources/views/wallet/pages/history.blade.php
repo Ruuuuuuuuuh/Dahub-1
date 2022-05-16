@@ -1,6 +1,6 @@
 @extends('wallet.layouts.app')
 @section('content')
-    <section id=history-page class="screen opened history">
+    <section id="history-page" class="screen opened history">
         <div class="section-header">
             <div class="top-nav">
                 <a href="{{ Route('wallet') }}" class="back-link-no-js">
@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="section-main">
-            <transaction-list :transactions='@json($transactions)'></transaction-list>
+            <transaction-list :transactions='{{json_encode($transactions)}}'></transaction-list>
         </div>
     </section>
     @include('wallet.components.footer')
