@@ -234,7 +234,12 @@ class DashboardController extends Controller
         return view('dashboard.pages.admin.telegram');
     }
 
-    public function settings() {
+    /**
+     * Страница настроек
+     * @return Application|Factory|View
+     */
+    public function settings(): View|Factory|Application
+    {
         $system = System::firstOrFail();
         return view('dashboard.pages.admin.settings')->with('system', $system);;
     }

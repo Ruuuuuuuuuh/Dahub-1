@@ -63,9 +63,6 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/settings', [App\Http\Controllers\DashboardController::class, 'settings'])->name('dashboard.settings')->middleware('admin');
 });
 
-
-
-
 // ADMIN ROUTES
 Route::post('/api/tags/', [App\Http\Controllers\SystemApiController::class, 'getTags'])->middleware('admin')->name('api.tags');
 Route::post('/api/tags/add', [App\Http\Controllers\SystemApiController::class, 'addTag'])->middleware('admin');

@@ -127,7 +127,7 @@ class WalletController extends Controller {
      * @return Application|Factory|View
      * @var array $data
      */
-    public function history()
+    public function history(): Factory|View|Application
     {
         $transactions = $this->user->transactions()->limit(150)->orderBy('id', 'desc')->get();
         $data = [];
