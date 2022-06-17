@@ -52,6 +52,8 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/orders/', [App\Http\Controllers\DashboardController::class, 'orders'])->middleware('gate_manager')->name('dashboard.orders');
     Route::get('/stages/', [App\Http\Controllers\DashboardController::class, 'stages'])->middleware('admin')->name('dashboard.stages');
     Route::get('/reports/', [App\Http\Controllers\DashboardController::class, 'reports'])->middleware('admin')->name('dashboard.reports');
+    Route::get('/reports/deposit', [App\Http\Controllers\DashboardController::class, 'reports'])->middleware('admin')->name('dashboard.reports.deposit');
+    Route::get('/reports/withdraw', [App\Http\Controllers\DashboardController::class, 'reports'])->middleware('admin')->name('dashboard.reports.withdraw');
     Route::get('/hft/', [App\Http\Controllers\DashboardController::class, 'hft'])->middleware('admin')->name('dashboard.hft');
     Route::get('/currencies/', [App\Http\Controllers\DashboardController::class, 'currencies'])->middleware('admin')->name('dashboard.currencies');
     Route::get('/currencies/{slug}', [App\Http\Controllers\DashboardController::class, 'currency'])->middleware('admin')->name('dashboard.currency');

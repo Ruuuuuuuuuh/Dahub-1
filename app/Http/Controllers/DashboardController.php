@@ -17,6 +17,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use Telegram\Bot\Api;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -146,7 +147,13 @@ class DashboardController extends Controller
         $wallet = new Wallet;
         $users = User::all();
         $tags = Tag::all();
-        return view('dashboard.pages.admin.reports', compact('system', 'orders', 'wallet', 'users', 'tags'));
+        $route = Route::currentRouteName();
+        $view = match ($route) {
+            'dashboard.reports' => 'reports',
+            'dashboard.reports.deposit' => 'deposit',
+            'dashboard.reports.withdraw' => 'withdraw',
+        };
+        return view('dashboard.pages.admin.reports.'.$view, compact('system', 'orders', 'wallet', 'users', 'tags'));
     }
 
     public function explorer(Request $request)

@@ -33,6 +33,14 @@
             padding-top: 5px;
             display: table;
         }
+        hr {
+            margin: 30px 0 30px;
+        }
+        .nav-link.active {
+            background: #02aaff;
+            color: #fff;
+            font-weight: 500;
+        }
     </style>
 @endsection
 
@@ -52,134 +60,24 @@
                     <div class="card-body">
 
                         <h2 class="mb-5">Отчеты</h2>
-                        <ul class="nav mb-3">
+                        <ul class="nav">
                             <li class="nav-item">
-                                <a class="nav-link active" href="{{Route('dashboard.reports.deposit')}}">Получение</a>
+                                <a class="nav-link @if (request()->route()->getName() == 'dashboard.reports.deposit') active @endif" href="{{Route('dashboard.reports.deposit')}}">Получение</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" href="{{Route('dashboard.reports.withdraw')}}">Отправление</a>
+                                <a class="nav-link  @if (request()->route()->getName() == 'dashboard.reports.withdraw') active @endif" href="{{Route('dashboard.reports.withdraw')}}">Отправление</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{Route('dashboard.reports.balances')}}">Балансы системы</a>
+                                <a class="nav-link  @if (request()->route()->getName() == 'dashboard.reports') active @endif" href="{{Route('dashboard.reports')}}">Балансы системы</a>
                             </li>
                             <li class="nav-item button-send" data-toggle="modal" data-target="#modal-send">
                                 <a class="nav-link btn btn-success">Перевести</a>
                             </li>
                         </ul>
                         <div class="content">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <td>Номер заявки</td>
-                                        <td>Дата</td>
-                                        <td>Номер транзакции</td>
-                                        <td>Сумма</td>
-                                        <td>Кошелек</td>
-                                        <td>Назначение</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach ($system->getTransactions('deposit')->whereNotIn('wallet_id', [1, 2])->limit(30)->orderBy('id', 'DESC')->get() as $order)
-                                        <tr>
-                                            <td>
-                                                {{ $order->meta['order_id'] ?? '--'  }}
-                                            </td>
-                                            <td>
-                                                {{ $order->created_at->Format('d.m.Y H:s') }}
-                                            </td>
-                                            <td>
-                                                {{$order->uuid}}
-                                            </td>
-                                            <td>
-
-                                                {{ floatval($order->getAmountFloatAttribute())  }}
-                                            </td>
-                                            <td>
-                                                {{ $order->wallet()->first()->slug }}
-                                            </td>
-                                            <td>
-                                                @if (isset($order->meta['destination']))
-                                                    @if (is_array($order->meta['destination']))
-                                                        @foreach ($order->meta['destination'] as $destination)
-                                                            <span class="badge badge-success">{{$destination}}</span>
-                                                        @endforeach
-                                                    @else
-                                                        <span class="badge badge-success">{{$order->meta['destination']}}</span>
-                                                    @endif
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            <div class="tab-pane fade" id="pills-withdraw" role="tabpanel"
-                                 aria-labelledby="pills-withdraw-tab">
-
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <td>Номер заявки</td>
-                                        <td>Дата</td>
-                                        <td>Номер транзакции</td>
-                                        <td>Сумма</td>
-                                        <td>Кошелек</td>
-                                        <td>Назначение</td>
-                                        <td>Комментарий</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach ($system->getTransactions('withdraw')->whereNotIn('wallet_id', [1, 2])->limit(30)->orderBy('id', 'DESC')->get() as $order)
-                                        <tr>
-                                            <td>
-                                                {{ $order->meta['order_id'] ?? '--'  }}
-                                            </td>
-                                            <td>
-                                                {{ $order->created_at->Format('d.m.Y H:s') }}
-                                            </td>
-                                            <td>
-                                                {{$order->uuid}}
-                                            </td>
-                                            <td>
-                                                {{ floatval($order->getAmountFloatAttribute()) }}
-                                            </td>
-                                            <td>
-                                                {{ $order->wallet()->first()->slug }}
-                                            </td>
-                                            <td>
-                                                @if (isset($order->meta['destination']))
-                                                    @if (is_array($order->meta['destination']))
-                                                        @foreach ($order->meta['destination'] as $destination)
-                                                            <span class="badge badge-success">{{$destination}}</span>
-                                                        @endforeach
-                                                    @else
-                                                        <span class="badge badge-success">{{$order->meta['destination']}}</span>
-                                                    @endif
-                                                @endif
-                                            </td>
-                                            <td>
-                                                {{ $order->meta['comment'] ?? '' }}
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="tab-pane fade" id="pills-balances" role="tabpanel"
-                                 aria-labelledby="pills-balances-tab">
-                                <hr>
-                                <h3 class="mb-3">Балансы системного кошелька</h3>
-                                <h4>{{ $system->getBalance('TokenSale') }} DHB (Токен Сейл)</h4>
-                                <h4>{{ $system->getBalance('DHBFundWallet') }} DHB (Резервы Фонда)</h4>
-                                @foreach (\App\Models\Currency::all() as $currency)
-                                    @if (!in_array($currency->title, array('DHB', 'USD')) && $system->getBalance($currency->title) > 0)
-                                    <h4>{{ $system->getBalance($currency->title) }} {{ $currency->title }}</h4>
-                                    @endif
-                                @endforeach
-                            </div>
+                            <hr>
+                            @yield('reportsContent')
                         </div>
-
-                        <hr/>
-
                     </div>
                 </div>
             </div>
@@ -270,25 +168,25 @@
         })
     </script>
     <script>
-/*        function withdrawPayment() {
-            let currency = $('#withdraw-payment select[name="currency"]').val();
-            let amount = $('#withdraw-payment input[name="amount"]').val();
-            let destination = $('#withdraw-payment select[name="destination"]').val();
-            let message = $('#withdraw-payment textarea').val();
-            let _token = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: "/api/withdraw-payment",
-                type: "POST",
-                data: {
-                    _token: _token,
-                    currency: currency,
-                    amount: amount,
-                    destination: destination,
-                    message: message
-                },
-                success: function (response) {
-                    alert('Вывод средств успешно совершен')
-                    window.location.href = '{{Route('dashboard.reports')}}';
+        /*        function withdrawPayment() {
+                    let currency = $('#withdraw-payment select[name="currency"]').val();
+                    let amount = $('#withdraw-payment input[name="amount"]').val();
+                    let destination = $('#withdraw-payment select[name="destination"]').val();
+                    let message = $('#withdraw-payment textarea').val();
+                    let _token = $('meta[name="csrf-token"]').attr('content');
+                    $.ajax({
+                        url: "/api/withdraw-payment",
+                        type: "POST",
+                        data: {
+                            _token: _token,
+                            currency: currency,
+                            amount: amount,
+                            destination: destination,
+                            message: message
+                        },
+                        success: function (response) {
+                            alert('Вывод средств успешно совершен')
+                            window.location.href = '{{Route('dashboard.reports')}}';
                 },
             });
         }*/
