@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="transactions actions">
+<!--                        <div class="transactions actions">
                             <input type="text" class="transactions" placeholder="Номер транзакции или ID пользователя">
                             <svg width="23" height="23" viewBox="0 0 23 23" fill="none"
                                  xmlns="http://www.w3.org/2000/svg">
@@ -88,7 +88,7 @@
                                     </linearGradient>
                                 </defs>
                             </svg>
-                        </div>
+                        </div>-->
                         <div class="order-list-header">
                             <div class="order">
                                 <div class="col-12">
@@ -183,7 +183,7 @@
                             '                                            <strong>' + value.amount + '&nbsp;' + value.currency + '</strong>\n' +
                             '                                        </div>\n' +
                             '                                        <div class="amount">\n' +
-                            '                                            <strong>' + value.dhb_amount + '&nbsp;DHB</strong>\n' +
+                            '                                            <strong>' + value.amount_dhb + '&nbsp;DHB</strong>\n' +
                             '                                        </div>\n' +
                             '                                    </div>\n' +
                             '                                </div>\n' +
@@ -234,7 +234,7 @@
                                 '                                            <strong>' + value.amount + '&nbsp;' + value.currency + '</strong>\n' +
                                 '                                        </div>\n' +
                                 '                                        <div class="amount">\n' +
-                                '                                            <strong>' + value.dhb_amount + '&nbsp;DHB</strong>\n' +
+                                '                                            <strong>' + value.amount_dhb + '&nbsp;DHB</strong>\n' +
                                 '                                        </div>\n' +
                                 '                                    </div>\n' +
                                 '                                </div>\n' +

@@ -68,9 +68,6 @@
                             <li class="nav-item button-send" data-toggle="modal" data-target="#modal-send">
                                 <a class="nav-link btn btn-success">Перевести</a>
                             </li>
-                            <li class="nav-item button-withdraw" data-toggle="modal" data-target="#modal-withdraw">
-                                <a class="nav-link btn btn-danger">Вывести</a>
-                            </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-deposit" role="tabpanel"
@@ -196,58 +193,6 @@
     </div>
 
 
-    <div class="modal fade" id="modal-withdraw" tabindex="-1" role="dialog" aria-labelledby="modal-withdraw"
-         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Вывод средств с системного кошелька</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="/api/withdraw" id="withdraw-payment">
-                        <div class="form-group">
-                            <label for="currency">Валюта</label>
-                            <select class="form-control" name="currency">
-                                <option value="DHBFundWallet">{{$system->getBalance('DHBFundWallet')}} DHB
-                                    (Резерв Фонда)
-                                </option>
-                                @foreach (\App\Models\Currency::all() as $currency)
-                                    @if (!in_array($currency->title, array('DHB', 'USD')) && $system->getBalance($currency->title) > 0)
-                                    <option value="{{ $currency->title }}">{{ $system->getBalance($currency->title) }} {{ $currency->title }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="amount">Сумма</label>
-                            <input type="text" class="form-control" name="amount" placeholder="Введите сумму">
-                        </div>
-                        <div class="form-group">
-                            <label for="destination">Назначение</label>
-                            <select class="form-control selectable" name="destination" placeholder="Назначение платежа"
-                                    multiple>
-                                @foreach ($tags as $tag)
-                                    <option value="{{$tag->name}}">{{$tag->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Комментарий</label>
-                            <textarea class="form-control" name="message"
-                                      placeholder="Комментарий к транзакции"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                    <button type="button" onclick="withdrawPayment();" class="btn btn-primary">Вывести</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="modal fade" id="modal-send" tabindex="-1" role="dialog" aria-labelledby="modal-send" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -331,7 +276,7 @@
         })
     </script>
     <script>
-        function withdrawPayment() {
+/*        function withdrawPayment() {
             let currency = $('#withdraw-payment select[name="currency"]').val();
             let amount = $('#withdraw-payment input[name="amount"]').val();
             let destination = $('#withdraw-payment select[name="destination"]').val();
@@ -352,7 +297,7 @@
                     window.location.href = '{{Route('dashboard.reports')}}';
                 },
             });
-        }
+        }*/
 
         function sendPayment() {
             let currency = $('#send-payment select[name="currency"]').val();
