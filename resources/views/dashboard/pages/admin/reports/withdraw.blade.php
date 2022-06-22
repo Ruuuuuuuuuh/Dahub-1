@@ -1,5 +1,11 @@
 @extends('dashboard.pages.admin.reports.layout')
 @section('reportsContent')
+    @php
+        $orders = $system->getTransactions('withdraw')->whereNotIn('wallet_id', [1, 2])->orderBy('id', 'DESC')->paginate(30);
+    @endphp
+    <div class="pb-3">
+        {{ $orders->links('pagination::bootstrap-4') }}
+    </div>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -13,9 +19,6 @@
         </tr>
         </thead>
         <tbody>
-        @php
-            $orders = $system->getTransactions('withdraw')->whereNotIn('wallet_id', [1, 2])->orderBy('id', 'DESC')->paginate(15);
-        @endphp
         @foreach ($orders as $order)
             <tr>
                 <td>

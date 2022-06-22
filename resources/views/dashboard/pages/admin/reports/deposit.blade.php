@@ -2,7 +2,7 @@
 @section('reportsContent')
 
 @php
-    $orders = $system->getTransactions('deposit')->whereNotIn('wallet_id', [1, 2])->orderBy('id', 'DESC')->paginate(15);
+    $orders = $system->getTransactions('deposit')->whereNotIn('wallet_id', [1, 2])->orderBy('id', 'DESC')->paginate(30);
 @endphp
 <div class="pb-3">
     {{ $orders->links('pagination::bootstrap-4') }}
