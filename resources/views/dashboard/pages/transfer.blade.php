@@ -135,7 +135,7 @@
                                 "_token": "{{ csrf_token() }}",
                                 "currency": 'DHB',
                                 "amount": amount,
-                                "username": username,
+                                "address": username,
                             },
                             success: function (data) {
                                 resolve(data)

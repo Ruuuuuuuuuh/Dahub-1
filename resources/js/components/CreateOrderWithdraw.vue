@@ -31,6 +31,7 @@
         <div class="select-wrapper">
             <select name="payment-network" class="form-select select-payment" v-model="selectedPayments" @change="checkPayment()">
                     <option v-for="item in payments" :key="item.id" :value="item.title">{{item.title}}</option>
+                    <option value="Dahub Pay">Dahub Pay</option>
             </select>
             <svg class="select-angle" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M18.7 9.7L12.7 15.7C12.5 15.9 12.3 16 12 16C11.7 16 11.5 15.9 11.3 15.7L5.3 9.7C4.9 9.3 4.9 8.7 5.3 8.3C5.7 7.9 6.3 7.9 6.7 8.3L12 13.6L17.3 8.3C17.7 7.9 18.3 7.9 18.7 8.3C19.1 8.7 19.1 9.3 18.7 9.7Z" fill="black"/>
@@ -131,15 +132,16 @@ export default {
     },
     methods: {
         createOrder() {
-            let data = {
-                "_token": this._token,
-                "currency": this.currency,
-                "amount": this.amount,
-                "payment": this.selectedPayments,
-                "address": this.address,
-                "destination": 'withdraw'
-            }
-            axios.post("/api/createOrderByUser", data)
+            if (this.selectedPayments != 'Dahub Pay') {
+                let data = {
+                    "_token": this._token,
+                    "currency": this.currency,
+                    "amount": this.amount,
+                    "payment": this.selectedPayments,
+                    "address": this.address,
+                    "destination": 'withdraw'
+                }
+                axios.post("/api/createOrderByUser", data)
                 .then(response => {
                     console.log(response)
                     document.location.href = '/wallet/orders/' + response.data;
@@ -149,6 +151,25 @@ export default {
                     this.messageError = error.response.data.message
                     // document.location.href = '/wallet/orders/' + data;
                 });
+            }
+            else {
+                let data = {
+                    "_token": this._token,
+                    "currency": this.currency,
+                    "amount": this.amount,
+                    "address": this.address,
+                }
+
+                axios.post("/api/transfer", data)
+                    .then(response => {
+                        alert('Перевод средств выполнен успешно')
+                        document.location.href = '/wallet/';
+                    })
+                    .catch((error) => {
+                        console.log(error.response.data);
+                        this.messageError = error.response.data.message
+                    });
+            }
         },
         checkAddress(event) {
             this.address = event.address
