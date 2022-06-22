@@ -26,6 +26,7 @@ use App\Models\User;
 use App\Models\Order;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use NotificationChannels\Telegram\Exceptions\CouldNotSendNotification;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 
@@ -613,7 +614,7 @@ class ApiController extends Controller
     }
 
     /**
-     * Подтверждение поступления средств шлюзом
+     * Подтверждение поступления средств шлюзом (заявка на ввод / токенсейл)
      * @param Request $request
      * @return Application|ResponseFactory|Response
      * @throws TelegramSDKException
@@ -635,7 +636,7 @@ class ApiController extends Controller
 
 
     /**
-     * Подтверждение заявки пользователем
+     * Подтверждение заявки пользователем (заявка на вывод)
      * @param Request $request
      * @return Application|ResponseFactory|Response|void
      */
@@ -643,6 +644,7 @@ class ApiController extends Controller
     {
         $order = Order::where('id', $request->input('id'))->firstOrFail();
         $gate = User::where('uid', $order->gate)->first();
+        $owner = User::where('uid', $order->user_uid)->first();
 
         if ($order->user_uid == $this->user->uid) {
             if (($gate->getWallet($order->currency.'_gate')->balanceFloat >= $order->amount)) {
@@ -658,6 +660,29 @@ class ApiController extends Controller
                 $systemWallet->getWallet('DHBFundWallet')->transferFloat( $gate->getWallet('DHB'), $tax, array('destination' => 'Бонус за успешное выполнение заявки', 'order_id' => $order->id));
                 $systemWallet->getWallet('DHBFundWallet')->refreshBalance();
                 $gate->getWallet('DHB')->refreshBalance();
+
+                $message = Message::where('order_id', $order->id)->first();
+                if ($message) {
+                    try {
+                        $telegram = new Api(env('TELEGRAM_BOT_GATE_ORDERS_TOKEN'));
+                        $telegram->editMessageText([
+                            'chat_id' => $message->chat_id,
+                            'message_id' => $message->message_id,
+                            'text' => $message->message . PHP_EOL . '🏁 <b>Заявка выполнена</b>',
+                            'parse_mode' => 'html',
+                            'reply_markup' => NULL
+                        ]);
+                    } catch (TelegramSDKException $e) {
+                        report ($e);
+                    }
+                }
+
+                try {
+                    $gate->notify(new \App\Notifications\ConfirmWithdrawOrder($order));
+                    $owner->notify(new \App\Notifications\ConfirmWithdrawOrder($order));
+                } catch (CouldNotSendNotification $e) {
+                    report ($e);
+                }
 
                 return $order->id;
             }
