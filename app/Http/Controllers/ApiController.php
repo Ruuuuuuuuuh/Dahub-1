@@ -768,13 +768,28 @@ class ApiController extends Controller
         if ($this->user->getBalanceFree($currency) >= $amount) {
             if ($username != 'DHBFundWallet') {
                 $receiver = User::where('uid', $username)->firstOrFail();
-                $this->user->getWallet($currency)->transferFloat($receiver->getWallet($currency), $amount, array('destination' => 'Transfer from user'));
+                $transaction = $this->user->getWallet($currency)->transferFloat($receiver->getWallet($currency), $amount, array('destination' => 'Transfer from user'));
                 $this->user->getWallet($currency)->refreshBalance();
                 $receiver->getWallet($currency)->refreshBalance();
             }
             else {
-                $this->user->getWallet($currency)->transferFloat(System::findOrFail(1)->getWallet('DHBFundWallet'), $amount, array('destination' => 'Transfer from user'));
+                $transaction = $this->user->getWallet($currency)->transferFloat(System::findOrFail(1)->getWallet('DHBFundWallet'), $amount, array('destination' => 'Transfer from user'));
             }
+
+            try {
+                $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
+
+                $telegram->sendMessage([
+                    'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
+                    'text' => '<b>🆕 Transaction created</b> ' . $transaction->created_at->format('d.m.Y H:i')
+                        . PHP_EOL . '<b>➡️ Transfer: </b>' . $amount . ' ' . $currency
+                        . PHP_EOL . '<b>#️⃣ Hash: </b>' . $transaction->uuid,
+                    'parse_mode' => 'html'
+                ]);
+            } catch (CouldNotSendNotification $e) {
+                report($e);
+            }
+
             return true;
         }
         else return response(['error' => true, 'message' => 'Не достаточно баланса'], 404, $this->headers, JSON_UNESCAPED_UNICODE);
