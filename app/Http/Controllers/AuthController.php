@@ -74,8 +74,8 @@ class AuthController extends Controller
 
             return [
                 'text' => "Добро пожаловать в DaHub, децентрализованную платформу-кошелёк! ",
-                'linkWallet' => env('APP_URL').'/auth/'.$authUser->auth_token.'?url=/wallet/',
-                'linkDashboard' => env('APP_URL').'/auth/'.$authUser->auth_token.'?url=/wallet/',
+                'linkWallet' => env('APP_URL').'/auth/'.$authUser->auth_token.'?url='.Route('wallet'),
+                'linkDashboard' => env('APP_URL').'/auth/'.$authUser->auth_token.'?url='.Route('dashboard'),
             ];
         }
         else {
