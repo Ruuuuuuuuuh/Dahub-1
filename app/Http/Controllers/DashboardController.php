@@ -212,8 +212,14 @@ class DashboardController extends Controller
         return view('dashboard.pages.admin.payments')->with('payments', $payments);
     }
 
-    public function getUsers() {
-        $users = User::all();
+    public function getUsers(Request $request) {
+        if ($request->has('search')) {
+            $users = User::Search($request->input('search'))->paginate(50);
+        }
+        else {
+            $users = User::paginate(50);
+        }
+
         return view('dashboard.pages.admin.users')->with('users', $users);
     }
 

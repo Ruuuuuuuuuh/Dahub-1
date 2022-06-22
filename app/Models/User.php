@@ -31,6 +31,7 @@ use App\Models\Currency as Currency;
  * @method static findOrFail($id)
  * @method static where(string $string, string $string1)
  * @method static create(array $array)
+ * @method static Search(mixed $input)
  * @mixin Builder
  */
 
@@ -227,6 +228,13 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
             );
         }
         return json_encode($balances, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function scopeSearch($query, $q)
+    {
+        return $query->where('name','LIKE','%'.$q.'%')
+            ->orWhere('username','LIKE','%'.$q.'%')
+            ->orWhere('uid','LIKE','%'.$q.'%');
     }
 
 }
