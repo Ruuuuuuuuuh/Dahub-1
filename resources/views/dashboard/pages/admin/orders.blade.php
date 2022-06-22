@@ -32,6 +32,10 @@
                         <h2 class="mb-4">Список заявок</h2>
 
                         <div class="order-list">
+
+                            <div class="pb-3">
+                                {{ $orders->links('pagination::bootstrap-4') }}
+                            </div>
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
@@ -109,6 +113,10 @@
                                 @endforeach
                                 </tbody>
                             </table>
+
+                            <div class="pb-3">
+                                {{ $orders->links('pagination::bootstrap-4') }}
+                            </div>
                         </div>
 
                     </div>

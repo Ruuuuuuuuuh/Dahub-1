@@ -107,7 +107,7 @@ class DashboardController extends Controller
 
     public function orders()
     {
-        $orders = Order::orderBy('id', 'DESC')->get();
+        $orders = Order::orderBy('id', 'DESC')->paginate(30);
         return view('dashboard.pages.admin.orders', compact('orders'));
     }
 
