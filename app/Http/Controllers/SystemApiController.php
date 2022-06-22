@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use NotificationChannels\Telegram\Exceptions\CouldNotSendNotification;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramResponseException;
 use Telegram\Bot\Exceptions\TelegramSDKException;
@@ -145,10 +146,10 @@ class SystemApiController extends Controller
             }
             $systemWallet = System::findOrFail(1);
             if ($currency == 'DHBFundWallet') {
-                $systemWallet->getWallet($currency)->transferFloat($user->getWallet('DHB'), $amount, array('destination' => $destination, 'comment' => $message));
+                $trans = $systemWallet->getWallet($currency)->transferFloat($user->getWallet('DHB'), $amount, array('destination' => $destination, 'comment' => $message));
             }
             else {
-                $systemWallet->getWallet($currency)->transferFloat($user->getWallet($currency), $amount, array('destination' => $destination, 'comment' => $message));
+                $trans = $systemWallet->getWallet($currency)->transferFloat($user->getWallet($currency), $amount, array('destination' => $destination, 'comment' => $message));
                 $systemWallet->getWallet($currency)->refreshBalance();
                 if ($currency == 'HFT') {
                     try {
@@ -199,6 +200,21 @@ class SystemApiController extends Controller
                     }
                 }
             }
+            if ($currency == 'DHBFundWallet') $currency = 'DHB';
+            try {
+                $telegram = new Api(env('TELEGRAM_BOT_EXPLORER_TOKEN'));
+
+                $telegram->sendMessage([
+                    'chat_id' => env('TELEGRAM_EXPLORER_CHAT_ID'),
+                    'text' => '<b>🆕 Transaction created</b> ' . $trans->created_at->format('d.m.Y H:i')
+                        . PHP_EOL . '<b>➡️ Transfer: </b>' . $amount . ' ' . $currency
+                        . PHP_EOL . '<b>#️⃣ Hash: </b>' . $trans->uuid,
+                    'parse_mode' => 'html'
+                ]);
+            } catch (CouldNotSendNotification $e) {
+                report($e);
+            }
+
             return 'Успешно переведено';
         }
         else {
