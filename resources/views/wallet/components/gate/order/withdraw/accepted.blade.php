@@ -83,6 +83,5 @@
 
     <div class="footer-relative">
         <a class="button button-blue" onclick="acceptSending()">Подтвердить отправление</a>
-        <a class="button button-red" onclick="declineOrder()">Отменить заявку</a>
     </div>
 </div>

@@ -16,6 +16,7 @@ use App\Notifications\AcceptSendingByUser;
 use App\Notifications\OrderAssignee;
 use App\Notifications\OrderCreate;
 use App\Notifications\OrderDecline;
+use App\Notifications\SendUserNotification;
 use Bavix\Wallet\Models\Transaction;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -142,7 +143,8 @@ class ApiController extends Controller
             if ($destination == 'TokenSale') {
                 $dhb_rate   = Rate::getRates('DHB');
                 $dhb_amount = $request->input('dhb_amount');
-                $amount     = $request->input('amount');
+                $amount     = $dhb_amount * $dhb_rate;
+                if ($dhb_amount > System::first()->amount_per_order) $error = 'Вы превысиили максимальное количество DHB в одной заявке';
             } else {
                 $dhb_rate   = '';
                 $dhb_amount = '';
@@ -771,6 +773,13 @@ class ApiController extends Controller
                     $transaction = $this->user->getWallet($currency)->transferFloat($receiver->getWallet($currency), $amount, array('destination' => 'Transfer from user'));
                     $this->user->getWallet($currency)->refreshBalance();
                     $receiver->getWallet($currency)->refreshBalance();
+                    // Send message via telegram
+                    try {
+                        $receiver->notify(new SendUserNotification('Пользователь ID' . $this->user->uid . ' отправил вам ' . $amount . ' ' . $currency . '.'));
+                        $this->user->notify(new SendUserNotification('Вы успешно отправили пользователю ID' . $this->user->uid . ' ' . $amount . ' ' . $currency . '.'));
+                    } catch (CouldNotSendNotification $e) {
+                        report ($e);
+                    }
                 }
                 else {
                     $transaction = $this->user->getWallet($currency)->transferFloat(System::findOrFail(1)->getWallet('DHBFundWallet'), $amount, array('destination' => 'Transfer from user'));

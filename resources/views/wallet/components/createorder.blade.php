@@ -22,8 +22,8 @@
     <div class="section-main">
         <ul class="nav nav-pills justify-content-between" id="create-order-tab" role="tablist">
             <li class="nav-item">
-                <button class="nav-link active" id="pills-deposit-tab" data-toggle="pill" data-target="#pills-deposit"
-                        type="button" role="tab" aria-controls="pills-deposit" aria-selected="true">Получить
+                <button class="nav-link" id="pills-deposit-tab" data-toggle="pill" data-target="#pills-deposit"
+                        type="button" role="tab" aria-controls="pills-deposit" aria-selected="false">Получить
                 </button>
             </li>
             <li class="nav-item">
@@ -32,20 +32,20 @@
                 </button>
             </li>
             <li class="nav-item">
-                <button class="nav-link" id="pills-withdraw-tab" data-toggle="pill" data-target="#pills-withdraw"
-                        type="button" role="tab" aria-controls="pills-withdraw" aria-selected="false">Отправить
+                <button class="nav-link active" id="pills-withdraw-tab" data-toggle="pill" data-target="#pills-withdraw"
+                        type="button" role="tab" aria-controls="pills-withdraw" aria-selected="true">Отправить
                 </button>
             </li>
         </ul>
         <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-deposit" role="tabpanel"
+            <div class="tab-pane fade" id="pills-deposit" role="tabpanel"
                  aria-labelledby="pills-deposit-tab">
                 @include('wallet.components.createorder.deposit')
             </div>
             <div class="tab-pane fade" id="pills-exchange" role="tabpanel" aria-labelledby="pills-exchange-tab">
                 @include('wallet.components.createorder.exchange')
             </div>
-            <div class="tab-pane fade" id="pills-withdraw" role="tabpanel" aria-labelledby="pills-withdraw-tab">
+            <div class="tab-pane fade show active" id="pills-withdraw" role="tabpanel" aria-labelledby="pills-withdraw-tab">
                 @include('wallet.components.createorder.withdraw')
             </div>
         </div>
