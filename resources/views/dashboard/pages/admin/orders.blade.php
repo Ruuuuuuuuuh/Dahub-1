@@ -87,7 +87,7 @@
                                                 @break
 
                                                 @case('pending')
-                                                Ожидание перевода средств
+                                                Ожидание подтверждения @if ($order->destination == 'TokenSale') шлюзом @else пользователем @endif
                                                 @break
 
                                                 @case('completed')
