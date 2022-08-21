@@ -46,6 +46,7 @@ class AcceptDepositOrder extends Notification
         if ($this->order->destination == 'TokenSale') {
             $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/dashboard/orders/'.$this->order->id);
             $content = "Заявка #" . $this->order->id . " на получение " . $this->order->dhb_amount . " DHB принята кипером. \nПереведите " . $this->order->amount . " " . $this->order->currency . " в " . $this->order->payment . $crypto . " \n`" . $this->order->payment_details . "`\nКак только вы отправите средства, подтвердите отправление в кошельке.";
+            if ($this->order->payment == 'Binance Pay') $content = "Заявка #" . $this->order->id . " на получение " . $this->order->dhb_amount . " DHB принята кипером. \nПереведите " . $this->order->amount . " " . $this->order->currency . " по Binance Pay ID: \n`" . $this->order->payment_details . "`\nКак только вы отправите средства, подтвердите отправление в кошельке.";
         }
         elseif ($this->order->destination == 'deposit') {
             $url = url('/auth/'.$this->order->user()->first()->auth_token.'/?url=/wallet/orders/'.$this->order->id);

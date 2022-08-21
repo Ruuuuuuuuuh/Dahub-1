@@ -50,11 +50,14 @@
                                 <div class="created-block form-inline">
                                     @if ($order->currency != 'TON')
                                         <p>Отправьте <strong><span class="step2-amount">{{$order->amount}} </span> <span
-                                                        class="step2-currency"> {{$order->currency}}</span> </strong>в
+                                                        class="step2-currency"> {{$order->currency}}</span> </strong>@if ($order->payment != 'Binance Pay')в
                                             <strong>{{$order->payment}}</strong>@if (App\Models\Payment::where('title', $order->payment)->firstOrFail()->crypto)
                                                 на адрес:
                                             @else
                                                 по номеру карты:
+                                            @endif
+                                            @else
+                                            по Binance Pay ID:
                                             @endif</p>
                                         <div class="w-100">
                                             <div class="col-12">
@@ -165,11 +168,14 @@
                             @elseif ($order->status == 'pending')
                                 <div class="created-block form-inline">
                                     <p>Отправьте <strong><span class="step2-amount">{{$order->amount}} </span> <span
-                                                    class="step2-currency"> {{$order->currency}}</span> </strong>в
+                                                class="step2-currency"> {{$order->currency}}</span> </strong>@if ($order->payment != 'Binance Pay')в
                                         <strong>{{$order->payment}}</strong>@if (App\Models\Payment::where('title', $order->payment)->firstOrFail()->crypto)
                                             на адрес:
                                         @else
                                             по номеру карты:
+                                        @endif
+                                        @else
+                                            по Binance Pay ID:
                                         @endif</p>
                                     <div class="w-100">
                                         <div class="col-12">
