@@ -23,7 +23,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link btn btn-outline-secondary" id="deposit-tab"
-                                       @if (Auth::user()->hasActiveTokenSaleOrder()) href="/dashboard/orders/{{Auth::user()->orders()->where('status', '!=', 'completed')->first()->id}}"
+                                       @if (Auth::user()->activeTokenSaleOrder()->exists()) href="/dashboard/orders/{{Auth::user()->activeTokenSaleOrder()->first()->id}}"
                                        @else data-toggle="tab" href="#deposit-area" role="tab"
                                        aria-controls="deposit-area" aria-selected="false" @endif>
                                         <svg width="18" height="18" viewBox="0 0 18 18" fill="none"

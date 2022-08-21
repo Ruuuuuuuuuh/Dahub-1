@@ -132,12 +132,11 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
 
 
     /**
-     * Если есть активная заявка токен сейла
-     * @return bool
+     * Активная заявка токен сейла
      */
-    public function hasActiveTokenSaleOrder(): bool
+    public function activeTokenSaleOrder(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->orders()->where('status', '!=', 'completed')->where('destination', 'TokenSale')->exists();
+        return $this->orders()->where('status', '!=', 'completed')->where('destination', 'TokenSale');
     }
 
     /**
