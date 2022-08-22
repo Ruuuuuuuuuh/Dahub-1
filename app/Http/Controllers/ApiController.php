@@ -776,7 +776,7 @@ class ApiController extends Controller
                     // Send message via telegram
                     try {
                         $receiver->notify(new SendUserNotification('Пользователь ID' . $this->user->uid . ' отправил вам ' . $amount . ' ' . $currency . '.'));
-                        $this->user->notify(new SendUserNotification('Вы успешно отправили пользователю ID' . $this->user->uid . ' ' . $amount . ' ' . $currency . '.'));
+                        $this->user->notify(new SendUserNotification('Вы успешно отправили пользователю ID' . $receiver->uid . ' ' . $amount . ' ' . $currency . '.'));
                     } catch (CouldNotSendNotification $e) {
                         report ($e);
                     }
