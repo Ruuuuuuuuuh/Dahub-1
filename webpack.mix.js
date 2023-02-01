@@ -17,4 +17,4 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/site.scss', 'public/css')
     .sass('resources/sass/exchange.scss', 'public/css')
     .version()
-    .options({ processCssUrls: false });
+    .options({ processCssUrls: false }).vue();
