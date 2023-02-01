@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 /**
  * Модель для валют / токенов
  * @method static where(string $string, mixed $currency)
+ * @method static payableCurrencies()
  */
 class Currency extends Model
 {

@@ -256,4 +256,22 @@ class DashboardController extends Controller
         $system = System::firstOrFail();
         return view('dashboard.pages.admin.settings')->with('system', $system);;
     }
+
+    /**
+     * Страница статистики
+     * @return Application|Factory|View
+     */
+    public function statistics(Request $request): View|Factory|Application
+    {
+        $system = System::firstOrFail();
+        $filter = $request->input('filter');
+        $users = new User();
+        $users = $users->getUsersByFilter($filter);
+
+        return view('dashboard.pages.admin.statistics.statistics')->with([
+            'system' => $system,
+            'users' => $users->paginate(50),
+            'filter' => $filter,
+        ]);
+    }
 }

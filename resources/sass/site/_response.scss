@@ -1,0 +1,279 @@
+@media screen and (max-width:1440px) {
+    #main-screen {
+        img {
+            width:100%;
+        }
+    }
+}
+@media screen and (max-width:1200px) {
+    .header {
+        margin-top:15px;
+    }
+    .mobile-hidden {
+        display: flex;
+    }
+    .button-wrapper {
+        display:flex;
+        justify-content: center;
+        .button {
+            max-width: 380px;
+        }
+    }
+    h1 {
+        font-size: 40px;
+        line-height: 52px;
+    }
+    h2 {
+        font-size: 36px;
+        line-height: 46px;
+        text-align: center;
+    }
+    p.description {
+        font-size: 15px;
+        line-height: 28px;
+    }
+    .container-fluid {
+        padding:0 30px;
+    }
+    .button {
+        margin: 0;
+        margin-top: 15px;
+        width: 100%;
+    }
+    .header {
+        margin-bottom: 0;
+        .header-wrapper {
+            justify-content: space-between;
+            align-items: center;
+            padding:0 30px;
+        }
+        .menu-icon {
+            display:block;
+        }
+        .mobile-menu {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            display: block;
+            top: 0;
+            left: 0;
+            background: #f9f9f9;
+            z-index: 1;
+        }
+        .menu {
+            display: none;
+        }
+    }
+    #main-screen {
+        text-align: center;
+        padding-bottom:30px;
+        p.description {
+            max-width: 100%;
+            margin-top:25px;
+        }
+        .button {
+            display: block;
+            margin-top: 45px;
+            margin-bottom: 70px;
+        }
+        img {
+            width:100%;
+            margin-bottom:70px;
+        }
+        .container-fluid>.row {
+            flex-direction: column-reverse;
+            .col-12 {
+                max-width:100%;
+                flex: 0 0 100%;
+            }
+            .main-screen-image img {
+                width:490px;
+            }
+        }
+    }
+    #second-screen {
+        padding: 60px 30px 100px;
+        background-image:none!important;
+        background: radial-gradient(103.51% 108.87% at 50% 50%, #132D54 0%, #091325 100%)!important;
+        text-align: center;
+        .second-screen-image {
+            text-align: center;
+            img {
+                display: block;
+                margin:0 auto;
+            }
+        }
+        h2 {
+            margin-top:45px;
+            justify-content: center;
+        }
+        .description-block {
+            max-width: 100%;
+            p {
+                font-size:15px;
+                line-height: 30px;
+            }
+        }
+
+    }
+    #third-screen {
+        padding: 15px 0 60px;
+        min-height: 800px;
+        .container-fluid>.row {
+            flex-direction: column-reverse;
+            .business-kit {
+                img {
+                    margin-top:0;
+                }
+            }
+        }
+        h2 {
+            text-align: left;
+        }
+        .section-content {
+            .accordion {
+                text-align: left;
+                .accordion-button {
+                    font-size: 24px;
+                    line-height: 34px;
+                    font-weight: 700;
+                    border: none;
+                    background-color: transparent;
+                    display: flex;
+                    padding-left: 0;
+                    margin-bottom: 10px;
+                    text-align: left;
+                }
+                .accordion-body {
+                    font-size: 15px;
+                    line-height: 30px;
+                }
+            }
+        }
+        .button-wrapper {
+            justify-content: flex-start;
+        }
+    }
+    #token-sale {
+        padding:120px 0;
+        .available-tokens {
+            .amount {
+                font-size: 76px;
+                margin: -15px 0 3px
+            }
+        }
+        .get-tokens {
+            margin-top: 25px;
+        }
+    }
+    #explorer {
+        h2 {
+            font-size:38px;
+        }
+        width:100%;
+        padding: 120px 0 80px;
+        overflow: hidden;
+        .explorer-wrapper {
+            width:100%;
+            overflow-x: scroll;
+        }
+        .order-list-header {
+            min-width:640px;
+            font-size:12px;
+            margin-top:45px;
+        }
+        .orders-list {
+            min-width:640px;
+            .order-wrapper {
+                font-size:12px;
+            }
+        }
+    }
+    #token-sale {
+        .get-tokens {
+            input, select {
+                margin:15px 0;
+                width:100%;
+                margin-left:0!important;
+            }
+        }
+    }
+    footer {
+        padding: 60px 30px;
+        p {
+            text-align: center;
+        }
+        .totop {
+            display:block;
+            background: none;
+            border: 2px solid #0CB4BC;
+            border-radius: 25px;
+            margin: 35px 0 25px;
+        }
+    }
+}
+@media screen and (max-width:640px) {
+
+    #loader {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        background: #fcfcfb;
+        overflow: visible;
+        img {
+            min-width:320px;
+            width:100%;
+        }
+    }
+
+    #mobile-slider {
+        display: block;
+    }
+    .mobile-scroll-icon {
+        display:block;
+    }
+    #explorer {
+        .transactions.actions {
+            display: none;
+        }
+    }
+    .header {
+        .logo {
+            margin-top:5px;
+            margin-left:-25px!important;
+            svg {
+                width:180px;
+            }
+        }
+    }
+    #main-screen h3 {
+        font-size: 18px;
+    }
+
+    #third-screen {
+        h2 {
+            font-size: 26px;
+            line-height: 40px;
+            text-align: center;
+        }
+        .section-content>h2 {
+            justify-content: center;
+        }
+        &:before {
+            opacity: 0.95;
+        }
+        .button-wrapper {
+            justify-content: center;
+        }
+    }
+    .deposit-block {
+        margin-bottom:0px!important;
+    }
+}
+/*
+@media screen and (min-width:1200px) and  (max-width:1200px){
+    .header .menu .button {
+        margin-left:15px;
+    }
+}*/

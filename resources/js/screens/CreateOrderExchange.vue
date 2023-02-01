@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-if="soon" class="soon">
+        <div v-if="!soon" class="soon">
             <svg width="225" height="217" viewBox="0 0 225 217" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_1577_10400)">
 <path d="M86.7127 41.2095H24.627V82.587H86.7127V41.2095Z" fill="white"/>
@@ -566,7 +566,7 @@
 <h1 >Сервис в разработке</h1>
         </div>
 
-        <div v-if="!soon">
+        <div v-if="soon">
         <form
             class="form-withdraw form-create-order"
             action="index.html"
@@ -603,7 +603,7 @@
                             fill="black"
                         />
                         <mask
-                            id="angle-down2"
+                            id="angle-down-exchange"
                             style="mask-type:alpha"
                             maskUnits="userSpaceOnUse"
                             x="5"
@@ -616,7 +616,7 @@
                                 fill="white"
                             />
                         </mask>
-                        <g mask="url(#angle-down2)">
+                        <g mask="url(#angle-down-exchange)">
                             <rect width="24" height="24" fill="#0D1F3C" />
                         </g>
                     </svg>
@@ -651,7 +651,7 @@
                             fill="black"
                         />
                         <mask
-                            id="angle-down1"
+                            id="angle-down-exchange1"
                             style="mask-type:alpha"
                             maskUnits="userSpaceOnUse"
                             x="5"
@@ -664,7 +664,7 @@
                                 fill="white"
                             />
                         </mask>
-                        <g mask="url(#angle-down1)">
+                        <g mask="url(#angle-down-exchange1)">
                             <rect width="24" height="24" fill="#0D1F3C" />
                         </g>
                     </svg>
@@ -769,7 +769,7 @@
                             fill="black"
                         />
                         <mask
-                            id="angle-down2"
+                            id="angle-down-exchange"
                             style="mask-type:alpha"
                             maskUnits="userSpaceOnUse"
                             x="5"
@@ -782,7 +782,7 @@
                                 fill="white"
                             />
                         </mask>
-                        <g mask="url(#angle-down2)">
+                        <g mask="url(#angle-down-exchange)">
                             <rect width="24" height="24" fill="#0D1F3C" />
                         </g>
                     </svg>
@@ -835,7 +835,7 @@
                             fill="black"
                         />
                         <mask
-                            id="angle-down1"
+                            id="angle-down-exchange1"
                             style="mask-type:alpha"
                             maskUnits="userSpaceOnUse"
                             x="5"
@@ -848,7 +848,7 @@
                                 fill="white"
                             />
                         </mask>
-                        <g mask="url(#angle-down1)">
+                        <g mask="url(#angle-down-exchange1)">
                             <rect width="24" height="24" fill="#0D1F3C" />
                         </g>
                     </svg>

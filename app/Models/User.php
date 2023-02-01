@@ -121,6 +121,16 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         return $this->hasMany('App\Models\Order', 'user_uid', 'uid');
     }
 
+
+    /**
+     * Get gate orders.
+     */
+    public function gateOrders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany('App\Models\Order', 'gate', 'uid');
+    }
+
+
     /**
      * Если есть активная заявка
      * @return bool
@@ -172,6 +182,10 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         return $this->hasMany('App\Models\PaymentDetail', 'user_uid', 'uid');
     }
 
+    public function referrals(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(User::class,'referred_by', 'affiliate_id');
+    }
 
     /**
      * Получить общий баланс DHB / USDT
@@ -234,6 +248,24 @@ class User extends Authenticatable implements Wallet, Confirmable, WalletFloat
         return $query->where('name','LIKE','%'.$q.'%')
             ->orWhere('username','LIKE','%'.$q.'%')
             ->orWhere('uid','LIKE','%'.$q.'%');
+    }
+
+    /**
+     * Return filtered User model with
+     * @param $filter
+     * @return User
+     */
+    public function getUsersByFilter($filter)
+    {
+        return match ($filter) {
+            'balance' => $this->withAggregate(['wallets' => function ($query) {
+                $query->where('slug', 'DHB');
+            }], 'balance')->orderBy('wallets_balance', 'DESC'),
+            'referrals' => $this->withCount('referrals')->having('referrals_count', '>', 0)->orderBy('referrals_count', 'desc'),
+            'orders' => $this->withCount(['gateOrders' => function($query) {
+                $query->where('status', '=', 'completed');
+            }])->having('gate_orders_count', '>', 0)->orderBy('gate_orders_count', 'desc')
+        };
     }
 
 }

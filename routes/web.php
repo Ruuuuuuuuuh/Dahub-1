@@ -23,6 +23,8 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/landing', [App\Http\Controllers\SiteController::class, 'index'])->name('frontpage');
+
 Route::get('/telegram/redirect', [App\Http\Controllers\AuthController::class, 'getUser'])->name('getuser');
 Route::get('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
 Route::get('/auth/{token}', [App\Http\Controllers\AuthController::class, 'authUser'])->name('auth');
@@ -38,6 +40,7 @@ Route::group(['prefix' => 'wallet'], function () {
     Route::get('/history/', [App\Http\Controllers\WalletController::class, 'history'])->name('history');
     Route::get('/system/', [App\Http\Controllers\WalletController::class, 'systemConfigPage'])->name('systemConfigPage')->middleware('admin');
     Route::get('/test/', [App\Http\Controllers\WalletController::class, 'testPage'])->name('testPage')->middleware('admin');
+    Route::get('/exchange/', [App\Http\Controllers\ExchangeController::class, 'index'])->name('exchange.index')->middleware('admin');
 });
 
 Route::group(['prefix' => 'dashboard'], function () {
@@ -63,6 +66,7 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/tags', [App\Http\Controllers\DashboardController::class, 'tags'])->name('dashboard.tags')->middleware('admin');
     Route::get('/telegram', [App\Http\Controllers\DashboardController::class, 'telegram'])->name('dashboard.telegram')->middleware('admin');
     Route::get('/settings', [App\Http\Controllers\DashboardController::class, 'settings'])->name('dashboard.settings')->middleware('admin');
+    Route::get('/statistics', [App\Http\Controllers\DashboardController::class, 'statistics'])->name('dashboard.statistics')->middleware('admin');
 });
 
 // ADMIN ROUTES
